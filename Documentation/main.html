@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+img.c {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+
+li span {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #00cc00;
+  so-language: en-US
+}
+
+.span2 {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #009900;
+  so-language: en-US
+}
+
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(4.2)</font></font></p>
+<blockquote>
+  <p style=" border-top: none; border-bottom: none; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#aaaaaa" face="Cambria, serif"><font color="#aaaaaa" size="6" style="font-size: 20pt"><font size="3" style="font-size: 12pt"><span style="letter-spacing: 0.8pt"><i>Phil Stopford</i></span></font></font></font></p>
+</blockquote>
+<a name="introduction"></a>
+<h1 class="western">Introduction</h1>
+<blockquote>
+  <p class="western" style=" line-height: 100%">Variance is a production-proven, high performance geometrical variation study engine, using Monte Carlo approaches. One area of focus is the definition of ground rules for semiconductor processes.</p>
+  <p class="western" style=" line-height: 100%">Variance writes out result summaries and, optionally, CSV files and/or SVG images that can be reviewed to understand the results of runs. Mean and standard deviation readouts are displayed during runs. The CSV files lend themselves to use in JMP or similar, and can be used with the project file directly in the tool to inspect specific cases from a run.</p>
+  <p class="western" style=" line-height: 100%">DOE summaries can also be created for easier review.</p>
+</blockquote>
+<a name="features"></a>
+<h1 class="western">Features</h1>
+<blockquote>
+  <a name="features_basiccalculations"></a>
+  <h2 class="western">Basic Calculations</h2>
+  <blockquote>
+    <ul>
+      <li>1D calculation system with 'n' sigma output</li>
+    </ul>
+  </blockquote>
+  <a name="features_implant"></a>
+  <h2 class="western">Implant Calculations</h2>
+  <blockquote>
+    <ul>
+      <li>Advanced shadowing Monte Carlo engine for tilted implants.</li>
+    </ul>
+  </blockquote>
+</blockquote>
+<blockquote>
+  <a name="features_montecarlo"></a>
+  <h2 class="western">Fast, efficient workflow</h2>
+  <blockquote>
+    <p class="western">Simulation input:</p>
+    <ul>
+      <li>Define your input shapes, or use external layout files.</li>
+      <ul>
+        <li>Copy/paste layer settings, and background layer display make set-up very simple.</li>
+        <li>External layout support is extensive:</li>
+        <ul>
+          <li>GDS and Oasis, uncompressed.</li>
+          <li>Layout geometry can be used to drive contour generation.</li>
+          <li>Layout geometry can be updated from the file on-disk when the project is loaded.</li>
+          <li>Hierarchical layout is supported.</li>
+          <li>Pattern generator derived layout can be used in DOE configurations.</li>
+        </ul>
+        <li>Layer shape can be defined using a Boolean of two other layers, including the results of another Boolean.</li>
+        <ul>
+          <li>Further enhanced support for keyholing (one or more cutters fully enclosed within another polygon), including handling of pre-existing keyholes.</li>
+          <li>Auto-removal of interior walls (keyholes) at input to simulation engine pipeline.</li>
+        </ul>
+      </ul>
+      <li>Extensive range of shape definition parameters:</li>
+      <ul>
+        <li>Shapes are defined using subshapes (rectangles).</li>
+        <li>Each subshape has arbitrary tip definitions, allowing for selective adjustment of specific edges.</li>
+        <li>Composite shape has additional controls</li>
+        <ul>
+          <li>Independent side and tip biasing.</li>
+          <li>Independent convex and concave corner rounding.</li>
+        </ul>
+        <li>Shape flipping (H/V, re-center).</li>
+        <li>Edge tension model to reproduce line narrowing.</li>
+        <li>Pitch effect biasing, iPitch effect biasing, including keyholed geometry.</li>
+      </ul>
+      <li>Define your variations and type of variation (default is Gaussian, but custom distributions per-variation are supported.)</li>
+      <ul>
+        <li>Independent tip and side CDU variation.</li>
+        <li>Independent tip and side bias variation.</li>
+        <li>Independent horizontal and vertical tip variation, including asymmetry.</li>
+        <li>Independently link variation sources together between any input layers, if desired.</li>
+        <ul>
+          <li>X overlay, Y overlay, side CDU and tip CDU are all independently configurable.</li>
+          <li>Side and tip CDU variation can be linked, globally, if desired.</li>
+        </ul>
+        <li>Make X, Y overlay variations relative to one or more layers, if desired.</li>
+        <li>Line edge roughness.</li>
+        <li>Lens distortion : short and long range, pincushion/barrel distortion.</li>
+        <li>Wobble (rotational variation)</li>
+      </ul>
+      <li>Export of the layer contours to GDSII or Oasis is available, now also from within any viewport.</li>
+    </ul>
+    <p class="western">Simulation Configuration:</p>
+    <p class="western">If you know the variations and want to evaluate them:</p>
+    <ul>
+      <li>Choose your calculation mode : area, chords, overlap/spacing, intersection angle.</li>
+      <li>Set up the number of cases to evaluate.</li>
+      <li>Summary file is always showing inputs and outputs for a given simulation.</li>
+      <li>Choose whether to output the full set of run data to CSV (important for replaying simulations).</li>
+      <ul>
+        <li>Export to CSV is now fully multithreaded, so runs much faster than before.</li>
+      </ul>
+      <li>Support for outputting simulation geometry to GDSII, Oasis, or SVG (SVG was only option prior to this release).</li>
+      <ul>
+        <li>Export of the geometry now happens during the run, eliminating the memory overhead (at the cost of runtime increase).</li>
+      </ul>
+      <li>Set up your arbitrary layer relationships to define the calculation.</li>
+      <ul>
+        <li>For example, [(layer 1) AND NOT (layer 2)] AND [layer 9 OR layer 10)]</li>
+      </ul>
+      <li>Run the simulation.</li>
+      <ul>
+        <li>Runtime is reduced (where possible) through adaptive geometry decimation.</li>
+      </ul>
+    </ul>
+    <p class="western">If you want to review certain results in depth, use the replay system to look at specific cases.</p>
+    <p class="western">If you want to find variations that permit the desired result, use PA Search:</p>
+    <ul>
+      <li>Set up the layers and simulation as usual, then use this mode to scope out values for the 'unknown' variations.</li>
+      <li>Tag one or more variation fields on any active layer(s) in the simulation, with limits on the search radius of values.</li>
+      <li>Define pass criteria based on calculation type for min/max screening of results fields.</li>
+    </ul>
+    <p class="western">User interface:</p>
+    <ul>
+      <li>Consistent, multi-platform GUI (Windows, Mac, Linux).</li>
+      <ul>
+        <li>User interface is resizable.</li>
+        <li>Native platform look-and-feel is preserved, rather than modified, on macOS and Linux (GTK).</li>
+      </ul>
+      <li>Large modern viewport used throughout:</li>
+      <ul>
+        <li>The optimal framework is automatically used on the platform being used (Vulkan, OpenGL, Direct3D, Metal). If desired, this can be overridden.</li>
+        <li>Drag and cursor key navigation</li>
+        <li>Wheel and key zoom</li>
+        <li>Customizable preferences (colors, zoom, antialiasing, opacity, fill).</li>
+        <li>Save the view to SVG file.</li>
+        <li>Background layers : see your other layers' contours in the current layer.</li>
+      </ul>
+      <li>Add comments to layers, DOE and simulation settings for documentation.</li>
+    </ul>
+  </blockquote>
+</blockquote>
+<blockquote>
+  <a name="features_other"></a>
+  <h2 class="western">Other</h2>
+  <blockquote>
+    <ul>
+      <li>E-mail notification (per-run / job). </li>
+      <li>Ability to batch-generate summary files of DOEs.</li>
+      <li>Headless binary (no GUI at all), to permit automation</li>
+    </ul>
+  </blockquote>
+</blockquote>
+<blockquote>
+  <a name="features_code"></a>
+  <h2 class="western">Code</h2>
+  <blockquote>
+    <ul>
+      <li>Avoidance of home-brew code for fundamentals, where possible - rely on proven systems.</li>
+      <li>Core is cross-platform via .NET Core framework (should be 3.1 for best results). Mono is no longer needed.</li>
+      <ul>
+      <li>Headless is neutral.</li>
+      </ul>
+    </ul>
+  </blockquote>
+</blockquote>
+
+</body>
+</html>

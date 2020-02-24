@@ -1,0 +1,180 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;Release_obf</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;DISABLELICENSE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DISABLELICENSE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\BASE36.cs" Link="qlicense\BASE36.cs" />
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\HardwareInfo.cs" Link="qlicense\HardwareInfo.cs" />
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseEntity.cs" Link="qlicense\LicenseEntity.cs" />
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseHandler.cs" Link="qlicense\LicenseHandler.cs" />
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseStatus.cs" Link="qlicense\LicenseStatus.cs" />
+    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseTypes.cs" Link="qlicense\LicenseTypes.cs" />
+    <Compile Include="..\keys.cs" Link="keys.cs" />
+    <Compile Include="..\Variance\chaos\chaosEngine.cs">
+      <Link>chaos\chaosEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\chaos\chaosEngine_implant.cs">
+      <Link>chaos\chaosEngine_implant.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\chaos\chaosSettings.cs">
+      <Link>chaos\chaosSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\chaos\chaosSettings_implant.cs">
+      <Link>chaos\chaosSettings_implant.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\DOE\DOEResults.cs">
+      <Link>DOE\DOEResults.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\DOE\DOESettings.cs">
+      <Link>DOE\DOESettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\engines\angleHandler.cs">
+      <Link>engines\angleHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\engines\areaHandler.cs">
+      <Link>engines\areaHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\engines\chordHandler.cs">
+      <Link>engines\chordHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\engines\distanceHandler.cs">
+      <Link>engines\distanceHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropy.cs">
+      <Link>entropy\entropy.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropyLayerSettings.cs">
+      <Link>entropy\entropyLayerSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropySettings.cs">
+      <Link>entropy\entropySettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropySettings_nonSim.cs">
+      <Link>entropy\entropySettings_nonSim.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropyShape.cs">
+      <Link>entropy\entropyShape.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropy_geo.cs">
+      <Link>entropy\entropy_geo.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\entropy_implant.cs">
+      <Link>entropy\entropy_implant.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\implantSettings.cs">
+      <Link>entropy\implantSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\paSearchSettings.cs">
+      <Link>entropy\paSearchSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\sampler_geo.cs">
+      <Link>entropy\sampler_geo.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\entropy\sampler_implant.cs">
+      <Link>entropy\sampler_implant.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\results\results.cs">
+      <Link>results\results.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\results\results_implant.cs">
+      <Link>results\results_implant.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\results\simResultPackage.cs">
+      <Link>results\simResultPackage.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\centralProperties.cs">
+      <Link>support\centralProperties.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\commonVars.cs">
+      <Link>support\commonVars.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\Email.cs">
+      <Link>support\Email.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\nonSimulationSettings.cs">
+      <Link>support\nonSimulationSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\previewShape.cs">
+      <Link>support\previewShape.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\replay.cs">
+      <Link>support\replay.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\shapeLibrary.cs">
+      <Link>support\shapeLibrary.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\simpleAES.cs">
+      <Link>support\simpleAES.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\simulationPreview.cs">
+      <Link>support\simulationPreview.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\Storage.cs">
+      <Link>support\Storage.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\SVGBuilder.cs">
+      <Link>support\SVGBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\utilityFuncs.cs">
+      <Link>support\utilityFuncs.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\VarianceContext.cs">
+      <Link>support\VarianceContext.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\clipper\clipper.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Color\color.csproj">
+      <Project>{576cba59-f35e-4f45-905c-26927e2e441a}</Project>
+      <Name>color</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\entropyRNG\entropyRNG.csproj">
+      <Project>{663a7d25-5255-4b85-b94d-53c431426339}</Project>
+      <Name>entropyRNG</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoCore\geoCore.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoLib\geoLib.csproj">
+      <Project>{87c2783d-ac80-4684-875c-f06237e9cc3f}</Project>
+      <Name>geoLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoWrangler\geoWrangler.csproj">
+      <Project>{1d7842b4-12c0-4e11-a6a9-77ceb55f156c}</Project>
+      <Name>geoWrangler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\info.lundin.math\info.lundin.math.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\KDTree\KDTree.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Noise\noise.csproj">
+      <Project>{ff8ede08-8236-49a0-a82e-3b6208b81431}</Project>
+      <Name>Noise</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\utility\utility.csproj">
+      <Project>{c3255560-6437-4eff-8948-971a76c6e9ab}</Project>
+      <Name>utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.5.1" />
+    <PackageReference Include="System.Management" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.0" />
+    <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

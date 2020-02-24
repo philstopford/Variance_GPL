@@ -1,0 +1,43 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildOS Condition="$([MSBuild]::IsOsPlatform(`Windows`)) == true">Windows</BuildOS>
+    <BuildOS Condition="$([MSBuild]::IsOsPlatform(`Linux`)) == true">Linux</BuildOS>
+    <BuildOS Condition="$([MSBuild]::IsOsPlatform(`OSX`)) == true">macOS</BuildOS>
+
+    <Obfuscate Condition="$(OutputType) != 'library' AND $(Configuration) == 'Release_obf'">true</Obfuscate>
+    <Headless Condition="$(MSBuildProjectName.Contains('Headless'))">true</Headless>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TopLevelDirectory>$(MSBuildThisFileDirectory)</TopLevelDirectory>
+    <ArtifactsDir>$(TopLevelDirectory)artifacts\</ArtifactsDir>
+
+    <!-- Without separate intermediate directories, project.assets.json would
+    get stomped on by each project as it was restored and built. For more info
+    see https://github.com/NuGet/Home/issues/4463 -->
+    <BaseIntermediateOutputPath>$(ArtifactsDir)obj\$(BuildOS)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+
+    <!-- Placing output binaries in a higher level directory than the project
+    files avoids problems with generated AssemblyInfo, among other benefits. -->
+    <BaseOutputPath>$(ArtifactsDir)bin\$(MSBuildProjectName)\</BaseOutputPath>
+
+    <VeldridSpirvVersion>1.0.13</VeldridSpirvVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOS) == 'Windows'">
+    <RuntimeID>win-x64</RuntimeID>
+    <VeldridSpirvNativeName>libveldrid-spirv.dll</VeldridSpirvNativeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOS) == 'Linux'">
+    <RuntimeID>linux-x64</RuntimeID>
+    <VeldridSpirvNativeName>libveldrid-spirv.so</VeldridSpirvNativeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOS) == 'macOS'">
+    <RuntimeID>osx-x64</RuntimeID>
+    <VeldridSpirvNativeName>libveldrid-spirv.dylib</VeldridSpirvNativeName>
+  </PropertyGroup>
+
+</Project>

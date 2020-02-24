@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <a name="overviewMC_DOE"></a>
+  <h2 class="western">DOE</h2>
+    <img src="images/gdsDOE_1.png" lt=""/>
+    <p class="western" style=" line-height: 100%">Layers that are using GDS or Oasis for input will have a 'use for DOE' checkbox in their settings.</p>
+    <p class="western" style=" line-height: 100%">The offset values allow you to define the lower left corner position of the first tile of interest, with respect to the 0,0 world position.</p>
+    <p class="western" style=" line-height: 100%">‘Use Specific Tiles’ allows you to use the described syntax to define which tiles should be evaluated.</p>
+    <p class="western" style=" line-height: 100%">‘Use iDRM CSV’ allows you to load in an iDRM CSV file and the tool will then automatically run all pass tiles for the simulation.</p>
+    <p class="western" style=" line-height: 100%">‘Use Quilt CSV’ allows you to load in a CSV file from the Quilt pattern generator. This will automatically configure the DOE grid to match the Quilt output.</p>
+    <img src="images/gdsDOE_layout.png" alt=""/>
+    <p class="western" style=" line-height: 100%">By default, the system will work from the origin, and the DOE layout is expected to have its lower left corner at the origin. Negative column and row offsets are supported. The lower left corner of the extracted tile is repositioned at the world origin for the simulation, so you can configure interacting shapes without worrying about the location of the DOE tile.</p>
+    <p class="western" style=" line-height: 100%"><a name="_GoBack"></a> The system will run the simulations configured for each tile in each row, running from left to right. At the time of writing, the user has the option to denote one specific tile (row/column combination) in the DOE layout for evaluation instead of the full set of tiles. For the settings shown earlier, with the specific tile set, the simulation result looks like this.</p>
+    <p class="western" style=" line-height: 100%">Duplicated polygons in the same layer are ignored during tile extraction; partial overlaps between polygons are resolved with a Union() operation to create a single polygon island of the final shape. The DOE tile can be contoured using the shape engine as well.</p>
+    <img src="images/gdsDOE_2.png" alt=""/>
+    <p class="western" style=" line-height: 100%">Assuming CDU/biasing is enabled, the tile extraction is performed before biasing/CDU and subsequent overlap resolution.</p>
+    <p class="western" style=" line-height: 100%">Note that the layer panel previews can be configured to show the full DOE layout or the extracted tile.</p>
+    <img src="images/gdsDOE_3.png" alt=""/>
+
+</body>
+</html>

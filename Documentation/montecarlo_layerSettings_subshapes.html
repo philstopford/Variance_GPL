@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <blockquote>
+    <a name="overviewMC_layers_subshapes"></a>
+    <h3 class="western">Sub-Shapes</h3>
+      <p class="western" style=" line-height: 100%">Sub-shapes are the basic building blocks for shapes inside the tool. Each sub-shape is a rectangle (which is why the rectangle only has one sub-shape available to configure, and also one sub-shape reference). This is also why sub-shape inputs are not available for GDS or Oasis input.</p>
+      <p class="western" style=" line-height: 100%">If you select a complex shape, you will see the user interface offer a second sub-shape input box. The sub-shapes in the drawn mode are color-coded for easier identification.</p>
+      <img src="images/layerSettings_subShapes.png" alt=""/>
+      <p class="western" style=" line-height: 100%">In some cases, the Sub-shape 2 offsets may not be available (or only one may be exposed). This is a result of the shape configuration (e.g. for an L-shape, neither offset is available since the two sub-shapes must abut and a vertical offset would yield a T-shape).</p>
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_subshapes_L"></a>
+      <h4 class="western">L-shape</h4>
+        <p class="western" style=" line-height: 100%">The Subshape1 entity defines the vertical arm of the L. The Subshape2 entity defines the horizontal arm of the L, abutted to the bottom right corner of the vertical arm.</p>
+        <img src="images/Lshape.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_subshapes_T"></a>
+      <h4 class="western">T-shape</h4>
+        <p class="western" style=" line-height: 100%">The Subshape1 entity defines the vertical arm of the T. The Subshape2 entity defines the horizontal arm of the T, abutted to the right edge of the vertical arm.</p>
+        <img src="images/Tshape.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_subshapes_+"></a>
+      <h4 class="western">Cross-shape</h4>
+        <p class="western" style=" line-height: 100%">The Subshape1 entity defines the vertical component of the cross. The Subshape2 entity defines the horizontal components of the cross. </p>
+        <img src="images/Xshape.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_subshapes_U"></a>
+      <h4 class="western">U-shape</h4>
+        <p class="western" style=" line-height: 100%">The Subshape1 entity defines the outer perimeter of the U. Subshape2 defines the notch that is cut into the Subshape1.</p>
+        <img src="images/Ushape.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_subshapes_S"></a>
+      <h4 class="western">S-shape</h4>
+        <p class="western" style=" line-height: 100%">The Subshape1 entity defines the outer perimeter of the S. Subshape2 defines the notch that is cut into the lower left of Subshape1. Subshape3 defines the notch that is cut into the upper right of Subshape1.</p>
+        <img src="images/Sshape.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+Changelog for Variance
+
+4.2
+
+	- Performance enhancements through extended use of multithreading.
+	 - Runtime improvements range from 10 to 30%, depending on the situation.
+	- Aligned Veldrid code with upstream.
+	- Moved email handling to MailKit.
+	- Moved to .NET Core 3.1 based on Eto updates.
+	- Allow independent alignment of flipped shape in X and Y.
+
+4.1.1
+
+	- Added graphicsMode switch in launch args.
+	 - d3d11 : D3D 11
+	 - vulkan : Vulkan
+	 - opengl : OpenGL
+	 - metal : Metal
+
+4.1
+
+	- Viewport optimization.
+	- Eto Veldrid updates.
+
+4.1a2
+
+	- GTK3 prototype port added.
+	- Further performance work on the viewport.
+	- Re-enabled obfuscation.
+	- Fixed packaging issues lingering from changes.
+
+4.1a1
+
+	- Prototyping new viewport code (Veldrid-based).
+	- Improved panning code.
+	- Moving libraries to .NET standard 2.0.
+	- Refactored some internals.
+	 - Squashed a bug in the U-shape second subshape horizontal length clamping.
+
+4.0.1
+
+	- Add an option for the 'friendly' numeric output.
+	- Fixed 'update' label jumping around.
+	- Histograms (10 buckets) provided in summary output for each result.
+
+4.0
+
+	- Docs for ILB, showing overview of capabilities.
+
+4.0b1
+
+	- Beta shake-down.
+	- Fix for rare crash on project load.
+	- Revised the keyholer to iterate cuts, rather than use a single pass. This resolves multiple issues, at the cost of runtime.
+	- Fixed an issue where internal tracking data for the viewport got out-of-sync with the geometry state.
+	- Found a legacy re-order method in the core that can be served by GeoWrangler.
+	- Fixed geometry artifacts arising from too-aggressive gap removal in the keyholer.
+	- Fixed issue where keyhole edge extension may not cut through geometry, leading to geometry issues.
+	- Fixed issue where the keyholer could fail (now union all cutters before running the Boolean).
+	- Varous clean-ups and optimizations.
+	- Refragment merged-overlap geometry.
+	- Tweaked ClipperLib to experiment with preserving vertices whilst sorting out overlaps.
+
+4.0a5
+
+	- Moved to Eto.OpenTK for the etoViewport infrastructure.
+	- Extensively reworked various parts of the geometry systems arising from keyhole/ILB research.
+	 - Sliver/gap removal has been overhauled.
+	 - Keyholing has been improved.
+	 - Overlap processing (self-intersections) has been addressed.
+	 - Boolean systems now clean up slivers/gaps.
+	 - Extensive test bed used to review behavior.
+	 - GeoWrangler can decompose arbitrary geometry now.
+	- Background layers are now re-evaluated with updates to the foreground.
+	 - Increases computation from previous approach, but more useful for ILB set-up.
+
+4.0a4
+
+	- Fixed contouring of negated holes.
+	 - Root cause was fail of orthogonality check due to colinear points and inconsistent polygon termination based on upstream source.
+	  - ShapeLibrary now ensures incoming geometry meets certain critera prior to review.
+	   - Duplicate terminators are stripped; shape is terminated prior to colinear vertex strip. Next is orthogonality check, and then the terminator is removed to meet downstream expectations.
+	 - GeoWrangler now owns the orthogonality checks and also now has methods to strip terminator and colinear points from geometry.
+	 - Any orthogonal geometry can now be contoured!
+	- Fix up UI irritations when loading a project file.
+	- Geometry pipeline auto-decimates geometry if calculation strategy permits.
+	 - Spacing/enclosure calculation is excluded from this system.
+	- Patched ClipperLib to retain colinear vertices (if desired) during offsetting. This isn't enabled in the upstream code.
+	- Further work on the sliver/gap removal code to ensure output geometry is correctly oriented and terminated.
+	 - Added optimizations to avoid sliver/gap unless ILB is in use (A/B groups), avoiding runtime impact unless really needed.
+	 - Verified sliver removal for simulations where keyhole geometry is inverted.
+
+4.0a3
+
+	- Apply sliver/gap removal to geometry inputs in calculation pipeline.
+	 - Avoids impact from internal walls / artifacts; displayed input geometry will still have keyholes to avoid display issues.
+	- Friendly value reporting in progress read-outs.
+	- Multi-threaded CSV export implemented.
+	 - Much faster compared to old approach.
+	- Implemented write-during-run for external files.
+	 - Significant memory saving, testing impact on runtime.
+	  ! Runtime impact is severe : runs nearly at the same rate as single-threaded mode.
+	  - Might be acceptable given that replay mode exists and that the contents of the viewport can be written to layout files now.
+	- Restore tessellation optimization that was disabled in a3 for debug work.
+	- Sampling engine implemented.
+	 - Pre-samples the space (except in PA search mode).
+	 - Currently for standard Monte Carlo, but may offer alternative sampling strategies in future.
+	- Removed single-threaded operation from GUI.
+	- Enabled export of viewport contents to GDS/Oasis, alongside the SVG feature.
+	- Initial work on multi-target export from simulations.
+	 - SVG remains available, but GDSII and Oasis are now available as targets.
+	- Bug fix for layer name export in Oasis.
+
+4.0a2
+
+	- Layout loads now set the active cell according to the top cell definition.
+	- Staging work for viewport export to layout files.
+	 - Tracking element source for layer creation.
+	- Viewport work.
+	 - Decoupled the tessellated geometry from the boundaries.
+	 - Optimizations through multithreading.
+
+4.0a1
+
+	- ILB pipeline refinements.
+	- Keyholes are much more robustly generated.

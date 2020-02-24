@@ -1,0 +1,1134 @@
+using Error;
+using Eto;
+using Eto.Forms;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Variance
+{
+    public partial class MainForm
+    {
+        bool abortCheck()
+        {
+            if (commonVars.runAbort == true)
+            {
+                DialogResult dR = MessageBox.Show("Abort saving of results?", "Abort save?", MessageBoxButtons.YesNo);
+                if (dR != DialogResult.Yes)
+                {
+                    commonVars.runAbort = false;
+                }
+            }
+            return commonVars.runAbort;
+        }
+
+        void abortCSV(CancellationTokenSource cancelSource, CancellationToken cancellationToken)
+        {
+            if (!commonVars.cancelling)
+            {
+                if ((commonVars.runAbort) && (!commonVars.userCancelQuery))
+                {
+                    commonVars.userCancelQuery = true;
+                    commonVars.cancelling = true;
+                    // AsyncInvoke causes problems where run is aborted before user can respond to dialog.
+                    Application.Instance.Invoke((() =>
+                    {
+                        DialogResult dR = MessageBox.Show("Abort saving of results?", "Abort save?", MessageBoxButtons.YesNo);
+                        if (dR == DialogResult.Yes)
+                        {
+                            updateStatusLine("Aborting saving of results.");
+                            commonVars.runAbort = true;
+                        }
+                        else
+                        {
+                            commonVars.runAbort = false;
+                        }
+                        commonVars.userCancelQuery = false;
+                    }));
+
+                    if (commonVars.runAbort)
+                    {
+                        cancelSource.Cancel();
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+                }
+                commonVars.cancelling = false;
+            }
+        }
+
+        void abortRun()
+        {
+            if (!commonVars.cancelling)
+            {
+                if ((commonVars.runAbort) && (!commonVars.userCancelQuery))
+                {
+                    Application.Instance.Invoke(() =>
+                    {
+                        commonVars.userCancelQuery = true;
+                        commonVars.cancelling = true;
+                        DialogResult dR = MessageBox.Show("Abort and save results so far?", "Abort run?", MessageBoxButtons.YesNo);
+                        if (dR == DialogResult.Yes)
+                        {
+                            commonVars.runAbort = true;
+                        }
+                        else
+                        {
+                            commonVars.runAbort = false;
+                        }
+                        commonVars.userCancelQuery = false;
+                    });
+                }
+                commonVars.cancelling = false;
+            }
+        }
+
+        bool abortAllRuns()
+        {
+            // if (commonVars.runAbort == true)
+            {
+                DialogResult dR = MessageBox.Show("Yes: Abort all runs\r\nNo: Abort just this run",
+                                                  "Abort all runs?", MessageBoxButtons.YesNo);
+                if (dR == DialogResult.Yes)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void abortRunMT(SimResultPackage resultPackage, CancellationTokenSource cancelSource, CancellationToken cancellationToken)
+        {
+            if (!commonVars.cancelling)
+            {
+                if ((commonVars.runAbort) && (!commonVars.userCancelQuery))
+                {
+                    commonVars.userCancelQuery = true;
+                    commonVars.cancelling = true;
+                    // AsyncInvoke causes problems where run is aborted before user can respond to dialog.
+                    Application.Instance.Invoke((() =>
+                    {
+                        DialogResult dR = MessageBox.Show("Abort and save results so far?", "Abort run?", MessageBoxButtons.YesNo);
+                        if (dR == DialogResult.Yes)
+                        {
+                            updateStatusLine("Aborting and saving results so far.");
+                            commonVars.runAbort = true;
+                        }
+                        else
+                        {
+                            commonVars.runAbort = false;
+                        }
+                        commonVars.userCancelQuery = false;
+                    }));
+
+                    if (commonVars.runAbort)
+                    {
+                        resultPackage.setState(false);
+                        cancelSource.Cancel();
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+                }
+                commonVars.cancelling = false;
+            }
+        }
+
+        void simRunning()
+        {
+            commonVars.setSimRunning(true);
+        }
+
+        void simRunningUIFunc()
+        {
+            simRunningUI();
+        }
+
+        void launchSimulationRun(bool useThreads)
+        {
+            int mode = getMainSelectedIndex();
+            int tabIndex = getSubTabSelectedIndex();
+            bool doPASearch = ((mode == (Int32)CommonVars.upperTabNames.twoD) && (tabIndex == (Int32)CommonVars.twoDTabNames.paSearch));
+            string outFile = null;
+
+            bool fileChosen = false;
+            if (!doPASearch)
+            {
+                string fileDialogTitle = "Select summary file to generate";
+                string fileDialogFilter = "TXT Files (*.txt)";
+                string fileDialogExt = ".txt";
+                if (((mode == (Int32)CommonVars.upperTabNames.twoD) && (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)) ||
+                    ((mode == (Int32)CommonVars.upperTabNames.Implant) && (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)))
+                {
+                    fileDialogTitle = "Select CSV file to generate";
+                    fileDialogFilter = "CSV Files (*.csv)";
+                    fileDialogExt = ".csv";
+                }
+
+                string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new char[] { '.' });
+                string fileName = "";
+                for (int i = 0; i < tokens.Length - 2; i++)
+                {
+                    fileName += tokens[i] + ".";
+                }
+                fileName += tokens[tokens.Length - 2];
+
+                SaveFileDialog sfd = new SaveFileDialog()
+                {
+                    Title = fileDialogTitle,
+                    Filters =
+                        {
+                            new FileFilter(fileDialogFilter, fileDialogExt)
+                        },
+                };
+                try
+                {
+                    sfd.FileName = fileName;
+                }
+                catch (Exception)
+                {
+
+                }
+
+                if (sfd.ShowDialog(this) == DialogResult.Ok)
+                {
+                    // Will overwrite if already exists.
+                    outFile = sfd.FileName;
+
+                    // GTK requester doesn't add the extension, so review and add if needed to avoid a crash later.
+                    if (!outFile.EndsWith(fileDialogExt, StringComparison.CurrentCulture))
+                    {
+                        outFile += fileDialogExt;
+                    }
+
+                    fileChosen = true;
+                }
+            }
+
+            if (doPASearch || (!doPASearch && fileChosen))
+            {
+                // Tidy up cruft prior to run. May not be necessary.
+                GC.Collect();
+
+                Task.Run(() =>
+                {
+                    if (mode == (Int32)CommonVars.upperTabNames.twoD)
+                    {
+                        entropyControl.EntropyRun(commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases), outFile, useThreads, doPASearch);
+                    }
+                    if (mode == (Int32)CommonVars.upperTabNames.Implant)
+                    {
+                        entropyControl.entropyRun_implant(commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases), outFile, useThreads);
+                    }
+                }
+                );
+            }
+            GC.Collect();
+        }
+
+        void monteCarloMultipleThreadEventHandler(object sender, EventArgs e)
+        {
+            launchSimulationRun(true);
+        }
+
+        void monteCarloSingleThreadEventHandler(object sender, EventArgs e)
+        {
+            launchSimulationRun(false);
+        }
+
+        void simRunningUI()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                // Disable menu items to avoid trouble.
+                var menu = Menu;
+                var menuItems = menu.Items;
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    menuItems[i].Enabled = false;
+                }
+                // Activate stop button to enable run abort.
+                btn_STOP.Enabled = true;
+                // Deactivate run button(s) since we're running a batch task.
+                btn_singleCPU.Enabled = false;
+                btn_multiCPU.Enabled = false;
+                // Block out UI elements
+                groupBox_setOutput.Enabled = false;
+                groupBox_simSettings.Enabled = false;
+                groupBox_GeoEqtn.Enabled = false;
+                groupBox_implant.Enabled = false;
+                if (commonVars.getReplayMode() == 0)
+                {
+                    groupBox_replay.Enabled = false;
+                }
+                commentBox.Enabled = false;
+                // Some systems don't appear to like the tab control being disabled, so apply some guarding methods in case.
+                simRunningTabToFreeze = getSubTabSelectedIndex();
+                tabControl_main.SelectedIndexChanged += freezeTabSelection;
+                tabControl_2D_simsettings.SelectedIndexChanged += freezeTabSelection;
+            });
+        }
+
+        void btnSTOP(object sender, EventArgs e)
+        {
+            // Set abort flag.
+            commonVars.runAbort = true;
+        }
+
+        void btnCancel(object sender, EventArgs e)
+        {
+            // Set abort flag.
+            commonVars.loadAbort = true;
+        }
+
+        void displayMultiThreadWarning()
+        {
+            Application.Instance.AsyncInvoke(() =>
+            {
+                lbl_multiThreadResultNote.Text = "Update ~" + (CentralProperties.timer_interval / 1000).ToString() + "s";
+                lbl_multiThreadResultNote.Visible = true;
+            });
+        }
+
+        void configProgressBar(int value, int max)
+        {
+            if (System.Threading.Thread.CurrentThread == commonVars.mainThreadIndex)
+            {
+                statusProgressBar.Value = value;
+                statusProgressBar.MaxValue = max;
+            }
+            else
+            {
+                Application.Instance.AsyncInvoke(() =>
+                {
+                    configProgressBar(value, max);
+                });
+            }
+        }
+
+        void postSimStatusLine()
+        {
+            int mainIndex = getMainSelectedIndex();
+            int tabIndex = getSubTabSelectedIndex();
+
+            if (mainIndex != (int)CommonVars.upperTabNames.twoD)
+            {
+                return;
+            }
+
+            if (tabIndex != (int)CommonVars.twoDTabNames.settings)
+            {
+                return;
+            }
+
+            string updateString = "";
+            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.shape) == 1)
+            {
+                updateString = "Input";
+                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1)
+                {
+                    updateString += " and ";
+                }
+            }
+            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1)
+            {
+                updateString += "Results";
+            }
+            if (updateString != "")
+            {
+                updateString += " drawn.";
+            }
+            updateStatusLine(updateString);
+        }
+
+        void postSimUI()
+        {
+            if (Platform.IsGtk)
+            {
+                Application.Instance.AsyncInvoke(() =>
+                {
+                    postSimUI_2();
+                });
+            }
+            else
+            {
+                Application.Instance.Invoke(() =>
+                {
+                    postSimUI_2();
+                });
+            }
+        }
+
+        void postSimUI_2()
+        {
+            // Run complete, deactivate stop button and activate run button(s) again.
+            commonVars.setSimRunning(false);
+            if (commonVars.getReplayMode() == 1)
+            {
+                return;
+            }
+
+            lbl_multiThreadResultNote.Visible = false;
+            btn_STOP.Enabled = false;
+            // Restore UI elements
+            groupBox_setOutput.Enabled = true;
+            groupBox_simSettings.Enabled = true;
+            groupBox_GeoEqtn.Enabled = true;
+            groupBox_implant.Enabled = true;
+            groupBox_replay.Enabled = true;
+            startButtonCheck();
+            commentBox.Enabled = true;
+            // Some systems don't appear to like the tab control being disabled. Remove the guards here.
+            tabControl_main.SelectedIndexChanged -= freezeTabSelection;
+            tabControl_2D_simsettings.SelectedIndexChanged -= freezeTabSelection;
+            // Re-enable menu items.
+            var menu = Menu;
+            var menuItems = menu.Items;
+            for (int i = 0; i < menuItems.Count; i++)
+            {
+                menuItems[i].Enabled = true;
+            }
+        }
+
+        void startIndeterminateProgress()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                statusProgressBar.Visible = true;
+                statusProgressBar.Indeterminate = true;
+            });
+        }
+
+        void startButtonCheck()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                btn_multiCPU.Enabled = false;
+                btn_singleCPU.Enabled = false;
+
+                if (getMainSelectedIndex() == (Int32)CommonVars.upperTabNames.Implant)
+                {
+                    btn_multiCPU.Enabled = true;
+                    btn_singleCPU.Enabled = true;
+                }
+                else
+                {
+                    if ((getMainSelectedIndex() == (Int32)CommonVars.upperTabNames.twoD) && ((getSubTabSelectedIndex() == (Int32)CommonVars.twoDTabNames.settings) || (getSubTabSelectedIndex() == (Int32)CommonVars.twoDTabNames.paSearch)))
+                    {
+                        bool aEqtn = commonVars.getLayerSettings(0).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+                        bool bEqtn = commonVars.getLayerSettings(CentralProperties.maxLayersForMC / 2).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+
+                        for (int i = 1; i < CentralProperties.maxLayersForMC / 2; i++)
+                        {
+                            aEqtn = aEqtn || commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+                            bEqtn = bEqtn || commonVars.getLayerSettings(i + CentralProperties.maxLayersForMC / 2).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+                        }
+
+                        if (aEqtn && bEqtn)
+                        {
+                            btn_singleCPU.Enabled = true;
+                            btn_multiCPU.Enabled = true;
+                        }
+                        else
+                        {
+                            btn_singleCPU.Enabled = false;
+                            btn_multiCPU.Enabled = false;
+                        }
+                    }
+                }
+            });
+        }
+
+        void doSimSettingsCheck()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                {
+                    if ((commonVars.getLayerSettings(i * 2).getInt(EntropyLayerSettings.properties_i.enabled) == 1) && (commonVars.getLayerSettings((i * 2) + 1).getInt(EntropyLayerSettings.properties_i.enabled) == 1))
+                    {
+                        comboBox_geoEqtn_Op_2Layer[i].Enabled = true;
+                    }
+                    else
+                    {
+                        comboBox_geoEqtn_Op_2Layer[i].Enabled = false;
+                    }
+                }
+            });
+        }
+
+        void suspendSettingsUI()
+        {
+            settingsUIFrozen = true;
+            commonVars.setActiveUI(CommonVars.uiActive.settings, false);
+            //tabPage_2D_Settings.SuspendLayout();
+        }
+
+        void resumeSettingsUI()
+        {
+            settingsUIFrozen = false;
+            commonVars.setActiveUI(CommonVars.uiActive.settings, true);
+            //tabPage_2D_Settings.ResumeLayout();
+        }
+
+        void addSettingsHandlers()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                settingsUIFrozen = false;
+                commonVars.setActiveUI(CommonVars.uiActive.settings, true);
+                comboBox_calcModes.SelectedIndexChanged += entropySettingsChanged;
+                checkBox_withinMode.CheckedChanged += entropySettingsChanged;
+                checkBox_useShortestEdge.CheckedChanged += entropySettingsChanged;
+                checkBox_displayResults.CheckedChanged += mcPreviewSettingsChanged;
+                checkBox_displayShapes.CheckedChanged += mcPreviewSettingsChanged;
+                num_ssNumOfCases.LostFocus += entropySettingsChanged;
+                num_ssPrecision.LostFocus += entropySettingsChanged;
+                num_cornerSegments.LostFocus += entropySettingsChanged;
+                checkBox_debugCalc.CheckedChanged += entropySettingsChanged;
+                checkBox_limitCornerPoints.CheckedChanged += entropySettingsChanged;
+                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+                {
+                    comboBox_geoEqtn_Op[i].SelectedIndexChanged += entropySettingsChanged;
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                {
+                    comboBox_geoEqtn_Op_2Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+                {
+                    comboBox_geoEqtn_Op_4Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+                {
+                    comboBox_geoEqtn_Op_8Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                }
+
+                checkBox_perPoly.CheckedChanged += entropySettingsChanged;
+                checkBox_aChord.CheckedChanged += entropySettingsChanged;
+                checkBox_bChord.CheckedChanged += entropySettingsChanged;
+                checkBox_external.CheckedChanged += entropySettingsChanged;
+                comboBox_externalTypes.SelectedIndexChanged += entropySettingsChanged;
+                checkBox_CSV.CheckedChanged += entropySettingsChanged;
+                checkBox_LERMode.CheckedChanged += entropySettingsChanged;
+                comboBox_RNG.SelectedIndexChanged += entropySettingsChanged;
+
+                text_server.LostFocus += emailSettingsChanged;
+                text_emailAddress.LostFocus += emailSettingsChanged;
+                text_emailPwd.LostFocus += emailSettingsChanged;
+
+                num_port.LostFocus += emailSettingsChanged;
+                checkBox_EmailCompletion.CheckedChanged += emailSettingsChanged;
+                checkBox_perJob.CheckedChanged += emailSettingsChanged;
+                checkBox_SSL.CheckedChanged += emailSettingsChanged;
+
+                checkBox_friendlyNumbers.CheckedChanged += miscSettingsChanged;
+
+                button_replay.Click += replayLoadCSV;
+                checkBox_replay.CheckedChanged += replayChanged;
+                num_replay.LostFocus += replayCaseChanged;
+            });
+        }
+
+        void freezeTabSelection(object sender, EventArgs e)
+        {
+            setMainSelectedIndex((Int32)CommonVars.upperTabNames.twoD);
+            set2DSelectedIndex(simRunningTabToFreeze);
+        }
+
+        void abUI()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                // A layer
+                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+                {
+                    label_geoEqtn_Op[i].Text = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                    // Check layer enable states for boolean menu activation states.
+                    comboBox_geoEqtn_Op[i].Enabled = commonVars.isLayerActive(i);
+                    label_geoEqtn_Op[i].Enabled = commonVars.isLayerActive(i);
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                {
+                    if (commonVars.interLayerRelationship_2(i))
+                    {
+                        comboBox_geoEqtn_Op_2Layer[i].Enabled = true;
+                    }
+                    else
+                    {
+                        comboBox_geoEqtn_Op_2Layer[i].Enabled = false;
+                    }
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+                {
+                    if (commonVars.interLayerRelationship_4(i))
+                    {
+                        comboBox_geoEqtn_Op_4Layer[i].Enabled = true;
+                    }
+                    else
+                    {
+                        comboBox_geoEqtn_Op_4Layer[i].Enabled = false;
+                    }
+                }
+            });
+        }
+
+        void xUI()
+        {
+            Application.Instance.Invoke(() =>
+            {
+                for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+                {
+                    if (
+                        (((commonVars.getLayerSettings(i * 8).getInt(EntropyLayerSettings.properties_i.enabled) == 1) || (commonVars.getLayerSettings((i * 8) + 1).getInt(EntropyLayerSettings.properties_i.enabled) == 1)) ||
+                         ((commonVars.getLayerSettings((i * 8) + 2).getInt(EntropyLayerSettings.properties_i.enabled) == 1) || (commonVars.getLayerSettings((i * 8) + 3).getInt(EntropyLayerSettings.properties_i.enabled) == 1)))
+                        &&
+                        (((commonVars.getLayerSettings((i * 8) + 4).getInt(EntropyLayerSettings.properties_i.enabled) == 1) || (commonVars.getLayerSettings((i * 8) + 5).getInt(EntropyLayerSettings.properties_i.enabled) == 1)) ||
+                         ((commonVars.getLayerSettings((i * 8) + 6).getInt(EntropyLayerSettings.properties_i.enabled) == 1) || (commonVars.getLayerSettings((i * 8) + 7).getInt(EntropyLayerSettings.properties_i.enabled) == 1)))
+                       )
+                    {
+                        comboBox_geoEqtn_Op_8Layer[i].Enabled = true;
+                    }
+                    else
+                    {
+                        comboBox_geoEqtn_Op_8Layer[i].Enabled = false;
+                    }
+                }
+            });
+        }
+
+        void entropySettingsChanged(object sender, EventArgs e)
+        {
+            if (settingsUIFrozen)
+            {
+                return;
+            }
+
+            Application.Instance.Invoke(() =>
+            {
+                entropySettingsChanged(sender);
+                getComment();
+            });
+            doStatusLine();
+            drawSimulationPanelHandler(false);
+            updatePASearchUI();
+        }
+
+        async void entropySettingsChanged(object sender)
+        {
+            bool updateNeeded = false;
+
+            // Force base configuration as the table layout lazy evaluation can result in trouble.
+            try
+            {
+                if (comboBox_calcModes.SelectedIndex < 0)
+                {
+                    comboBox_calcModes.SelectedIndex = (int)CommonVars.calcModes.area;
+                }
+            }
+            catch (Exception)
+            {
+                // Harmless fail in case we're not in the right UI state.
+            }
+            if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) < 0)
+            {
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.area);
+            }
+
+            if (commonVars.getReplayMode() == 0)
+            {
+                int mainIndex = getMainSelectedIndex();
+                int twoDIndex = getSubTabSelectedIndex();
+
+                btn_singleCPU.Enabled = false;
+
+                btn_multiCPU.Enabled = false;
+                btn_STOP.Enabled = false;
+                statusProgressBar.Visible = false;
+                if (mainIndex != (Int32)CommonVars.upperTabNames.twoD)
+                {
+                    return;
+                }
+
+                if (!openGLErrorReported)
+                {
+                    createVPContextMenu();
+                    if (twoDIndex != (int)CommonVars.twoDTabNames.paSearch)
+                    {
+                        viewPort.changeSettingsRef(ref mcVPSettings[CentralProperties.maxLayersForMC - 1 + twoDIndex]);
+                    }
+                    else
+                    {
+                        // Link to the simulation viewport to make things easier in the PA search mode, since we can hook into the simulation preview cheaply.
+                        viewPort.changeSettingsRef(ref mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings]);
+                    }
+                }
+
+                setGlobalUIValues();
+
+                bool preCheck = !((twoDIndex == (int)CommonVars.twoDTabNames.settings) || (twoDIndex == (int)CommonVars.twoDTabNames.paSearch));
+
+                var control = sender as TabControl;
+                if ((control == tabControl_2D_simsettings) && preCheck)
+                {
+                    return;
+                }
+
+                commonVars.setWarningShown(false);
+
+                if ((twoDIndex == (int)CommonVars.twoDTabNames.settings) || (twoDIndex == (int)CommonVars.twoDTabNames.paSearch))
+                {
+                    startButtonCheck();
+                    upperGadgets_panel.Content = simPreviewBox;
+                    statusProgressBar.Visible = true;
+                }
+
+                if (twoDIndex == (int)CommonVars.twoDTabNames.DOE)
+                {
+                    updateStatusLine("Configure DOE settings.");
+                }
+
+                // Set update needed flag to cause a re-sim if desired.
+                // We force the update flag to on and then clear it if the control is not supposed to trigger a re-evaluation.
+            }
+
+            updateNeeded = true;
+
+            if (commonVars.getReplayMode() == 0)
+            {
+                var checkBoxControl = sender as CheckBox;
+                if ((checkBoxControl == checkBox_external) || (checkBoxControl == checkBox_CSV) ||
+                    (checkBoxControl == checkBox_greedyMultiCPU) || (checkBoxControl == checkBox_LERMode))
+                {
+                    updateNeeded = false;
+                }
+
+                var numControl = sender as NumericStepper;
+                if (numControl == num_ssNumOfCases)
+                {
+                    updateNeeded = false;
+                }
+
+                var ddControl = sender as DropDown;
+                if (ddControl == comboBox_RNG)
+                {
+                    updateNeeded = false;
+                }
+
+                // Retrieve our settings.
+                checkBox_perPoly.Enabled = false;
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.area)
+                {
+                    checkBox_perPoly.Enabled = true;
+                }
+
+                checkBox_withinMode.Enabled = false;
+                checkBox_useShortestEdge.Enabled = false;
+
+                abUI();
+
+                xUI();
+
+                if ((bool)checkBox_debugCalc.Checked)
+                {
+                    commonVars.getSimulationSettings().debugCalc = true;
+                }
+                else
+                {
+                    commonVars.getSimulationSettings().debugCalc = false;
+                }
+
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.enclosure_spacing_overlap)
+                {
+                    if ((bool)checkBox_withinMode.Checked)
+                    {
+                        if ((bool)checkBox_useShortestEdge.Checked)
+                        {
+                            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.enclosure);
+                        }
+                        else
+                        {
+                            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.enclosureOld);
+                        }
+                    }
+                    else
+                    {
+                        if ((bool)checkBox_useShortestEdge.Checked)
+                        {
+                            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.spacing);
+                        }
+                        else
+                        {
+                            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.spacingOld);
+                        }
+                    }
+                }
+
+                checkBox_aChord.Enabled = false;
+                checkBox_bChord.Enabled = false;
+
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.chord)
+                {
+                    checkBox_aChord.Enabled = true;
+                    checkBox_bChord.Enabled = true;
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.chordCalcElements.a + (int)CommonVars.chordCalcElements.b);
+                    if ((!(bool)checkBox_aChord.Checked) && (!(bool)checkBox_bChord.Checked))
+                    {
+                        checkBox_aChord.Checked = true; // force a default if the user is being silly.
+                    }
+                    if (!(bool)checkBox_aChord.Checked)
+                    {
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)CommonVars.chordCalcElements.a);
+
+                    }
+                    if (!(bool)checkBox_bChord.Checked)
+                    {
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)CommonVars.chordCalcElements.b);
+                    }
+                }
+
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.area)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.area);
+                    if ((bool)checkBox_perPoly.Checked)
+                    {
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.areaCalcModes.perpoly);
+                        textBox_userGuidance.Text = "The minimum overlap area will be calculated and reported.";
+                    }
+                    else
+                    {
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.areaCalcModes.all);
+                        textBox_userGuidance.Text = "The total overlap area of all polygons in the layers will be calculated and reported.";
+                    }
+                    label_AB.Text = "AND";
+                }
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.enclosure_spacing_overlap)
+                {
+                    comboBox_calcModes.SelectedIndexChanged -= entropySettingsChanged;
+                    checkBox_withinMode.Enabled = true;
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.enclosure_spacing_overlap);
+                    string t = "";
+                    if ((bool)checkBox_withinMode.Checked)
+                    {
+                        checkBox_useShortestEdge.Enabled = false;
+                        commonVars.calcMode_names[(int)CommonVars.calcModes.enclosure_spacing_overlap] = "Compute Enclosure Distribution";
+                        label_AB.Text = "Min Enclosure To";
+                        t = "enclosure";
+                    }
+                    else
+                    {
+                        checkBox_useShortestEdge.Enabled = true;
+                        commonVars.calcMode_names[(int)CommonVars.calcModes.enclosure_spacing_overlap] = "Compute Spacing Distribution";
+                        label_AB.Text = "Min Space To";
+                        t = "spacing";
+                    }
+                    comboBox_calcModes.SelectedIndex = (int)CommonVars.calcModes.enclosure_spacing_overlap;
+                    comboBox_calcModes.SelectedIndexChanged += entropySettingsChanged;
+                    textBox_userGuidance.Text = "The system will report the minimum " + t + " value between the shapes, as a single value per case.\r\nNote that overlap cases will report a negative value to indicate that they are opposite to the case being evaluated";
+                }
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.chord)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.chord);
+                    label_AB.Text = "Min Chord With";
+                    textBox_userGuidance.Text = "The system will report multiple chord lengths as : \"AMinTopChord,AMinBottomChord,BMinLeftChord,BMinRightChord\".\r\n\r\nMissing chords or invalid cases for evaluation are reported as 0.0\r\nChords not requested by the user are shown as N/A in the output file.\r\n\r\nShape A is defined by geometric equation A; B is geometric equation B.\r\n\r\nMajor axis : Orient shape A horizontally and B vertically else results will be reversed (top/bottom <> left/right)";
+                }
+                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.angle)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.angle);
+                    label_AB.Text = "Min Angle With";
+                    textBox_userGuidance.Text = "The minimum intersection angle will be reported, in degrees. A lack of intersection will yield a 180-degree value in the output";
+                }
+                commonVars.getSimulationSettings().setResolution(Convert.ToDouble(num_ssPrecision.Value));
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.cSeg, Convert.ToInt32(num_cornerSegments.Value));
+
+                if ((bool)checkBox_limitCornerPoints.Checked)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.optC, 1);
+                }
+                else
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.optC, 0);
+                }
+
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.nCases, Convert.ToInt32(num_ssNumOfCases.Value));
+
+                if ((bool)checkBox_greedyMultiCPU.Checked)
+                {
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.greedy, 1);
+                }
+                else
+                {
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.greedy, 0);
+                }
+
+                if ((bool)checkBox_linkCDUVariation.Checked)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.linkCDU, 1);
+                }
+                else
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.linkCDU, 0);
+                }
+
+                if ((bool)checkBox_LERMode.Checked)
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.ler, 1);
+                }
+                else
+                {
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.ler, 0);
+                }
+
+                // Store our operators in simulation settings.
+                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+                {
+                    commonVars.getSimulationSettings().setOperatorValue(EntropySettings.properties_o.layer, i, comboBox_geoEqtn_Op[i].SelectedIndex);
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                {
+                    commonVars.getSimulationSettings().setOperatorValue(EntropySettings.properties_o.twoLayer, i, comboBox_geoEqtn_Op_2Layer[i].SelectedIndex);
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+                {
+                    commonVars.getSimulationSettings().setOperatorValue(EntropySettings.properties_o.fourLayer, i, comboBox_geoEqtn_Op_4Layer[i].SelectedIndex);
+                }
+
+                for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+                {
+                    commonVars.getSimulationSettings().setOperatorValue(EntropySettings.properties_o.eightLayer, i, comboBox_geoEqtn_Op_8Layer[i].SelectedIndex);
+                }
+
+                if ((bool)checkBox_external.Checked)
+                {
+                    comboBox_externalTypes.Enabled = true;
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.external, 1);
+                    commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
+                }
+                else
+                {
+                    comboBox_externalTypes.Enabled = false;
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.external, 0);
+                }
+
+                commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.externalType, comboBox_externalTypes.SelectedIndex);
+
+                if ((bool)checkBox_CSV.Checked)
+                {
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.csv, 1);
+                }
+                else
+                {
+                    commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.csv, 0);
+                }
+
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.rngType, comboBox_RNG.SelectedIndex);
+
+                // Ensure we set controls according to run state
+                if (commonVars.isSimRunning())
+                {
+                    btn_singleCPU.Enabled = false;
+                    btn_multiCPU.Enabled = false;
+                    btn_STOP.Enabled = true;
+                }
+            }
+
+            // Make a single run when on the right tab, to populate the preview structures, and only if simulation not running.
+            if (!commonVars.isSimRunning())// && (tabPage_2D_simsettings.SelectedIndex == (int)CommonVars.twoDTabNames.settings))
+            {
+                if (updateNeeded)
+                {
+                    // Set indeterminate progress bar to show application is thinking.
+                    Application.Instance.Invoke(() =>
+                    {
+                        statusProgressBar.Indeterminate = true;
+                    }
+                    );
+                    entropyControl.update(commonVars);
+                    // Spawn and await background task in case the calculation is long-running.
+                    // Avoids blocking the UI.
+                    // Freeze the UI to avoid cascasing runs.
+                    simRunningUIFunc();
+                    btn_STOP.Enabled = false; // No ability to abort a single case, so don't mislead the user. They are along for the ride.
+
+                    try
+                    {
+                        await Task.Run(() =>
+                        {
+                            updateStatusLine("Calculating - please wait");
+                            if (commonVars.getReplayMode() == 0)
+                            {
+                                entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false);
+                            }
+                            else
+                            {
+                                entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false, setJobSettings: true, loadedJobSettings: simReplay.getChaosSettings(), replayRow: simReplay.getValue(Replay.properties_i.row), replayCol: simReplay.getValue(Replay.properties_i.col));
+                            }
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        // Handle any task cancelled exception without crashing the tool. The cancellation may occur due to close of the tool whilst evaluation is underway.
+                    }
+                    postSimUI();
+                    // Set the progress bar back to a fixed state
+                    Application.Instance.Invoke(() =>
+                    {
+                        statusProgressBar.Indeterminate = false;
+                    }
+                    );
+                    postSimStatusLine();
+                }
+            }
+            if (commonVars.getReplayMode() == 0)
+            {
+                uiFollowChanges();
+            }
+        }
+
+        void setReplayControls()
+        {
+            groupBox_replay.Enabled = true;
+            button_replay.Enabled = true;
+            checkBox_replay.Enabled = simReplay.isValid();
+            num_replay.Enabled = simReplay.isValid();
+
+            if (((bool)checkBox_replay.Checked) && (!simReplay.isValid()))
+            {
+                checkBox_replay.Checked = false;
+                // Will trigger event handler and update setup.
+            }
+        }
+
+        void replaySuspend()
+        {
+            groupBox_replay.Enabled = false;
+            num_replay.Enabled = false;
+            checkBox_replay.Enabled = false;
+            button_replay.Enabled = true;
+        }
+
+        void replayResume()
+        {
+            groupBox_replay.Enabled = true;
+            num_replay.Enabled = true;
+            checkBox_replay.Enabled = true;
+            button_replay.Enabled = false;
+        }
+
+        void replayLoadCSV(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Title = "Select CSV file to Load",
+                MultiSelect = false,
+                Filters =
+                        {
+                            new FileFilter("CSV Files (*.csv)", ".csv")
+                        }
+            };
+            if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
+            {
+                try
+                {
+                    simReplay.replay_loadCSV(ofd.FileName);
+                }
+                catch (Exception)
+                {
+                    simReplay.reset();
+                }
+            }
+
+            // Configure numeric control.
+            if (simReplay.getValue(Replay.properties_i.max) < 1)
+            {
+                num_replay.MinValue = 0;
+                num_replay.Value = 0;
+                num_replay.MaxValue = 0;
+            }
+            else
+            {
+                num_replay.MaxValue = simReplay.getValue(Replay.properties_i.max);
+                num_replay.Value = 1;
+                num_replay.MinValue = 1;
+            }
+
+            setReplayControls();
+        }
+
+        void replayChanged(object sender, EventArgs e)
+        {
+            replayChanged();
+        }
+
+        void replayChanged()
+        {
+            if (replayUIFrozen)
+            {
+                return;
+            }
+            replayUIFrozen = true;
+
+            if ((bool)checkBox_replay.Checked)
+            {
+                enableReplay();
+            }
+            else
+            {
+                disableReplay();
+            }
+
+            replayUIFrozen = false;
+        }
+
+        void enableReplay()
+        {
+            commonVars.setReplayMode(1);
+            simRunningUI();
+            replayResume();
+            replay();
+        }
+
+        void disableReplay()
+        {
+            postSimUI();
+            commonVars.setReplayMode(0);
+            replaySuspend();
+            entropySettingsChanged(null);
+        }
+
+        void replayCaseChanged(object sender, EventArgs e)
+        {
+            if (replayUIFrozen)
+            {
+                return;
+            }
+            replayUIFrozen = true;
+            replay();
+            replayUIFrozen = false;
+        }
+
+        void replay()
+        {
+            if (!simReplay.isValid())
+            {
+                return;
+            }
+
+            if (commonVars.getReplayMode() == 1)
+            {
+                // Retrieve chaos values from replay.
+                simReplay.getState(Convert.ToInt32(num_replay.Value));
+
+                // Update preview with replay state.
+                entropySettingsChanged(null);
+            }
+
+            replayChanged();
+        }
+    }
+}

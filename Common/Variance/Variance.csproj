@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;Release_obf</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;DISABLELICENSE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
+    <DefineConstants>TRACE;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DISABLELICENSE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="license\**" />
+    <Compile Remove="qlicense\**" />
+    <EmbeddedResource Remove="license\**" />
+    <EmbeddedResource Remove="qlicense\**" />
+    <None Remove="license\**" />
+    <None Remove="qlicense\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Eto\Common\Variance.cs" Link="support\Variance.cs" />
+    <Compile Include="..\keys.cs" Link="keys.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+    <PackageReference Include="MailKit" Version="2.5.1" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+    <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
+    <PackageReference Include="Veldrid" Version="4.7.0" />
+    <PackageReference Include="System.Management" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\clipper\clipper.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Color\color.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\entropyRNG\entropyRNG.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoCore\geoCore.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoLib\geoLib.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoWrangler\geoWrangler.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\info.lundin.math\info.lundin.math.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\KDTree\KDTree.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Noise\noise.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\errorReporter\errorReporter.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
+    <ProjectReference Include="..\..\Eto\Resources\resources.csproj" />
+  </ItemGroup>
+
+</Project>

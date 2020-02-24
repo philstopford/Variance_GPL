@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;Release_obf</Configurations>
+    <!-- <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers> -->
+    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="mc_image.icns" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BundleResource Include="mc_image.icns" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.5.0-rc.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Mac\Eto.Veldrid.Mac64.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
+    <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
+  </ItemGroup>
+
+  <!--Eto's MacTemplate.targets file doesn't automatically pack native .dylib
+  libraries into the monolithic executable produced by mkbundle. Luckily, it
+  respects existing values of MkBundleArgs by appending instead of replacing.-->
+  <Target Name="SetMkBundleArgs" BeforeTargets="MacBundleMono" Condition="$(MacBundleMono) == true">
+    <PropertyGroup>
+      <MkBundleArgs>--simple --library "$(OutputPath)$(VeldridSpirvNativeName)"</MkBundleArgs>
+    </PropertyGroup>
+  </Target>
+
+</Project>

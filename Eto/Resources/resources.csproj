@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;Release_obf</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="1dcalc.jpg" />
+    <None Remove="mc_image.png" />
+    <None Remove="mc_image_int.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="1dcalc.jpg" />
+    <EmbeddedResource Include="mc_image.png" />
+    <EmbeddedResource Include="mc_image_int.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.5.0-rc.6" />
+  </ItemGroup>
+
+</Project>

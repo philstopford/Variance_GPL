@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <a name="overviewMC_customRNGMapping"></a>
+  <h2 class="western">Custom RNG Mapping</h2>
+    <p class="western" style=" line-height: 100%"><img src="images/custom_RNG.png" alt=""/> </p>
+
+    <p class="western" style=" line-height: 100%">By default, Variance uses a Gaussian distribution for its inputs. This is achieved by mapping a uniform distribution into a Gaussian, through application of the Box-Muller transform. You can, however, choose to define a custom mapping equation and apply it to as many inputs as you like.</p>
+    <p class="western" style=" line-height: 100%">Some notes about custom mapping:</p>
+    <ul>
+    	<li>Custom mapping equations within the project will be written in-full to the project file, and also recorded in output summary files.</li>
+    	<li>Custom mapping equations will be loaded from project files, and added to the internal list. They will remain available for use in other projects until manually deleted (in the Utils tab).</li>
+    	<li>Input parameters set to use a custom mapping equation will have red labels in the UI, to make review easier.</li>
+    	<li>Use of custom mapping will disable standard-deviation reporting in the UI during simulation runs, including PA search.</li>
+    	<li>Use of custom mapping will require offline analysis (through the CSV output option) to understand the distribution of results.</li>
+	</ul>
+
+    <p class="western" style=" line-height: 100%"><img src="images/custom_RNG_applied.png" alt=""/> </p>
+
+  <h3 class="western">Adding/Editing/Removing Equations</h3>
+
+    <p class="western" style=" line-height: 100%"><img src="images/custom_RNG.png" alt=""/> </p>
+
+    <p class="western" style=" line-height: 100%">Custom mapping equations are entered into, or removed from, the system under the <a href="utils.html">Utils</a> tab. The equations are then available for selection by double-clicking on the label in the user interface (next to the numeric field), which will cause a menu to be displayed listing the available equations.</p>
+
+    <p class="western" style=" line-height: 100%">The underlying uniformally distributed RNG is available for access through several independent variables (i.e. they are independent calls to the RNG): x, y, z. In this way, you can reproduce the Box-Muller transform with :</p>
+
+    <p class="western" style=" line-height: 100%">sqrt(-2 * ln(y)) * cos(2 * PI * x)</p>
+
+    <p class="western" style=" line-height: 100%">This is the unscaled form; if you were working with 3 sigma normal inputs, you would need to compensate with a /3.0</p>
+
+    <p class="western" style=" line-height: 100%">For convenience, there are also three unscaled Box-Muller transformations (_gxy, _gyz, _gxz) available for use in the expression:</p>
+    <ul>
+    	<li>_gxy == (sqrt(-2 * ln(y)) * cos(2 * PI * x))</li>
+		<li>_gyz == (sqrt(-2 * ln(z)) * cos(2 * PI * y))</li>
+        <li>_gxz == (sqrt(-2 * ln(z)) * cos(2 * PI * x))</li>
+    </ul>
+
+    <p class="western" style=" line-height: 100%">When adding an equation, the tool will validate the entry. Errors must be rectified before the equation can be added. Only unique equations will be added - duplicates will be silently ignored.</p>
+
+  <h3 class="western">Supported operators and functions</h3>
+    <p class="western" style=" line-height: 100%">+, -, *, /, ^, %</p>
+    <p class="western" style=" line-height: 100%">^ is raised to (power) for example 3^2</p>
+    <p class="western" style=" line-height: 100%">% is the modulo operator</p>
+
+    <p class="western" style=" line-height: 100%">sqrt, sin, cos, tan, atan, acos, asin, acotan, exp, ln, log, sinh, cosh, tanh, abs, ceil, floor, fac, sfac, round, fpart. fac, sfac are factorial and semi-factorial functions. fpart returns the decimal part of a value.</p>
+
+    <p class="western" style=" line-height: 100%">!, ==, !=, ||, &&, >, < , >=, <= : Logical operators, 1.0 means true, 0.0 means false. If an expression evaluates to anything other than 1.0 it is considered false.</p>
+
+  <h3 class="western">Supported constants</h3>
+    <p class="western" style=" line-height: 100%">PI</p>
+    <p class="western" style=" line-height: 100%">Euler</p>
+    <p class="western" style=" line-height: 100%">false (0.0)</p>
+    <p class="western" style=" line-height: 100%">infinity</p>
+
+</body>
+</html>

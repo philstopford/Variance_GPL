@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<a name="overviewUtilities"></a>
+<h1 class="western" style="page-break-before: always">Utilities</h1>
+  <p class="western" style=" line-height: 100%">The Utilities tab is where miscellaneous tools and settings can be found that do not find a ready home elsewhere in the application.</p>
+<a name="overviewUtilities_DOESummary"></a>
+  <h2 class="western1" style="page-break-before: always">DOE Summary</h2>
+  <p style="page-break-before: always"><img src="images/utilities.png" alt=""/></p>
+    <p class="western1" style=" line-height: 100%">This tool can be used to generate a CSV file that summarizes all of the results from a DOE. The results are presented in a grid. Each result is of the form 'result 0: x: 17.01(s: 2.67)'. Multiple results from the same cell in the DOE are separated by ';' and have their result number indicated (e.g. 'result 0: x: 17.01(s: 2.67);result 1: x: 16.75(s: 2.66)'.</p>
+    <blockquote>
+      <p class="western1" style=" line-height: 100%">Equation: (Layer 1) MIN SPACE/OVERLAP/ENCL TO/WITH (Layer 3)</p>
+      <p class="western1" style=" line-height: 100%">,<br>
+        ,<br>
+        ,<br>
+        result 0: x: 17.01(s: 2.67),result 0: x: 17.01(s: 2.67)    </p>
+    </blockquote>
+    <p class="western1" style=" line-height: 100%">The tool will process any and all DOEs in the directory that you specify, creating one summary file per DOE that is found.</p>
+
+<a name="overviewUtilities_Email"></a>
+  <h2 class="western1" style="page-break-before: always">Email Notification</h2>
+  <p style="page-break-before: always"><img src="images/utilities.png" alt=""/></p>
+    <p class="western1" style=" line-height: 100%">This tool offers notification options for job/batch completion. The settings should be straightforward and available from your provider. You can determine whether they are correctly set using the 'Test' button to send a mail. The 'from' and 'to' addresses will be the same.</p>
+    <p class="western1" style=" line-height: 100%">The email received when jobs are completed will be of the form:</p>
+    <blockquote>
+      <p class="western" align="left" style=" line-height: 100%">
+      (Subject) Variance run completed : ..\..\..\VxC14.xml<br>
+      (Body) x: 706.69, s: 108.8</p>
+    </blockquote>
+    <p class="western1" style=" line-height: 100%">In the case of run failure, the subject line will have 'aborted' in place of 'completed'. The subject line lends itself to filtering. In case of mistakes, the email is deliberately terse to avoid problems if the address is incorrect. Nothing can be inferred from the content and no attachments are sent. The subject line does contain the full path and job XML reference, to provide context for the user to know which jobs are complete.</p>
+    <p class="western1" style=" line-height: 100%">These settings are remembered across sessions, and are stored in the user's registry. On non-Windows platforms, the registry replacement system (e.g. from Mono or Wine) may be readable by other users, so caution is advised.</p>    
+
+<a name="overviewUtilities_DisplayPrefs"></a>
+  <h2 class="western1" style="page-break-before: always">Display Preferences</h2>
+  <p style="page-break-before: always"><img src="images/utilities.png" alt=""/></p>
+    <p class="western1" style=" line-height: 100%">This tool offers preferences to configure the viewport appearance and look-and-feel.</p>
+    <p class="western1" style=" line-height: 100%">These settings are remembered across sessions, and are stored in the user's registry.</p>    
+    <ul>
+    <li>Zoom increment : how quickly the viewport zooms in/out</li>
+    <li>Antialiasing : whether the lines are drawn smoothed or stepped</li>
+    <li>(BG/FG) opacity : the opacity of the shapes in the viewport. The opacity is applied to the fill in filled polygons, and the contour otherwise.</li>
+    <li>Fill : whether the shapes are drawn filled or not. 'Drawn' polygons are never filled to avoid confusion.</li>
+    <li>Reset : resets the preferences to defaults</li>
+    </ul>
+    <p style="page-break-before: always"><img src="images/filled_geometry.png" alt=""/></p>
+    <p class="western1" style=" line-height: 100%">The color squares show the current colors assigned to different elements in the viewport. Click on a square to bring up a color picker in order to change the colors as-desired. The changes will be applied across the interface without further action, although the individual layer viewports may only update once 'nudged' (e.g. zooming)</p>    
+
+<a name="overviewUtilities_ExtPrefs"></a>
+  <h2 class="western1" style="page-break-before: always">GDS/Oasis Preferences</h2>
+  <p style="page-break-before: always"><img src="images/utilities.png" alt=""/></p>
+    <p class="western1" style=" line-height: 100%">This tool offers preferences to configure aspects related to GDS/Oasis files.</p>
+    <p class="western1" style=" line-height: 100%">These settings are remembered across sessions, and are stored in the user's registry.</p>    
+    <ul>
+    <li>Allow CD Variation : permit side CDU to be applied to the geometry</li>
+    <li>Use DOE Tile for Layer Preview : whether the extracted DOE tile or the full layout should be displayed in the layer preview</li>
+    </ul>
+
+</body>
+</html>

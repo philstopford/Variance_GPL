@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#0aacc" dir="ltr">
+
+<a name="overviewimplant"></a>
+<h1 class="western">Overview of Implant calculation</h1>
+  <p class="western" style=" line-height: 100%">This is a tilted implant shadowing calculation system. It currently does not account for corner rounding in the resist other than the top corner rounding of the resist profile. The contour is generated from the internal shape engine.</p>
+  <img src="images/implant.png" alt=""/>
+  <p class="western" style=" line-height: 100%">The preview state shows the mean, minimum and maximum shadowing for the <b>nominal</b> resist contour (i.e. the implant 3-sigma is applied to the mean as appropriate). The Monte Carlo system evaluates all sources of variation and determines the mean and standard deviation.</p>
+  <p class="western" style=" line-height: 100%">The majority of the controls are self-explanatory, especially when one is already familiar with the multi-layer Monte Carlo system. Note that linear resolution values are not available because shadowing is a result of interaction with corners. Accuracy is therefore directly dependent on the corner resolution, which is defined by the corner segment value. Higher values yield a greater resolution.</p>
+  <p class="western" style=" line-height: 100%">The summary file output will report the effective resolution (i.e. edge resolution / accuracy, angular resolution / accuracy). You can also choose to export CSV and/or SVG output files, just like in the multilayer Monte Carlo system. Electing to save SVGs will cause considerable memory consumption during the run as the geometry is stored rather than cleared. The CSV is essentially free-of-cost, except for the time taken to write the file to disk at the end of the run.</p>
+  <p class="western" style=" line-height: 100%">Please consider that 90 degree tilt conditions (through variation) will result in an infinite shadow being cast. This condition is <b>not</b> ignored and will result in your entire run having an infinite mean and invalid standard deviation. You should ensure that your implant conditions do not cause this to arise.</p>
+</body>
+</html>

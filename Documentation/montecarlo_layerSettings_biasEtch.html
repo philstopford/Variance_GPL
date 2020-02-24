@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <blockquote>
+    <a name="overviewMC_layers_BiasEtch"></a>
+    <h3 class="western">Bias and Etch Parameters</h3>
+      <p class="western" style=" line-height: 100%">Side bias is applied to all sides of the shape that are not defined as tips.</p>
+      <p class="western" style=" line-height: 100%">Note that tips have a variation on their bias. The variation is split to permit positive and negative maximum variation values. Internally, a variation type random number for each type generated. A value &lt; 0.5 causes a negative tip variation to be applied, otherwise a positive variation is applied. The variation is correlated if the tip and side CDU is correlated.</p>
+      <img src="images/layerSettings_biasEtch.png" alt=""/>
+      <p class="western" style=" line-height: 100%">Proximity dependent bias is evaluated for each point on the layer. It is assessed after all other dimensional variations are applied (CDU, LER/LWR). For each point, a visibility calculation is performed. The initial ray is cast along the point's normal. The system also permits additional rays to be cast to the side. These rays are emitted at increments of (90 / number of side rays). Increasing the number of rays yields a more accurate result, but increases the calculation time for the shape. Note, as below, that keyholed geometry may result due to overlaps. This keyholed representation is required for some of the calculation approaches to work successfully. The keyhole is positioned to minimize mathematical errors in each case.</p>
+    <table>
+    <tr>
+      <td>
+      <img class="c" src="images/rays_0.png" alt=""/>
+      </td>
+      <td>
+      <img class="c" src="images/rays_1.png" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <img class="c" src="images/rays_2.png" alt=""/>
+      </td>
+      <td>
+      <img class="c" src="images/rays_4.png" alt=""/>
+      </td>
+    </tr>
+    </table>
+      <p class="western" style=" line-height: 100%">Note that artifacts and asymmetry can arise from insufficient rays being used, as shown below. Work continues to improve the algorithm, but this is something to be aware of in the current approach.</p>
+    <table>
+    <tr>
+      <td>
+      <img class="c" src="images/u_rays_0.png" alt=""/>
+      </td>
+      <td>
+      <img class="c" src="images/u_rays_1.png" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <img class="c" src="images/u_rays_2.png" alt=""/>
+      </td>
+      <td>
+      <img class="c" src="images/u_rays_4.png" alt=""/>
+      </td>
+    </tr>
+    </table>
+    <p class="western" style=" line-height: 100%">As noted earlier, keyholed geometry is created in case of fully enclosed holes in the geometry. Using keyholed geometry in conjunction with proximity biasing may result in artifacts around the keyhole region, arising from the complex geometry. Also, note also that the keyhole insertion may be different from any evident in the 'drawn' case in these situations, arising from internal attempts to reduce mathematical errors.</p>
+    <p class="western" style=" line-height: 100%">Please also refer to the order-of-operations section to understand how lens distortion, proximity biasing and LER are applied in combination.</p>
+
+  </blockquote>
+
+  <blockquote>
+    <blockquote>
+      <h4 class="western">GDS/Oasis Note</h4>
+        <p class="western" style=" line-height: 100%">Side CDU can be enabled for GDS/Oasis shapes, but should only be used with care. Biasing is performed uniformally to increase or decrease the shape boundary. This may not reflect the OPC contours (process) and could also lead to algorithm fails in case of self-intersections. A preference is available to enable/disable this setting for this type of geometry; projects loaded with side CDU for these types of layers will override this preference if it is off.</p>
+        <p class="western" style=" line-height: 100%">An effort is made to handle self-intersections (as shown below). The polygon fill type menu (defaulting to 'non-zero') allows for adjustments, but 'non-zero' will usually be correct. Note that there is no guarantee that the result will work with all calculation modes, however.</p>
+        <p class="western" style=" line-height: 100%">The keyholes generated from the overlap processing are also evident in the images below.</p>
+        <img src="images/biasGDS.png" alt=""/>
+        <p class="western" style=" line-height: 100%">&nbsp;</p>
+        <img src="images/biasGDS_area.png" alt=""/>
+    </blockquote>
+  </blockquote>
+
+</body>
+</html>

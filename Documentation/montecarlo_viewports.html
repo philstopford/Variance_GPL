@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <a name="overviewMC_viewports"></a>
+  <h2 class="western">Viewports</h2>
+    <p class="western" style=" line-height: 100%">The viewport system uses the optimal native system for the platform being used (Vulkan, OpenGL, Direct3D, Metal). You can zoom with your mouse wheel and also move around using the WASD keys. If you get lost in the viewport, hit ‘r’ and the viewport will go back to the origin and default zoom. 'f' will freeze/thaw the viewport, preventing mouse input changing the camera position and zoom until thawed. 'n' and 'm' will zoom in/out. Tooltips will be displayed on mouse hover, providing a reference for the user.</p>
+    <p class="western" style=" line-height: 100%">Context menus are available in viewports - simply right click. Note that the implant and DOE menus lack some of the entries.</p>    
+    
+    <p class="western" style=" line-height: 100%"><img src="images/contextmenu.png" lt=""/></p>    
+
+    <p class="western" style=" line-height: 100%">Most of the entries should be self-explanatory, but an overview is below:</p>    
+    <ul>
+    	<li>Reset: resets the view zoom and camera location to the default values.</li>
+    	<li>Display Options : allows for toggle antialiasing, fill or the display of points in the viewport.</li>
+    	<li>Freeze/Thaw : 'Freeze' will lock the viewport position and zoom at the current values. 'Thaw' will remove the lock.</li>
+    	<li>Save bookmark : This will save the current view location.</li>
+    	<li>Load bookmark : This will load a saved view.</li>
+    	<li>Use location for all viewports : Applies the current view to all viewports in the system.</li>
+    	<li>Zoom Extents : zooms and repositions the camera to display all content in the viewport. See note below for DOE previews.</li>
+    	<li>Zoom In / Zoom Out : zooms in or out by one step.</li>
+    	<li>Fast Zoom In / Fast Zoom Out : zooms in or out by a multiple of steps.</li>
+    	<li>Save SVG : writes the viewport content to an SVG.</li>
+    	<li>Save Layout : writes the viewport content to a GDSII or Oasis file.</li>
+    </ul>
+
+    <p class="western" style=" line-height: 100%">For layer previews involving a DOE tile (configured under the preferences), 'zoom extents' will consider the extracted geometry for the extents unless 'show drawn' is active, in which case the full layout is considered.</p>    
+
+</body>
+</html>

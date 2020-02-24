@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <blockquote>
+    <blockquote>
+      <a name="overviewMC_layers_boolean"></a>
+      <h4 class="western">Boolean</h4>
+        <p class="western" style=" line-height: 100%">In Boolean mode, you can set up an arbitrary Boolean equation from two active layers. The input layers include variations during simulation, and the output of the Boolean will see its own variations applied. An example scenario would be the reproduction of a spacer deposition pitch effect on a grating that has been processed with a cut mask. You could define the grating in layer 1, and the cut mask in layer 2. Layer 3 could then be (layer 1 NOT layer 2), and you could then apply the proximity biasing for the spacer deposition in layer 3.</p>
+        <p class="western" style=" line-height: 100%">Some notes:</p>
+        <ul>
+	    	<li>Layers feeding a Boolean need to be enabled.</li>
+	    	<li>LWR/LER from input layers is not previewed in the Boolean layer unless 'show' is set on the input layer(s). This allows for respective contributions to be configured and visualized.</li>
+        	<li>There are a number of complex scenarios that arise with Booleans, including limitations on contouring the solution. An overview is provided <a href="ilb_test_case_overview.html">here</a>.</li>
+        </ul>
+      	<p class="western" style=" line-height: 100%"><img src="images/ilb_3.png" alt=""/> </p>
+      	<p class="western" style=" line-height: 100%"><img src="images/ilb_12bg.png" alt=""/> </p>
+        <p class="western" style=" line-height: 100%">The resulting geometry is available for contouring as usual. Note that the contouring pipeline is the same as for geoCore contouring, with the same limitations regarding orthogonal shapes for biasing of tips. Proximity biasing, etc. are all fully supported.</p>
+      	<p class="western" style=" line-height: 100%"><img src="images/ilb_tip_proxBias.png" alt=""/> </p>
+
+        <p class="western" style=" line-height: 100%">Layers that are enabled and referenced in Booleans can, and usually should, be omitted from the simulation. This is configured using the checkboxes.</p>
+      	<p class="western" style=" line-height: 100%"><img src="images/ilb_noOmit12.png" alt=""/> </p>
+      	<p class="western" style=" line-height: 100%"><img src="images/ilb_omit12.png" alt=""/> </p>
+
+    </blockquote>
+  </blockquote>
+
+
+</body>
+</html>

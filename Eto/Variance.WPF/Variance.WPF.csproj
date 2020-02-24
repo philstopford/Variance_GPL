@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationManifest>app1.manifest</ApplicationManifest>
+    <ApplicationIcon>Monte_Carlo_2550495b_ico.ico</ApplicationIcon>
+    <Configurations>Debug;Release;Release_obf</Configurations>
+    <UseWpf>True</UseWpf>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants></DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Wpf\Eto.Veldrid.Wpf.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
+    <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
+    <ProjectReference Include="..\Resources\resources.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Monte_Carlo_2550495b_ico.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.6" />
+  </ItemGroup>
+
+</Project>

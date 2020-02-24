@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <a name="overviewMC_settings"></a>
+  <h2 class="western">Simulation Settings</h2>
+    <p><img src="images/distanceCalc_Filtering.png" alt=""/></p>
+    <ul>
+      <li>Number of cases: The total number of cases to evaluate. Note that the engine will sometimes encounter a configuration that cannot be evaluated and will reject it, so the total number of results may differ from the number of cases you request.</li>
+      <li>Resolution: This defines the minimum distance between points. This is used internally to fragment straight edges after the first stage of the shape generation. A second stage is used after LWR is applied, to try and ensure that large LWR values haven't unduly separated points on the edge. In the second stage, there is a limitation when there is insufficient space to fragment - at least 2x the resolution value is needed to inject a point, to have a distance &gt;= resolution to the points either side.</li>
+      <li>Corner Segments: The corners of the shapes are defined using a sweep from 0 to 90 degrees. This 90 degree sweep is divided up into segments. The more segments, the greater the accuracy (90 segments correspond to a 1 degree angular resolution). Note that this is overridden by the 'optimize corner pt density' option.</li>
+      <li>LER as LWR/sqrt(2): This, when set, causes LER to be calculated with a larger value than the more conservative, but strictly incorrect, LWR/2 approach that is often used.</li>
+      <li>Optimize corner pt density: When set, this overrides (if necessary) the angular resolution used to define corners. In this mode, the limiting factor wil be the linear distance between points, based on the edge resolution setting. This reduces calculation time significantly if the corners are packed tightly with points.</li>
+      <li>Link variation for tip and side CDU: This correlates the variation between tip and side CDU for the runs. This matches the old tool behavior, but may not be desired in all cases.</li>
+      <li>Total number of points: Just a readout of how many points make up the result contours.</li>
+    </ul> 
+    <p class="western" style=" line-height: 100%">The resolution and corner segment values allow you a good degree of control over the fidelity of the shapes being fed into the simulation engine, but do note that the increasing number of points will have an impact on calculation time per run. Nearest neighbor and chord length calculation time scales with increasing numbers of points.</p>
+    <p class="western" style=" line-height: 100%">There are some additional options available:</p>
+    <ul>
+      <li>Display results for each case : This draws the result out for the current case, in the preview region</li>
+      <li>Display input shapes for each case: This draws the contours being delivered to the simulation engine for each case.</li>
+      <li>Create SVG file for each case: This causes the tool to write out the input and output contours for each run to a numbered SVG file that can be referenced to the numbered result in the CSV output. Colors are preserved. <u><b>NOTE : This will cause significant memory footprint as the contours are retained in memory until the end of the run.</b></u></li>
+      <li>CSV. With this set, the default case, a CSV file will be generated with all of the result values and variation values. This can take some time for larger runs, and the files can also be large. Disabling this avoids the lengthy file generation, but it doesn't save any memory or CPU time during runs.</li>
+      <li>Use all CPUs (multi CPU). With this active, all CPUs will be used for the simulation runs. With it deselected, one CPU core will be left free so that the user can do work as the simulation is processed.</li>
+      <li>RNG Type. A choice of RNG is available to the user. Default is System.Random. Additionaly options are a Mersenne Twister or the Cryptographic RNG. The Mersenne Twister should be faster, but it hasn't been well benchmarked yet. The Cryptographic RNG adds a 10% overhead, but avoids a predictable distribution.</li>
+    </ul>
+    <p class="western" style=" line-height: 100%">The top right ‘result for this run’ will report the value(s) determined for the current run.</p>
+    <p class="western" style=" line-height: 100%">To run on a single processor, use ‘Single CPU’, otherwise use ‘Multiple CPU’.</p>
+    <ul>
+      <p style=" line-height: 100%">Note that during a multiple CPU run, the readout, progress bar and preview may update inconsistently and infrequently. This does not reflect the speed of the computation, but is just a consequence of the available spare capacity in the system to update the interface during the calculations. This should almost never happen for the usual case of the hardware-accelerated OpenGL viewports. For software OpenGL, the likelihood is higher. Slow machines will suffer more.</p>
+    </ul>
+
+  <blockquote>
+    <a name="overviewMC_settings_geoeqtn"></a>
+    <h3 class="western">Geometric Equation</h3>
+      <p class="western" style=" line-height: 100%">This is where the layer relationships are set up for the simulation. Note that the layer equation looks like this :</p>
+      <blockquote>
+        <p align="center" class="western" style=" line-height: 100%">{[(Layer 1 AND/OR Layer 2) AND/OR (Layer 3 AND/OR Layer 4)] AND/OR [(Layer 5 AND/OR Layer 6) AND/OR (Layer 7 AND/OR Layer 8)]}</p>
+        <p align="center" class="western" style=" line-height: 100%">-------</p>
+        <p align="center" class="western" style=" line-height: 100%">{[(Layer 9 AND/OR Layer 10) AND/OR (Layer 11 AND/OR Layer 12)] AND/OR [(Layer 13 AND/OR Layer 14) AND/OR (Layer 15 AND/OR Layer 16)]}</p>
+      </blockquote>
+      <p class="western" style=" line-height: 100%">This reflects the internal flow - the layers are processed piecewise in the way described above.</p>
+      <img src="images/geometric_equation.png" alt=""/>
+  </blockquote>
+
+  <blockquote>
+    <a name="overviewMC_settings_area"></a>
+    <h3 class="western">Area</h3>
+      <img src="images/areaCalc_1.png" alt=""/>
+      <p class="western" style=" line-height: 100%">By default, the total area is output in the current version of the system, summed across all input polygons. For multi-polygon cases where a minimum overlap area calculation is desired, the 'Per Poly' option can be set. One such example would be contact hole evaluations.</p>
+      <img src="images/areaCalc_2.png" alt=""/>
+  </blockquote>
+
+  <blockquote>
+    <a name="overviewMC_settings_spacing"></a>
+    <h3 class="western">Distance (Spacing/Enclosure, Overlap)</h3>
+      <p class="western" style=" line-height: 100%">When the shapes do not overlap, distance finds the minimum distance between points on one shape and points on the other.</p>
+      <img src="images/distanceCalc_1.png" alt=""/>
+      <p class="western" style=" line-height: 100%">In the case of an overlap event, a maximum overlap value is reported with negative sign to indicate the opposite nature of the value.</p>
+      <img src="images/distanceCalc_2.png" alt=""/>
+      <p class="western" style=" line-height: 100%">If the "shortest edge" option is checked, the overlap is evaluated by casting rays from the shortest edge and finding the longest ray length to the other side of the overlap. Rays are cast orthogonal to the edge segment. This use of the shortest edge makes the overlap detection neutral to the configuration of the layers. The evaluation of the shortest edge adds some small overhead to the calculation routine, but the benefit more than compensates:</p>
+      <img src="images/distanceCalc_wrongOrder_shortestEdge.png" alt=""/>
+      <p class="western" style=" line-height: 100%">In the absence of the "shortest edge" setting, the overlap is calculated using lines projected from the part of the overlap defined by the layer5/6/7/8 edges, which are projected until they intersect the edge from layer 1/2/3/4. If the layer order is reversed, the reported result will not be what you expect.</p>
+      <img src="images/distanceCalc_wrongOrder.png" alt=""/>
+      <p class="western" style=" line-height: 100%">The debug option gives you the ability to see the rays being cast, to help visualize how the engine is assessing your simulation. No results are gathered with the debug mode set.</p>
+      <img src="images/overlap_raytrace_shortestEdge.png" alt=""/>
+      <p class="western" style=" line-height: 100%">&nbsp;</p>
+      <img src="images/overlap_raytrace.png" alt=""/>
+      <p class="western" style=" line-height: 100%">Averaged normals are used as a basis for the raycast, to handle rough geometry from LER.</p>
+      <img src="images/overlap_ler.png" alt=""/>
+    <a name="overviewMC_settings_spacing_enclosure"></a>
+      <p class="western" style=" line-height: 100%">When the enclosure checkbox is set, the enclosure value is assessed.</p>
+      <img src="images/distanceCalc_enclosure.png" alt=""/>
+      <p class="western" style=" line-height: 100%">When the shapes overlap, the same projection approach is used to determine the maximum distance beyond the edge, This is reported as a negative value to indicate there is an absence of full enclosure :</p>
+      <img src="images/distanceCalc_enclosure_overlap.png" alt=""/>
+  </blockquote>
+
+  <blockquote>
+    <a name="overviewMC_settings_chord"></a>
+    <h3 class="western">Chord</h3>
+    <img src="images/chordCalc_1.png" alt=""/>
+      <p class="western" style=" line-height: 100%">Minimum chord length is measured with a fixed expectation that the result from Geometric Equation A is oriented to lie in the horizontal direction and the reqsult from Geometric Equation B is vertically oriented. This enables the top/bottom/left/right chord determination. Ignoring this will mean that the top/bottom and left/right result pairs will be transposed in the CSV output.</p>
+      <p class="western" style=" line-height: 100%">Any shapes are handled.</p>
+      <img src="images/chordCalc_2.png" alt=""/>
+      <p class="western" style=" line-height: 100%">&nbsp;</p>
+      <img src="images/chordCalc_3.png" alt=""/>
+      <p class="western" style=" line-height: 100%">You can deselect pairs of chords. Those chords not measured will be reported as N/A in the output file.</p>
+      <p class="western" style=" line-height: 100%">To reinforce the earlier note, the example below shows how chord location is dependent on the horizontal and vertical orientation expectations for the geometric equations.</p>
+      <img src="images/chordCalc_4.png" alt=""/>
+  </blockquote>
+
+  <blockquote>
+    <a name="overviewMC_settings_angle"></a>
+    <h3 class="western">Angle</h3>
+      <p class="western" style=" line-height: 100%">Intersection angle is delivered by the logical AND of polygons.</p>
+      <img src="images/angleCalc_1.png" alt=""/>
+      <p class="western" style=" line-height: 100%">&nbsp;</p>
+      <img src="images/angleCalc_2.png" alt=""/>
+  </blockquote>
+
+</body>
+</html>

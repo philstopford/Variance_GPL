@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	color: #33aacc
+}
+img {
+    max-width: 100% /*;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<a name="performance"></a>
+<h1 class="western">Performance</h1>
+	<p class="western">Different calculation modes have different levels of performance. They all scale with the number of runs and threading resource available.</p>
+	<blockquote>
+		<img src="images/calculation_time_by_type.png" alt=""/>
+	</blockquote>
+	<p class="western">The implant Monte Carlo engine is derived from the multi-layer system, but works slightly differently. On a quad-core i7-6700k, it processes 25000 iterations/second (250k cases in ~ 10 seconds, for 90 corner segments), on Windows.</p>
+
+	<p class="western">Performance on Mac and Linux/GTK is generally half of that on Windows. This appears to be due to the underlying Mono framework on those platforms, which imposes limits on the multithreading system (single-threaded performance is comparable).</p>
+
+	<h2 class="western">Benchmark</h2>
+	<p class="western">Runtime is essentially linear with the number of cases, for both single and multi-threaded modes. Multithreaded provides a significant boost in performance.</p>
+	<blockquote>
+		<img src="images/comparison_multithread.png" alt=""/>
+	</blockquote>
+
+	<p class="western">Runtime also scales linearly with the number of layers involved in the calculation, independent of the layer configuration. Area runtimes are below for 250k cases using the average overlay project.</p>
+	<ul>
+		<li>2 Layers : 16 seconds</li>
+		<li>3 Layers : 23 seconds</li>
+		<li>4 Layers : 30 seconds</li>
+		<li>5 Layers : 36 seconds</li>
+		<li>6 Layers : 42 seconds</li>
+		<li>7 Layers : 59 seconds</li>
+		<li>8 Layers : 54 seconds</li>
+		<li>16 Layers : 108 seconds</li>
+	</ul>
+
+	<h2 class="western">Memory</h2>
+	<p class="western">Memory is aggressively held under control through the Garbage Collector. Each result, assuming no SVG is created, needs 1.5 KB RAM to be stored during a run. SVG greatly increases this.</p>
+
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <a name="overviewMC_summary"></a>
+  <h2 class="western">Summary File</h2>
+    <p class="western" style=" line-height: 100%">A summary file is generated for each run automatically. This records the run, the date of the run, the calculation. For each result, the mean and standard deviation are reported along with the number of cases evaluated for each result. For each input layer, the settings are shown. The simulation settings (corner segments, edge resolution, number of cases) are recorded.</p>
+
+  <blockquote>
+    <h3 class="western">Example – Typical Case (8 layers)</h3>
+    <blockquote>
+      <p class="western" align="left" style=" line-height: 100%"><pre>
+Variance 3.0 (Phil Stopford)
+Results summary for job: D:\Variance\bm300_8threads.txt run on : Thursday, September 7, 2017. Runtime: 69.05 seconds
+
+Equation: [(Layer 1 AND Layer 2) AND (Layer 3 AND Layer 4)] AND [(Layer 5 AND Layer 6) AND (Layer 7 AND Layer 8)]
+
+result 0 mean and standard deviation for 125000 cases: x: 710.77, s: 94.92
+
+Layer settings for job
+
+Layer 0 Name: Layer 1
+Layer 0 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+INACTIVE: X Overlay reference layer: None
+INACTIVE: Y Overlay reference layer: None
+ACTIVE: X Overlay reference layers: 2 3 4 9 10 11 12 
+ACTIVE: Y Overlay reference layers: 2 3 4 9 10 11 12 
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 1 Name: Layer 2
+Layer 1 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 2 Name: Layer 3
+Layer 2 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 3 Name: Layer 4
+Layer 3 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 8 Name: Layer 5
+Layer 8 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 9 Name: Layer 6
+Layer 9 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 10 Name: Layer 7
+Layer 10 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Layer 11 Name: Layer 8
+Layer 11 Shape: Rectangle/Square
+Subshape 0: 
+  HLength: 40
+  VLength: 40
+  HOffset: 0
+  VOffset: 0
+  TipLocations: None
+SubshapeReference: 0
+PositionInSubshape: Center
+Horizontal Offset: 0
+Vertical Offset: 0
+Rotation: 0
+Wobble: 0
+Side Bias: 0
+HorTip Bias: 0
+  HorTip Bias +ve Var: 0
+  HorTip Bias -ve Var: 0
+VerTip Bias: 0
+  VerTip Bias +ve Var: 0
+  VerTip Bias -ve Var: 0
+Inner CRR: 0
+  Inner CR Var: 0
+Outer CRR: 60
+  Outer CR Var: 0
+LWR: 5
+LWR Frequency: 0.2
+LWR Noise: Perlin
+Side CDU: 0
+Tips CDU: 0
+Horizontal Overlay: 10
+Vertical Overlay: 10
+X Overlay correlation: None
+Y Overlay correlation: None
+ACTIVE: X Overlay reference layer: None
+ACTIVE: Y Overlay reference layer: None
+INACTIVE: X Overlay reference layers: None
+INACTIVE: Y Overlay reference layers: None
+CDU correlation: None
+Tip CDU correlation: None
+
+Simulation Settings:
+  Number of Cases: 125000
+  Edge resolution: 1
+  Corner segments: 90
+  Override corner angle step by edge resolution: no
+  Linked tip/side CDU: yes
+  LER: LWR/sqrt(2)
+RNG: System.Random
+</pre>
+    </p>
+    </blockquote>
+  </blockquote>
+</body>
+</html>

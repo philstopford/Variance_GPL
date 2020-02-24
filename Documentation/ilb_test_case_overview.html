@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>ILB - Test Case Overview</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+    font-family: "Calibri", serif;
+    font-size: 10pt;
+  color: #aaaaaa;
+    so-language: en-US
+}
+p.cjk {
+    font-family: "Calibri";
+    font-size: 10pt;
+    so-language: en-US
+}
+p.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA
+}
+h1 {
+    direction: ltr;
+    color: #365f91;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h1.western {
+    font-family: "Cambria", serif;
+    font-size: 13pt;
+    so-language: en-US
+}
+h1.cjk {
+    font-family: "宋体";
+    font-size: 13pt;
+    so-language: en-US
+}
+h1.ctl {
+font-family:;
+    font-size: 13pt;
+    so-language: ar-SA
+}
+h2 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h2.western {
+    font-family: "Cambria", serif;
+    font-size: 12pt;
+    so-language: en-US
+}
+h2.cjk {
+    font-family: "宋体";
+    font-size: 12pt;
+    so-language: en-US
+}
+h2.ctl {
+font-family:;
+    font-size: 12pt;
+    so-language: ar-SA
+}
+h3 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h3.western {
+    font-family: "Cambria", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+h3.cjk {
+    font-family: "宋体";
+    font-size: 10pt;
+    so-language: en-US
+}
+h3.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA
+}
+h4 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h4.western {
+    font-family: "Cambria", serif;
+    font-size: 10pt;
+    so-language: en-US;
+    font-style: italic
+}
+h4.cjk {
+    font-family: "宋体";
+    font-size: 10pt;
+    so-language: en-US;
+    font-style: italic
+}
+h4.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA;
+    font-style: italic
+}
+a:link {
+    color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {   font-family: "Cambria", serif;
+    font-size: 13pt;
+    so-language: en-US
+}
+p.western1 {    font-family: "Calibri", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+h2.western1 {   font-family: "Cambria", serif;
+    font-size: 12pt;
+    so-language: en-US
+}
+p.western2 {    font-family: "Calibri", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+#menu {
+position: fixed;
+left: 0;
+top: 5em;
+width: 3em;
+margin: -2.5em 0 0 0;
+z-index: 5;
+background: rgba(40, 40, 40, 0.9);
+color: #ccc;
+font-weight: normal;
+font-size: 12px;
+text-align: left;
+border: solid rgba(40, 40, 40, 0.5);
+border-left: none;
+padding: 0.5em 0.5em 0.5em 2.5em;
+box-shadow: 0 1px 3px black;
+/*border-radius: 3em 0.5em 0.5em 3em;*/
+}
+#menu li { margin: 0 }
+#menu a { color: inherit }
+
+/* Make menu absolute, not fixed, on IE 5 & 6 */
+#menu { position: absolute }
+*>#menu { position: fixed }
+
+</style>
+</head>
+
+  <ul id=menu>
+    <li><a href="#testcase3">3</a></li>
+    <li><a href="#testcase4">4</a></li>
+    <li><a href="#testcase5">5</a></li>
+    <li><a href="#testcase6">6</a></li>
+    <li><a href="#testcase7">7</a></li>
+    <li><a href="#testcase8">8</a></li>
+    <li><a href="#testcase9">9</a></li>
+    <li><a href="#testcase10">10</a></li>
+    <li><a href="#testcase10broken">10b</a></li>
+    <li><a href="#testcase11">11</a></li>
+    <li><a href="#testcase12">12</a></li>
+    <li><a href="#testcase13">13</a></li>
+    <li><a href="#testcase14">14</a></li>
+    <li><a href="#testcase15">15</a></li>
+    <li><a href="#testcase16">16</a></li>
+    <li><a href="#testcase17">17</a></li>
+    <li><a href="#testcase18">18</a></li>
+    <li><a href="#sim_test1">sim1</a></li>
+    <li><a href="#sim_test2">sim2</a></li>
+  </ul>
+
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<blockquote>
+<blockquote>
+
+<a name="ilb_testcases"></a>
+<h1 class="western">ILB Test Case Overview</h1>
+<p class="western">The ILB system has lots of complexity and so there are a large number of test cases to cover different aspects. This provides an overview of each test case, and the expected result..</p>
+
+<blockquote>
+  <a name="testcase3"></a>
+  <h2 class="western">3</h2>
+  <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
+  <p class="western">Layer 5 is 4-3 and this lightly tests the keyholer injects an edge</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/003_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/003_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase4"></a>
+  <h2 class="western">4</h2>
+  <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/004_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/004_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase5"></a>
+  <h2 class="western">5</h2>
+  <p class="western">Layer 5 is 4-1, with corner rounding applied. This tests the inner and outer corner rounding results, including the rounding around the keyhole. Numeric errors could close the keyhole and unclean geometry will fail the rounding.</p>
+  <p class="western">Layer 6 is 5-2. This is a test that there is no additional keyhole insertion and also tests that the result is a clean cut (no keyhole collapse or fragments).</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/005_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/005_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase6"></a>
+  <h2 class="western">6</h2>
+  <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here.</p>
+  <p class="western">Layer 7 is 5-6. This tests the internal keyhole removal, Boolean, keyhole injection (twice, one for each cutter). The keyhole system is sensitive to cutter order (at the time of writing), but it should be the case that one cutter is connected to the outer perimeter, and an internal connection is made between the two cutters.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/006_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/006_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/006_003.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase7"></a>
+  <h2 class="western">7</h2>
+  <p class="western">Layer 3 is 2-1, yielding a keyholed polygon</p>
+  <p class="western">Layer 4 is 2-1, yielding an offset keyholed polygon</p>
+  <p class="western">Layer 5 is 3 || 4. This tests keyhole removal and keyhole injection where the second hole has a different keyhole location.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/007_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/007_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/007_003.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase8"></a>
+  <h2 class="western">8</h2>
+  <p class="western">Layer 3 is a multipolygon single-pass difference test of 2-1, yielding a single keyholed polygon with two holes.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/008_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase9"></a>
+  <h2 class="western">9</h2>
+  <p class="western">Layer 3 is a multipolygon single-pass difference test of 2-1, yielding a single keyholed polygon with two holes.</p>
+  <p class="western">Layer 4 is 2-3. This is a test of the sliver/gap removal mechanisms and the result should also be compatible with the contouring engine, so this is tested as well..</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/009_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/009_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase10"></a>
+  <h2 class="western">10</h2>
+  <p class="western">Simple multi-cut test, used to compare the keyhole result with the 10_broken test.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/010_001.png" scale="50%" alt=""/>
+      </td>
+      <td = width="50%">
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase10broken"></a>
+  <h2 class="western">10_broken</h2>
+  <p class="western">Simple multi-cut test, used to compare the keyhole result with the 10 test. The keyholer result should find the correct edge for the slightly shifted top right cutter.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/010b_001.png" scale="50%" alt=""/>
+      </td>
+      <td = width="50%">
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase11"></a>
+  <h2 class="western">11</h2>
+  <p class="western">Layer 1 is a baked pointset from a keyholed polygon (exported and then loaded from GDS).</p>
+  <p class="western">Layer 3 is 1-2. This is a test of the gap removal mechanisms, and keyhole injection for orthogonal geometry - the two cutters should be connected because that is the shortest solution found.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/011_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/011_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase12"></a>
+  <h2 class="western">12</h2>
+  <p class="western">Layer 3 is 1 || 2. Simple union test.</p>
+  <p class="western">Layer 5 is 4 - 1.</p>
+  <p class="western">Layer 6 is 5 - 2.</p>
+  <p class="western">Layer 7 is 4 - 3. Should be identical to layer 6.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/012_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/012_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/012_003.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/012_004.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase13"></a>
+  <h2 class="western">13</h2>
+  <p class="western">Layer 5 is 4-1.</p>
+  <p class="western">Layer 6 is 5-2. This is a test of the gap removal mechanisms, and keyhole injection. Numeric precision can lead to keyhole loss, resulting in artifacts, and/or contouring rejection.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/013_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/013_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase14"></a>
+  <h2 class="western">14</h2>
+  <p class="western">Layer 1 is a baked pointset of two sliver polygons (exported and then loaded from GDS).</p>
+  <p class="western">Layer 3 is 1 && 2. This is a test of the sliver removal mechanisms and ensures the result is contouring-compatible.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/014_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/014_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase15"></a>
+  <h2 class="western">15</h2>
+  <p class="western">Layer 5 is a baked pointset of a keyholed polygon (exported and then loaded from GDS).</p>
+  <p class="western">Layer 6 is 5 - 2, resulting in a keyholed polygon with rounding applied to test the result is clean and contour-compatible.</p>
+  <p class="western">Layer 7 is 6 && 6. This is a test of the error introduced during the keyhole merging manipulation. The geometry is merged during this operation, and due to the sharp angles in this region, the raycaster will never find this option. As a result, the required keyhole is created elsewhere.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/015_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+	  <img class="c" src="ilb_testcase_images/015_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+	  <img class="c" src="ilb_testcase_images/015_003.png" scale="50%" alt=""/>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase16"></a>
+  <h2 class="western">16</h2>
+  <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here. A rotation of -55 degrees is applied deliberately</p>
+  <p class="western">Layer 7 is 5-6. This tests the internal keyhole removal, Boolean, keyhole injection (twice, one for each cutter). The shortest path is found to connect the cutters as below.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/016_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+    <img class="c" src="ilb_testcase_images/016_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/016_003.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase17"></a>
+  <h2 class="western">17</h2>
+  <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here. A rotation of -60 degrees is applied deliberately</p>
+  <p class="western">Layer 7 is 5-6. This tests the internal keyhole removal, Boolean, keyhole injection (twice, one for each cutter). This is designed to force an overlap between the cutters which causes the internal keyhole system to a non-orthogonal evaluation. The 'bridge' between the cutters in this situation arises from the overlap, not a keyhole, so a single keyhole is injected to the outer perimeter.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/017_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+    <img class="c" src="ilb_testcase_images/017_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/017_003.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+<blockquote>
+  <a name="testcase18"></a>
+  <h2 class="western">18</h2>
+  <p class="western">Layer 1 is a tiled DOE layout dataset, loaded from GDS. The DOE is set to use the first entry of the second row.</p>
+  <p class="western">Layer 3 is 1-2. This tests that the correct tile is located, repositioned and the Boolean succeeds. If the 'use DOE tile for preview' setting is off, the Boolean is applied to the first tile.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/018_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+    <img class="c" src="ilb_testcase_images/018_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/018_003.png" scale="50%" alt=""/>
+      </td>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/018_004.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+
+<blockquote>
+  <a name="sim_test1"></a>
+  <h2 class="western">Keyholed Ortho Test</h2>
+  <p class="western">This is intended to test the removal of the keyhole in the simulation pipeline. If the keyhole is removed, the distance check will not report against the keyhole but the real outer edge.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/sim001_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+    <img class="c" src="ilb_testcase_images/sim001_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+
+<blockquote>
+  <a name="sim_test2"></a>
+  <h2 class="western">Keyholed Ortho Inversion Test</h2>
+  <p class="western">This is intended to test the removal of the sliver/keyhole in the simulation pipeline. If the keyhole/sliver is removed, the distance check will not report against the former keyhole (potential sliver) but the real outer edge.</p>
+
+  <table>
+    <tr>
+      <td = width="50%">
+    <img class="c" src="ilb_testcase_images/sim002_001.png" scale="50%" alt=""/>
+      </td>
+      <td>
+    <img class="c" src="ilb_testcase_images/sim002_002.png" scale="50%" alt=""/>
+      </td>
+    </tr>
+  </table>
+</blockquote>
+
+</blockquote>
+</blockquote>
+</body>
+</html>

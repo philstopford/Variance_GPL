@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+pre
+{
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US  
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100% ;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+</style>
+</head>
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+  <blockquote>
+    <a name="overviewMC_layers_Litho"></a>
+    <h3 class="western">Lithography Parameters</h3>
+     <p class="western" style=" line-height: 100%">The corner rounding definitions should be fairly obvious. LWR is per-shape and is currently mapped to LER based on the simulation setting option (LWR/2 or LWR/sqrt(2)). There are several noise methods available (Perlin, Simplex, OpenSimplex) with configurable freqency. To see the nominal LER, the 'Show' checkbox can be set.</p>
+     <img src="images/ler_preview_perlin.png" alt=""/>
+     <p class="western" style=" line-height: 100%">&nbsp;</p>
+     <img src="images/ler_preview_opensimplex.png" alt=""/>
+
+     <p class="western" style=" line-height: 100%">Two layers of noise can be applied, allowing a low frequency noise to be modified by a high frequency noise.</p>
+     <img class="c" src="images/ler_preview_perlin_lowFreqLayer1.png" alt=""/>
+     <p class="western" style=" line-height: 100%">&nbsp;</p>
+     <img class="c" src="images/ler_preview_perlin_lowFreqLayer1_highFreqLayer2.png" alt=""/>
+
+      <p class="western" style=" line-height: 100%">Overlay is a global overlay unless you choose a reference layer in the basic case. You can also use the 'Av' (for average) checkbox to allow multiple layers to be referenced. In this situation, the average overlay value of the reference layers is used as the reference position for positioning the active layer.</p>
+      <p class="western" style=" line-height: 100%">Correlation options are available to link the variation value between layers. This means that the random number value(s) for overlay and/or CDU from the correlated layer(s) will be used to evaluate the overlay and CDU of this layer. For the same overlay and CDU 3-sigma inputs, the correlated shapes will be linked. Choosing ‘0’ means no correlation in each case.</p>
+      <p class="western" style=" line-height: 100%">As noted, LWR to LER conversion methodology is user-selectable. Choices are LER = LWR/2 or LER = LWR/sqrt(2).</p>
+      <p class="western" style=" line-height: 100%">Wobble describes the 3-sigma rotational variation of the shape. This is only applicable to non-GDS/Oasis shapes as PV bands should encompass this variation already.</p>
+      <p class="western" style=" line-height: 100%">Lens distortion can be applied using the k1 and k2 lens coefficients, using the model described by <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/zhan99.pdf">Zhang</a>. The lens radius, r, is the distance from the world origin. k1 applies over r^2. k2 applies over r^4, defining a long range distortion effect compared to k1.</p>
+      <img src="images/lens_k1_1.3_k2_0.png" alt=""/>
+      <p class="western" style=" line-height: 100%">&nbsp;</p>
+      <img src="images/lens_k1_0_k2_3.png" alt=""/>
+      <p class="western" style=" line-height: 100%">&nbsp;</p>
+      <img src="images/lens_k1_1.3_k2_3.png" alt=""/>
+      <p class="western" style=" line-height: 100%">Please also refer to the order-of-operations section to understand how lens distortion, proximity biasing and LER are applied in combination.</p>
+      <h4 class="western">GDS/Oasis Note</h4>
+      <blockquote>
+        <p class="western" style=" line-height: 100%">Side CDU can be enabled for GDS/Oasis shapes, but should only be used with care. Biasing is performed uniformally to increase or decrease the shape boundary. This may not reflect the OPC contours (process) and could also lead to algorithm fails in case of self-intersections. A preference is available to enable/disable this setting for this type of geometry; projects loaded with side CDU for these types of layers will override this preference if it is off.</p>
+        <p class="western" style=" line-height: 100%">An effort is made to handle self-intersections (as shown below). The polygon fill type menu (defaulting to 'non-zero') allows for adjustments, but 'non-zero' will usually be correct. Note that there is no guarantee that the result will work with all calculation modes, however.</p>
+        <img src="images/biasGDS.png" alt=""/>
+        <p class="western" style=" line-height: 100%">&nbsp;</p>
+        <img src="images/biasGDS_area.png" alt=""/>
+      </blockquote>
+  </blockquote>
+
+</body>
+</html>
