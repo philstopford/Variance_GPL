@@ -1633,7 +1633,13 @@ namespace Variance
             // errorReporter.showMessage_OK(helpPath, "Info");
             if (helpAvailable)
             {
-                System.Diagnostics.Process.Start(helpPath);
+                new Process
+                {
+                    StartInfo = new ProcessStartInfo(@helpPath)
+                    {
+                        UseShellExecute = true
+                    }
+                }.Start();
             }
         }
 
