@@ -18,12 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\BASE36.cs" Link="qlicense\BASE36.cs" />
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\HardwareInfo.cs" Link="qlicense\HardwareInfo.cs" />
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseEntity.cs" Link="qlicense\LicenseEntity.cs" />
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseHandler.cs" Link="qlicense\LicenseHandler.cs" />
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseStatus.cs" Link="qlicense\LicenseStatus.cs" />
-    <Compile Include="..\..\..\qlicense_phil\Core\QLicense\LicenseTypes.cs" Link="qlicense\LicenseTypes.cs" />
     <Compile Include="..\keys.cs" Link="keys.cs" />
     <Compile Include="..\Variance\chaos\chaosEngine.cs">
       <Link>chaos\chaosEngine.cs</Link>
