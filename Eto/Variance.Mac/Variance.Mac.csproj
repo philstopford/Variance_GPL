@@ -4,8 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;Release_obf</Configurations>
-    <!-- <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers> -->
-    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup>
