@@ -19,7 +19,7 @@ namespace Variance
             {
                 groupBox_layerSubShapes_exp = new GroupBox();
                 TableLayout groupBox_layerSubShapes_table = new TableLayout();
-                groupBox_layerSubShapes_exp.Content = groupBox_layerSubShapes_table;
+                groupBox_layerSubShapes_exp.Content = TableLayout.AutoSized(groupBox_layerSubShapes_table);
                 groupBox_layerSubShapes_exp.Text = "SubShapes";
 
                 subshapes_row1(groupBox_layerSubShapes_table);

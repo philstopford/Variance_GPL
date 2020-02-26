@@ -571,7 +571,6 @@ namespace Variance
 
             twoD_LayerUISetup_boolean_exp();
 
-
             twoD_LayerUISetup_subShape_exp();
 
             twoD_LayerUISetup_geoCore_exp();
@@ -587,8 +586,10 @@ namespace Variance
             layerGadgets_row2(layerGadgets_table);
             layerGadgets_row3(layerGadgets_table);
 
+            layerGadgets_table.Rows.Add(new TableRow());
+
             Panel p = new Panel();
-            p.Content = layerGadgets_table;
+            p.Content = TableLayout.AutoSized(layerGadgets_table);
             tc.Control = p;
         }
 
