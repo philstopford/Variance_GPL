@@ -451,9 +451,10 @@ namespace Variance
 
                 var i2 = i;
 
-                label_geoEqtn_Op[i2].MouseDoubleClick += delegate
+                label_geoEqtn_Op[i2].MouseDoubleClick += delegate(object sender, MouseEventArgs e)
                 {
                     goToLayerUI(i2);
+                    e.Handled = true;
                 };
 
             }
