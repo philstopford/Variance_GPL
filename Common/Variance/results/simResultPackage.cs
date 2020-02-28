@@ -156,23 +156,34 @@ namespace Variance
 
             List<double>[] res = new List<double>[numberOfResultsFields];
 
+#if VARIANCETHREADED
             Parallel.For(0, numberOfResultsFields, (i) =>
-            // for (int i = 0; i < numberOfResultsFields; i++)
+#else
+            for (int i = 0; i < numberOfResultsFields; i++)
+#endif
             {
                 res[i] = new List<double>();
-            });
-
+            }
+#if VARIANCETHREADED
+            );
+#endif
             for (int r = 0; r < results.Count; r++)
             {
+#if VARIANCETHREADED
                 Parallel.For(0, numberOfResultsFields, (i) =>
-                // for (int i = 0; i < numberOfResultsFields; i++)
+#else
+                for (int i = 0; i < numberOfResultsFields; i++)
+#endif
                 {
                     // Could have "N/A" and need to skip the result in that case.
                     if (results[r][i] != "N/A")
                     {
                         res[i].Add(Convert.ToDouble(results[r][i]));
                     }
-                });
+                }
+#if VARIANCETHREADED
+                );
+#endif
             }
 
             return pGetHistograms(res, buckets);

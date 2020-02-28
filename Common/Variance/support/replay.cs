@@ -250,11 +250,17 @@ namespace Variance
             int colIndex = 0;
             // Find out which layers we have active.
             bool[] activeLayers = new bool[CentralProperties.maxLayersForMC];
+#if VARIANCETHREADED
             Parallel.For(0, CentralProperties.maxLayersForMC, (i) =>
-            // for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+#else
+            for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+#endif
             {
                 activeLayers[i] = (commonVars_.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
-            });
+            }
+#if VARIANCETHREADED
+            );
+#endif
 
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {

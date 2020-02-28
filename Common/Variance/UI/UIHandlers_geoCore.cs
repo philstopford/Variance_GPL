@@ -138,13 +138,7 @@ namespace Variance
                         // No drawn polygons desired.
                         if (!previewShapes[i].getDrawnPoly(poly))
                         {
-                            int length = polys[poly].Length;
-                            GeoLibPoint[] ePoly = new GeoLibPoint[length];
-                            Parallel.For(0, length, (pt) =>
-                            // for (int pt = 0; pt < length; pt++)
-                            {
-                                ePoly[pt] = new GeoLibPoint((int)(polys[poly][pt].X * scale), (int)(polys[poly][pt].Y * scale));
-                            });
+                            GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(polys[poly], scale);
 
                             gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                         }

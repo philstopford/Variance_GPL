@@ -216,12 +216,18 @@ namespace Variance
         {
             int l = pg.Count;
             GeoLibPointF[] result = new GeoLibPointF[l];
+#if SVGTHREADED
             Parallel.For(0, l, (i) =>
-            // for (Int32 i = 0; i < pg.Count; ++i)
+#else
+            for (Int32 i = 0; i < pg.Count; ++i)
+#endif
             {
                 result[i].X = (float)pg[i].X / scale;
                 result[i].Y = (float)pg[i].Y / scale;
-            });
+            }
+#if SVGTHREADED
+            );
+#endif
             return result;
         }
     }

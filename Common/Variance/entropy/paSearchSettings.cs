@@ -180,8 +180,11 @@ namespace Variance
         {
             int length = paNames.Length;
             bool[] enabled = new bool[length];
+#if VARIANCETHREADED
             Parallel.For(0, length, (i) =>
-            // for (int i = 0; i < length; i++)
+#else
+            for (int i = 0; i < length; i++)
+#endif
             {
                 bool enable = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;
                 if (enable)
@@ -208,8 +211,10 @@ namespace Variance
                     }
                 }
                 enabled[i] = enable;
-            });
-
+            }
+#if VARIANCETHREADED
+            );
+#endif
             return enabled;
         }
 

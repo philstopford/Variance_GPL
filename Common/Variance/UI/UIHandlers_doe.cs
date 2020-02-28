@@ -164,12 +164,18 @@ namespace Variance
                             Int32 colorIndex = tile % varianceContext.vc.colors.resultColors.Count(); // map our result into the available colors.
                             PointF[] currentTile = tilePoly.ToArray();
                             int length = currentTile.Length;
+#if VARIANCETHREADED
                             Parallel.For(0, length, (pt) =>
-                            // for (int pt = 0; pt < length; pt++)
+#else
+                            for (int pt = 0; pt < length; pt++)
+#endif
                             {
                                 currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                                 currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
-                            });
+                            }
+#if VARIANCETHREADED
+                            );
+#endif
                             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
                                 poly: currentTile,
                                 polyColor: Color.FromArgb(commonVars.getColors().resultColors[colorIndex].toArgb()),
@@ -187,12 +193,18 @@ namespace Variance
                 {
                     PointF[] currentTile = tilePoly.ToArray();
                     int length = currentTile.Length;
+#if VARIANCETHREADED
                     Parallel.For(0, length, (pt) =>
-                    // for (int pt = 0; pt < length; pt++)
+#else
+                    for (int pt = 0; pt < length; pt++)
+#endif
                     {
                         currentTile[pt].X += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileCol) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                         currentTile[pt].Y += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileRow) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
-                    });
+                    }
+#if VARIANCETHREADED
+                    );
+#endif
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
                         poly: currentTile,
                         polyColor: Color.FromArgb(commonVars.getColors().resultColors[0].toArgb()),
@@ -210,12 +222,18 @@ namespace Variance
                         Int32 row = commonVars.getSimulationSettings().getDOESettings().getTileList_Value(tile, 1);
                         PointF[] currentTile = tilePoly.ToArray();
                         int length = currentTile.Length;
+#if VARIANCETHREADED
                         Parallel.For(0, length, (pt) =>
-                        // for (int pt = 0; pt < length; pt++)
+#else
+                        for (int pt = 0; pt < length; pt++)
+#endif
                         {
                             currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                             currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
-                        });
+                        }
+#if VARIANCETHREADED
+                        );
+#endif
                         mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
                             poly: currentTile,
                             polyColor: Color.FromArgb(commonVars.getColors().resultColors[colorIndex].toArgb()),
