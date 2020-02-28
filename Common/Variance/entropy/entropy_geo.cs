@@ -558,12 +558,7 @@ namespace Variance
                     {
                         GeoLibPointF[] tempPoly = GeoWrangler.pointFFromPath(result[poly], CentralProperties.scaleFactorForOperation);
                         // move back to origin from tile location
-                        Parallel.For(0, tempPoly.Length, (pt) =>
-                        // for (int pt = 0; pt < tempPoly.Length; pt++)
-                        {
-                            tempPoly[pt].X -= xCompensation;
-                            tempPoly[pt].Y -= yCompensation;
-                        });
+                        tempPoly = GeoWrangler.move(tempPoly, -xCompensation, -yCompensation);
                         extractedPolys.Add(tempPoly);
                     }
 
@@ -939,12 +934,7 @@ namespace Variance
                     int polyLength = polys[poly].Length;
                     if (polyLength > 2)
                     {
-                        GeoLibPoint[] ePoly = new GeoLibPoint[polyLength];
-                        Parallel.For(0, polyLength, (pt) =>
-                        // for (int pt = 0; pt < polyLength; pt++)
-                        {
-                            ePoly[pt] = new GeoLibPoint((int)(polys[poly][pt].X * scale), (int)(polys[poly][pt].Y * scale));
-                        });
+                        GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
 
                         gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                     }
@@ -961,12 +951,7 @@ namespace Variance
                 int polyLength = rpolys[poly].Length;
                 if (polyLength > 2)
                 {
-                    GeoLibPoint[] ePoly = new GeoLibPoint[polyLength];
-                    Parallel.For(0, polyLength, (pt) =>
-                    // for (int pt = 0; pt < polyLength; pt++)
-                    {
-                        ePoly[pt] = new GeoLibPoint((int)(rpolys[poly][pt].X * scale), (int)(rpolys[poly][pt].Y * scale));
-                    });
+                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(rpolys[poly], scale);
 
                     gcell_root.addPolygon(ePoly.ToArray(), layerNum, 0); // layer is 1-index based for output, so need to offset value accordingly.
                 }
@@ -1365,13 +1350,19 @@ namespace Variance
                     }
                     points = new GeoLibPointF[arraySize];
 
+#if ENTROPYTHREADED
                     Parallel.For(0, length, (i) =>
-                    // for (Int32 i = 0; i < length; i++)
+#else
+                    for (Int32 i = 0; i < length; i++)
+#endif
                     {
                         // The cast below is important - if this is missing or screwed up, we get clamped to integers and the viewport representation is fouled up.
                         points[i] = new GeoLibPointF(((float)currentJobEngine.getPaths()[listMember][i].X / CentralProperties.scaleFactorForOperation),
-                                               ((float)currentJobEngine.getPaths()[listMember][i].Y / CentralProperties.scaleFactorForOperation));
-                    });
+                                                     ((float)currentJobEngine.getPaths()[listMember][i].Y / CentralProperties.scaleFactorForOperation));
+                    }
+#if ENTROPYTHREADED
+                    );
+#endif
                     // Close the shape only if we have an area calculation; for other cases we expect lines.
                     if ((commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.area) && (points[points.Count() - 1] != points[0]))
                     {

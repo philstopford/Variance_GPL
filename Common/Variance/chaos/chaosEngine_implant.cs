@@ -204,11 +204,17 @@ namespace Variance
                 }
                 else
                 {
+#if CHAOSTHREADED
                     Parallel.For(0, solution[0].Count, (pt) =>
-                    // for (int pt = 0; pt < solution[0].Count; pt++)
+#else
+                    for (int pt = 0; pt < solution[0].Count; pt++)
+#endif
                     {
                         points[pt] = new GeoLibPoint(solution[0][pt].X, solution[0][pt].Y);
-                    });
+                    }
+#if CHAOSTHREADED
+                    );
+#endif
                 }
                 points[points.Length - 1] = new GeoLibPoint(points[0].X, points[0].Y); // close it, for the sake of it.
 
@@ -391,14 +397,20 @@ namespace Variance
                 // Now need to scale our polygon back down again for display.
                 geom = new GeoLibPointF[points.Length]; // resist profile that has been evaluated for shadowing.
                 bgGeom = new GeoLibPointF[points.Length]; // display the other resist side, to avoid confusing user, but this isn't evaluated in shadowing.
+#if CHAOSTHREADED
                 Parallel.For(0, points.Length, (pt) =>
-                // for (int pt = 0; pt < points.Length; pt++)
+#else
+                for (int pt = 0; pt < points.Length; pt++)
+#endif
                 {
                     double x = (double)(points[pt].X) / CentralProperties.scaleFactorForOperation;
                     double y = (double)(points[pt].Y) / CentralProperties.scaleFactorForOperation;
                     geom[pt] = new GeoLibPointF(x, y);
                     bgGeom[pt] = new GeoLibPointF(-x, y);
-                });
+                }
+#if CHAOSTHREADED
+                );
+#endif
                 outputValid = true;
             }
             catch (Exception)

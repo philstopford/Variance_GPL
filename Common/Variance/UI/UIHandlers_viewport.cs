@@ -68,11 +68,17 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.polyList[poly].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
                 int count = temp.Length;
+#if SVGTHREADED
                 Parallel.For(0, count, (pt) =>
-                // for (int pt = 0; pt < count; pt++)
+#else
+                for (int pt = 0; pt < count; pt++)
+#endif
                 {
                     temp[pt].Y = -temp[pt].Y;
-                });
+                }
+#if SVGTHREADED
+                );
+#endif
                 svg.AddPolygons(temp);
             }
 
@@ -82,11 +88,17 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.bgPolyList[poly].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
                 int count = temp.Length;
+#if SVGTHREADED
                 Parallel.For(0, count, (pt) =>
-                // for (int pt = 0; pt < count; pt++)
+#else
+                for (int pt = 0; pt < count; pt++)
+#endif
                 {
                     temp[pt].Y = -temp[pt].Y;
-                });
+                }
+#if SVGTHREADED
+                );
+#endif
                 svg.AddPolygons(temp);
             }
 
@@ -97,11 +109,17 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.lineList[line].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
                 int count = temp.Length;
+#if SVGTHREADED
                 Parallel.For(0, count, (pt) =>
-                // for (int pt = 0; pt < count; pt++)
+#else
+                for (int pt = 0; pt < count; pt++)
+#endif
                 {
                     temp[pt].Y = -temp[pt].Y;
-                });
+                }
+#if SVGTHREADED
+                );
+#endif
                 svg.AddPolygons(temp);
             }
 
@@ -220,11 +238,17 @@ namespace Variance
             {
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
                 int count = temp.Length;
+#if SVGTHREADED
                 Parallel.For(0, count, (pt) =>
-                // for (int pt = 0; pt < count; pt++)
+#else
+                for (int pt = 0; pt < count; pt++)
+#endif
                 {
                     temp[pt].Y = -temp[pt].Y;
-                });
+                }
+#if SVGTHREADED
+                );
+#endif
                 int layerIndex = vpSettings.polySourceIndex[poly];
                 if (layers.IndexOf(layerIndex) == -1)
                 {
@@ -244,13 +268,18 @@ namespace Variance
                 if (polyLength > 2)
                 {
                     GeoLibPoint[] ePoly = new GeoLibPoint[polyLength];
+#if SVGTHREADED
                     Parallel.For(0, polyLength, (pt) =>
-                    // for (int pt = 0; pt < polyLength; pt++)
+#else
+                    for (int pt = 0; pt < polyLength; pt++)
+#endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
-                    });
-
+                    }
+#if SVGTHREADED
+                    );
+#endif
                     gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                 }
             }
@@ -261,11 +290,17 @@ namespace Variance
                 {
                     GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
                     int count = temp.Length;
+#if SVGTHREADED
                     Parallel.For(0, count, (pt) =>
-                    // for (int pt = 0; pt < count; pt++)
+#else
+                    for (int pt = 0; pt < count; pt++)
+#endif
                     {
                         temp[pt].Y = -temp[pt].Y;
-                    });
+                    }
+#if SVGTHREADED
+                    );
+#endif
                     int layerIndex = vpSettings.lineSourceIndex[line];
                     if (layers.IndexOf(layerIndex) == -1)
                     {
@@ -282,13 +317,18 @@ namespace Variance
                     }
 
                     GeoLibPoint[] ePoly = new GeoLibPoint[count];
+#if SVGTHREADED
                     Parallel.For(0, count, (pt) =>
-                    // for (int pt = 0; pt < count; pt++)
+#else
+                    for (int pt = 0; pt < count; pt++)
+#endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
-                    });
-
+                    }
+#if SVGTHREADED
+                    );
+#endif
                     gcell_root.addPath(ePoly.ToArray(), layerIndex + 1, 0);
                 }
             }
@@ -299,11 +339,17 @@ namespace Variance
                 {
                     GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
                     int count = temp.Length;
+#if SVGTHREADED
                     Parallel.For(0, count, (pt) =>
-                    // for (int pt = 0; pt < count; pt++)
+#else
+                    for (int pt = 0; pt < count; pt++)
+#endif
                     {
                         temp[pt].Y = -temp[pt].Y;
-                    });
+                    }
+#if SVGTHREADED
+                    );
+#endif
                     int layerIndex = vpSettings.bgPolySourceIndex[poly];
                     if (layers.IndexOf(layerIndex) == -1)
                     {
@@ -320,13 +366,18 @@ namespace Variance
                     }
 
                     GeoLibPoint[] ePoly = new GeoLibPoint[count];
+#if SVGTHREADED
                     Parallel.For(0, count, (pt) =>
-                    // for (int pt = 0; pt < count; pt++)
+#else
+                    for (int pt = 0; pt < count; pt++)
+#endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
-                    });
-
+                    }
+#if SVGTHREADED
+                    );
+#endif
                     gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0);
                 }
             }

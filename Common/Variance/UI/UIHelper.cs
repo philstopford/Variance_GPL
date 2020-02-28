@@ -33,12 +33,17 @@ namespace Variance
         {
             int length = sourceArray.Length;
             PointF[] returnArray = new PointF[length];
+#if VARIANCETHREADED
             Parallel.For(0, length, (i) =>
-            // for (int i = 0; i < length; i++)
+#else
+            for (int i = 0; i < length; i++)
+#endif
             {
                 returnArray[i] = myPointFToPointF(sourceArray[i]);
-            });
-
+            }
+#if VARIANCETHREADED
+            );
+#endif
             return returnArray;
         }
 
@@ -46,12 +51,17 @@ namespace Variance
         {
             int length = sourceArray.Length;
             GeoLibPointF[] returnArray = new GeoLibPointF[length];
+#if VARIANCETHREADED
             Parallel.For(0, length, (i) =>
-            // for (int i = 0; i < length; i++)
+#else
+            for (int i = 0; i < length; i++)
+#endif
             {
                 returnArray[i] = pointFTomyPointF(sourceArray[i]);
-            });
-
+            }
+#if VARIANCETHREADED
+            );
+#endif
             return returnArray;
         }
     }

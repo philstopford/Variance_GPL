@@ -436,8 +436,11 @@ namespace Variance
             wobbleVar = new double[count];
             LWRSeed = new int[count];
             LWR2Seed = new int[count];
+#if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
-            //for (Int32 i = 0; i < count; i++)
+#else
+            for (Int32 i = 0; i < count; i++)
+#endif
             {
                 iC_PAsearch[i] = false;
                 oC_PAsearch[i] = false;
@@ -581,11 +584,17 @@ namespace Variance
                     LWRSeed[i] = UtilityFuncs.getRandomInt(simSettings);
                     LWR2Seed[i] = UtilityFuncs.getRandomInt(simSettings);
                 }
-            });
+            }
+#if CHAOSTHREADED
+            );
+#endif
             // Rewalk to handle overlay and CDU correlation. We can't do this in the loop above since the correlated layer's settings
             // are likely not available at that point in time.
+#if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
-            // for (Int32 i = 0; i < count; i++)
+#else
+            for (Int32 i = 0; i < count; i++)
+#endif
             {
                 if (listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_corr) == 1)
                 {
@@ -604,7 +613,10 @@ namespace Variance
                     // Note that the TVar will be matched to SVar if the simulation settings call for these to be linked.
                     CDUTVar[i] = CDUTVar[listOfSettings[i].getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref)];
                 }
-            });
+            }
+#if CHAOSTHREADED
+            );
+#endif
         }
 
         bool rngCheck(string rngString)

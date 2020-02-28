@@ -115,7 +115,7 @@ namespace Variance
             int arrayLength = (Int32)vertexCount;
             Vertex = new MyVertex[arrayLength];
             tips = new Boolean[arrayLength];
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, arrayLength, (i) => 
 #else
             for (Int32 i = 0; i < arrayLength; i++)
@@ -123,12 +123,12 @@ namespace Variance
             {
                 tips[i] = false;
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
             arrayLength = (Int32)Math.Floor(vertexCount / 2) + 1;
             round1 = new MyRound[arrayLength];
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, arrayLength, (i) => 
 #else
             for (Int32 i = 0; i < arrayLength; i++)
@@ -136,7 +136,7 @@ namespace Variance
             {
                 round1[i] = new MyRound();
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
         }
@@ -1489,7 +1489,7 @@ namespace Variance
             int sCount = sourcePoly.Length;
             Vertex = new MyVertex[sCount + 1]; // add one to close.
             // Assign shape vertices to Vertex and move on. EntropyShape will know what to do.
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, sCount, (pt) => 
 #else
             for (int pt = 0; pt < sCount; pt++)
@@ -1497,7 +1497,7 @@ namespace Variance
             {
                 Vertex[pt] = new MyVertex(sourcePoly[pt].X, sourcePoly[pt].Y, typeDirection.tilt1, false, false, typeVertex.corner);
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
             // Close the shape.
@@ -1512,7 +1512,7 @@ namespace Variance
             tips = new Boolean[vertexCount];
             Int32 vertexCounter = 0; // set up our vertex counter.
 
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, vertexCount, (i) =>
 #else
             for (Int32 i = 0; i < vertexCount; i++)
@@ -1520,13 +1520,13 @@ namespace Variance
             {
                 tips[i] = false;
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
 
             Int32 roundCount = sourcePoly.Length + 1;
             round1 = new MyRound[roundCount];
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, roundCount, (i) =>
 #else
             for (Int32 i = 0; i < roundCount; i++)
@@ -1534,7 +1534,7 @@ namespace Variance
             {
                 round1[i] = new MyRound();
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
             // Set up first rounding entry
@@ -1714,7 +1714,7 @@ namespace Variance
             }
 
             // Reprocess our corners for inner/outer rounding based on horFace/verFace directions
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             Parallel.For(0, roundCount, (pt) => 
 #else
             for (int pt = 0; pt < roundCount; pt++)
@@ -1751,7 +1751,7 @@ namespace Variance
 
                 Vertex[round1[pt].index].inner = !outerVertex;
             }
-#if SLPARALLEL
+#if SHAPELIBTHREADED
             );
 #endif
         }

@@ -53,18 +53,30 @@ namespace Variance
         {
             // Put 0-index point at minX (see method for more notes)
             int aCount = aPath.Count;
+#if CHAOSTHREADED
             Parallel.For(0, aCount, (path) =>
-            // for (Int32 path = 0; path < aCount; path++)
+#else
+            for (Int32 path = 0; path < aCount; path++)
+#endif
             {
                 aPath[path] = reOrderPath("A", path);
-            });
+            }
+#if CHAOSTHREADED
+            );
+#endif
             // Put 0-index point at minY (see method for more notes)
             int bCount = bPath.Count;
+#if CHAOSTHREADED
             Parallel.For(0, bCount, (path) =>
-            // for (Int32 path = 0; path < bCount; path++)
+#else
+            for (Int32 path = 0; path < bCount; path++)
+#endif
             {
                 bPath[path] = reOrderPath("B", path);
-            });
+            }
+#if CHAOSTHREADED
+            );
+#endif
             List<Paths> returnPaths = new List<Paths>();
             returnPaths.Add(aPath.ToList());
             returnPaths.Add(bPath.ToList());
@@ -159,12 +171,17 @@ namespace Variance
                 merged = GeoWrangler.makeKeyHole(ret);
 
                 int count = merged.Count;
+#if CHAOSTHREADED
                 Parallel.For(0, count, (i) =>
-                //for (int i = 0; i < count; i++)
+#else
+                for (int i = 0; i < count; i++)
+#endif
                 {
                     merged[i] = GeoWrangler.clockwise(merged[i]);
-                });
-
+                }
+#if CHAOSTHREADED
+                );
+#endif
                 // Squash any accidental keyholes - not ideal, but best option found so far.
                 Clipper c1 = new Clipper();
                 c1.PreserveCollinear = true;
@@ -177,12 +194,18 @@ namespace Variance
             if (rigorous && !holes)
             {
                 int count = ret.Count;
+#if CHAOSTHREADED
                 Parallel.For(0, count, (i) =>
-                // for (int i = 0; i < count; i++)
+#else
+                for (int i = 0; i < count; i++)
+#endif
                 {
                     ret[i] = GeoWrangler.clockwise(ret[i]);
                     ret[i] = GeoWrangler.close(ret[i]);
-                });
+                }
+#if CHAOSTHREADED
+                );
+#endif
                 // Return here because the attempt to rationalize the geometry below also screws things up, it seems.
                 return ret;
             }
@@ -305,8 +328,11 @@ namespace Variance
 
             Path tPath = new Path();
 
+#if CHAOSTHREADED
             Parallel.For(0, limit2, (i) =>
-            // for (int i = 0; i < limit2; i++)
+#else
+            for (int i = 0; i < limit2; i++)
+#endif
             {
                 if (inputLayerEnabled[i * 2] && inputLayerEnabled[(i * 2) + 1])
                 {
@@ -327,8 +353,10 @@ namespace Variance
                         twoLayerResults[i] = new Paths();
                     }
                 }
-            });
-
+            }
+#if CHAOSTHREADED
+            );
+#endif
             /* Direct the 4 layer boolean approach
              -2 : no active layers.
              -1 : only the left layer is enabled.
@@ -337,8 +365,11 @@ namespace Variance
              */
             int[] doLayer4Boolean = new int[limit4];
 
+#if CHAOSTHREADED
             Parallel.For(0, limit4, (i) =>
-            // for (int i = 0; i < limit4; i++)
+#else
+            for (int i = 0; i < limit4; i++)
+#endif
             {
                 if (
                     (inputLayerEnabled[i * 4] || inputLayerEnabled[(i * 4) + 1]) &&
@@ -362,10 +393,15 @@ namespace Variance
                         doLayer4Boolean[i] = -2;
                     }
                 }
-            });
-
+            }
+#if CHAOSTHREADED
+            );
+#endif
+#if CHAOSTHREADED
             Parallel.For(0, limit4, (i) =>
-            // for (int i = 0; i < limit4; i++)
+#else
+            for (int i = 0; i < limit4; i++)
+#endif
             {
                 if ((doLayer4Boolean[i] == 0) && ((twoLayerResults[(i * 2)].Count > 0) && (twoLayerResults[(i * 2) + 1].Count > 0)))
                 {
@@ -419,8 +455,10 @@ namespace Variance
                             break;
                     }
                 }
-            });
-
+            }
+#if CHAOSTHREADED
+            );
+#endif
             /* Direct the 8 layer boolean approach
              -2 : no active layers.
              -1 : only the left layer is enabled.
@@ -429,8 +467,11 @@ namespace Variance
              */
             int[] doLayer8Boolean = new int[limit8];
 
+#if CHAOSTHREADED
             Parallel.For(0, limit8, (i) =>
-            // for (int i = 0; i < limit8; i++)
+#else
+            for (int i = 0; i < limit8; i++)
+#endif
             {
                 // Are both sides active?
                 // 0th loop : 0   1        5
@@ -470,10 +511,16 @@ namespace Variance
                         doLayer8Boolean[i] = -2;
                     }
                 }
-            });
+            }
+#if CHAOSTHREADED
+            );
+#endif
 
+#if CHAOSTHREADED
             Parallel.For(0, limit8, (i) =>
-            // for (int i = 0; i < limit8; i++)
+#else
+            for (int i = 0; i < limit8; i++)
+#endif
             {
                 if ((doLayer8Boolean[i] == 0) && ((fourLayerResults[(i * 2)].Count > 0) && (fourLayerResults[(i * 2) + 1].Count > 0)))
                 {
@@ -531,8 +578,10 @@ namespace Variance
                             break;
                     }
                 }
-            });
-
+            }
+#if CHAOSTHREADED
+            );
+#endif
             return eightLayerResults;
         }
 
@@ -692,12 +741,17 @@ namespace Variance
                             // Fragment our result.
                             char[] resultSeparators = new char[] { ',' }; // CSV separator for splitting results for comparison.
                             string[] tmpfraggedResult = result.Split(resultSeparators);
+#if CHAOSTHREADED
                             Parallel.For(0, tmpfraggedResult.Length, (i) =>
-                            // for (Int32 i = 0; i < tmpfraggedResult.Length; i++)
+#else
+                            for (Int32 i = 0; i < tmpfraggedResult.Length; i++)
+#endif
                             {
                                 fraggedResult[i] = Convert.ToDouble(tmpfraggedResult[i]);
-                            });
-
+                            }
+#if CHAOSTHREADED
+                            );
+#endif
                             fraggedResult[0] = cH.aChordLengths[0] / CentralProperties.scaleFactorForOperation;
                             listOfOutputPoints[0] = cH.a_chordPaths[0].ToList();
                             fraggedResult[1] = cH.aChordLengths[1] / CentralProperties.scaleFactorForOperation;

@@ -586,13 +586,7 @@ namespace Variance
 
                 for (int poly = 0; poly < resistPolys.Count; poly++)
                 {
-                    int length = resistPolys[poly].Length;
-                    GeoLibPoint[] ePoly = new GeoLibPoint[length];
-                    Parallel.For(0, length, (pt) =>
-                    // for (int pt = 0; pt < length; pt++)
-                    {
-                        ePoly[pt] = new GeoLibPoint((int)(resistPolys[poly][pt].X * scale), (int)(resistPolys[poly][pt].Y * scale));
-                    });
+                    GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(resistPolys[poly], scale);
 
                     gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
                 }
@@ -603,13 +597,7 @@ namespace Variance
             g.addLayerName("L2D0", "shadowLine");
             for (int poly = 0; poly < shadowLine.Count; poly++)
             {
-                int length = shadowLine[poly].Length;
-                GeoLibPoint[] ePoly = new GeoLibPoint[length];
-                Parallel.For(0, length, (pt) =>
-                // for (int pt = 0; pt < length; pt++)
-                {
-                    ePoly[pt] = new GeoLibPoint((int)(shadowLine[poly][pt].X * scale), (int)(shadowLine[poly][pt].Y * scale));
-                });
+                GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(shadowLine[poly], scale);
 
                 gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
             }

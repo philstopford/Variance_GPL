@@ -93,14 +93,20 @@ namespace Variance
             {
                 return;
             }
+#if VARIANCETHREADED
             Parallel.For(0, paNames.Length, (j) =>
-            // for (int j = 0; j < paNames.Length; j++)
+#else
+            for (int j = 0; j < paNames.Length; j++)
+#endif
             {
                 searchablePAs[layer, j] = false;
                 upperLimit[layer, j] = 0;
                 meanValues[layer, j] = "";
                 stdDevValues[layer, j] = "";
-            });
+            }
+#if VARIANCETHREADED
+            );
+#endif
         }
 
         public bool isPASearchable(int layer, int index)
@@ -215,8 +221,11 @@ namespace Variance
 
         void pBackupOriginalValues(CommonVars commonVars)
         {
+#if VARIANCETHREADED
             Parallel.For(0, CentralProperties.maxLayersForMC, (i) =>
-            // for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+#else
+            for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+#endif
             {
                 if (searchablePAs[i, (int)paEnum.XOL])
                 {
@@ -270,7 +279,10 @@ namespace Variance
                 {
                     originalValues[i, (int)paEnum.WOB] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
                 }
-            });
+            }
+#if VARIANCETHREADED
+            );
+#endif
         }
 
         void pSetValues(ref CommonVars commonVars)
