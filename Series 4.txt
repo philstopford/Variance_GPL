@@ -1,5 +1,17 @@
 Changelog for Variance
 
+4.2.1a1
+
+	- Small refactoring to use common methods in some geometry transform/migration cases.
+	- Aggressive multithreading seems to overwhelm some systems. Moving to preprocessor switches to find best balance:
+	 - GEOLIBTHREADED : GeoLib
+	 - GWTHREADED : GeoWrangler.
+	 - VARIANCETHREADED : Variance
+	 - SHAPELIBTHREADED : ShapeLibrary
+	 - CHAOSTHREADED : Chaos
+	 - ENTROPYTHREADED : Entropy
+	 - SVGTHREADED : SVG output
+
 4.2
 
 	- Performance enhancements through extended use of multithreading.
