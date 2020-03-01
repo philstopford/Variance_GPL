@@ -5,16 +5,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <ApplicationIcon>Monte_Carlo_2550495b_ico.ico</ApplicationIcon>
-    <Configurations>Debug;Release;Release_obf</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <UseWpf>True</UseWpf>
     <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants></DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -33,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.0" />
   </ItemGroup>
 
 </Project>

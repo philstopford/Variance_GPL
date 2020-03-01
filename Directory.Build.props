@@ -5,7 +5,6 @@
     <BuildOS Condition="$([MSBuild]::IsOsPlatform(`Linux`)) == true">Linux</BuildOS>
     <BuildOS Condition="$([MSBuild]::IsOsPlatform(`OSX`)) == true">macOS</BuildOS>
 
-    <Obfuscate Condition="$(OutputType) != 'library' AND $(Configuration) == 'Release_obf'">true</Obfuscate>
     <Headless Condition="$(MSBuildProjectName.Contains('Headless'))">true</Headless>
   </PropertyGroup>
 

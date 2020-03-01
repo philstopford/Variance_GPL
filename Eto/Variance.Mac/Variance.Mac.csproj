@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Configurations>Debug;Release;Release_obf</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
@@ -12,10 +12,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
@@ -28,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>

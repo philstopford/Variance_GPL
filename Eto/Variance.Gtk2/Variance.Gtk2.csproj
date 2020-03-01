@@ -6,7 +6,7 @@
     <!-- By design, the newer SDK-style projects don't search the GAC, and it's
     necessary to explicitly demand that to find the Gtk# assemblies. -->
     <AssemblySearchPaths>$(AssemblySearchPaths);{GAC}</AssemblySearchPaths>
-    <Configurations>Debug;Release;Release_obf</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,12 +22,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_obf|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Gtk2" Version="2.5.0-rc.6" />
+    <PackageReference Include="Eto.Platform.Gtk2" Version="2.5.0" />
     <PackageReference Include="OpenTK" Version="3.1.0" />
   </ItemGroup>
 
