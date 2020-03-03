@@ -1,6 +1,6 @@
 Changelog for Variance
 
-4.2.1a1
+4.2.1
 
 	- Small refactoring to use common methods in some geometry transform/migration cases.
 	- Aggressive multithreading seems to overwhelm some systems. Moving to preprocessor switches to find best balance:
