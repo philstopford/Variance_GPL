@@ -177,7 +177,7 @@ img {
 	</blockquote>
 	<p class="western">The implant Monte Carlo engine is derived from the multi-layer system, but works slightly differently. On a quad-core i7-6700k, it processes 25000 iterations/second (250k cases in ~ 10 seconds, for 90 corner segments), on Windows.</p>
 
-	<p class="western">Performance on Mac and Linux/GTK is generally half of that on Windows. This appears to be due to the underlying Mono framework on those platforms, which imposes limits on the multithreading system (single-threaded performance is comparable).</p>
+	<p class="western">Performance on Mac and Linux/GTK is generally comparable with that on Windows (at most, 10% worse). The performance gap was closed with the move to .NET Core 3.1, avoiding the performance issues apparent in the Mono framework used in earlier releases.</p>
 
 	<h2 class="western">Benchmark</h2>
 	<p class="western">Runtime is essentially linear with the number of cases, for both single and multi-threaded modes. Multithreaded provides a significant boost in performance.</p>
