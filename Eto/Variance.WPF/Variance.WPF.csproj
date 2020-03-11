@@ -8,6 +8,7 @@
     <Configurations>Debug;Release</Configurations>
     <UseWpf>True</UseWpf>
     <ServerGarbageCollection>true</ServerGarbageCollection>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
