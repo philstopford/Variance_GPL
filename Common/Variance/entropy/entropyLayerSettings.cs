@@ -257,6 +257,10 @@ namespace Variance
         Int32 edgeSlide;
         Int32 LWRNoiseType;
         Int32 LWR2NoiseType;
+        Int32 correlatedLWR;
+        Int32 correlatedLWRLayerIndex;
+        Int32 correlatedLWR2;
+        Int32 correlatedLWR2LayerIndex;
 
         [NonSerialized]
         Int32 LWRNoisePreview;
@@ -290,7 +294,8 @@ namespace Variance
 
         public enum properties_i
         {
-            enabled, omit, gCSEngine, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, edgeSlide, lwrType, lwr2Type, lwrPreview,
+            enabled, omit, gCSEngine, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, edgeSlide, 
+            lwrType, lwr2Type, lwrPreview, lwr_corr, lwr_corr_ref, lwr2_corr, lwr2_corr_ref,
             xOL_corr, xOL_corr_ref, yOL_corr, yOL_corr_ref, CDU_corr, CDU_corr_ref, tCDU_corr, tCDU_corr_ref,
             xOL_ref, yOL_ref, xOL_av, yOL_av,
             flipH, flipV, alignX, alignY, structure, lD, fill, fileType, perPoly, refLayout,
@@ -348,6 +353,18 @@ namespace Variance
                     break;
                 case properties_i.lwr2Type:
                     ret = LWR2NoiseType;
+                    break;
+                case properties_i.lwr_corr:
+                    ret = correlatedLWR;
+                    break;
+                case properties_i.lwr_corr_ref:
+                    ret = correlatedLWRLayerIndex;
+                    break;
+                case properties_i.lwr2_corr:
+                    ret = correlatedLWR2;
+                    break;
+                case properties_i.lwr2_corr_ref:
+                    ret = correlatedLWR2LayerIndex;
                     break;
                 case properties_i.lwrPreview:
                     ret = LWRNoisePreview;
@@ -492,6 +509,18 @@ namespace Variance
                 case properties_i.lwrPreview:
                     LWRNoisePreview = val;
                     break;
+                case properties_i.lwr_corr:
+                    correlatedLWR = val;
+                    break;
+                case properties_i.lwr_corr_ref:
+                    correlatedLWRLayerIndex = val;
+                    break;
+                case properties_i.lwr2_corr:
+                    correlatedLWR2 = val;
+                    break;
+                case properties_i.lwr2_corr_ref:
+                    correlatedLWR2LayerIndex = val;
+                    break;
                 case properties_i.xOL_ref:
                     overlayXReferenceLayer = val;
                     break;
@@ -631,6 +660,18 @@ namespace Variance
                 case properties_i.lwr2Type:
                     LWR2NoiseType = default_LWRNoiseType;
                     break;
+                case properties_i.lwr_corr:
+                    correlatedLWR = 0;
+                    break;
+                case properties_i.lwr2_corr:
+                    correlatedLWR2 = 0;
+                    break;
+                case properties_i.lwr_corr_ref:
+                    correlatedLWRLayerIndex = -1;
+                    break;
+                case properties_i.lwr2_corr_ref:
+                    correlatedLWR2LayerIndex = -1;
+                    break;
                 case properties_i.perPoly:
                     perPoly = default_perPoly;
                     break;
@@ -764,6 +805,14 @@ namespace Variance
                     break;
                 case properties_i.lwrPreview:
                     ret = default_LWRNoisePreview;
+                    break;
+                case properties_i.lwr_corr:
+                case properties_i.lwr2_corr:
+                    ret = 0;
+                    break;
+                case properties_i.lwr_corr_ref:
+                case properties_i.lwr2_corr_ref:
+                    ret = -1;
                     break;
                 case properties_i.xOL_ref:
                     ret = default_overlayXReferenceLayer;
@@ -1833,6 +1882,11 @@ namespace Variance
             LWR2NoiseType = default_LWRNoiseType;
             LWR2NoiseFreq = default_LWRNoiseFreq;
 
+            correlatedLWR = 0;
+            correlatedLWRLayerIndex = -1;
+            correlatedLWR2 = 0;
+            correlatedLWR2LayerIndex = -1;
+
             horOverlay = default_horOverlay;
             horOverlay_RNGMapping = default_rngmapping;
             verOverlay = default_verOverlay;
@@ -1963,6 +2017,11 @@ namespace Variance
                 LWR2 = source.LWR2;
                 LWR2NoiseType = source.LWR2NoiseType;
                 LWR2NoiseFreq = source.LWR2NoiseFreq;
+
+                correlatedLWR = source.correlatedLWR;
+                correlatedLWRLayerIndex = source.correlatedLWRLayerIndex;
+                correlatedLWR2 = source.correlatedLWR2;
+                correlatedLWR2LayerIndex = source.correlatedLWR2LayerIndex;
 
                 sideCDU = source.sideCDU;
                 sideCDU_RNGMapping = source.sideCDU_RNGMapping;

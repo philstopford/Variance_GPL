@@ -588,7 +588,7 @@ namespace Variance
 #if CHAOSTHREADED
             );
 #endif
-            // Rewalk to handle overlay and CDU correlation. We can't do this in the loop above since the correlated layer's settings
+            // Rewalk to handle correlation. We can't do this in the loop above since the correlated layer's settings
             // are likely not available at that point in time.
 #if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
@@ -612,6 +612,14 @@ namespace Variance
                 {
                     // Note that the TVar will be matched to SVar if the simulation settings call for these to be linked.
                     CDUTVar[i] = CDUTVar[listOfSettings[i].getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref)];
+                }
+                if (listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr) == 1)
+                {
+                    LWRSeed[i] = LWRSeed[listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr_ref)];
+                }
+                if (listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr) == 1)
+                {
+                    LWR2Seed[i] = LWR2Seed[listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)];
                 }
             }
 #if CHAOSTHREADED

@@ -90,6 +90,9 @@ namespace Variance
         List<bool[]> SCDURBs_enabledState;
         List<bool[]> TCDURBs_enabledState;
 
+        List<bool[]> CLWRRBs_enabledState;
+        List<bool[]> CLWR2RBs_enabledState;
+
         // Layer UI element arrays.
         // 2D Layer UI stuff.
         DropDown comboBox_layerShape_exp;

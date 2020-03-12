@@ -1,5 +1,9 @@
 Changelog for Variance
 
+4.2.2
+
+	> Correlated LWR, LWR2.
+
 4.2.1
 
 	- Small refactoring to use common methods in some geometry transform/migration cases.

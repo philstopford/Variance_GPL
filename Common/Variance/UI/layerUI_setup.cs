@@ -23,6 +23,9 @@ namespace Variance
             cB_layer_OLRX_Av_exp = new CheckBox[CentralProperties.maxLayersForMC];
             cB_layer_OLRY_Av_exp = new CheckBox[CentralProperties.maxLayersForMC];
 
+            rB_layer_CLWR_exp = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_layer_CLWR2_exp = new RadioButton[CentralProperties.maxLayersForMC];
+
             xOLRBs_enabledState = new List<bool[]>();
             yOLRBs_enabledState = new List<bool[]>();
 
@@ -31,6 +34,9 @@ namespace Variance
 
             SCDURBs_enabledState = new List<bool[]>();
             TCDURBs_enabledState = new List<bool[]>();
+
+            CLWRRBs_enabledState = new List<bool[]>();
+            CLWR2RBs_enabledState = new List<bool[]>();
 
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
@@ -42,6 +48,9 @@ namespace Variance
 
                 SCDURBs_enabledState.Add(new bool[CentralProperties.maxLayersForMC]);
                 TCDURBs_enabledState.Add(new bool[CentralProperties.maxLayersForMC]);
+
+                CLWRRBs_enabledState.Add(new bool[CentralProperties.maxLayersForMC]);
+                CLWR2RBs_enabledState.Add(new bool[CentralProperties.maxLayersForMC]);
             }
 
             experiment_table = new TableLayout();
