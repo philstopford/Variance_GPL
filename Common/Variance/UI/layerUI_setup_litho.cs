@@ -603,15 +603,13 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row4_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row4_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row4_tl});
             outer.Content = outer_tl;
             row4_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
             groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             // Table layout within cell.
             TableCell lit_tr4_0 = new TableCell();
@@ -650,6 +648,7 @@ namespace Variance
             TableLayout ptl = new TableLayout();
             p.Content = ptl;
             ptl.Rows.Add(new TableRow());
+            ptl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
             TableCell ptc = new TableCell();
             ptl.Rows[0].Cells.Add(ptc);
 
@@ -699,8 +698,7 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row5_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row5_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row5_tl });
             outer.Content = outer_tl;
             row5_tl.Rows.Add(new TableRow());
 
@@ -734,6 +732,8 @@ namespace Variance
             setSize(num_layer_lithoHorOverlay_exp, 55, num_Height);
             lit_tr5_0_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr5_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoHorOverlay_exp);
+
+            row5_tl.Rows[row5_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             TableCell lit_tr5_1 = new TableCell();
             row5_tl.Rows[row5_tl.Rows.Count - 1].Cells.Add(lit_tr5_1);
@@ -827,8 +827,8 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row6_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row6_tl) });
             outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row6_tl) });
             outer.Content = outer_tl;
             row6_tl.Rows.Add(new TableRow());
 
@@ -917,8 +917,7 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row7_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row7_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row7_tl });
             outer.Content = outer_tl;
             row7_tl.Rows.Add(new TableRow());
 
@@ -938,9 +937,8 @@ namespace Variance
 
             lbl_layer_lithoVerOverlay_exp = new Label();
             lbl_layer_lithoVerOverlay_exp.Text = "Ver Overlay";
-            lbl_layer_lithoVerOverlay_exp.MouseDoubleClick += hOverlay_RNG;
-            lbl_layer_lithoVerOverlay_exp.Width = 86;
-            lbl_layer_lithoVerOverlay_exp.ToolTip = "3-sigma horizontal overlay.";
+            lbl_layer_lithoVerOverlay_exp.MouseDoubleClick += vOverlay_RNG;
+            lbl_layer_lithoVerOverlay_exp.ToolTip = "3-sigma verizontal overlay.";
             lit_tr7_0_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr7_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoVerOverlay_exp;
             lit_tr7_0_tl.Rows[0].Cells[0].ScaleWidth = true;
@@ -953,6 +951,8 @@ namespace Variance
             setSize(num_layer_lithoVerOverlay_exp, 55, num_Height);
             lit_tr7_0_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr7_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoVerOverlay_exp);
+
+            row7_tl.Rows[row7_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             TableCell lit_tr7_1 = new TableCell();
             row7_tl.Rows[row7_tl.Rows.Count - 1].Cells.Add(lit_tr7_1);
@@ -1047,8 +1047,8 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row8_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row8_tl) });
             outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row8_tl) });
             outer.Content = outer_tl;
             row8_tl.Rows.Add(new TableRow());
 
