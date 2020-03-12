@@ -46,6 +46,7 @@ namespace Variance
 
                 litho_row1(groupBox_layer_lithography_table);
                 litho_row2(groupBox_layer_lithography_table);
+                litho_rowLens(groupBox_layer_lithography_table);
                 litho_rowLWR(groupBox_layer_lithography_table);
                 litho_rowLWR2(groupBox_layer_lithography_table);
                 litho_row3(groupBox_layer_lithography_table);
@@ -243,6 +244,56 @@ namespace Variance
             lit_tr1_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
 
             row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+        }
+
+        void litho_rowLens(TableLayout groupBox_layer_lithography_table)
+        {
+            TableRow lit_lens = new TableRow();
+            groupBox_layer_lithography_table.Rows.Add(lit_lens);
+
+            Panel outer = new Panel();
+
+            TableLayout tl = new TableLayout();
+            tl.Rows.Add(new TableRow());
+
+            outer.Content = tl;
+
+            lit_lens.Cells.Add(new TableCell() { Control = outer });
+
+            Panel p1 = new Panel();
+            TableLayout p1tl = new TableLayout();
+            p1tl.Rows.Add(new TableRow());
+            p1.Content = p1tl;
+
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+
+            lbl_layer_coeff1_exp = new Label();
+            lbl_layer_coeff1_exp.Text = "Lens k1";
+            lbl_layer_coeff1_exp.ToolTip = "Lens k1";
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
+
+            num_layer_coeff1_exp = new NumericStepper();
+            num_layer_coeff1_exp.Increment = 0.1;
+            num_layer_coeff1_exp.DecimalPlaces = 2;
+            num_layer_coeff1_exp.Value = 0.0;
+            num_layer_coeff1_exp.ToolTip = "Lens k1";
+            setSize(num_layer_coeff1_exp, 55, num_Height);
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
+
+
+            lbl_layer_coeff2_exp = new Label();
+            lbl_layer_coeff2_exp.Text = "Lens k2";
+            lbl_layer_coeff2_exp.ToolTip = "Lens k2";
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
+
+            num_layer_coeff2_exp = new NumericStepper();
+            num_layer_coeff2_exp.Increment = 0.1;
+            num_layer_coeff2_exp.DecimalPlaces = 2;
+            num_layer_coeff2_exp.Value = 0.0;
+            num_layer_coeff2_exp.ToolTip = "Lens k2";
+            setSize(num_layer_coeff2_exp, 55, num_Height);
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
         }
 
         void litho_rowLWR(TableLayout groupBox_layer_lithography_table)
@@ -467,8 +518,7 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row3_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row3_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row3_tl });
             outer.Content = outer_tl;
             row3_tl.Rows.Add(new TableRow());
 
@@ -503,7 +553,7 @@ namespace Variance
             lit_tr3_0_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr3_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoCDUSide_exp);
 
-            row3_tl.Rows[0].Cells.Add(new TableCell());
+            row3_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
 
             TableCell lit_tr3_1 = new TableCell();
             row3_tl.Rows[0].Cells.Add(lit_tr3_1);
@@ -554,46 +604,6 @@ namespace Variance
                 }
                 rB_CCDU++;
             }
-
-
-            Panel p2 = new Panel();
-            TableLayout ltl = new TableLayout();
-            p2.Content = ltl;
-            row3_tl.Rows[0].Cells.Add(new TableCell() { Control = p2 });
-
-            ltl.Rows.Add(new TableRow());
-
-            lbl_layer_coeff1_exp = new Label();
-            lbl_layer_coeff1_exp.Text = "Lens k1";
-            lbl_layer_coeff1_exp.ToolTip = "Lens k1";
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
-
-            num_layer_coeff1_exp = new NumericStepper();
-            num_layer_coeff1_exp.Increment = 0.1;
-            num_layer_coeff1_exp.DecimalPlaces = 2;
-            num_layer_coeff1_exp.Value = 0.0;
-            num_layer_coeff1_exp.ToolTip = "Lens k1";
-            setSize(num_layer_coeff1_exp, 55, num_Height);
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
-
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-
-            ltl.Rows.Add(new TableRow());
-
-            lbl_layer_coeff2_exp = new Label();
-            lbl_layer_coeff2_exp.Text = "Lens k2";
-            lbl_layer_coeff2_exp.ToolTip = "Lens k2";
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
-
-            num_layer_coeff2_exp = new NumericStepper();
-            num_layer_coeff2_exp.Increment = 0.1;
-            num_layer_coeff2_exp.DecimalPlaces = 2;
-            num_layer_coeff2_exp.Value = 0.0;
-            num_layer_coeff2_exp.ToolTip = "Lens k2";
-            setSize(num_layer_coeff2_exp, 55, num_Height);
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
-
-            ltl.Rows[ltl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
         }
 
         // TCDU
