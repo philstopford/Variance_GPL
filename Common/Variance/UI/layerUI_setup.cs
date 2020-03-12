@@ -784,6 +784,13 @@ namespace Variance
             checkBox_Layer_ShowDrawn_exp.Text = "Show Drawn";
             checkBox_Layer_ShowDrawn_exp.ToolTip = "Show drawn shape for the contour";
             gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_ShowDrawn_exp });
+
+            gadgets_tr1_0_tl.Rows.Add(new TableRow());
+
+            cB_layer_LWRPreview_exp = new CheckBox();
+            cB_layer_LWRPreview_exp.Text = "Show LWR";
+            cB_layer_LWRPreview_exp.ToolTip = "Preview of LWR";
+            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_layer_LWRPreview_exp });
         }
     }
 }

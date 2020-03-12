@@ -44,36 +44,33 @@ namespace Variance
                 p.Content = t;
                 tc.Control = p;
 
-                litho_row1(groupBox_layer_lithography_table);
-                litho_row2(groupBox_layer_lithography_table);
-                litho_rowLens(groupBox_layer_lithography_table);
-                litho_rowLWR(groupBox_layer_lithography_table);
-                litho_rowLWR2(groupBox_layer_lithography_table);
-                litho_row3(groupBox_layer_lithography_table);
-                litho_row4(groupBox_layer_lithography_table);
-                litho_row5(groupBox_layer_lithography_table);
-                litho_row6(groupBox_layer_lithography_table);
-                litho_row7(groupBox_layer_lithography_table);
-                litho_row8(groupBox_layer_lithography_table);
+                litho_icr_ocr(groupBox_layer_lithography_table);
+                litho_lens(groupBox_layer_lithography_table);
+                litho_lwr(groupBox_layer_lithography_table);
+                litho_lwr2(groupBox_layer_lithography_table);
+                litho_scdu(groupBox_layer_lithography_table);
+                litho_tcdu(groupBox_layer_lithography_table);
+                litho_xol(groupBox_layer_lithography_table);
+                litho_colx(groupBox_layer_lithography_table);
+                litho_yol(groupBox_layer_lithography_table);
+                litho_coly(groupBox_layer_lithography_table);
             });
         }
 
         // ICR
-        void litho_row1(TableLayout groupBox_layer_lithography_table)
+        void litho_icr_ocr(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
             TableLayout row0_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row0_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row0_tl });
             outer.Content = outer_tl;
             row0_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
             groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             // Table layout within cell.
             TableCell lit_tr0_0 = new TableCell();
@@ -89,7 +86,6 @@ namespace Variance
             lbl_layer_lithoICRR_exp.ToolTip = "Inner vertex (concave) corner rounding radius.";
             lit_tr0_0_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr0_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoICRR_exp;
-            lit_tr0_0_tl.Rows[0].Cells[0].ScaleWidth = true;
 
             num_layer_lithoICRR_exp = new NumericStepper();
             num_layer_lithoICRR_exp.Increment = 0.1;
@@ -124,43 +120,15 @@ namespace Variance
             lit_tr0_1_tl.Rows[0].Cells.Add(new TableCell());
             lit_tr0_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoICV_exp);
 
-            TableCell lit_tr0_2 = new TableCell();
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(lit_tr0_2);
 
-            Panel p = new Panel();
-            lit_tr0_2.Control = p;
-
-            TableLayout ptl = new TableLayout();
-            p.Content = ptl;
-
-            ptl.Rows.Add(new TableRow());
-
-            ptl.Rows.Add(new TableRow());
-            ptl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            TableCell tc0 = new TableCell();
-            TableCell tc1 = new TableCell();
-            ptl.Rows[0].Cells.Add(tc0);
-            ptl.Rows[0].Cells.Add(tc1);
-
-            Panel p1 = new Panel();
-            Panel p2 = new Panel();
-            tc0.Control = p1;
-            tc1.Control = p2;
-
-            TableLayout tc0tl = new TableLayout();
-            TableLayout tc1tl = new TableLayout();
-            p1.Content = tc0tl;
-            p2.Content = tc1tl;
-
-            tc0tl.Rows.Add(new TableRow());
-            tc1tl.Rows.Add(new TableRow());
+            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
 
             lbl_layer_lithoWobble_exp = new Label();
             lbl_layer_lithoWobble_exp.Text = "Wobble";
             lbl_layer_lithoWobble_exp.MouseDoubleClick += wobble_RNG;
             lbl_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
-            tc0tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
+            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
 
             num_layer_lithoWobble_exp = new NumericStepper();
             num_layer_lithoWobble_exp.Increment = 0.1;
@@ -168,85 +136,10 @@ namespace Variance
             num_layer_lithoWobble_exp.MinValue = 0;
             num_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
             setSize(num_layer_lithoWobble_exp, 55, (int)(label_Height * uiScaleFactor));
-            tc0tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
-
-
-            cB_layer_LWRPreview_exp = new CheckBox();
-            cB_layer_LWRPreview_exp.Text = "Show";
-            cB_layer_LWRPreview_exp.ToolTip = "Preview of LWR";
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_layer_LWRPreview_exp });
+            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
         }
 
-        // OCR
-        void litho_row2(TableLayout groupBox_layer_lithography_table)
-        {
-            Panel outer = new Panel();
-            TableLayout outer_tl = new TableLayout();
-            TableLayout row2_tl = new TableLayout();
-            outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row2_tl) });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            outer.Content = outer_tl;
-            row2_tl.Rows.Add(new TableRow());
-
-            // Outer table, row 1
-            groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
-
-            // Table layout within cell.
-            TableCell lit_tr1_0 = new TableCell();
-            row2_tl.Rows[0].Cells.Add(lit_tr1_0);
-
-            TableLayout lit_tr1_0_tl = new TableLayout();
-            lit_tr1_0.Control = lit_tr1_0_tl;
-
-            lit_tr1_0_tl.Rows.Add(new TableRow());
-
-            lbl_layer_lithoOCRR_exp = new Label();
-            lbl_layer_lithoOCRR_exp.Text = "Outer Radius";
-            lbl_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
-            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCRR_exp;
-            lit_tr1_0_tl.Rows[0].Cells[0].ScaleWidth = true;
-
-            num_layer_lithoOCRR_exp = new NumericStepper();
-            num_layer_lithoOCRR_exp.Increment = 0.1;
-            num_layer_lithoOCRR_exp.DecimalPlaces = 2;
-            num_layer_lithoOCRR_exp.MinValue = 0;
-            num_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
-            setSize(num_layer_lithoOCRR_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCRR_exp);
-
-            TableCell lit_tr1_1 = new TableCell();
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(lit_tr1_1);
-
-            TableLayout lit_tr1_1_tl = new TableLayout();
-            lit_tr1_1.Control = lit_tr1_1_tl;
-
-            lit_tr1_1_tl.Rows.Add(new TableRow());
-
-            lbl_layer_lithoOCV_exp = new Label();
-            lbl_layer_lithoOCV_exp.Text = "Var";
-            lbl_layer_lithoOCV_exp.MouseDoubleClick += ICV_RNG;
-            lbl_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
-            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_1_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCV_exp;
-
-            num_layer_lithoOCV_exp = new NumericStepper();
-            num_layer_lithoOCV_exp.Increment = 0.1;
-            num_layer_lithoOCV_exp.DecimalPlaces = 2;
-            num_layer_lithoOCV_exp.MinValue = 0;
-            num_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
-            setSize(num_layer_lithoOCV_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
-
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
-        }
-
-        void litho_rowLens(TableLayout groupBox_layer_lithography_table)
+        void litho_lens(TableLayout groupBox_layer_lithography_table)
         {
             TableRow lit_lens = new TableRow();
             groupBox_layer_lithography_table.Rows.Add(lit_lens);
@@ -266,7 +159,55 @@ namespace Variance
             p1.Content = p1tl;
 
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+
+            TableCell lit_tr0_2 = new TableCell();
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(lit_tr0_2);
+
+            TableLayout lit_tr1_0_tl = new TableLayout();
+            lit_tr0_2.Control = lit_tr1_0_tl;
+
+            lit_tr1_0_tl.Rows.Add(new TableRow());
+
+            lbl_layer_lithoOCRR_exp = new Label();
+            lbl_layer_lithoOCRR_exp.Text = "Outer Radius";
+            lbl_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
+            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
+            lit_tr1_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCRR_exp;
+
+            num_layer_lithoOCRR_exp = new NumericStepper();
+            num_layer_lithoOCRR_exp.Increment = 0.1;
+            num_layer_lithoOCRR_exp.DecimalPlaces = 2;
+            num_layer_lithoOCRR_exp.MinValue = 0;
+            num_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
+            setSize(num_layer_lithoOCRR_exp, 55, (int)(label_Height * uiScaleFactor));
+            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
+            lit_tr1_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCRR_exp);
+
+            TableCell lit_tr0_3 = new TableCell();
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(lit_tr0_3);
+
+            TableLayout lit_tr1_1_tl = new TableLayout();
+            lit_tr0_3.Control = lit_tr1_1_tl;
+
+            lit_tr1_1_tl.Rows.Add(new TableRow());
+
+            lbl_layer_lithoOCV_exp = new Label();
+            lbl_layer_lithoOCV_exp.Text = "Var";
+            lbl_layer_lithoOCV_exp.MouseDoubleClick += ICV_RNG;
+            lbl_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
+            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
+            lit_tr1_1_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCV_exp;
+
+            num_layer_lithoOCV_exp = new NumericStepper();
+            num_layer_lithoOCV_exp.Increment = 0.1;
+            num_layer_lithoOCV_exp.DecimalPlaces = 2;
+            num_layer_lithoOCV_exp.MinValue = 0;
+            num_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
+            setSize(num_layer_lithoOCV_exp, 55, (int)(label_Height * uiScaleFactor));
+            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
+            lit_tr1_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
+
+            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             lbl_layer_coeff1_exp = new Label();
             lbl_layer_coeff1_exp.Text = "Lens k1";
@@ -296,7 +237,7 @@ namespace Variance
             p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
         }
 
-        void litho_rowLWR(TableLayout groupBox_layer_lithography_table)
+        void litho_lwr(TableLayout groupBox_layer_lithography_table)
         {
             TableRow lit_lwr = new TableRow();
             groupBox_layer_lithography_table.Rows.Add(lit_lwr);
@@ -404,7 +345,7 @@ namespace Variance
             }
         }
 
-        void litho_rowLWR2(TableLayout groupBox_layer_lithography_table)
+        void litho_lwr2(TableLayout groupBox_layer_lithography_table)
         {
             TableRow lit_lwr2 = new TableRow();
             groupBox_layer_lithography_table.Rows.Add(lit_lwr2);
@@ -511,8 +452,9 @@ namespace Variance
                 rB_CLWR2++;
             }
         }
-        // SCDU, lens distortion
-        void litho_row3(TableLayout groupBox_layer_lithography_table)
+        
+        // SCDU
+        void litho_scdu(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
@@ -607,7 +549,7 @@ namespace Variance
         }
 
         // TCDU
-        void litho_row4(TableLayout groupBox_layer_lithography_table)
+        void litho_tcdu(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
@@ -702,7 +644,7 @@ namespace Variance
         }
 
         // XOL, XOLR
-        void litho_row5(TableLayout groupBox_layer_lithography_table)
+        void litho_xol(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
@@ -831,7 +773,7 @@ namespace Variance
         }
 
         // COLX
-        void litho_row6(TableLayout groupBox_layer_lithography_table)
+        void litho_colx(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
@@ -921,7 +863,7 @@ namespace Variance
         }
 
         // YOL, YOLR
-        void litho_row7(TableLayout groupBox_layer_lithography_table)
+        void litho_yol(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
@@ -1051,7 +993,7 @@ namespace Variance
         }
 
         // COLY
-        void litho_row8(TableLayout groupBox_layer_lithography_table)
+        void litho_coly(TableLayout groupBox_layer_lithography_table)
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
