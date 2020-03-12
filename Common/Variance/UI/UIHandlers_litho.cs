@@ -82,8 +82,102 @@ namespace Variance
                         }
                     }
                     TCDURBs_enabledState[j][i] = tcdu_enabled;
+
+                    bool lwr_enabled = enabled;
+                    if (lwr_enabled && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.lwr_corr) == 1))
+                    {
+                        // If i depends on j, we cannot allow j to enable dependency on i. First to assert a dependency, in layer order, wins.
+                        if (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.lwr_corr) == j)
+                        {
+                            lwr_enabled = false;
+                        }
+                    }
+                    CLWRRBs_enabledState[j][i] = lwr_enabled;
+
+                    bool lwr2_enabled = enabled;
+                    if (lwr2_enabled && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.lwr2_corr) == 1))
+                    {
+                        // If i depends on j, we cannot allow j to enable dependency on i. First to assert a dependency, in layer order, wins.
+                        if (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.lwr2_corr) == j)
+                        {
+                            lwr2_enabled = false;
+                        }
+                    }
+                    CLWR2RBs_enabledState[j][i] = lwr2_enabled;
                 }
             }
+        }
+
+        void updateLayerLWRRadioButtons_exp(int layer)
+        {
+            Application.Instance.Invoke(() =>
+            {
+                // -1 is off, which is the 0th radio button.
+                int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lwr_corr_ref) + 1;
+
+                rB_layer_CLWR_exp[0].Enabled = true;
+                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+                {
+                    if (i == layer)
+                    {
+                        // No button for current layer, so skip this pass through the loop.
+                        continue;
+                    }
+                    else
+                    {
+                        int bIndex = i + 1; // offset button index by 1 as the 0-index is the 'off' button.
+                        if (i > layer)
+                        {
+                            bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
+                        }
+                        rB_layer_CLWR_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        rB_layer_CLWR_exp[bIndex].Enabled = CLWRRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                    }
+                }
+
+                if (sIndex > layer)
+                {
+                    sIndex--;
+                }
+
+                rB_layer_CLWR_exp[sIndex].Checked = true;
+            });
+        }
+
+        void updateLayerLWR2RadioButtons_exp(int layer)
+        {
+            Application.Instance.Invoke(() =>
+            {
+                // -1 is off, which is the 0th radio button.
+                int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref) + 1;
+
+                rB_layer_CLWR2_exp[0].Enabled = true;
+                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
+                {
+                    if (i == layer)
+                    {
+                        // No button for current layer, so skip this pass through the loop.
+                        continue;
+                    }
+                    else
+                    {
+                        int bIndex = i + 1; // offset button index by 1 as the 0-index is the 'off' button.
+                        if (i > layer)
+                        {
+                            bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
+                        }
+                        rB_layer_CLWR2_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        rB_layer_CLWR2_exp[bIndex].Enabled = CLWR2RBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                    }
+                }
+
+                if (sIndex > layer)
+                {
+                    sIndex--;
+                }
+
+                rB_layer_CLWR2_exp[sIndex].Checked = true;
+            });
         }
 
         void updateLayerCDURadioButtons_exp(int layer)

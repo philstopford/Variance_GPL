@@ -486,6 +486,8 @@ namespace Variance
                 }
 
                 updateLayerRadioButtons_exp();
+                updateLayerLWRRadioButtons_exp(settingsIndex);
+                updateLayerLWR2RadioButtons_exp(settingsIndex);
                 updateLayerCDURadioButtons_exp(settingsIndex);
                 updateLayerTCDURadioButtons_exp(settingsIndex);
                 updateLayerCOLXRadioButtons_exp(settingsIndex);
