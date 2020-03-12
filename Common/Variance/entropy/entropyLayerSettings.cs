@@ -61,6 +61,8 @@ namespace Variance
         static decimal default_outerCV = 0;
         static decimal default_LWR = 0;
         static Int32 default_LWRNoiseType = (Int32)CommonVars.noiseIndex.perlin;
+        static Int32 default_correlatedLWR = 0;
+        static Int32 default_correlatedLWRLayerIndex = -1;
         static Int32 default_LWRNoisePreview = 0;
         static decimal default_LWRNoiseFreq = 0.2m;
         static decimal default_sideCDU = 0;
@@ -661,16 +663,16 @@ namespace Variance
                     LWR2NoiseType = default_LWRNoiseType;
                     break;
                 case properties_i.lwr_corr:
-                    correlatedLWR = 0;
+                    correlatedLWR = default_correlatedLWR;
                     break;
                 case properties_i.lwr2_corr:
-                    correlatedLWR2 = 0;
+                    correlatedLWR2 = default_correlatedLWR;
                     break;
                 case properties_i.lwr_corr_ref:
-                    correlatedLWRLayerIndex = -1;
+                    correlatedLWRLayerIndex = default_correlatedLWRLayerIndex;
                     break;
                 case properties_i.lwr2_corr_ref:
-                    correlatedLWR2LayerIndex = -1;
+                    correlatedLWR2LayerIndex = default_correlatedLWRLayerIndex;
                     break;
                 case properties_i.perPoly:
                     perPoly = default_perPoly;
@@ -808,11 +810,11 @@ namespace Variance
                     break;
                 case properties_i.lwr_corr:
                 case properties_i.lwr2_corr:
-                    ret = 0;
+                    ret = default_correlatedLWR;
                     break;
                 case properties_i.lwr_corr_ref:
                 case properties_i.lwr2_corr_ref:
-                    ret = -1;
+                    ret = default_correlatedLWRLayerIndex;
                     break;
                 case properties_i.xOL_ref:
                     ret = default_overlayXReferenceLayer;
@@ -1882,10 +1884,10 @@ namespace Variance
             LWR2NoiseType = default_LWRNoiseType;
             LWR2NoiseFreq = default_LWRNoiseFreq;
 
-            correlatedLWR = 0;
-            correlatedLWRLayerIndex = -1;
-            correlatedLWR2 = 0;
-            correlatedLWR2LayerIndex = -1;
+            correlatedLWR = default_correlatedLWR;
+            correlatedLWRLayerIndex = default_correlatedLWRLayerIndex;
+            correlatedLWR2 = default_correlatedLWR;
+            correlatedLWR2LayerIndex = default_correlatedLWRLayerIndex;
 
             horOverlay = default_horOverlay;
             horOverlay_RNGMapping = default_rngmapping;

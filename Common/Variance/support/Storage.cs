@@ -314,10 +314,14 @@ namespace Variance
                     new XElement("LWRRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lwr_RNG)),
                     new XElement("LWRNoiseFreq", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq)),
                     new XElement("LWRNoiseType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwrType)),
+                    new XElement("correlatedLWR", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr)),
+                    new XElement("correlatedLWRLayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr_ref)),
                     new XElement("LWR2", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwr2)),
                     new XElement("LWR2RNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lwr2_RNG)),
                     new XElement("LWR2NoiseFreq", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq)),
                     new XElement("LWR2NoiseType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2Type)),
+                    new XElement("correlatedLWR2", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr)),
+                    new XElement("correlatedLWR2LayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)),
                     new XElement("LWRNoisePreview", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwrPreview)),
                     new XElement("sideCDU", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)),
                     new XElement("sideCDURNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.sCDU_RNG)),
@@ -1157,6 +1161,24 @@ namespace Variance
 
                 try
                 {
+                    readSettings.setInt(EntropyLayerSettings.properties_i.lwr_corr, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("correlatedLWR").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultInt(EntropyLayerSettings.properties_i.lwr_corr);
+                }
+
+                try
+                {
+                    readSettings.setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("correlatedLWRLayerIndex").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultInt(EntropyLayerSettings.properties_i.lwr_corr_ref);
+                }
+
+                try
+                {
                     readSettings.setDecimal(EntropyLayerSettings.properties_decimal.lwr2, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("LWR2").First().Value));
                 }
                 catch (Exception)
@@ -1189,6 +1211,24 @@ namespace Variance
                 catch (Exception)
                 {
                     readSettings.defaultInt(EntropyLayerSettings.properties_i.lwr2Type);
+                }
+
+                try
+                {
+                    readSettings.setInt(EntropyLayerSettings.properties_i.lwr2_corr, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("correlatedLWR2").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultInt(EntropyLayerSettings.properties_i.lwr2_corr);
+                }
+
+                try
+                {
+                    readSettings.setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("correlatedLWR2LayerIndex").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultInt(EntropyLayerSettings.properties_i.lwr2_corr_ref);
                 }
 
                 try

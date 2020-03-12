@@ -314,6 +314,8 @@ namespace Variance
                 rB_layer_COLY_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
                 rB_layer_OLRX_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
                 rB_layer_OLRY_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
+                rB_layer_CLWR_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
+                rB_layer_CLWR2_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
                 rB_layer_CCDU_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
                 rB_layer_CTCDU_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
                 rB_layerBooleanA_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
@@ -1450,6 +1452,8 @@ namespace Variance
             int COLYIndex = 0;
             int OLRXIndex = 0;
             int OLRYIndex = 0;
+            int CLWRIndex = 0;
+            int CLWR2Index = 0;
             int CCDUIndex = 0;
             int CTCDUIndex = 0;
             bool[] avXIndices = new bool[CentralProperties.maxLayersForMC];
@@ -1475,6 +1479,14 @@ namespace Variance
                 if (rB_layer_OLRY_exp[i].Checked)
                 {
                     OLRYIndex = i;
+                }
+                if (rB_layer_CLWR_exp[i].Checked)
+                {
+                    CLWRIndex = i;
+                }
+                if (rB_layer_CLWR2_exp[i].Checked)
+                {
+                    CLWR2Index = i;
                 }
                 if (rB_layer_CCDU_exp[i].Checked)
                 {
@@ -1564,6 +1576,40 @@ namespace Variance
                     yolRefIndex--; // compensate for missing radio button for current layer.
                 }
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_ref, yolRefIndex - 1);
+            }
+
+            if (CLWRIndex == 0)
+            {
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr, 0);
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, -1);
+            }
+            else
+            {
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr, 1);
+                int clwrRefIndex = Convert.ToInt32(rB_layer_CLWR_exp[CLWRIndex].Text);
+                if (clwrRefIndex > settingsIndex)
+                {
+                    // clwrRefIndex--; // compensate for missing radio button for current layer.
+                }
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, clwrRefIndex - 1);
+
+            }
+
+            if (CLWR2Index == 0)
+            {
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr, 0);
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, -1);
+            }
+            else
+            {
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr, 1);
+                int clwr2RefIndex = Convert.ToInt32(rB_layer_CLWR2_exp[CLWRIndex].Text);
+                if (clwr2RefIndex > settingsIndex)
+                {
+                    // clwr2RefIndex--; // compensate for missing radio button for current layer.
+                }
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, clwr2RefIndex - 1);
+
             }
 
             if (CCDUIndex == 0)
