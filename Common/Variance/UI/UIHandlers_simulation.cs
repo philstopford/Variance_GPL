@@ -163,14 +163,6 @@ namespace Variance
                     fileDialogExt = ".csv";
                 }
 
-                string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new char[] { '.' });
-                string fileName = "";
-                for (int i = 0; i < tokens.Length - 2; i++)
-                {
-                    fileName += tokens[i] + ".";
-                }
-                fileName += tokens[tokens.Length - 2];
-
                 SaveFileDialog sfd = new SaveFileDialog()
                 {
                     Title = fileDialogTitle,
@@ -181,6 +173,13 @@ namespace Variance
                 };
                 try
                 {
+                    string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new char[] { '.' });
+                    string fileName = "";
+                    for (int i = 0; i < tokens.Length - 2; i++)
+                    {
+                        fileName += tokens[i] + ".";
+                    }
+                    fileName += tokens[tokens.Length - 2];
                     sfd.FileName = fileName;
                 }
                 catch (Exception)

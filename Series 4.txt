@@ -2,7 +2,8 @@ Changelog for Variance
 
 4.2.2
 
-	> Correlated LWR, LWR2.
+	- Correlated seeds for LWR, LWR2.
+	 - Required slight rework of UI.
 
 4.2.1
 
