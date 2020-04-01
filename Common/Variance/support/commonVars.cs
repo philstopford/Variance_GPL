@@ -368,57 +368,6 @@ namespace Variance
         public string author { get; set; }
         public string titleText { get; set; }
 
-        string licDuration, licFeatures, licExpiration;
-
-        public enum l { d, f, e }
-
-        public string getL(l L)
-        {
-            return pGetL(L);
-        }
-
-        string pGetL(l L)
-        {
-            string ret = "";
-
-            switch (L)
-            {
-                case l.d:
-                    ret = licDuration;
-                    break;
-                case l.e:
-                    ret = licExpiration;
-                    break;
-                case l.f:
-                    ret = licFeatures;
-                    break;
-            }
-
-            return ret;
-        }
-
-        bool licExpired;
-
-        public bool getE()
-        {
-            return pGetE();
-        }
-
-        bool pGetE()
-        {
-            return licExpired;
-        }
-
-        public void setE(bool val)
-        {
-            pSetE(val);
-        }
-
-        void pSetE(bool val)
-        {
-            licExpired = val;
-        }
-
         public string projectFileName = "";
         bool warningShown, geoCoreCDUWarningShown;
 
@@ -561,14 +510,6 @@ namespace Variance
             // It is also used by the load from disk file system, using a temporary MCSettings instance as the source
             // In the case of the clearHandler, we get sent a new MCLayerSettings instance, so we have to handle that.
             // Check our copyFrom reference. We need to do this early before anything could change.
-
-            // Change settings if the license doesn't support them.
-            if (licFeatures != "advanced")
-            {
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.lwrType, (Int32)CommonVars.noiseIndex.perlin);
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.gCSEngine, 0);
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.edgeSlide, 0);
-            }
 
             if (!gdsOnly)
             {
@@ -1007,18 +948,6 @@ namespace Variance
                     settingsUIActive = val;
                     break;
             }
-        }
-
-        public void licenceCheck(VarianceContext varianceContext)
-        {
-            pLicenceCheck(varianceContext);
-        }
-
-        void pLicenceCheck(VarianceContext varianceContext)
-        {
-            licDuration = "permanent";
-            licFeatures = "advanced";
-            licExpiration = "";
         }
 
         public CommonVars(VarianceContext varianceContext)

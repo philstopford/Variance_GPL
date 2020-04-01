@@ -357,14 +357,6 @@ namespace Variance
 
                 experimental_listBox_layers.SelectedIndex = selectedLayer;
 
-                if ((commonVars.getE()) || (commonVars.getL(CommonVars.l.f) != "advanced"))
-                {
-                    checkBox_layer_geoCore_shapeEngine_exp.Enabled = false;
-                    checkBox_layer_geoCore_shapeEngine_exp.Checked = false;
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Enabled = false;
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Checked = false;
-                }
-
                 if ((commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE) &&
                     !((bool)checkBox_layer_geoCore_shapeEngine_exp.Checked))
                 {
@@ -874,18 +866,8 @@ namespace Variance
 
         void do2DLayerUI_edgeSlide_exp(int settingsIndex)
         {
-            // Process edge slide UI elements.
-            if ((commonVars.getE()) || (commonVars.getL(CommonVars.l.f) != "advanced"))
-            {
-                checkBox_layer_edgeSlide_exp.Checked = false;
-                checkBox_layer_edgeSlide_exp.Enabled = false;
-                num_layer_edgeSlideTension_exp.Enabled = false;
-            }
-            else
-            {
-                checkBox_layer_edgeSlide_exp.Enabled = true;
-                num_layer_edgeSlideTension_exp.Enabled = true;
-            }
+            checkBox_layer_edgeSlide_exp.Enabled = true;
+            num_layer_edgeSlideTension_exp.Enabled = true;
 
             if ((bool)checkBox_layer_edgeSlide_exp.Checked)
             {

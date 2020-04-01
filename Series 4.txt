@@ -1,5 +1,9 @@
 Changelog for Variance
 
+4.2.3
+
+	- Fix up some issues arising from relicensing of project.
+
 4.2.2
 
 	- Correlated seeds for LWR, LWR2.

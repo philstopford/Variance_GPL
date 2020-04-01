@@ -339,14 +339,6 @@ namespace Variance
                     checkBox_layer_geoCore_layoutReference_exp.Checked = false;
                 }
 
-                if ((commonVars.getE()) || (commonVars.getL(CommonVars.l.f) != "advanced"))
-                {
-                    checkBox_layer_geoCore_shapeEngine_exp.Checked = false;
-                    checkBox_layer_geoCore_shapeEngine_exp.Enabled = false;
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Checked = false;
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Enabled = false;
-                }
-
                 // Layout handling
                 textBox_layer_FileLocation_geoCore_exp.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.file);
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE)
@@ -449,10 +441,6 @@ namespace Variance
                 }
                 try
                 {
-                    if ((commonVars.getE()) || (commonVars.getL(CommonVars.l.f) != "advanced"))
-                    {
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwrType, (Int32)CommonVars.noiseIndex.perlin);
-                    }
                     comboBox_layerLWRNoiseType_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrType);
                 }
                 catch (Exception)
@@ -460,10 +448,6 @@ namespace Variance
                 }
                 try
                 {
-                    if ((commonVars.getE()) || (commonVars.getL(CommonVars.l.f) != "advanced"))
-                    {
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2Type, (Int32)CommonVars.noiseIndex.perlin);
-                    }
                     comboBox_layerLWR2NoiseType_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwr2Type);
                 }
                 catch (Exception)
