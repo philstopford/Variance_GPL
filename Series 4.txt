@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.2.3
 
+	- Bug fix to lens distortion.
 	- Fix up some issues arising from relicensing of project.
 
 4.2.2

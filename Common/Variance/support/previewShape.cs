@@ -918,12 +918,13 @@ namespace Variance
 
                         previewPoints[poly][point] = new GeoLibPointF(px, py);
 
-                        // Refragment
-                        previewPoints[poly] = fragment.fragmentPath(previewPoints[poly]);
                     }
 #if VARIANCETHREADED
                     );
 #endif
+
+                    // Refragment
+                    previewPoints[poly] = fragment.fragmentPath(previewPoints[poly]);
                 }
             }
         }
