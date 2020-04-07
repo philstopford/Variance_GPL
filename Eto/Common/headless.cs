@@ -327,15 +327,6 @@ namespace Variance
             // In the case of the clearHandler, we get sent a new MCLayerSettings instance, so we have to handle that.
             // Check our copyFrom reference. We need to do this early before anything could change.
 
-            // Change settings if the license doesn't support them.
-            if (commonVars.getL(CommonVars.l.f) != "advanced")
-            {
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.lwrType, (Int32)CommonVars.noiseIndex.perlin);
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.lwr2Type, (Int32)CommonVars.noiseIndex.perlin);
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.gCSEngine, 0);
-                entropyLayerSettings.setInt(EntropyLayerSettings.properties_i.edgeSlide, 0);
-            }
-
             if (!gdsOnly)
             {
                 if (commonVars.isCopyPrepped())

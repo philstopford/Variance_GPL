@@ -406,7 +406,9 @@ namespace Variance
             cleavedResults = new List<List<double>>(numberOfResultsFields);
             numberOfValues = new Int32[numberOfResultsFields];
             meanValues = new double[numberOfResultsFields];
+            lastMeanValues = new double[numberOfResultsFields];
             stdDevValues = new double[numberOfResultsFields];
+            lastStdDevValues = new double[numberOfResultsFields];
             summedValues = new double[numberOfResultsFields];
             summedSquarevalues = new double[numberOfResultsFields];
             for (Int32 i = 0; i < numberOfResultsFields; i++)
@@ -416,7 +418,9 @@ namespace Variance
                 summedValues[i] = 0.0;
                 summedSquarevalues[i] = 0.0;
                 meanValues[i] = 0.0;
+                lastMeanValues[i] = 0.0;
                 stdDevValues[i] = 0.0;
+                lastStdDevValues[i] = 0.0;
             }
         }
 
