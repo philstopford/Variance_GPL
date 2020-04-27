@@ -42,13 +42,6 @@ namespace Variance.Gtk
                         case "opengl":
                             graphicsMode = (int)GraphicsBackend.OpenGL;
                             break;
-                        case "metal":
-                            graphicsMode = (int)GraphicsBackend.Metal;
-                            break;
-                        case "d3d11":
-                            graphicsMode = (int)GraphicsBackend.Direct3D11;
-                            break;
-                        case "vulkan":
                         default:
                             graphicsMode = (int)GraphicsBackend.Vulkan;
                             break;
@@ -101,7 +94,7 @@ namespace Variance.Gtk
             Int32 HTCount = Environment.ProcessorCount;
 
             var platform = new Eto.GtkSharp.Platform();
-            platform.Add<VeldridSurface.IHandler>(() => new GtkVeldridSurfaceHandler());
+            platform.Add<VeldridSurface.IOpenGL>(() => new GtkVeldridSurfaceHandler());
 
             VarianceContextGUI varianceContext = new VarianceContextGUI(false, xmlFile, numberOfThreads,
                                                         HTCount, backend);
