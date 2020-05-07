@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using Eto.Veldrid;
 using Eto.Veldrid.Mac;
-using OpenTK;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -94,11 +93,6 @@ namespace Variance.Mac
                 {
                     // avoid changing the backend from the preferred case.
                 }
-            }
-
-            if (backend == GraphicsBackend.OpenGL)
-            {
-                Toolkit.Init(new ToolkitOptions { Backend = PlatformBackend.PreferNative });
             }
 
             var platform = new Eto.Mac.Platform();

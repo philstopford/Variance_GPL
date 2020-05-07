@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Mac\Eto.Veldrid.Mac64.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
   </ItemGroup>

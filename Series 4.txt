@@ -1,5 +1,15 @@
 Changelog for Variance
 
+4.2.4
+
+	- Veldrid viewport updates to use new nugets from Eto.Veldrid upstream project.
+	 - OpenGL is problematic under .NET Core on non-Windows systems due to library issues.
+	 - Upstream OpenTK dropped its platform support; upstream Eto.Veldrid has responded.
+	 - This approach now provides :
+	  Windows : Vulkan, Direct3D 11
+	  macOS : metal
+	  Linux : Vulkan, OpenGL
+
 4.2.3
 
 	- Library updates

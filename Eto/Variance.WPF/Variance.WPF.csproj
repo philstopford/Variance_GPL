@@ -20,7 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Wpf\Eto.Veldrid.Wpf.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
     <ProjectReference Include="..\Resources\resources.csproj" />

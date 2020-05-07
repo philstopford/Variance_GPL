@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using Eto.Veldrid;
 using Eto.Veldrid.Wpf;
-using OpenTK;
 using System;
 using Veldrid;
 
@@ -91,11 +90,6 @@ namespace Variance.WPF
                 {
                     // avoid changing the backend from the preferred case.
                 }
-            }
-
-            if (backend == GraphicsBackend.OpenGL)
-            {
-                Toolkit.Init(new ToolkitOptions { Backend = PlatformBackend.PreferNative });
             }
 
             var platform = new Eto.Wpf.Platform();
