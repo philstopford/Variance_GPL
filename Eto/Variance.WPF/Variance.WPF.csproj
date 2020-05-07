@@ -20,9 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.VeldridSurface\Eto.VeldridSurface.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
-    <ProjectReference Include="..\Resources\resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>
