@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using Eto.Veldrid;
 using Eto.Veldrid.Gtk;
-using OpenTK;
 using System;
 using Variance;
 using Veldrid;
