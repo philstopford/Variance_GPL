@@ -2,6 +2,8 @@ Changelog for Variance
 
 4.2.4
 
+	- Found a workaround to draw lines over polygons.
+	 - Z-order wasn't doing the job, but re-ordering the draw calls works. Not ideal, but at least overlaying lines works.
 	- Veldrid viewport updates to use new nugets from Eto.Veldrid upstream project.
 	 - OpenGL is problematic under .NET Core on non-Windows systems due to library issues.
 	 - Upstream OpenTK dropped its platform support; upstream Eto.Veldrid has responded.
