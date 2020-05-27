@@ -50,6 +50,8 @@ namespace Variance
             public ObservableCollection<string> rngMapping { get; set; }
         }
 
+        int viewportSize = 484;
+
         bool[] geoGBVisible, subShapeGBVisible, booleanGBVisible;
 
         // Context menu to display when user wants to change the distribution behind an input.

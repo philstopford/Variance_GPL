@@ -965,7 +965,7 @@ namespace Variance
                 ShaderSubdirectory = shaders
             };
 
-            vSurface.Size = new Size(400, 380);
+            vSurface.Size = new Size(viewportSize, viewportSize);
             viewPort.updateHostFunc = viewportUpdateHost;
 
             string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw";
