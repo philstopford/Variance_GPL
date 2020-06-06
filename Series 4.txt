@@ -1,5 +1,9 @@
 Changelog for Variance
 
+4.2.5
+
+	- Forms update to resolve Gtk issue.
+
 4.2.4
 
 	- Found a workaround to draw lines over polygons.
