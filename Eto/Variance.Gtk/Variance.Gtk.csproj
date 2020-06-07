@@ -20,8 +20,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.3-ci-20200531.2" />
-    <PackageReference Include="Eto.Veldrid.Gtk" Version="0.1.0-CI.91052407" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.5.3-ci-20200607.2" />
+    <PackageReference Include="Eto.Veldrid.Gtk" Version="0.1.0" />
   </ItemGroup>
 
   <ItemGroup>
