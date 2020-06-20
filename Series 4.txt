@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.2.5
 
+	- Workaround for intel/Vulkan crashes in Veldrid.
 	- Forms update to resolve Gtk issue.
 
 4.2.4
