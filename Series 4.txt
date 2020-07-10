@@ -1,5 +1,10 @@
 Changelog for Variance
 
+4.2.6
+
+	- Viewport enhancements.
+	- Bug fix to update DOE configuration with project load.
+
 4.2.5
 
 	- Workaround for intel/Vulkan crashes in Veldrid.
