@@ -197,6 +197,7 @@ namespace Variance
                     updateDOESettingsUIFromSettings();
                     break;
             }
+            doeSettingsChanged();
             entropySettingsChanged(null);
             mcPreviewSettingsChanged(null, EventArgs.Empty);
             int vpindex = getSubTabSelectedIndex();
