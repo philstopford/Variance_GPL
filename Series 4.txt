@@ -4,6 +4,7 @@ Changelog for Variance
 
 	- Viewport enhancements.
 	- Bug fix to update DOE configuration with project load.
+	- Drag-and-drop support for project loading.
 
 4.2.5
 

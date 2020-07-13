@@ -83,6 +83,55 @@ namespace Variance
             });
         }
 
+        void dragEvent(object sender, DragEventArgs e)
+        {
+            if (e.Data.ContainsUris)
+            {
+                // Check that we have a valid file somewhere in the dropped resources
+                for (int i = 0; i < e.Data.Uris.Length; i++)
+                {
+                    string[] tokens = e.Data.Uris[i].LocalPath.Split(new char[] { '.' });
+                    if ((tokens[tokens.Length - 1].ToUpper() == "VARIANCE") || (tokens[tokens.Length - 1].ToUpper() == "XML"))
+                    {
+                        e.Effects = DragEffects.Copy;
+                        break;
+                    }
+                }
+            }
+        }
+
+        void dragAndDrop(object sender, DragEventArgs e)
+        {
+            // Only allow a single selection; pick the first.
+            DataObject d = e.Data;
+            int length = d.Uris.Length;
+            if (length < 1)
+            {
+                return;
+            }
+
+            // Find our first file object.
+            int index = -1;
+            for (int i = 0; i < length; i++)
+            {
+                if (d.Uris[i].IsFile)
+                {
+                    // Actually a supported file?
+                    string[] tokens = d.Uris[i].LocalPath.Split(new char[] { '.' });
+                    if ((tokens[tokens.Length - 1].ToUpper() == "VARIANCE") || (tokens[tokens.Length - 1].ToUpper() == "XML"))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            if (index != -1)
+            {
+                doLoad(d.Uris[index].LocalPath);
+            }
+        }
+
         void openHandler(object sender, EventArgs e)
         {
             // Need to request input file location and name.

@@ -1099,6 +1099,11 @@ namespace Variance
             do2DLayerUI_exp(0, updateUI: true);
             addAllUIHandlers();
             commonVars.setHashes();
+
+            tabControl_main.DragEnter += dragEvent;
+            tabControl_main.DragOver += dragEvent;
+
+            tabControl_main.DragDrop += dragAndDrop;
         }
 
         enum layerLookUpOrder { ICV, OCV, SCDU, TCDU, XOL, YOL, HTPV, HTNV, VTPV, VTNV, WOB, LWR, LWR2 }
