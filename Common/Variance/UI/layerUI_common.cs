@@ -601,23 +601,24 @@ namespace Variance
                     num_layer_subshape3_ho_exp.Value = 0;
                     num_layer_subshape3_vo_exp.Value = 0;
 
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_layer_subshape2_hl_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_layer_subshape2_ho_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_layer_subshape2_vl_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_layer_subshape2_vo_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape1Tip, comboBox_layerTipLocations2_exp.SelectedIndex);
-
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_layer_subshape3_hl_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_layer_subshape3_ho_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_layer_subshape3_vl_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_layer_subshape3_vo_exp.Value));
-                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape2Tip, comboBox_layerTipLocations3_exp.SelectedIndex);
                 }
 
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_layer_subshape_hl_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_layer_subshape_ho_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_layer_subshape_vl_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_layer_subshape_vo_exp.Value));
+
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_layer_subshape2_hl_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_layer_subshape2_ho_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_layer_subshape2_vl_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_layer_subshape2_vo_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape1Tip, comboBox_layerTipLocations2_exp.SelectedIndex);
+
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_layer_subshape3_hl_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_layer_subshape3_ho_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_layer_subshape3_vl_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_layer_subshape3_vo_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape2Tip, comboBox_layerTipLocations3_exp.SelectedIndex);
 
                 warnArray[0] = ((commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) == 0) || (commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) == 0));
 

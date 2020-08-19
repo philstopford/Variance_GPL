@@ -1236,7 +1236,6 @@ namespace Variance
         {
             List<PreviewShape> previewShapes = new List<PreviewShape>();
 
-            string shapeString = ((CentralProperties.typeShapes)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex)).ToString();
             // User has a shape chosen so we can draw a preview
             if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (Int32)CommonVars.shapeNames.none)
             {
