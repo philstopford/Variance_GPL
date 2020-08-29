@@ -1308,14 +1308,14 @@ namespace Variance
             decimal maxSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - 0.02m;
             decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 0.02m;
 
-            decimal ss2HOffset = (commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength)) / 2;
+            decimal ss2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength) - 0.02m;
             decimal ss2VOffset = (commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength));
 
             layer_clampSubShape2_exp(minHLength: (double)minSS2HLength, 
                 maxHLength: (double)maxSS2HLength, 
                 minVLength: (double)minSS2VLength, 
                 maxVLength: (double)maxSS2VLength,
-                minHOffset: (double)ss2HOffset, 
+                minHOffset: 0.02f, 
                 maxHOffset: (double)ss2HOffset,
                 minVOffset: (double)ss2VOffset, 
                 maxVOffset: (double)ss2VOffset
@@ -1331,7 +1331,7 @@ namespace Variance
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_layer_subshape3_ho_exp.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_layer_subshape3_vo_exp.Value));
 
-            num_layer_subshape2_ho_exp.Enabled = false;
+            num_layer_subshape2_ho_exp.Enabled = true;
             num_layer_subshape2_vo_exp.Enabled = false;
         }
 

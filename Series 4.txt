@@ -1,5 +1,9 @@
 Changelog for Variance
 
+4.2.8
+
+	- Unlock U subshape 2 horizontal offset.
+
 4.2.7
 
 	- Finally resolved a very minor UI irritation where the U-shape wasn't, on first using it, displaying the cutter correctly.
