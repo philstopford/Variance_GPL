@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.2.8
 
+	- Speculative fix for runtime bug that surfaced in debug sessions. Seems like a garbage collection misfire - ChaosSettings instance in EntropyEval is randomly(?) null even though caller has it defined and the instance is pre-calculated in sampler and definitely not null. Using a variable to hold a reference to see if this avoids the problem.
 	- Unlock U subshape 2 horizontal offset.
 
 4.2.7
