@@ -75,7 +75,8 @@ namespace Variance
                 try
                 {
                     // Get the results from the implant calc engine.
-                    implantResultPackage.Add(entropyEval_implant(previewMode, sampler_implant.getSample(i)));
+                    ChaosSettings_implant cs = sampler_implant.getSample(i);
+                    implantResultPackage.Add(entropyEval_implant(previewMode, cs));
 
                     if ((numberOfCases == 1) || (currentProgress % sampleRate == 0))
                     {
@@ -204,7 +205,8 @@ namespace Variance
                     Results_implant currentResult = new Results_implant();
                     try
                     {
-                        currentResult = entropyEval_implant(previewMode, sampler_implant.getSample(i));
+                        ChaosSettings_implant cs = sampler_implant.getSample(i);
+                        currentResult = entropyEval_implant(previewMode, cs);
 
                         if (currentResult.isValid()) // only update if result is valid.
                         {

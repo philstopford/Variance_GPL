@@ -150,7 +150,8 @@ namespace Variance
                 try
                 {
                     // Get the results from the MC engine.
-                    Results currentResult = EntropyEval(previewMode, doPASearch, row, col, sampler.getSample(i));
+                    ChaosSettings cs = sampler.getSample(i);
+                    Results currentResult = EntropyEval(previewMode, doPASearch, row, col, cs);
 
                     bool addResultToPackage = true;
                     if (doPASearch)
@@ -368,7 +369,8 @@ namespace Variance
                     Results currentResult = new Results();
                     try
                     {
-                        currentResult = EntropyEval(previewMode, doPASearch, row, col, sampler.getSample(i));
+                        ChaosSettings cs = sampler.getSample(i);
+                        currentResult = EntropyEval(previewMode, doPASearch, row, col, cs);
 
                         bool addResultToPackage = true;
                         if (doPASearch)
@@ -1295,6 +1297,10 @@ namespace Variance
 
         Results EntropyEval(bool previewMode, bool doPASearch, Int32 currentRow, Int32 currentCol, ChaosSettings currentJobSettings)
         {
+            if (currentJobSettings == null)
+            {
+                throw new Exception("ChaosSettings are null!");
+            }
             string value = "N/A";
             List<GeoLibPointF[]> listOfPoints;
             GeoLibPointF[] points;
