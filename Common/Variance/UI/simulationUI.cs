@@ -797,7 +797,6 @@ namespace Variance
             button_replay = new Button();
             button_replay.Text = "Load CSV File";
             button_replay.ToolTip = "Load CSV file generated from a run using this project file.\n\rThis will allow replay of the cases.";
-            // setSize(button_replay, replayButtonWidth, replayButtonHeight);
             tr0.Cells.Add(new TableCell() { Control = TableLayout.AutoSized(button_replay) });
 
             checkBox_replay = new CheckBox();

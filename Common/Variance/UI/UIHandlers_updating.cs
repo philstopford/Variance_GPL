@@ -915,9 +915,8 @@ namespace Variance
                                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].addLine(
                                         line: UIHelper.myPointFArrayToPointFArray(commonVars.getSimPreview().getPoints(poly)),
                                         lineColor: Color.FromArgb(varianceContext.vc.colors.resultColors[colorIndex].toArgb()),
-                                        alpha: 1.0f,//(float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
+                                        alpha: 1.0f,
                                         layerIndex: CentralProperties.maxLayersForMC + colorIndex
-                                        // zBias: 10.0f
                                     );
                                 }
                                 else
@@ -928,7 +927,6 @@ namespace Variance
                                         alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
                                         drawn: false,
                                         layerIndex: CentralProperties.maxLayersForMC + colorIndex
-                                        //zBias: 10.0f
                                     );
                                 }
                             }

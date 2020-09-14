@@ -473,7 +473,6 @@ namespace Variance
             catch (Exception)
             {
             }
-            //t.Dispose(); // might be irrelevant now - commented out for testing.
             commonVars.m_timer.Stop();
             commonVars.m_timer.Dispose();
             resultPackage.setRunTime(swTime);

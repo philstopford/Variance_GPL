@@ -85,14 +85,11 @@ namespace Variance
 
         bool abortAllRuns()
         {
-            // if (commonVars.runAbort == true)
+            DialogResult dR = MessageBox.Show("Yes: Abort all runs\r\nNo: Abort just this run",
+                                                "Abort all runs?", MessageBoxButtons.YesNo);
+            if (dR == DialogResult.Yes)
             {
-                DialogResult dR = MessageBox.Show("Yes: Abort all runs\r\nNo: Abort just this run",
-                                                  "Abort all runs?", MessageBoxButtons.YesNo);
-                if (dR == DialogResult.Yes)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
@@ -458,14 +455,12 @@ namespace Variance
         {
             settingsUIFrozen = true;
             commonVars.setActiveUI(CommonVars.uiActive.settings, false);
-            //tabPage_2D_Settings.SuspendLayout();
         }
 
         void resumeSettingsUI()
         {
             settingsUIFrozen = false;
             commonVars.setActiveUI(CommonVars.uiActive.settings, true);
-            //tabPage_2D_Settings.ResumeLayout();
         }
 
         void addSettingsHandlers()

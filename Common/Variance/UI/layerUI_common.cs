@@ -1570,10 +1570,6 @@ namespace Variance
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr, 1);
                 int clwrRefIndex = Convert.ToInt32(rB_layer_CLWR_exp[CLWRIndex].Text);
-                if (clwrRefIndex > settingsIndex)
-                {
-                    // clwrRefIndex--; // compensate for missing radio button for current layer.
-                }
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, clwrRefIndex - 1);
 
             }
@@ -1587,10 +1583,6 @@ namespace Variance
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr, 1);
                 int clwr2RefIndex = Convert.ToInt32(rB_layer_CLWR2_exp[CLWRIndex].Text);
-                if (clwr2RefIndex > settingsIndex)
-                {
-                    // clwr2RefIndex--; // compensate for missing radio button for current layer.
-                }
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, clwr2RefIndex - 1);
 
             }
@@ -1604,10 +1596,6 @@ namespace Variance
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.CDU_corr, 1);
                 int ccduRefIndex = Convert.ToInt32(rB_layer_CCDU_exp[CCDUIndex].Text);
-                if (ccduRefIndex > settingsIndex)
-                {
-                    // ccduRefIndex--; // compensate for missing radio button for current layer.
-                }
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.CDU_corr_ref, ccduRefIndex - 1);
 
             }

@@ -9,8 +9,6 @@ namespace Variance
             Application.Instance.Invoke(() =>
             {
                 tabControl_main.SelectedIndexChanged += mainTabChanged;
-                // tabControl_2D_simsettings.SelectedIndexChanged += entropySettingsChanged;
-                // tabControl_2D_simsettings.SelectedIndexChanged += mcPreviewSettingsChanged;
                 tabControl_2D_simsettings.SelectedIndexChanged += subTabChanged;
 
                 entropyControl = new Entropy(ref varianceContext.vc, commonVars);
@@ -25,7 +23,6 @@ namespace Variance
                 entropyControl.updateProgressBarFunc = updateProgressBar;
                 entropyControl.updateImplantSimUIFunc = updateImplantSimUIST;
                 entropyControl.updateImplantSimUIMTFunc = updateImplantSimUIMT;
-                //mcControl.forceRepaintFunc = forceRepaint;
                 entropyControl.abortAllRunsFunc = abortAllRuns;
                 entropyControl.abortCSVFunc = abortCSV;
                 entropyControl.abortRunFunc = abortRun;

@@ -361,7 +361,6 @@ namespace Variance
                         // center is to force 0.5 value of the scaling factor for a ratio of 1
                         // tension controls the shape of the curve, and thus the sensitivity of the response..
                         double center = 1.0f;
-                        //float tension = 0.35f;
                         double tension = Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.eTension));
                         offset = currentEdgeLength * (1 / (1 + Math.Exp(-tension * (center - ratio))));
                     }

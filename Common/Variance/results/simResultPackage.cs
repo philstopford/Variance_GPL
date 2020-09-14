@@ -397,7 +397,6 @@ namespace Variance
                 // Split the result string :
                 string[] tempStr = newResult.getResult().Split(csvSeparator);
                 updateCleavedResults(tempStr);
-                // update();
             }
         }
 

@@ -72,13 +72,11 @@ namespace Variance
             {
                 if (commonVars.projectFileName == "")
                 {
-                    //menu_fileSave.Enabled = false;
                     Title = commonVars.titleText;
                 }
                 else
                 {
                     Title = commonVars.titleText + " - " + commonVars.projectFileName;
-                    //menu_fileSave.Enabled = true;
                 }
             });
         }

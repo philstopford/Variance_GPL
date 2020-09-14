@@ -1155,8 +1155,6 @@ namespace Variance
             // Scale up our geometry for processing. Force a clockwise point order here due to potential upstream point order changes (e.g. polygon merging)
             Paths sourceGeometry = GeoWrangler.pathsFromPointFs(previewPoints, CentralProperties.scaleFactorForOperation);
 
-            // sourceGeometry = GeoWrangler.removeKeyHoles(sourceGeometry, 1);
-
             int sCount = sourceGeometry.Count();
             for (int poly = 0; poly < sCount; poly++)
             {
@@ -1980,7 +1978,6 @@ namespace Variance
                 bounding.Add(new IntPoint(bounds.right, bounds.top));
                 bounding.Add(new IntPoint(bounds.right, bounds.bottom));
 
-                // c.AddPath(bounding, PolyType.ptClip, true);
                 c.AddPaths(sourcePolyData, PolyType.ptClip, true);
                 c.AddPaths(sourcePolyData, PolyType.ptSubject, true);
 
@@ -2013,7 +2010,6 @@ namespace Variance
                     c.Clear();
 
                     c.AddPath(bounding, PolyType.ptClip, true);
-                    // c.AddPaths(sourcePolyData, PolyType.ptClip, true);
                     c.AddPaths(sourcePolyData, PolyType.ptSubject, true);
 
                     c.Execute(ClipType.ctIntersection, resizedPolyData, pft, pft);
@@ -2068,7 +2064,6 @@ namespace Variance
                 // Here, we can run into trouble....we might have a set of polygons which need to get keyholed. For example, where we have fully enclosed 'cutters' within an outer boundary.
                 // Can geoWrangler help us out here?
                 resizedPolyData = GeoWrangler.makeKeyHole(resizedPolyData).ToList();
-                //resizedPolyData = GeoWrangler.sanitize(resizedPolyData).ToList();
 
                 if (resizedPolyData.Count() == 0)
                 {

@@ -17,11 +17,10 @@ namespace Variance
             Application.Instance.Invoke(() =>
             {
                 int count = mcVPSettings.Length;
-                // Parallel.For(0, count, (i) =>
                 for (int i = 0; i < count; i++)
                 {
                     mcVPSettings[i].setCameraPos(location.X, location.Y);
-                }//);
+                }
             });
         }
 

@@ -130,10 +130,9 @@ namespace Variance
                 viewPort.changeSettingsRef(ref otkVPSettings_implant);
 
             }
-            else //if (tabControl_main.SelectedIndex == (Int32)CommonVars.upperTabNames.twoD)
+            else
             {
                 subTabChanged();
-                // entropySettingsChanged(sender, e);
             }
 
             if (mainIndex == (Int32)CommonVars.upperTabNames.twoD)
@@ -142,8 +141,7 @@ namespace Variance
                 commentBox.Enabled = true;
             }
 
-            if (/*(mainIndex == (Int32)CommonVars.upperTabNames.oneD) ||*/
-                (mainIndex == (Int32)CommonVars.upperTabNames.Utilities))
+            if (mainIndex == (Int32)CommonVars.upperTabNames.Utilities)
             {
                 lbl_simPreviewZoom.Visible = false;
                 lbl_viewportPos.Visible = false;

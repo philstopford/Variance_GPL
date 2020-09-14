@@ -520,8 +520,6 @@ namespace Variance
                 do2DLayerUI_exp(settingsIndex, updateUI: true);
                 updateGroupBoxVisibility_exp(settingsIndex);
 
-                //set_shape_type_ui(settingsIndex);
-
                 layerUIFrozen_exp = alreadyFrozen;
 
                 doShowDrawn(settingsIndex);

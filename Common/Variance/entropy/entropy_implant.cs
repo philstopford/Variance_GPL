@@ -183,21 +183,6 @@ namespace Variance
                 }
             }
 
-            /* // Removing as seems to not be necessary, but leaving code in place in case we need to restore this for some reason.
-			// Run a task to enable cancelling from another thread.
-			Task.Factory.StartNew(() =>
-			{
-				if (abortRunFunc != null)
-				{
-					abortRunFunc();
-					if (commonVars.runAbort)
-					{
-						cancelSource.Cancel();
-					}
-				}
-			});
-            */
-
             try
             {
                 Parallel.For(0, numberOfCases, po, (i, loopState) =>
@@ -266,7 +251,6 @@ namespace Variance
             catch (Exception)
             {
             }
-            //t.Dispose(); // might be irrelevant now - commented out for testing.
             commonVars.m_timer.Stop();
             commonVars.m_timer.Dispose();
             implantResultPackage.setRunTime(swTime);
@@ -486,9 +470,6 @@ namespace Variance
                     catch (Exception)
                     {
                     }
-
-                    //stepProgress?.Invoke();
-                    //directProgress?.Invoke(resultEntry, doneCases);
                 });
 
                 File.WriteAllLines(csvFileName, stringList);

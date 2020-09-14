@@ -837,7 +837,6 @@ namespace Variance
             doPrompts = true;
 
             // Figure out whether we should display the help menu, if documentation is available.
-            // string basePath = AppContext.BaseDirectory; // Disabled this as release builds do not seem to populate this field. Use the above complex approach instead.
             helpPath = Path.Combine(EtoEnvironment.GetFolderPath(EtoSpecialFolder.ApplicationResources), "Documentation", "index.html");
             helpAvailable = File.Exists(helpPath);
 
@@ -881,8 +880,6 @@ namespace Variance
             }
 
             viewPort.SetUpVeldrid();
-
-            // Title = $"Veldrid backend: {vSurface.Backend.ToString()}";
 
             viewPort.Clock.Start();
             createVPContextMenu();
@@ -970,7 +967,6 @@ namespace Variance
 
             string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw";
             vp = new Panel();
-            //vp.Size = new Size(viewPort.Width + 2, viewPort.Height + 2);
             if (!Platform.IsMac) // This color setting causes issues on Mac where the viewport doesn't show until the mouse passes over.
             {
                 vp.BackgroundColor = Eto.Drawing.Colors.Black;
@@ -1635,7 +1631,6 @@ namespace Variance
 
         void launchHelp(object sender, EventArgs e)
         {
-            // errorReporter.showMessage_OK(helpPath, "Info");
             if (helpAvailable)
             {
                 new Process

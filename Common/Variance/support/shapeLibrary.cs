@@ -532,13 +532,11 @@ namespace Variance
                 case (Int32)CommonVars.tipLocations.none: // None
                     break;
                 case (Int32)CommonVars.tipLocations.L: // Left
-                                                       // this.tips[5] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.R: // Right
                     tips[9] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.LR: // Left and right
-                                                        // this.tips[5] = true;
                     tips[9] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.T: // Top
@@ -729,14 +727,12 @@ namespace Variance
                     tips[9] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.T: // Top
-                                                       // this.tips[7] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.B: // Bottom
                     tips[7] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.TB: // Top and Bottom
                     tips[7] = true;
-                    // this.tips[11] = true;
                     break;
                 case (Int32)CommonVars.tipLocations.TL: // Top and Left
                     tips[5] = true;
@@ -1063,7 +1059,6 @@ namespace Variance
             Vertex[15] = new MyVertex(tmpX, tmpY, typeDirection.up1, false, false, typeVertex.center);
 
             tmpX = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength));
-            // tmpX += Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength)); // full distance
             tmpX += Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset));
             Vertex[16] = new MyVertex(tmpX, tmpY, typeDirection.tilt1, true, false, typeVertex.corner);
 
