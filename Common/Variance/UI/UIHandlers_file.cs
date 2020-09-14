@@ -358,7 +358,10 @@ namespace Variance
                         {
                             using (fileLoad_cancelTS.Token.Register(Thread.CurrentThread.Abort))
                             {
-                                fileOK = layoutLoad(settingsIndex, ofd.FileName);
+                                Application.Instance.Invoke(() =>
+                                {
+                                    fileOK = layoutLoad(settingsIndex, ofd.FileName);
+                                });
                             }
                         }
                         catch (ThreadAbortException)
