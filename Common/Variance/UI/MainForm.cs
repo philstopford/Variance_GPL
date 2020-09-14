@@ -1690,10 +1690,6 @@ namespace Variance
                     new ButtonMenuItem { Text = "&File", Items = { newSim, openSim, revertSim, saveSim, saveAsSim } },
                     new ButtonMenuItem { Text = "&Edit", Items = { copyLayer, pasteLayer, clearLayer } },
                 },
-                /*ApplicationItems = {
-					// application (OS X) or file menu (others)
-					new ButtonMenuItem { Text = "&Preferences..." },
-				},*/
                 QuitItem = quitCommand,
                 HelpItems = {
                     helpCommand

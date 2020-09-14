@@ -83,7 +83,6 @@ namespace Variance
 
                 commonVars.storage.setLayerSettings = setLayerSettings;
                 commonVars.storage.resumeUI = resumeUIFromStorage;
-                commonVars.storage.prepUI = prepUI;
                 commonVars.storage.suspendSettingsUI = suspendSettingsUI;
                 commonVars.storage.suspendDOESettingsUI = suspendDOESettingsUI;
                 commonVars.storage.updateSettingsUIFromSettings = updateSettingsUIFromSettings;
@@ -197,19 +196,6 @@ namespace Variance
 
                 btn_resetColors.Click += resetColors;
             });
-        }
-
-        void prepUI()
-        {
-            /*
-            Application.Instance.Invoke(() =>
-            {
-                for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
-                {
-                    layer_stateAvOverlayCheckboxes(i, true);
-                }
-            });
-            */
         }
 
         bool tooManyPolysWarning()

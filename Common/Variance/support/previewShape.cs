@@ -892,12 +892,6 @@ namespace Variance
                         double px = previewPoints[poly][point].X;
                         double py = previewPoints[poly][point].Y;
 
-                        // Coefficients during testing.
-                        /*
-                        double k1 = 1000.0;
-                        double k2 = 500.0;
-                        */
-
                         // Need to calculate a new 'radius' from the origin for each point in the polygon, then scale the X/Y values accordingly in the polygon.
                         // Use scale factor to try and guarantee a -1 to +1 value range
                         px /= CentralProperties.scaleFactorForOperation;
