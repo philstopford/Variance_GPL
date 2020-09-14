@@ -28,7 +28,6 @@ namespace Variance
                 entropyControl.abortRunFunc = abortRun;
                 entropyControl.abortRunFuncMT = abortRunMT;
                 entropyControl.multithreadWarningFunc = displayMultiThreadWarning;
-                entropyControl.tooManyPolysWarningFunc = tooManyPolysWarning;
                 entropyControl.simRunningFunc = simRunning;
                 entropyControl.simRunningUIFunc = simRunningUIFunc;
                 entropyControl.implantSimRunningUIFunc = simRunningUIFunc;
@@ -196,24 +195,6 @@ namespace Variance
 
                 btn_resetColors.Click += resetColors;
             });
-        }
-
-        bool tooManyPolysWarning()
-        {
-            Application.Instance.Invoke(() =>
-            {
-                if (!commonVars.wasWarningShown())
-                {
-                    commonVars.setWarningShown(true);
-                    DialogResult dR = MessageBox.Show("More than 25 polygons involved in at least one layer - are you sure you want to continue?", "This could take a while", MessageBoxButtons.YesNo);
-                    if (dR == DialogResult.No)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            return true;
         }
 
         void clearAbortFlag()
