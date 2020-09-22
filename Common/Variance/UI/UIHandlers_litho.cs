@@ -130,7 +130,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_CLWR_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_CLWR_exp[bIndex].Text = name; 
                         rB_layer_CLWR_exp[bIndex].Enabled = CLWRRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -166,7 +172,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_CLWR2_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_CLWR2_exp[bIndex].Text = name;
                         rB_layer_CLWR2_exp[bIndex].Enabled = CLWR2RBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -202,7 +214,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_CCDU_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_CCDU_exp[bIndex].Text = name;
                         rB_layer_CCDU_exp[bIndex].Enabled = SCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -238,7 +256,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_CTCDU_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_CTCDU_exp[bIndex].Text = name;
                         rB_layer_CTCDU_exp[bIndex].Enabled = TCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -274,7 +298,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_OLRX_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_OLRX_exp[bIndex].Text = name;
                         rB_layer_OLRX_exp[bIndex].Enabled = xOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -310,7 +340,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_OLRY_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_OLRY_exp[bIndex].Text = name;
                         rB_layer_OLRY_exp[bIndex].Enabled = yOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -346,7 +382,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_COLX_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_COLX_exp[bIndex].Text = name;
                         rB_layer_COLX_exp[bIndex].Enabled = xCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -382,7 +424,13 @@ namespace Variance
                         {
                             bIndex = i; // if we are above our layer, decrement (effectively) as we don't have a button for the current layer, so have to compensate the positional index.
                         }
-                        rB_layer_COLY_exp[bIndex].Text = (i + 1).ToString(); // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layer_COLY_exp[bIndex].Text = name;
                         rB_layer_COLY_exp[bIndex].Enabled = yCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
@@ -419,9 +467,15 @@ namespace Variance
                         {
                             bIndex = i;
                         }
-                        rB_layerBooleanA_exp[bIndex].Text = (i + 1).ToString();
+                        string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                        if (name == "")
+                        {
+                            // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                            name = (i + 1).ToString();
+                        }
+                        rB_layerBooleanA_exp[bIndex].Text = name;
                         rB_layerBooleanA_exp[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
-                        rB_layerBooleanB_exp[bIndex].Text = (i + 1).ToString();
+                        rB_layerBooleanB_exp[bIndex].Text = name;
                         rB_layerBooleanB_exp[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
                     }
                 }
@@ -450,6 +504,15 @@ namespace Variance
                 int colIndex = 0;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
+                    string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                    if (name == "")
+                    {
+                        // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        name = (i + 1).ToString();
+                    }
+                    cB_layer_OLRX_Av_exp[i].Text = name;
+                    cB_layer_OLRY_Av_exp[i].Text = name;
+
                     if (index == i)
                     {
                         cB_layer_OLRX_Av_exp[i].Enabled = false;
