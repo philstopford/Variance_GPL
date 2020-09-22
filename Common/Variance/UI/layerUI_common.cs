@@ -1662,6 +1662,13 @@ namespace Variance
                 int colIndex = 0;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
+                    string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                    if (name == "")
+                    {
+                        // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                        name = (i + 1).ToString();
+                    }
+                    checkBox_bg_lyr[i].Text = name;
                     if (settingsIndex != i)
                     {
                         checkBox_bg_lyr[i].Enabled = (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
@@ -1768,6 +1775,13 @@ namespace Variance
             // Set our checkbox enabled status
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
+                string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
+                if (name == "")
+                {
+                    // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
+                    name = (i + 1).ToString();
+                }
+                checkBox_omit_lyr[i].Text = name;
                 checkBox_omit_lyr[i].Enabled = bLayerStatus[i];
             }
         }
