@@ -239,6 +239,9 @@ namespace Variance
             {
                 Title = title;
             });
+
+            updateLBContextMenu();
+            pasteLayer.Enabled = commonVars.isCopyPrepped();
         }
 
         void mainTabHandler(object sender, EventArgs e)

@@ -160,5 +160,9 @@ namespace Variance
         TableLayout upperGadgets_table; // background and omit.
 
         CancellationTokenSource fileLoad_cancelTS;
+
+        ContextMenu listbox_menu;
+        ButtonMenuItem lb_copy, lb_paste, lb_enableDisable, lb_clear;
+
     }
 }

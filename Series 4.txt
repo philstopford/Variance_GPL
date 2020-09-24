@@ -1,5 +1,11 @@
 Changelog for Variance
 
+4.2.9
+
+	- Context menu for layer list box. Allows various convenient actions.
+	- Message boxes for confirmation when clearing a layer or resetting the tool.
+	- Layer-related elements (e.g. correlation / reference controls) now update to show the layer name, to ease understanding.
+
 4.2.8
 
 	- Crash fix for toggling filled polygon display in the viewport.

@@ -222,6 +222,14 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
+                var result = MessageBox.Show("Are you sure?", "New", MessageBoxButtons.YesNo, MessageBoxType.Question);
+                if (result != DialogResult.Yes)
+                {
+                    return;
+                }
+            });
+            Application.Instance.Invoke(() =>
+            {
                 int storeIndex = getSelectedLayerIndex();
                 suspendUIHandlers();
                 commonVars.reset(varianceContext.vc); // use this method to avoid clobbering the observable collections.

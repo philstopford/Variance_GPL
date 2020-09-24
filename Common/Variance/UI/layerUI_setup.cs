@@ -71,6 +71,7 @@ namespace Variance
             experimental_listBox_layers.Width = 55;
             experimental_listBox_layers.DataContext = DataContext;
             experimental_listBox_layers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.layerNames);
+            experimental_listBox_layers.ContextMenu = listbox_menu;
 
             experimental_listBox_layers.SelectedIndexChanged += listbox_change;
 

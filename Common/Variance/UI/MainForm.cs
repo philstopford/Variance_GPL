@@ -827,6 +827,78 @@ namespace Variance
             commentBoxHeight = 160 - (label_Height * 2);
         }
 
+        void createLBContextMenu()
+        {
+            listbox_menu = new ContextMenu();
+            int itemIndex = 0;
+            lb_copy = new ButtonMenuItem() { Text = "Copy" };
+            listbox_menu.Items.Add(lb_copy);
+            listbox_menu.Items[itemIndex].Click += delegate
+            {
+                copy();
+            };
+            itemIndex++;
+            lb_paste = new ButtonMenuItem() { Text = "Paste" };
+            listbox_menu.Items.Add(lb_paste);
+            listbox_menu.Items[itemIndex].Click += delegate
+            {
+                paste();
+            };
+            itemIndex++;
+            lb_clear = new ButtonMenuItem() { Text = "Clear" };
+            listbox_menu.Items.Add(lb_clear);
+            listbox_menu.Items[itemIndex].Click += delegate
+            {
+                clear();
+            };
+            itemIndex++;
+            lb_enableDisable = new ButtonMenuItem() { Text = "Enable" };
+            listbox_menu.Items.Add(lb_enableDisable);
+            listbox_menu.Items[itemIndex].Click += delegate
+            {
+                enableDisable();
+            };
+            itemIndex++;
+        }
+
+        void updateLBContextMenu()
+        {
+            try
+            {
+                lb_paste.Enabled = commonVars.isCopyPrepped();
+            }
+            catch (Exception)
+            {
+                lb_paste.Enabled = false;
+            }
+
+            int index = getSelectedLayerIndex();
+            if (commonVars.getLayerSettings(index).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
+            {
+                lb_enableDisable.Text = "Disable";
+            }
+            else
+            {
+                lb_enableDisable.Text = "Enable";
+            }
+        }
+
+        void enableDisable()
+        {
+            int index = getSelectedLayerIndex();
+            if (commonVars.getLayerSettings(index).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
+            {
+                commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.enabled, 0);
+            }
+            else
+            {
+                commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.enabled, 1);
+            }
+            set_ui_from_settings(index);
+            do2DLayerUI_exp(index);
+        }
+
+
         public MainForm(ref bool doPrompts, VarianceContextGUI _varianceContext)
         {
             pMainForm(ref doPrompts, _varianceContext);
@@ -905,6 +977,8 @@ namespace Variance
             loadPrefs();
 
             uiVars();
+
+            createLBContextMenu();
 
             commonVars = new CommonVars(varianceContext.vc);
             simReplay = new Replay(ref commonVars);
