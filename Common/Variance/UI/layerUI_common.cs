@@ -1077,7 +1077,7 @@ namespace Variance
                     // Experimental optimization to try and reduce memory footprint.
                     commonVars.getGeoCoreHandler(settingsIndex).setPoints(commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure), commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD));
                     // Map our points into the layer's file data, if the layer is active.
-                    commonVars.getLayerSettings(settingsIndex).setFileData(commonVars.getGeoCoreHandler(settingsIndex).getGeo().points());
+                    commonVars.getLayerSettings(settingsIndex).setFileData(commonVars.getGeoCoreHandler(settingsIndex).getGeo().points(flatten: true));
 
                     try
                     {

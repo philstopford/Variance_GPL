@@ -615,7 +615,7 @@ namespace Variance
                                 getGeoCoreHandler(index).getGeo().updateGeometry(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.structure), entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lD));
                                 getGeoCoreHandler(index).setPoints(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.structure), entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lD));
                                 // Map our points into the layer's file data, if the layer is active.
-                                entropyLayerSettings.setFileData(getGeoCoreHandler(index).getGeo().points());
+                                entropyLayerSettings.setFileData(getGeoCoreHandler(index).getGeo().points(flatten: true));
                                 updateSuccess = true;
                             }
                         }
