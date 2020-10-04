@@ -684,6 +684,7 @@ namespace Variance
         void customShape_offset(EntropyLayerSettings entropyLayerSettings)
         {
             return; // disabling this because it affects geometry in annoying ways.
+            /*
             string posInSubShapeString = ((CommonVars.subShapeLocations)entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.posIndex)).ToString();
 
             // Get the bounding box.
@@ -790,6 +791,7 @@ namespace Variance
                     ErrorReporter.showMessage_OK("Start and end not the same - previewShape", "Oops");
                 }
             }
+            */
         }
 
         void doOffsets(EntropyLayerSettings entropyLayerSettings)
