@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.2.9
 
+	- DesignLibs enhancements for flattening of nested layout.
 	- Context menu for layer list box. Allows various convenient actions.
 	- Message boxes for confirmation when clearing a layer or resetting the tool.
 	- Layer-related elements (e.g. correlation / reference controls) now update to show the layer name, to ease understanding.
