@@ -1,6 +1,6 @@
 Changelog for Variance
 
-4.2.9
+4.3
 
 	- DesignLibs enhancements for flattening of nested layout.
 	- Context menu for layer list box. Allows various convenient actions.
