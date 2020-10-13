@@ -1170,6 +1170,8 @@ namespace Variance
                 }
 
                 Path sourcePoly = sourceGeometry[poly].ToList();
+                Paths collisionGeometry = sourceGeometry.ToList();
+                collisionGeometry.RemoveAt(poly);
                 Path deformedPoly = new Path();
 
                 // Threading operation here gets more tricky than the distance handler. We have a less clear trade off of threading based on the emission edge (the polygon being biased) vs the multisampling emission.
@@ -1193,12 +1195,12 @@ namespace Variance
                     emitThread = true;
                 }
 
-                RayCast rc = new RayCast(sourcePoly, sourceGeometry, Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread);
+                RayCast rc = new RayCast(sourcePoly, GeoWrangler.clockwise(collisionGeometry), Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread);
 
                 clippedLines = rc.getClippedRays().ToList();
                 if (debug)
                 {
-                    dRays = rc.getClippedRays().ToList();
+                    dRays.AddRange(rc.getClippedRays().ToList());
                 }
 
                 // We hope to get the same number of clipped lines back as the number of points that went in....
