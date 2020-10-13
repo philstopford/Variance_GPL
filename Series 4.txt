@@ -2,6 +2,9 @@ Changelog for Variance
 
 4.3
 
+	- Proximity bias revised.
+	 - Side rays were unduly impacting the computed distance to edge.
+	  - Revised to reduce weight of lateral rays as they become more tangential to the emission point.
 	- DesignLibs enhancements for flattening of nested layout.
 	- Context menu for layer list box. Allows various convenient actions.
 	- Message boxes for confirmation when clearing a layer or resetting the tool.

@@ -1195,7 +1195,7 @@ namespace Variance
                     emitThread = true;
                 }
 
-                RayCast rc = new RayCast(sourcePoly, GeoWrangler.clockwise(collisionGeometry), Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread);
+                RayCast rc = new RayCast(sourcePoly, collisionGeometry, Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread);
 
                 clippedLines = rc.getClippedRays().ToList();
                 if (debug)
