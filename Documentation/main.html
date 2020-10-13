@@ -226,7 +226,7 @@ li span {
           <li>GDS and Oasis, uncompressed.</li>
           <li>Layout geometry can be used to drive contour generation.</li>
           <li>Layout geometry can be updated from the file on-disk when the project is loaded.</li>
-          <li>Hierarchical layout is supported.</li>
+          <li><span>IMPROVED: </span>Hierarchical layout is better supported in terms of nested cell references, and arrays of reference cells.</li>
           <li>Pattern generator derived layout can be used in DOE configurations.</li>
         </ul>
         <li>Layer shape can be defined using a Boolean of two other layers, including the results of another Boolean.</li>
@@ -246,7 +246,10 @@ li span {
         </ul>
         <li>Shape flipping (H/V, re-center).</li>
         <li>Edge tension model to reproduce line narrowing.</li>
-        <li>Pitch effect biasing, iPitch effect biasing, including keyholed geometry.</li>
+        <li><span>IMPROVED:</span> Pitch effect biasing, including on keyholed geometry.</li>
+        <ul>
+          <li>Previously, side rays had a disproportionate effect on the computed visibility, leading to muted response.</li>
+        </ul>
       </ul>
       <li>Define your variations and type of variation (default is Gaussian, but custom distributions per-variation are supported.)</li>
       <ul>
@@ -273,11 +276,11 @@ li span {
       <li>Summary file is always showing inputs and outputs for a given simulation.</li>
       <li>Choose whether to output the full set of run data to CSV (important for replaying simulations).</li>
       <ul>
-        <li>Export to CSV is now fully multithreaded, so runs much faster than before.</li>
+        <li>Export to CSV is fully multithreaded, so runs much faster than before.</li>
       </ul>
       <li>Support for outputting simulation geometry to GDSII, Oasis, or SVG (SVG was only option prior to this release).</li>
       <ul>
-        <li>Export of the geometry now happens during the run, eliminating the memory overhead (at the cost of runtime increase).</li>
+        <li>Export of the geometry happens during the run, eliminating the memory overhead (at the cost of runtime increase).</li>
       </ul>
       <li>Set up your arbitrary layer relationships to define the calculation.</li>
       <ul>
