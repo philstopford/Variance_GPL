@@ -1200,7 +1200,7 @@ namespace Variance
                 clippedLines = rc.getClippedRays().ToList();
                 if (debug)
                 {
-                    dRays.AddRange(rc.getClippedRays().ToList());
+                    dRays.AddRange(clippedLines);
                 }
 
                 // We hope to get the same number of clipped lines back as the number of points that went in....
