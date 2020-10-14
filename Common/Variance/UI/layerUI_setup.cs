@@ -424,6 +424,8 @@ namespace Variance
                 num_pitchDepBias_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBias);
                 num_pitchDepBiasIsoDistance_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist);
                 num_pitchDepBiasSideRays_exp.Value = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxRays);
+                comboBox_proxBiasFallOff.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff);
+                num_proxBiasFallOffMultiplier.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier);
                 num_layer_lithoICRR_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCR);
                 num_layer_lithoOCRR_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCR);
                 num_layer_lithoICV_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCV);

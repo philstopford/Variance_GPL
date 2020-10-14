@@ -50,6 +50,8 @@ namespace Variance
         static decimal default_proximityBias = 0;
         static decimal default_proximityIsoDistance = 0;
         static Int32 default_proximitySideRays = 2;
+        static Int32 default_proximitySideRaysFallOff = 0;
+        static decimal default_proximitySideRaysFallOffMultiplier = 4.0m;
 
         static Int32 default_edgeSlide = 0;
         static decimal default_edgeSlideTension = 0.35m;
@@ -294,9 +296,11 @@ namespace Variance
         Int32 booleanLayerOpB;
         Int32 booleanLayerOpAB;
 
+        Int32 proxSideRaysFallOff;
+
         public enum properties_i
         {
-            enabled, omit, gCSEngine, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, edgeSlide, 
+            enabled, omit, gCSEngine, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, proxSideRaysFallOff, edgeSlide, 
             lwrType, lwr2Type, lwrPreview, lwr_corr, lwr_corr_ref, lwr2_corr, lwr2_corr_ref,
             xOL_corr, xOL_corr_ref, yOL_corr, yOL_corr_ref, CDU_corr, CDU_corr_ref, tCDU_corr, tCDU_corr_ref,
             xOL_ref, yOL_ref, xOL_av, yOL_av,
@@ -452,6 +456,9 @@ namespace Variance
                 case properties_i.bLayerOpAB:
                     ret = booleanLayerOpAB;
                     break;
+                case properties_i.proxSideRaysFallOff:
+                    ret = proxSideRaysFallOff;
+                    break;
             }
 
             return ret;
@@ -604,6 +611,9 @@ namespace Variance
                 case properties_i.bLayerOpAB:
                     booleanLayerOpAB = val;
                     break;
+                case properties_i.proxSideRaysFallOff:
+                    proxSideRaysFallOff = val;
+                    break;
             }
         }
 
@@ -752,6 +762,9 @@ namespace Variance
                 case properties_i.bLayerOpAB:
                     booleanLayerOpAB = default_booleanLayerA;
                     break;
+                case properties_i.proxSideRaysFallOff:
+                    proxSideRaysFallOff = default_proximitySideRaysFallOff;
+                    break;
             }
         }
 
@@ -894,6 +907,9 @@ namespace Variance
                     break;
                 case properties_i.bLayerOpAB:
                     ret = default_booleanLayerOpAB;
+                    break;
+                case properties_i.proxSideRaysFallOff:
+                    ret = default_proximitySideRaysFallOff;
                     break;
             }
 
@@ -1214,6 +1230,7 @@ namespace Variance
         decimal tipsCDU;
         decimal horOverlay;
         decimal verOverlay;
+        decimal proxSideRaysMultiplier;
 
         public enum properties_decimal
         {
@@ -1229,7 +1246,8 @@ namespace Variance
             lwr, lwrFreq, lwr2, lwr2Freq,
             eTension,
             sCDU, tCDU,
-            xOL, yOL
+            xOL, yOL,
+            proxSideRaysMultiplier
         }
 
         public decimal getDecimal(properties_decimal p)
@@ -1362,6 +1380,9 @@ namespace Variance
                 case properties_decimal.yOL:
                     ret = verOverlay;
                     break;
+                case properties_decimal.proxSideRaysMultiplier:
+                    ret = proxSideRaysMultiplier;
+                    break;
             }
 
             return ret;
@@ -1492,6 +1513,9 @@ namespace Variance
                     break;
                 case properties_decimal.yOL:
                     ret = default_verOverlay;
+                    break;
+                case properties_decimal.proxSideRaysMultiplier:
+                    ret = default_proximitySideRaysFallOffMultiplier;
                     break;
             }
 
@@ -1627,6 +1651,9 @@ namespace Variance
                 case properties_decimal.yOL:
                     verOverlay = val;
                     break;
+                case properties_decimal.proxSideRaysMultiplier:
+                    proxSideRaysMultiplier = val;
+                    break;
             }
         }
 
@@ -1758,6 +1785,9 @@ namespace Variance
                     break;
                 case properties_decimal.yOL:
                     verOverlay = default_verOverlay;
+                    break;
+                case properties_decimal.proxSideRaysMultiplier:
+                    proxSideRaysMultiplier = default_proximitySideRaysFallOffMultiplier;
                     break;
             }
         }
@@ -1941,6 +1971,9 @@ namespace Variance
             booleanLayerOpAB = default_booleanLayerOpAB;
 
             omitFromSim = default_omitLayer;
+
+            proxSideRaysFallOff = default_proximitySideRaysFallOff;
+            proxSideRaysMultiplier = default_proximitySideRaysFallOffMultiplier;
         }
 
         public void adjustSettings(EntropyLayerSettings source, bool gdsOnly)
@@ -2070,6 +2103,9 @@ namespace Variance
                 booleanLayerOpAB = source.booleanLayerOpAB;
 
                 omitFromSim = source.omitFromSim;
+
+                proxSideRaysFallOff = source.proxSideRaysFallOff;
+                proxSideRaysMultiplier = source.proxSideRaysMultiplier;
             }
 
             // layout stuff

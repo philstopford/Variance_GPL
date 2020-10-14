@@ -1,4 +1,5 @@
 ﻿using Eto.Forms;
+using System;
 
 namespace Variance
 {
@@ -7,9 +8,10 @@ namespace Variance
         // 2D Layer Bias Etch
         GroupBox groupBox_layer_etchandbias_exp;
         NumericStepper num_layerSidebias_exp, num_layerHTipbias_exp, num_layerVTipbias_exp, num_layerhTipNVar_exp, num_layervTipNVar_exp, num_layerhTipPVar_exp, num_layervTipPVar_exp,
-                         num_pitchDepBias_exp, num_pitchDepBiasIsoDistance_exp, num_pitchDepBiasSideRays_exp;
+                         num_pitchDepBias_exp, num_pitchDepBiasIsoDistance_exp, num_pitchDepBiasSideRays_exp, num_proxBiasFallOffMultiplier;
         Label lbl_layerSidebias_exp, lbl_layerHTipbias_exp, lbl_layerVTipbias_exp, lbl_layerhTipNVar_exp, lbl_layervTipNVar_exp, lbl_layerhTipPVar_exp, lbl_layervTipPVar_exp,
-                lbl_pitchDepBias_exp, lbl_pitchDepBiasIsoDistance_exp, lbl_pitchDepBiasSideRays_exp;
+                lbl_pitchDepBias_exp, lbl_pitchDepBiasIsoDistance_exp, lbl_pitchDepBiasSideRays_exp, lbl_proxBiasFallOffMultiplier;
+        DropDown comboBox_proxBiasFallOff;
 
         void twoD_LayerUISetup_biasEtch_exp(TableCell tc)
         {
@@ -229,6 +231,28 @@ namespace Variance
             num_pitchDepBiasSideRays_exp.ToolTip = "Number of additional rays to fire each side of main ray.";
             setSize(num_pitchDepBiasSideRays_exp, 55, num_Height);
             biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_pitchDepBiasSideRays_exp) });
+
+            comboBox_proxBiasFallOff = new DropDown();
+            comboBox_proxBiasFallOff.ToolTip = "Falloff to apply for side rays.";
+            comboBox_proxBiasFallOff.BindDataContext(c => c.DataStore, (UIStringLists m) => m.fallOffList);
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_proxBiasFallOff) });
+
+            lbl_proxBiasFallOffMultiplier = new Label();
+            lbl_proxBiasFallOffMultiplier.Text = "Multiplier";
+            lbl_proxBiasFallOffMultiplier.Width = 80;
+            lbl_proxBiasFallOffMultiplier.ToolTip = "Multiplier for falloff";
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_proxBiasFallOffMultiplier });
+
+            num_proxBiasFallOffMultiplier = new NumericStepper();
+            num_proxBiasFallOffMultiplier.Increment = 0.1;
+            num_proxBiasFallOffMultiplier.MinValue = 0;
+            num_proxBiasFallOffMultiplier.Value = Convert.ToDouble(EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier));
+            num_proxBiasFallOffMultiplier.DecimalPlaces = 2;
+            num_proxBiasFallOffMultiplier.ToolTip = "Multipler for falloff";
+            setSize(num_proxBiasFallOffMultiplier, 55, num_Height);
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_proxBiasFallOffMultiplier) });
+
+
 
             biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = new Panel() });
             biasEtch_tr1_0_tl.Rows[0].Cells[biasEtch_tr1_0_tl.Rows[0].Cells.Count - 1].ScaleWidth = true;

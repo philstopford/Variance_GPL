@@ -43,6 +43,8 @@ namespace Variance
 
             public ObservableCollection<string> layerNames { get; set; }
 
+            public List<string> fallOffList { get; set; }
+
             public List<string> notList { get; set; }
             public List<string> booleanList { get; set; }
             public List<string> openGLMode { get; set; }

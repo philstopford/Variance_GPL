@@ -302,6 +302,8 @@ namespace Variance
                     new XElement("proximityBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.pBias)),
                     new XElement("proximityIsoDistance", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist)),
                     new XElement("proximitySideRays", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxRays)),
+                    new XElement("proximitySideRayFallOff", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff)),
+                    new XElement("proximitySideRayFallOffMultiplier", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)),
                     new XElement("innerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCR)),
                     new XElement("outerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.oCR)),
                     new XElement("innerCV", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCV)),
@@ -1041,6 +1043,24 @@ namespace Variance
                 catch (Exception)
                 {
                     readSettings.defaultInt(EntropyLayerSettings.properties_i.proxRays);
+                }
+
+                try
+                {
+                    readSettings.setInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("proximitySideRayFallOff").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff);
+                }
+
+                try
+                {
+                    readSettings.setDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("proximitySideRayFallOffMultiplier").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.iCR);
                 }
 
                 try

@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.Diagnostics;
 using Eto.Veldrid;
 using Veldrid;
+using geoWrangler;
 
 namespace Variance
 {
@@ -51,6 +52,7 @@ namespace Variance
                 booleanList = booleanList_,
                 openGLMode = commonVars.getOpenGLModeList(),
                 notList = notList_,
+                fallOffList = RayCast.fallOffList,
                 polyFillList = commonVars.getPolyFillTypes(),
                 geoCoreStructureList = commonVars.structureList,
                 geoCoreLDList = commonVars.activeStructure_LayerDataTypeList,

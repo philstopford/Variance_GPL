@@ -277,6 +277,9 @@ namespace Variance
             num_pitchDepBiasIsoDistance_exp.LostFocus += twoDLayerEventHandler_exp;
             num_pitchDepBiasSideRays_exp.LostFocus += twoDLayerEventHandler_exp;
 
+            comboBox_proxBiasFallOff.SelectedIndexChanged += twoDLayerEventHandler_exp;
+            num_proxBiasFallOffMultiplier.LostFocus += twoDLayerEventHandler_exp;
+
             num_layer_lithoICRR_exp.LostFocus += twoDLayerEventHandler_exp;
             num_layer_lithoICV_exp.LostFocus += twoDLayerEventHandler_exp;
             num_layer_lithoOCRR_exp.LostFocus += twoDLayerEventHandler_exp;
@@ -696,6 +699,8 @@ namespace Variance
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.vTNVar, Convert.ToDecimal(num_layervTipNVar_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.pBias, Convert.ToDecimal(num_pitchDepBias_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.pBiasDist, Convert.ToDecimal(num_pitchDepBiasIsoDistance_exp.Value));
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff, Convert.ToInt32(comboBox_proxBiasFallOff.SelectedIndex));
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier, Convert.ToDecimal(num_proxBiasFallOffMultiplier.Value));
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.proxRays, Convert.ToInt32(num_pitchDepBiasSideRays_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.iCR, Convert.ToDecimal(num_layer_lithoICRR_exp.Value));
                 commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.oCR, Convert.ToDecimal(num_layer_lithoOCRR_exp.Value));
