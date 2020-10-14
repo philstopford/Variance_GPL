@@ -2,9 +2,9 @@ Changelog for Variance
 
 4.3
 
-	- Proximity bias revised.
-	 - Side rays were unduly impacting the computed distance to edge.
-	  - Revised to reduce weight of lateral rays as they become more tangential to the emission point.
+	- Proximity bias revised to allow customizable falloff to be applied to side rays.
+	 - Previously, all rays were given equal weight and this caused a reduction in the visibility effect for a number of cases.
+	 - Now, there is a customizable falloff option (None, Linear, Gaussian). The effect can also be amplified with a multiplier.
 	- DesignLibs enhancements for flattening of nested layout.
 	- Context menu for layer list box. Allows various convenient actions.
 	- Message boxes for confirmation when clearing a layer or resetting the tool.
