@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.3
 
+	- Viewport context menu now shows hotkeys.
 	- Proximity bias revised to allow customizable falloff to be applied to side rays.
 	 - Previously, all rays were given equal weight and this caused a reduction in the visibility effect for a number of cases.
 	 - Now, there is a customizable falloff option (None, Linear, Gaussian). The effect can also be amplified with a multiplier.
