@@ -1041,7 +1041,7 @@ namespace Variance
             vSurface.Size = new Size(viewportSize, viewportSize);
             viewPort.updateHostFunc = viewportUpdateHost;
 
-            string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw";
+            string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw\r\n(x) to zoom extents";
             vp = new Panel();
             if (!Platform.IsMac) // This color setting causes issues on Mac where the viewport doesn't show until the mouse passes over.
             {
@@ -1305,7 +1305,7 @@ namespace Variance
             int itemIndex = 0;
             int svgIndex = 1;
             int layoutIndex = 2;
-            vp_menu.Items.Add(new ButtonMenuItem { Text = "Reset" });
+            vp_menu.Items.Add(new ButtonMenuItem { Text = "Reset (r)" });
             vp_menu.Items[itemIndex].Click += delegate
             {
                 viewPort.reset();
@@ -1362,11 +1362,11 @@ namespace Variance
             {
                 if (viewPort.ovpSettings.isLocked())
                 {
-                    vp_menu.Items.Add(new ButtonMenuItem { Text = "Thaw" });
+                    vp_menu.Items.Add(new ButtonMenuItem { Text = "Thaw (f)" });
                 }
                 else
                 {
-                    vp_menu.Items.Add(new ButtonMenuItem { Text = "Freeze" });
+                    vp_menu.Items.Add(new ButtonMenuItem { Text = "Freeze (f)" });
                 }
                 freezeThawIndex = itemIndex;
                 vp_menu.Items[itemIndex].Click += delegate
@@ -1413,15 +1413,15 @@ namespace Variance
             }
             vp_menu.Items.AddSeparator();
             itemIndex++;
-            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom Extents" });
+            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom Extents (x)" });
             vp_menu.Items[itemIndex].Click += delegate
             {
-                viewPort.zoomExtents();
+                viewPort.zoomExtents(-1);
             };
             itemIndex++;
             vp_menu.Items.AddSeparator();
             itemIndex++;
-            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom In" });
+            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom In (m)" });
             vp_menu.Items[itemIndex].Click += delegate
             {
                 viewPort.zoomIn(-1);
@@ -1464,7 +1464,7 @@ namespace Variance
             vp_menu.Items.AddSeparator();
             itemIndex++;
 
-            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom Out" });
+            vp_menu.Items.Add(new ButtonMenuItem { Text = "Zoom Out (n)" });
             vp_menu.Items[itemIndex].Click += delegate
             {
                 viewPort.zoomOut(-1);
@@ -1508,11 +1508,11 @@ namespace Variance
             {
                 if (viewPort.ovpSettings.isLocked())
                 {
-                    vp_menu.Items[freezeThawIndex].Text = "Thaw";
+                    vp_menu.Items[freezeThawIndex].Text = "Thaw (f)";
                 }
                 else
                 {
-                    vp_menu.Items[freezeThawIndex].Text = "Freeze";
+                    vp_menu.Items[freezeThawIndex].Text = "Freeze (f)";
                 }
 
                 if (viewPort.savedLocation_valid)
