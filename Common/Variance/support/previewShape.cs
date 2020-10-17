@@ -1171,7 +1171,7 @@ namespace Variance
 
                 Path sourcePoly = sourceGeometry[poly].ToList();
                 Paths collisionGeometry = sourceGeometry.ToList();
-                collisionGeometry.RemoveAt(poly);
+                // collisionGeometry.RemoveAt(poly); // Don't actually want to remove the emission as self-aware proximity matters.
                 Path deformedPoly = new Path();
 
                 // Threading operation here gets more tricky than the distance handler. We have a less clear trade off of threading based on the emission edge (the polygon being biased) vs the multisampling emission.
