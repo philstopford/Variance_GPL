@@ -215,10 +215,13 @@ box-shadow: 0 1px 3px black;
 
     <blockquote>
       <a name="releases_430"></a>
-      <h2 class="western">New to 4.3 (TBD)</h2>
+      <h2 class="western">New to 4.3 (Oct 18 2020)</h2>
       <blockquote>
         <ul>
-          <li>Proximity bias now has customizable fall-off options, to reduce the influence of side rays in the visibility calculation.</li>
+          <li>Proximity bias overhauled.</li>
+      	  <ul>
+      	    <li>Side ray contributions are now able to be weighted based on fall-offs (linear, Gaussian, Cosine) with strength multiplier.</li>
+      	  </ul>
           <li>Use DesignLibs enhancements to flatten complex layout (e.g. cellref arrays).</li>
           <li>Context menu for layer list box. Allows various convenient actions.</li>
           <li>Message boxes for confirmation when clearing a layer or resetting the tool.</li>

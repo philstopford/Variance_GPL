@@ -6,7 +6,7 @@ Changelog for Variance
 	- Proximity bias revised to allow customizable falloff to be applied to side rays.
 	 - Previously, all rays were given equal weight and this caused a reduction in the visibility effect for a number of cases.
 	 - Now, there is a customizable falloff option (None, Linear, Gaussian, Cosine). The effect can also be amplified with a multiplier.
-	 - Exploring ray termination by weighting vs result weighting post-raycast.
+	 - Result is a weighted average.
 	- DesignLibs enhancements for flattening of nested layout.
 	- Context menu for layer list box. Allows various convenient actions.
 	- Message boxes for confirmation when clearing a layer or resetting the tool.
