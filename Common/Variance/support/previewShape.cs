@@ -2061,7 +2061,10 @@ namespace Variance
 
                 // Here, we can run into trouble....we might have a set of polygons which need to get keyholed. For example, where we have fully enclosed 'cutters' within an outer boundary.
                 // Can geoWrangler help us out here?
-                resizedPolyData = GeoWrangler.makeKeyHole(resizedPolyData).ToList();
+
+                // We need to run the fragmenter here because the keyholer / raycaster pipeline needs points for emission.
+                Fragmenter f = new Fragmenter(commonVars.getSimulationSettings().getResolution() * CentralProperties.scaleFactorForOperation);
+                resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData)).ToList();
 
                 if (resizedPolyData.Count() == 0)
                 {
@@ -2071,12 +2074,14 @@ namespace Variance
                 // We got some resulting geometry from our Boolean so let's process it to send back to the caller.
                 List<GeoLibPointF[]> refinedData = new List<GeoLibPointF[]>();
 
-                Fragmenter f = new Fragmenter(commonVars.getSimulationSettings().getResolution(), CentralProperties.scaleFactorForOperation);
-
                 resizedPolyData = GeoWrangler.close(resizedPolyData);
 
                 rpdCount = resizedPolyData.Count;
 
+                // Switch our fragmenter to use a new configuration for the downsized geometry.
+                f = new Fragmenter(commonVars.getSimulationSettings().getResolution(), CentralProperties.scaleFactorForOperation);
+
+                // Convert back our geometry.                
                 for (int rPoly = 0; rPoly < rpdCount; rPoly++)
                 {
                     // We have to refragment as the overlap processing changed the geometry heavily.
