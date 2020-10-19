@@ -110,12 +110,12 @@ namespace Variance
             return returnPath;
         }
 
-        public static Paths customBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag)
+        public static Paths customBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution)
         {
-            return pCustomBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag);
+            return pCustomBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, resolution);
         }
 
-        static Paths pCustomBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag)
+        static Paths pCustomBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution)
         {
             // In principle, 'rigorous' handling is only needed where the cutter is fully enclosed by the subject polygon.
             // The challenge is to know whether this is the case or not.
@@ -168,6 +168,8 @@ namespace Variance
             if (holes)
             {
                 Paths merged = new Paths();
+                Fragmenter f = new Fragmenter(resolution * CentralProperties.scaleFactorForOperation);
+                ret = f.fragmentPaths(ret);
                 merged = GeoWrangler.makeKeyHole(ret);
 
                 int count = merged.Count;

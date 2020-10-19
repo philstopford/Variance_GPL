@@ -1195,6 +1195,12 @@ namespace Variance
                     emitThread = true;
                 }
 
+                Fragmenter f = new Fragmenter(commonVars.getSimulationSettings().getResolution() * CentralProperties.scaleFactorForOperation);
+
+                sourcePoly = f.fragmentPath(sourcePoly);
+
+                collisionGeometry = f.fragmentPaths(collisionGeometry);
+
                 RayCast rc = new RayCast(sourcePoly, collisionGeometry, Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread, sideRayFallOff: (RayCast.falloff)entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff), sideRayFallOffMultiplier: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)));
 
                 clippedLines = rc.getClippedRays().ToList();
@@ -1873,7 +1879,8 @@ namespace Variance
                 firstLayer: layerAPaths, 
                 secondLayerOperator: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpB), 
                 secondLayer: layerBPaths, 
-                booleanFlag: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpAB)
+                booleanFlag: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpAB),
+                resolution: commonVars.getSimulationSettings().getResolution()
             );
 
             // This is set later, if needed, to force an early return from the overlap processing path.
