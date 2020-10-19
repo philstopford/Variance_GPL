@@ -189,6 +189,7 @@ namespace Variance
                 c1.PreserveCollinear = true;
                 c1.AddPaths(merged, PolyType.ptSubject, true);
                 c1.Execute(ClipType.ctUnion, ret);
+                ret = GeoWrangler.stripColinear(ret, 1.0);
             }
 
             ret = GeoWrangler.sliverRemoval(ret); // experimental to try and remove any slivers.
@@ -209,7 +210,7 @@ namespace Variance
                 );
 #endif
                 // Return here because the attempt to rationalize the geometry below also screws things up, it seems.
-                return ret;
+                return GeoWrangler.stripColinear(ret, 1.0);
             }
 
             IntRect bounds = Clipper.GetBounds(ret);
