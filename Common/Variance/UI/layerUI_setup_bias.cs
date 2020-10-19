@@ -10,7 +10,7 @@ namespace Variance
         NumericStepper num_layerSidebias_exp, num_layerHTipbias_exp, num_layerVTipbias_exp, num_layerhTipNVar_exp, num_layervTipNVar_exp, num_layerhTipPVar_exp, num_layervTipPVar_exp,
                          num_pitchDepBias_exp, num_pitchDepBiasIsoDistance_exp, num_pitchDepBiasSideRays_exp, num_proxBiasFallOffMultiplier;
         Label lbl_layerSidebias_exp, lbl_layerHTipbias_exp, lbl_layerVTipbias_exp, lbl_layerhTipNVar_exp, lbl_layervTipNVar_exp, lbl_layerhTipPVar_exp, lbl_layervTipPVar_exp,
-                lbl_pitchDepBias_exp, lbl_pitchDepBiasIsoDistance_exp, lbl_pitchDepBiasSideRays_exp, lbl_proxBiasFallOffMultiplier;
+                lbl_pitchDepBias_exp, lbl_pitchDepBiasIsoDistance_exp, lbl_pitchDepBiasSideRays_exp, lbl_proxBiasFallOff, lbl_proxBiasFallOffMultiplier;
         DropDown comboBox_proxBiasFallOff;
 
         void twoD_LayerUISetup_biasEtch_exp(TableCell tc)
@@ -193,9 +193,8 @@ namespace Variance
 
             lbl_pitchDepBias_exp = new Label();
             lbl_pitchDepBias_exp.Text = "Proximity bias";
-            lbl_pitchDepBias_exp.Width = 90;
             lbl_pitchDepBias_exp.ToolTip = "Maximum bias to be applied to edges based on visibility-based space to nearest edges.";
-            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_pitchDepBias_exp });
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_pitchDepBias_exp) });
 
             num_pitchDepBias_exp = new NumericStepper();
             num_pitchDepBias_exp.Increment = 0.1;
@@ -206,9 +205,8 @@ namespace Variance
 
             lbl_pitchDepBiasIsoDistance_exp = new Label();
             lbl_pitchDepBiasIsoDistance_exp.Text = "Isolated edge distance";
-            lbl_pitchDepBiasIsoDistance_exp.Width = 150;
             lbl_pitchDepBiasIsoDistance_exp.ToolTip = "Distance from nearest feature (in-layer) when edge is considered isolated and gets full proximity-dependent bias applied.";
-            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_pitchDepBiasIsoDistance_exp });
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_pitchDepBiasIsoDistance_exp) });
 
             num_pitchDepBiasIsoDistance_exp = new NumericStepper();
             num_pitchDepBiasIsoDistance_exp.Increment = 0.1;
@@ -219,9 +217,8 @@ namespace Variance
 
             lbl_pitchDepBiasSideRays_exp = new Label();
             lbl_pitchDepBiasSideRays_exp.Text = "Side Rays";
-            lbl_pitchDepBiasSideRays_exp.Width = 80;
             lbl_pitchDepBiasSideRays_exp.ToolTip = "Number of additional rays to fire each side of main ray.";
-            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_pitchDepBiasSideRays_exp });
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_pitchDepBiasSideRays_exp) });
 
             num_pitchDepBiasSideRays_exp = new NumericStepper();
             num_pitchDepBiasSideRays_exp.Increment = 1;
@@ -232,16 +229,20 @@ namespace Variance
             setSize(num_pitchDepBiasSideRays_exp, 55, num_Height);
             biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_pitchDepBiasSideRays_exp) });
 
+            lbl_proxBiasFallOff = new Label();
+            lbl_proxBiasFallOff.Text = "Falloff";
+            lbl_proxBiasFallOff.ToolTip = "Falloff for side rays";
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_proxBiasFallOff });
+
             comboBox_proxBiasFallOff = new DropDown();
             comboBox_proxBiasFallOff.ToolTip = "Falloff to apply for side rays.";
             comboBox_proxBiasFallOff.BindDataContext(c => c.DataStore, (UIStringLists m) => m.fallOffList);
             biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_proxBiasFallOff) });
 
             lbl_proxBiasFallOffMultiplier = new Label();
-            lbl_proxBiasFallOffMultiplier.Text = "Multiplier";
-            lbl_proxBiasFallOffMultiplier.Width = 80;
+            lbl_proxBiasFallOffMultiplier.Text = "x";
             lbl_proxBiasFallOffMultiplier.ToolTip = "Multiplier for falloff";
-            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_proxBiasFallOffMultiplier });
+            biasEtch_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_proxBiasFallOffMultiplier) });
 
             num_proxBiasFallOffMultiplier = new NumericStepper();
             num_proxBiasFallOffMultiplier.Increment = 0.1;

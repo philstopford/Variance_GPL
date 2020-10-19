@@ -51,7 +51,7 @@ namespace Variance
         static decimal default_proximityIsoDistance = 0;
         static Int32 default_proximitySideRays = 2;
         static Int32 default_proximitySideRaysFallOff = 0;
-        static decimal default_proximitySideRaysFallOffMultiplier = 4.0m;
+        static decimal default_proximitySideRaysFallOffMultiplier = 1.0m;
 
         static Int32 default_edgeSlide = 0;
         static decimal default_edgeSlideTension = 0.35m;
