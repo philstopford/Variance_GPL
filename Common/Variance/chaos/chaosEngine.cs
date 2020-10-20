@@ -146,7 +146,7 @@ namespace Variance
 
             ret = layerBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, preserveColinear: true);
 
-            ret = GeoWrangler.gapRemoval(ret).ToList();
+            ret = GeoWrangler.gapRemoval(ret, extension: extension).ToList();
 
             bool holes = false;
             bool gwHoles = false;
@@ -170,7 +170,7 @@ namespace Variance
                 Paths merged = new Paths();
                 Fragmenter f = new Fragmenter(resolution * CentralProperties.scaleFactorForOperation);
                 ret = f.fragmentPaths(ret);
-                merged = GeoWrangler.makeKeyHole(ret);
+                merged = GeoWrangler.makeKeyHole(ret, extension:extension);
 
                 int count = merged.Count;
 #if CHAOSTHREADED
@@ -192,7 +192,7 @@ namespace Variance
                 ret = GeoWrangler.stripColinear(ret, 1.0);
             }
 
-            ret = GeoWrangler.sliverRemoval(ret); // experimental to try and remove any slivers.
+            ret = GeoWrangler.sliverRemoval(ret, extension: extension); // experimental to try and remove any slivers.
 
             if (rigorous && !holes)
             {

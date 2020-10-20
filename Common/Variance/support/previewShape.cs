@@ -1940,9 +1940,9 @@ namespace Variance
                     notDrawnStuff.Add(sourceData[i]);
                 }
             }
-            List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, forceOverride, pft);
+            List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, extension:Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)), forceOverride, pft);
 
-            List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, forceOverride, pft);
+            List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, extension: Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)), forceOverride, pft);
 
             previewPoints.Clear();
             drawnPoly.Clear();
@@ -1964,7 +1964,7 @@ namespace Variance
 
         }
 
-        List<GeoLibPointF[]> processOverlaps_core(CommonVars commonVars, List<GeoLibPointF[]> sourceData, bool forceOverride = false, PolyFillType pft = PolyFillType.pftNonZero)
+        List<GeoLibPointF[]> processOverlaps_core(CommonVars commonVars, List<GeoLibPointF[]> sourceData, double extension, bool forceOverride = false, PolyFillType pft = PolyFillType.pftNonZero)
         {
             try
             {
@@ -2072,7 +2072,7 @@ namespace Variance
 
                 // We need to run the fragmenter here because the keyholer / raycaster pipeline needs points for emission.
                 Fragmenter f = new Fragmenter(commonVars.getSimulationSettings().getResolution() * CentralProperties.scaleFactorForOperation);
-                resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData)).ToList();
+                resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData), extension:extension).ToList();
 
                 if (resizedPolyData.Count() == 0)
                 {
