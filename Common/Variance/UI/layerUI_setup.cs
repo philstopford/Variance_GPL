@@ -480,6 +480,7 @@ namespace Variance
                     comboBox_layerBooleanOpA_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpA);
                     comboBox_layerBooleanOpB_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpB);
                     comboBox_layerBooleanOpAB_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpAB);
+                    num_rayExtension.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension);
                 }
 
                 updateLayerRadioButtons_exp();
