@@ -382,6 +382,16 @@ namespace Variance
                 catch (Exception)
                 {
                 }
+
+                try
+                {
+                    num_rayExtension.Value = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
+                }
+                catch (Exception)
+                {
+
+                }
+
                 try
                 {
                     comboBox_layerTipLocations2_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape1Tip);

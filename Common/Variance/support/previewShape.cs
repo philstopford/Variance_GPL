@@ -1880,7 +1880,8 @@ namespace Variance
                 secondLayerOperator: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpB), 
                 secondLayer: layerBPaths, 
                 booleanFlag: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpAB),
-                resolution: commonVars.getSimulationSettings().getResolution()
+                resolution: commonVars.getSimulationSettings().getResolution(),
+                extension: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.rayExtension))
             );
 
             // This is set later, if needed, to force an early return from the overlap processing path.

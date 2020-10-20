@@ -8,7 +8,8 @@ namespace Variance
         GroupBox groupBox_layerBoolean_exp;
         DropDown comboBox_layerBooleanOpAB_exp, comboBox_layerBooleanOpA_exp, comboBox_layerBooleanOpB_exp, comboBox_layerTipLocations_boolean_exp;
         RadioButton[] rB_layerBooleanA_exp, rB_layerBooleanB_exp;
-        Label lbl_layerTipLocations_boolean_exp;
+        Label lbl_layerTipLocations_boolean_exp, lbl_rayExtension;
+        NumericStepper num_rayExtension;
 
         void twoD_LayerUISetup_boolean_exp()
         {
@@ -194,7 +195,23 @@ namespace Variance
             comboBox_layerTipLocations_boolean_exp = new DropDown();
             row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerTipLocations_boolean_exp) });
             comboBox_layerTipLocations_boolean_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
+
+
             row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+
+            lbl_rayExtension = new Label();
+            lbl_rayExtension.Text = "Extension";
+            lbl_rayExtension.ToolTip = "Extension factor for keyhole raycast.";
+            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_rayExtension) });
+
+            num_rayExtension = new NumericStepper();
+            num_rayExtension.MinValue = 1.0;
+            num_rayExtension.Increment = 0.1;
+            num_rayExtension.DecimalPlaces = 2;
+            num_rayExtension.ToolTip = "Line end extension.";
+            setSize(num_rayExtension, 55, num_Height);
+            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_rayExtension) });
+
         }
     }
 }

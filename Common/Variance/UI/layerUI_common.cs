@@ -311,6 +311,8 @@ namespace Variance
             comboBox_layerBooleanOpAB_exp.SelectedIndexChanged += twoDLayerEventHandler_exp;
             comboBox_layerTipLocations_boolean_exp.SelectedIndexChanged += twoDLayerEventHandler_exp;
 
+            num_rayExtension.LostFocus += twoDLayerEventHandler_exp;
+
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
                 rB_layer_COLX_exp[i].CheckedChanged += twoDLayerEventHandler_exp;
@@ -925,6 +927,8 @@ namespace Variance
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.bLayerOpA, comboBox_layerBooleanOpA_exp.SelectedIndex);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.bLayerOpB, comboBox_layerBooleanOpB_exp.SelectedIndex);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.bLayerOpAB, comboBox_layerBooleanOpAB_exp.SelectedIndex);
+
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.rayExtension, Convert.ToDecimal(num_rayExtension.Value));
 
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape0Tip, comboBox_layerTipLocations_boolean_exp.SelectedIndex);
         }
@@ -1875,6 +1879,7 @@ namespace Variance
                 comboBox_layerBooleanOpA_exp.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerOpA);
                 comboBox_layerBooleanOpAB_exp.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerOpAB);
                 comboBox_layerBooleanOpB_exp.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerOpB);
+                num_rayExtension.Value = Convert.ToDouble(commonVars.getLayerSettings(layer).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
             }
             else
             {

@@ -110,12 +110,12 @@ namespace Variance
             return returnPath;
         }
 
-        public static Paths customBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution)
+        public static Paths customBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution, double extension)
         {
-            return pCustomBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, resolution);
+            return pCustomBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, resolution, extension);
         }
 
-        static Paths pCustomBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution)
+        static Paths pCustomBoolean(int firstLayerOperator, Paths firstLayer, int secondLayerOperator, Paths secondLayer, int booleanFlag, double resolution, double extension)
         {
             // In principle, 'rigorous' handling is only needed where the cutter is fully enclosed by the subject polygon.
             // The challenge is to know whether this is the case or not.
@@ -128,12 +128,12 @@ namespace Variance
             {
                 try
                 {
-                    rigorous = GeoWrangler.enclosed(firstLayer, customSizing: 1, strict: true); // force a strict check.
+                    rigorous = GeoWrangler.enclosed(firstLayer, customSizing: 1, extension: extension, strict: true); // force a strict check.
 
                     if (!rigorous)
                     {
                         // Need a further check because keyholed geometry in B could be problematic.
-                        rigorous = GeoWrangler.enclosed(secondLayer, customSizing: 1, strict: true); // force a strict check.
+                        rigorous = GeoWrangler.enclosed(secondLayer, customSizing: 1, extension: extension, strict: true); // force a strict check.
                     }
                 }
                 catch (Exception)

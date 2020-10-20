@@ -388,6 +388,7 @@ namespace Variance
                     new XElement("booleanLayerOpA", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpA)),
                     new XElement("booleanLayerOpB", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpB)),
                     new XElement("booleanLayerOpAB", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpAB)),
+                    new XElement("rayExtension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)),
 
                     new XElement("displayZoomFactor", (camParameters != null) ? camParameters[2] : 1),
                     new XElement("viewportX", (camParameters != null) ? camParameters[0] : 0),
@@ -1619,6 +1620,15 @@ namespace Variance
                 catch (Exception)
                 {
                     readSettings.defaultInt(EntropyLayerSettings.properties_i.bLayerOpAB);
+                }
+
+                try
+                {
+                    readSettings.setDecimal(EntropyLayerSettings.properties_decimal.rayExtension, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("rayExtension").First().Value));
+                }
+                catch (Exception)
+                {
+                    readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.rayExtension);
                 }
 
                 try

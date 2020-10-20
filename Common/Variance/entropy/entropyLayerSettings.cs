@@ -112,6 +112,8 @@ namespace Variance
 
         static Int32 default_omitLayer = 0;
 
+        static decimal default_rayExtension = 1.03m;
+
         [NonSerialized]
         Int32[] bgLayers;
 
@@ -1231,6 +1233,7 @@ namespace Variance
         decimal horOverlay;
         decimal verOverlay;
         decimal proxSideRaysMultiplier;
+        decimal rayExtension;
 
         public enum properties_decimal
         {
@@ -1247,7 +1250,8 @@ namespace Variance
             eTension,
             sCDU, tCDU,
             xOL, yOL,
-            proxSideRaysMultiplier
+            proxSideRaysMultiplier,
+            rayExtension
         }
 
         public decimal getDecimal(properties_decimal p)
@@ -1383,6 +1387,9 @@ namespace Variance
                 case properties_decimal.proxSideRaysMultiplier:
                     ret = proxSideRaysMultiplier;
                     break;
+                case properties_decimal.rayExtension:
+                    ret = rayExtension;
+                    break;
             }
 
             return ret;
@@ -1516,6 +1523,9 @@ namespace Variance
                     break;
                 case properties_decimal.proxSideRaysMultiplier:
                     ret = default_proximitySideRaysFallOffMultiplier;
+                    break;
+                case properties_decimal.rayExtension:
+                    ret = default_rayExtension;
                     break;
             }
 
@@ -1654,6 +1664,9 @@ namespace Variance
                 case properties_decimal.proxSideRaysMultiplier:
                     proxSideRaysMultiplier = val;
                     break;
+                case properties_decimal.rayExtension:
+                    rayExtension = val;
+                    break;
             }
         }
 
@@ -1788,6 +1801,9 @@ namespace Variance
                     break;
                 case properties_decimal.proxSideRaysMultiplier:
                     proxSideRaysMultiplier = default_proximitySideRaysFallOffMultiplier;
+                    break;
+                case properties_decimal.rayExtension:
+                    rayExtension = default_rayExtension;
                     break;
             }
         }
@@ -1969,6 +1985,7 @@ namespace Variance
             booleanLayerOpA = default_booleanLayerOpA;
             booleanLayerOpB = default_booleanLayerOpB;
             booleanLayerOpAB = default_booleanLayerOpAB;
+            rayExtension = default_rayExtension;
 
             omitFromSim = default_omitLayer;
 
@@ -2101,6 +2118,7 @@ namespace Variance
                 booleanLayerOpA = source.booleanLayerOpA;
                 booleanLayerOpB = source.booleanLayerOpB;
                 booleanLayerOpAB = source.booleanLayerOpAB;
+                rayExtension = source.rayExtension;
 
                 omitFromSim = source.omitFromSim;
 
