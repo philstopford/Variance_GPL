@@ -503,7 +503,7 @@ box-shadow: 0 1px 3px black;
   <a name="testcase16"></a>
   <h2 class="western">16</h2>
   <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
-  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here. A rotation of -55 degrees is applied deliberately</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here (an extension is needed to avoid keyhole failure). A rotation of -55 degrees is applied deliberately</p>
   <p class="western">Layer 7 is 5-6. This tests the internal keyhole removal, Boolean, keyhole injection (twice, one for each cutter). The shortest path is found to connect the cutters as below.</p>
 
   <table>
@@ -527,7 +527,7 @@ box-shadow: 0 1px 3px black;
   <a name="testcase17"></a>
   <h2 class="western">17</h2>
   <p class="western">Layer 3 is a union of 1 and 2. This should be a simple test</p>
-  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here. A rotation of -60 degrees is applied deliberately</p>
+  <p class="western">Layer 5 is 4-3, with a proximity bias applied. If the output from the Boolean is not clean, the proximity bias will fail so this is used to ensure clean output from this case. Overlap merging is tested, and the keyholer is also tested here (an extension is needed to avoid keyhole failure). A rotation of -55 degrees is applied deliberately</p>
   <p class="western">Layer 7 is 5-6. This tests the internal keyhole removal, Boolean, keyhole injection (twice, one for each cutter). This is designed to force an overlap between the cutters which causes the internal keyhole system to a non-orthogonal evaluation. The 'bridge' between the cutters in this situation arises from the overlap, not a keyhole, so a single keyhole is injected to the outer perimeter.</p>
 
   <table>
