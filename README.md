@@ -32,6 +32,9 @@ Process Assumptions search:
 DOE layout (including DOE layout from iDRM or Quilt (https://github.com/philstopford/Quilt_GPL)):
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/gdsDOE_1.png)
 
+Replay of case calculation, allowing fail cases to be understood:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/replay.png)
+
 Implant shadowing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/implant.png)
 
