@@ -29,5 +29,8 @@ Boolean with contouring and proximity bias:
 Process Assumptions search:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/pa_search.png)
 
+DOE layout (including DOE layout from iDRM or Quilt (https://github.com/philstopford/Quilt_GPL)):
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/gdsDOE_1.png)
+
 Implant shadowing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/implant.png)
