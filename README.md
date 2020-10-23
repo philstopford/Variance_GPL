@@ -26,6 +26,22 @@ Proximity bias:
 Boolean with contouring and proximity bias:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/ilb_testcase_images/004_002.png)
 
+Area calculation:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/areaCalc_1.png)
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/areaCalc_2.png)
+
+Chord calculation:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/chordCalc_2.png)
+
+Spacing/enclosure calculation:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/distanceCalc_Filtering.png)
+
+Minimum angle calculation:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/angleCalc_2.png)
+
+Complex calculation expressions:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/geometric_equation.png)
+
 Process Assumptions search:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/pa_search.png)
 
