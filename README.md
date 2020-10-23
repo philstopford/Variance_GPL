@@ -51,6 +51,10 @@ DOE layout (including DOE layout from iDRM or Quilt (https://github.com/philstop
 Replay of case calculation, allowing fail cases to be understood:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/replay.png)
 
+Per-property custom RNG mapping:
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/custom_RNG.png)
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/custom_RNG_menu.png)
+
 Implant shadowing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/implant.png)
 
