@@ -11,10 +11,10 @@ In-layer Booleans:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/ilb_3.png)
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/ilb_12bg.png)
 
-Boolean with contouring:
+Boolean with contouring, and auto-keyholing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/ilb_testcase_images/015_002.png)
 
-Shape engine using layout:
+Shape engine using layout, with auto-keyholing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/biasGDS.png)
 
 Line Edge Roughness:
