@@ -34,3 +34,7 @@ DOE layout (including DOE layout from iDRM or Quilt (https://github.com/philstop
 
 Implant shadowing:
 ![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/implant.png)
+
+Multi-platform
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/Eto_421_Gtk_1.png)
+![](https://github.com/philstopford/Variance_GPL/blob/master/Documentation/images/Eto_421_mac_1.png)
