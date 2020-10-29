@@ -332,7 +332,7 @@ namespace Variance
                 MultiSelect = false,
                 Filters =
                             {
-                                new FileFilter("Layout Files (*.gds; *.oas; *.oasis)", ".gds", "*.oas", "*.oasis")
+                                new FileFilter("Layout Files (*.gds; *.oas; *.oasis; *.gds.gz; *.oas.gz; *.oasis.gz)", ".gds", "*.oas", "*.oasis", ".gds.gz", "*.oas.gz", "*.oasis.gz")
                             }
             };
 
@@ -352,6 +352,8 @@ namespace Variance
                 timer.Elapsed += new System.Timers.ElapsedEventHandler(abortFileLoad);
 
                 fileLoad_cancelTS = new CancellationTokenSource();
+
+                string[] tokens = ofd.FileName.Split(new char[] { '.' });
 
                 bool fileOK = false;
 
@@ -456,15 +458,15 @@ namespace Variance
             string[] tokens = filename.Split(new char[] { '.' });
             string ext = tokens[tokens.Length - 1].ToUpper();
 
-            if ((ext == "GDS") || (ext == "OAS") || (ext == "OASIS"))
+            if ((ext == "GDS") || (ext == "OAS") || (ext == "OASIS") || (ext == "GZ"))
             {
 
-                if (ext == "GDS")
+                if ((ext == "GDS") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "GDS")))
                 {
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.gds);
                 }
 
-                if ((ext == "OAS") || (ext == "OASIS"))
+                if ((ext == "OAS") || (ext == "OASIS") || ((ext == "GZ") && ((tokens[tokens.Length - 2].ToUpper() == "OAS") || (tokens[tokens.Length - 2].ToUpper() == "OASIS"))))
                 {
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.oasis);
                 }
