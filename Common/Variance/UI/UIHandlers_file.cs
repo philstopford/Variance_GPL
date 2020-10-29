@@ -328,11 +328,11 @@ namespace Variance
 
             OpenFileDialog ofd = new OpenFileDialog()
             {
-                Title = "Select GDS or OAS file to Load",
+                Title = "Select GDSII or OASIS file to Load",
                 MultiSelect = false,
                 Filters =
                             {
-                                new FileFilter("Layout Files (*.gds; *.oas)", ".gds", "*.oas")
+                                new FileFilter("Layout Files (*.gds; *.oas; *.oasis)", ".gds", "*.oas", "*.oasis")
                             }
             };
 
@@ -456,7 +456,7 @@ namespace Variance
             string[] tokens = filename.Split(new char[] { '.' });
             string ext = tokens[tokens.Length - 1].ToUpper();
 
-            if ((ext == "GDS") || (ext == "OAS"))
+            if ((ext == "GDS") || (ext == "OAS") || (ext == "OASIS"))
             {
 
                 if (ext == "GDS")
@@ -464,7 +464,7 @@ namespace Variance
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.gds);
                 }
 
-                if (ext == "OAS")
+                if ((ext == "OAS") || (ext == "OASIS"))
                 {
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.oasis);
                 }
