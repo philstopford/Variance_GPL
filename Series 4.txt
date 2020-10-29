@@ -1,5 +1,11 @@
 Changelog for Variance
 
+4.3.1
+
+	- Layout input enhancements.
+	 - Support GZIP-compressed layout files as input to layers.
+	 - Expand the list of recognized file extensions.
+
 4.3
 
 	- Multiple refinements to the raycaster, keyholer and boolean systems.
