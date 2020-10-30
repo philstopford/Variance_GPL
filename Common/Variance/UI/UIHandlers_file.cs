@@ -332,7 +332,7 @@ namespace Variance
                 MultiSelect = false,
                 Filters =
                             {
-                                new FileFilter("Layout Files (*.gds; *.oas; *.oasis; *.gds.gz; *.oas.gz; *.oasis.gz)", ".gds", "*.oas", "*.oasis", ".gds.gz", "*.oas.gz", "*.oasis.gz")
+                                new FileFilter("Layout Files (*.gds; *.gdsii; *.oas; *.oasis; *.gds.gz; *.gdsii.gz; *.oas.gz; *.oasis.gz)", ".gds", ".gdsii", "*.oas", "*.oasis", ".gds.gz", ".gdsii.gz", "*.oas.gz", "*.oasis.gz")
                             }
             };
 
@@ -458,10 +458,10 @@ namespace Variance
             string[] tokens = filename.Split(new char[] { '.' });
             string ext = tokens[tokens.Length - 1].ToUpper();
 
-            if ((ext == "GDS") || (ext == "OAS") || (ext == "OASIS") || (ext == "GZ"))
+            if ((ext == "GDS") || (ext == "GDSII") || (ext == "OAS") || (ext == "OASIS") || (ext == "GZ"))
             {
 
-                if ((ext == "GDS") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "GDS")))
+                if ((ext == "GDS") || (ext == "GDSII") || ((ext == "GZ") && ((tokens[tokens.Length - 2].ToUpper() == "GDS") || (tokens[tokens.Length - 2].ToUpper() == "GDSII"))))
                 {
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.gds);
                 }
