@@ -10,17 +10,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DISABLELICENSE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="license\**" />
-    <Compile Remove="qlicense\**" />
-    <EmbeddedResource Remove="license\**" />
-    <EmbeddedResource Remove="qlicense\**" />
-    <None Remove="license\**" />
-    <None Remove="qlicense\**" />
-  </ItemGroup>
+  <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Eto\Common\Variance.cs" Link="support\Variance.cs" />
