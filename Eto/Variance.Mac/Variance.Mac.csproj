@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>osx.10.10-x64</RuntimeIdentifiers>
   </PropertyGroup>
