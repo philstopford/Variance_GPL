@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp5</TargetFramework>
-    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <ApplicationIcon>Monte_Carlo_2550495b_ico.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
