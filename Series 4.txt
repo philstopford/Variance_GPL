@@ -2,7 +2,8 @@ Changelog for Variance
 
 4.3.2
 
-	- Targetting .NET 5.0
+	- Bug fix in GeoCore where wrong variable was used to access members of tmpCel.
+	- Targetting .NET 5.0. Brings ~10% performance improvement in runtime.
 
 4.3.1
 
