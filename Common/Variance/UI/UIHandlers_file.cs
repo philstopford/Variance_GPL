@@ -336,6 +336,9 @@ namespace Variance
                             }
             };
 
+            bool fileOK = false;
+            string error = "";
+
             if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
             {
                 Application.Instance.Invoke(() =>
@@ -354,8 +357,6 @@ namespace Variance
                 fileLoad_cancelTS = new CancellationTokenSource();
 
                 string[] tokens = ofd.FileName.Split(new char[] { '.' });
-
-                bool fileOK = false;
 
                 timer.Start();
 
@@ -429,6 +430,7 @@ namespace Variance
                 }
                 else
                 {
+                    error = commonVars.getGeoCoreHandler(settingsIndex).errormsg;
                     commonVars.getGeoCoreHandler(settingsIndex).getGeo().reset();
                 }
                 Application.Instance.Invoke(() =>
@@ -450,6 +452,10 @@ namespace Variance
                 stopIndeterminateProgress();
                 geoCoreLoadingUI(false);
                 do2DLayerUI_exp(settingsIndex, updateUI: true);
+                if (!fileOK)
+                {
+                    ErrorReporter.showMessage_OK(error, "Error loading file");
+                }
             });
         }
 
