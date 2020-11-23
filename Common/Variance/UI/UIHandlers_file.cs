@@ -430,7 +430,16 @@ namespace Variance
                 }
                 else
                 {
-                    error = commonVars.getGeoCoreHandler(settingsIndex).errormsg;
+                    error = "";
+                    int noOfErrors = commonVars.getGeoCoreHandler(settingsIndex).error_msgs.Count;
+                    for (int s = 0; s < noOfErrors; s++)
+                    {
+                        error += commonVars.getGeoCoreHandler(settingsIndex).error_msgs[s];
+                        if ((s > 0) && (s != noOfErrors - 1))
+                        {
+                            error += "\r\n";
+                        }
+                    }
                     commonVars.getGeoCoreHandler(settingsIndex).getGeo().reset();
                 }
                 Application.Instance.Invoke(() =>
@@ -454,7 +463,7 @@ namespace Variance
                 do2DLayerUI_exp(settingsIndex, updateUI: true);
                 if (!fileOK)
                 {
-                    ErrorReporter.showMessage_OK(error, "Error loading file");
+                    ErrorReporter.showMessage_OK(error, "Error(s) loading file");
                 }
             });
         }
