@@ -17,11 +17,13 @@ namespace Variance.WPF
             string xmlFile = "";
             int numberOfThreads = -1; // -1 corresponds to using all threads that are detected.
             int graphicsMode = -1;
+            bool dark = false;
 
             if (args.Length > 0)
             {
                 int oneThreadIndex = Array.IndexOf(args, "--1thread");
                 int threadsIndex = Array.IndexOf(args, "--threads");
+                dark = Array.IndexOf(args, "--dark") != -1;
                 int graphicsIndex = Array.IndexOf(args, "--graphicsMode");
 
                 if (oneThreadIndex != -1)
@@ -102,6 +104,12 @@ namespace Variance.WPF
                                                         HTCount, backend);
             // run application with our main form
             VarianceApplication va = new VarianceApplication(platform, varianceContext);
+
+            if (dark)
+            {
+                System.Windows.Application.Current.Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri("pack://application:,,,/DynamicAero2;component/Theme.xaml", UriKind.RelativeOrAbsolute) });
+                System.Windows.Application.Current.Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri("pack://application:,,,/DynamicAero2;component/Brushes/Dark.xaml", UriKind.RelativeOrAbsolute) });
+            }
             va.Run();
         }
     }

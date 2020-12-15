@@ -163,7 +163,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.9.0" />
+    <PackageReference Include="MailKit" Version="2.10.0" />
     <PackageReference Include="System.Management" Version="5.0.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="5.0.0" />

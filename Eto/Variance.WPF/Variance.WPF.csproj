@@ -25,6 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\DynamicAero2\DynamicAero2.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
   </ItemGroup>
 
@@ -33,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.7" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.5.8" />
     <PackageReference Include="Eto.Veldrid.Wpf" Version="0.1.0" />
   </ItemGroup>
 
