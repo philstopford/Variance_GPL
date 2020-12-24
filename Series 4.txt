@@ -4,10 +4,10 @@ Changelog for Variance
 
 	- External file generation control via filtering of result conditions.
 	 - Allows for 'fail' cases only to be exported based on user criteria.
+	> Experimental dark UI mode for Windows.
 
 4.3.2
 
-	> Experimental dark UI mode for Windows.
 	- Make use of error message reporting through DesignLibs for invalid layout files which previously silently failed, or worse, crashed the tool.
 	- Bug fix in GeoCore where wrong variable was used to access members of tmpCel.
 	- Targetting .NET 5.0. Brings ~10% performance improvement in runtime.
