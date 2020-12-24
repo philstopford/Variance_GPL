@@ -244,7 +244,7 @@ namespace Variance
             tce_tl.Rows.Add(new TableRow());
 
             checkBox_external = new CheckBox();
-            checkBox_external.Text = "External";
+            checkBox_external.Text = "Write out ";
             checkBox_external.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
             tce_tl.Rows[tce_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_external });
 
@@ -269,7 +269,7 @@ namespace Variance
             tce2_tl.Rows.Add(new TableRow());
 
             checkBox_externalCriteria = new CheckBox();
-            checkBox_externalCriteria.Text = "if";
+            checkBox_externalCriteria.Text = "if ";
             checkBox_externalCriteria.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
             tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_externalCriteria });
 

@@ -190,11 +190,13 @@ img {
     </ul> 
     <p class="western" style=" line-height: 100%">The resolution and corner segment values allow you a good degree of control over the fidelity of the shapes being fed into the simulation engine, but do note that the increasing number of points will have an impact on calculation time per run. Nearest neighbor and chord length calculation time scales with increasing numbers of points.</p>
     <p class="western" style=" line-height: 100%">There are some additional options available:</p>
+    <p><img src="images/settings.png" alt=""/></p>
     <ul>
       <li>Display results for each case : This draws the result out for the current case, in the preview region</li>
       <li>Display input shapes for each case: This draws the contours being delivered to the simulation engine for each case.</li>
-      <li>Create SVG file for each case: This causes the tool to write out the input and output contours for each run to a numbered SVG file that can be referenced to the numbered result in the CSV output. Colors are preserved. <u><b>NOTE : This will cause significant memory footprint as the contours are retained in memory until the end of the run.</b></u></li>
-      <li>CSV. With this set, the default case, a CSV file will be generated with all of the result values and variation values. This can take some time for larger runs, and the files can also be large. Disabling this avoids the lengthy file generation, but it doesn't save any memory or CPU time during runs.</li>
+      <li>Write out: This causes the tool to write out the input and output contours for each run to a file. The associated drop-down allows the format to be selected (SVG, GDSII, Oasis). A numbered file will result, that can be referenced to the numbered result in the CSV output. Colors are preserved. Output is generated during the run; the runtime of the simulation will therefore slow down due to the file system overhead.</li>
+      <li>'if': allows criteria to be set for the output of an extenral file. Each pair of dropdown and numeric field is associated with a result field (4 results in the case of chords). The condition is set using the dropdown and the numeric field allows the user to set the threshold.</li>
+      <li>CSV. With this set, a CSV file will be generated with all of the result values and variation values. This can take some time for larger runs, and the files can also be large.</li>
       <li>Use all CPUs (multi CPU). With this active, all CPUs will be used for the simulation runs. With it deselected, one CPU core will be left free so that the user can do work as the simulation is processed.</li>
       <li>RNG Type. A choice of RNG is available to the user. Default is System.Random. Additionaly options are a Mersenne Twister or the Cryptographic RNG. The Mersenne Twister should be faster, but it hasn't been well benchmarked yet. The Cryptographic RNG adds a 10% overhead, but avoids a predictable distribution.</li>
     </ul>
