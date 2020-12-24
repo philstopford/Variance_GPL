@@ -183,7 +183,7 @@ li span {
 </style>
 </head>
 <body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
-<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(4.3)</font></font></p>
+<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(4.4)</font></font></p>
 <blockquote>
   <p style=" border-top: none; border-bottom: none; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#aaaaaa" face="Cambria, serif"><font color="#aaaaaa" size="6" style="font-size: 20pt"><font size="3" style="font-size: 12pt"><span style="letter-spacing: 0.8pt"><i>Phil Stopford</i></span></font></font></font></p>
 </blockquote>
@@ -223,15 +223,15 @@ li span {
         <li>Copy/paste layer settings, and background layer display make set-up very simple.</li>
         <li>External layout support is extensive:</li>
         <ul>
-          <li><span>IMPROVED:</span> GDS and Oasis, including GZIP-compressed.</li>
+          <li>GDS and Oasis, including GZIP-compressed.</li>
           <li>Layout geometry can be used to drive contour generation.</li>
           <li>Layout geometry can be updated from the file on-disk when the project is loaded.</li>
-          <li><span>IMPROVED: </span>Hierarchical layout is better supported in terms of nested cell references, and arrays of reference cells.</li>
+          <li>Hierarchical layout is better supported in terms of nested cell references, and arrays of reference cells.</li>
           <li>Pattern generator derived layout can be used in DOE configurations.</li>
         </ul>
-        <li><span>IMPROVED: </span>Layer shape can be defined using a Boolean of two other layers, including the results of another Boolean.</li>
+        <li>Layer shape can be defined using a Boolean of two other layers, including the results of another Boolean.</li>
         <ul>
-          <li><span>IMPROVED: </span>Further enhanced support for keyholing (one or more cutters fully enclosed within another polygon), including handling of pre-existing keyholes.</li>
+          <li>Further enhanced support for keyholing (one or more cutters fully enclosed within another polygon), including handling of pre-existing keyholes.</li>
           <li>Auto-removal of interior walls (keyholes) at input to simulation engine pipeline.</li>
         </ul>
       </ul>
@@ -246,7 +246,7 @@ li span {
         </ul>
         <li>Shape flipping (H/V, re-center).</li>
         <li>Edge tension model to reproduce line narrowing.</li>
-        <li><span>IMPROVED:</span> Pitch effect biasing, including on keyholed geometry.</li>
+        <li>Pitch effect biasing, including on keyholed geometry.</li>
         <ul>
           <li>Previously, side rays had a disproportionate effect on the computed visibility, leading to muted response. Now, customizable falloffs are available.</li>
         </ul>
@@ -281,6 +281,7 @@ li span {
       <li>Support for outputting simulation geometry to GDSII, Oasis, or SVG (SVG was only option prior to this release).</li>
       <ul>
         <li>Export of the geometry happens during the run, eliminating the memory overhead (at the cost of runtime increase).</li>
+        <li><span>IMPROVED: </span>Criteria can be set by result field to limit exports to cases of interest in the run.</li>
       </ul>
       <li>Set up your arbitrary layer relationships to define the calculation.</li>
       <ul>
