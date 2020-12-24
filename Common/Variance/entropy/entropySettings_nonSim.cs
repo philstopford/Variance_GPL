@@ -6,7 +6,17 @@ namespace Variance
     {
         Int32 externalType { get; set; }
         Int32 generateExternal { get; set; }
+        Int32 externalCriteria { get; set; }
         Int32 generateCSV { get; set; }
+
+        Int32 extCritCondition1 { get; set; }
+        decimal extCritValue1 { get; set; }
+        Int32 extCritCondition2 { get; set; }
+        decimal extCritValue2 { get; set; }
+        Int32 extCritCondition3 { get; set; }
+        decimal extCritValue3 { get; set; }
+        Int32 extCritCondition4 { get; set; }
+        decimal extCritValue4 { get; set; }
 
         static Int32 default_externalType = (Int32)CommonVars.external_Type.svg;
         static Int32 default_generateExternal = 0;
@@ -25,14 +35,112 @@ namespace Variance
         static Int32 default_displayResults = 1;
         static Int32 default_displayShape = 1;
 
-        public enum properties_i { external, externalType, csv, greedy, results, shape }
+        public enum properties_d { externalCritCond1, externalCritCond2, externalCritCond3, externalCritCond4 }
 
-        public Int32 getValue(properties_i p)
+        public decimal getDecimal(properties_d p)
         {
-            return pGetValue(p);
+            return pGetDecimal(p);
         }
 
-        Int32 pGetValue(properties_i p)
+        decimal pGetDecimal(properties_d p)
+        {
+            decimal ret = 0;
+            switch (p)
+            {
+                case properties_d.externalCritCond1:
+                    ret = extCritValue1;
+                    break;
+                case properties_d.externalCritCond2:
+                    ret = extCritValue2;
+                    break;
+                case properties_d.externalCritCond3:
+                    ret = extCritValue3;
+                    break;
+                case properties_d.externalCritCond4:
+                    ret = extCritValue4;
+                    break;
+            }
+
+            return ret;
+        }
+
+        public void setDecimal(properties_d p, decimal val)
+        {
+            pSetDecimal(p, val);
+        }
+
+        void pSetDecimal(properties_d p, decimal val)
+        {
+            switch (p)
+            {
+                case properties_d.externalCritCond1:
+                    extCritValue1 = val;
+                    break;
+                case properties_d.externalCritCond2:
+                    extCritValue2 = val;
+                    break;
+                case properties_d.externalCritCond3:
+                    extCritValue3 = val;
+                    break;
+                case properties_d.externalCritCond4:
+                    extCritValue4 = val;
+                    break;
+            }
+        }
+
+        public void defaultDecimal(properties_d p)
+        {
+            pDefaultDecimal(p);
+        }
+
+        void pDefaultDecimal(properties_d p)
+        {
+            switch (p)
+            {
+                case properties_d.externalCritCond1:
+                    extCritValue1 = 0;
+                    break;
+                case properties_d.externalCritCond2:
+                    extCritValue2 = 0;
+                    break;
+                case properties_d.externalCritCond3:
+                    extCritValue3 = 0;
+                    break;
+                case properties_d.externalCritCond4:
+                    extCritValue4 = 0;
+                    break;
+            }
+        }
+
+        public decimal getDefaultDecimal(properties_d p)
+        {
+            return pGetDefaultDecimal(p);
+        }
+
+        decimal pGetDefaultDecimal(properties_d p)
+        {
+            decimal ret = 0;
+            switch (p)
+            {
+                case properties_d.externalCritCond1:
+                case properties_d.externalCritCond2:
+                case properties_d.externalCritCond3:
+                case properties_d.externalCritCond4:
+                    ret = 0;
+                    break;
+            }
+
+            return ret;
+        }
+
+        public enum properties_i { external, externalType, externalCriteria, externalCritCond1, externalCritCond2, externalCritCond3, externalCritCond4, csv, greedy, results, shape }
+
+        public Int32 getInt(properties_i p)
+        {
+            return pGetInt(p);
+        }
+
+        Int32 pGetInt(properties_i p)
         {
             Int32 ret = 0;
             switch (p)
@@ -45,6 +153,21 @@ namespace Variance
                     break;
                 case properties_i.externalType:
                     ret = externalType;
+                    break;
+                case properties_i.externalCriteria:
+                    ret = externalCriteria;
+                    break;
+                case properties_i.externalCritCond1:
+                    ret = extCritCondition1;
+                    break;
+                case properties_i.externalCritCond2:
+                    ret = extCritCondition2;
+                    break;
+                case properties_i.externalCritCond3:
+                    ret = extCritCondition3;
+                    break;
+                case properties_i.externalCritCond4:
+                    ret = extCritCondition4;
                     break;
                 case properties_i.greedy:
                     ret = greedyMode;
@@ -60,12 +183,12 @@ namespace Variance
             return ret;
         }
 
-        public void setValue(properties_i p, int val)
+        public void setInt(properties_i p, int val)
         {
-            pSetValue(p, val);
+            pSetInt(p, val);
         }
 
-        void pSetValue(properties_i p, int val)
+        void pSetInt(properties_i p, int val)
         {
             switch (p)
             {
@@ -77,6 +200,21 @@ namespace Variance
                     break;
                 case properties_i.externalType:
                     externalType = val;
+                    break;
+                case properties_i.externalCriteria:
+                    externalCriteria = val;
+                    break;
+                case properties_i.externalCritCond1:
+                    extCritCondition1 = val;
+                    break;
+                case properties_i.externalCritCond2:
+                    extCritCondition2 = val;
+                    break;
+                case properties_i.externalCritCond3:
+                    extCritCondition3 = val;
+                    break;
+                case properties_i.externalCritCond4:
+                    extCritCondition4 = val;
                     break;
                 case properties_i.greedy:
                     greedyMode = val;
@@ -90,12 +228,12 @@ namespace Variance
             }
         }
 
-        public void defaultValue(properties_i p)
+        public void defaultInt(properties_i p)
         {
-            pDefaultValue(p);
+            pDefaultInt(p);
         }
 
-        void pDefaultValue(properties_i p)
+        void pDefaultInt(properties_i p)
         {
             switch (p)
             {
@@ -114,18 +252,33 @@ namespace Variance
                 case properties_i.external:
                     generateExternal = default_generateExternal;
                     break;
+                case properties_i.externalCriteria:
+                    externalCriteria = 0;
+                    break;
+                case properties_i.externalCritCond1:
+                    extCritCondition1 = 0;
+                    break;
+                case properties_i.externalCritCond2:
+                    extCritCondition2 = 0;
+                    break;
+                case properties_i.externalCritCond3:
+                    extCritCondition3 = 0;
+                    break;
+                case properties_i.externalCritCond4:
+                    extCritCondition4 = 0;
+                    break;
                 case properties_i.externalType:
                     externalType = default_externalType;
                     break;
             }
         }
 
-        public Int32 getDefaultValue(properties_i p)
+        public Int32 getDefaultInt(properties_i p)
         {
-            return pGetDefaultValue(p);
+            return pGetDefaultInt(p);
         }
 
-        Int32 pGetDefaultValue(properties_i p)
+        Int32 pGetDefaultInt(properties_i p)
         {
             Int32 ret = 0;
             switch (p)
@@ -138,6 +291,13 @@ namespace Variance
                     break;
                 case properties_i.externalType:
                     ret = default_externalType;
+                    break;
+                case properties_i.externalCriteria:
+                case properties_i.externalCritCond1:
+                case properties_i.externalCritCond2:
+                case properties_i.externalCritCond3:
+                case properties_i.externalCritCond4:
+                    ret = 0;
                     break;
                 case properties_i.greedy:
                     ret = default_greedyMode;
@@ -226,6 +386,11 @@ namespace Variance
             greedyMode = default_greedyMode;
             generateExternal = default_generateExternal;
             externalType = default_externalType;
+            externalCriteria = 0;
+            extCritCondition1 = 0;
+            extCritCondition2 = 0;
+            extCritCondition3 = 0;
+            extCritCondition4 = 0;
             generateCSV = default_generateCSV;
         }
     }

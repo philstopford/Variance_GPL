@@ -28,6 +28,8 @@ namespace Variance
 
             public List<string> externalTypeList { get; set; }
 
+            public List<string> externalFilterList { get; set; }
+
             public List<string> rngTypeList { get; set; }
             public List<string> noiseTypeList { get; set; }
 

@@ -175,7 +175,7 @@ namespace Variance
                 po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
             }
 
-            if (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.greedy) == 0)
+            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
             {
                 if (po.MaxDegreeOfParallelism > 1) // avoid setting to 0
                 {
@@ -198,15 +198,15 @@ namespace Variance
                             try
                             {
                                 {
-                                    if ((commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1) && (baseFileName != ""))
+                                    if ((commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1) && (baseFileName != ""))
                                     {
-                                        switch (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType))
+                                        switch (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType))
                                         {
                                             case (Int32)CommonVars.external_Type.svg:
                                                 writeSVG(currentResult, i, numberOfCases);
                                                 break;
                                             default:
-                                                writeLayout_implant(currentResult, i, numberOfCases, commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType));
+                                                writeLayout_implant(currentResult, i, numberOfCases, commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType));
                                                 break;
                                         }
                                     }
@@ -427,7 +427,7 @@ namespace Variance
 
             string statusLine = "No CSV or external files written per job settings.All done.";
 
-            if (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
             {
                 // Set our parallel task options based on user settings.
                 ParallelOptions po = new ParallelOptions();
@@ -444,7 +444,7 @@ namespace Variance
                     {
                         if (implantResultPackage.getImplantResult(resultEntry).isValid())
                         {
-                            if (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+                            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                             {
                                 // result can be a CSV string for multiple values - header is aligned above
                                 string csvString = resultEntry.ToString() + "," + implantResultPackage.getImplantResult(resultEntry).getResult();
@@ -476,15 +476,15 @@ namespace Variance
                 statusLine = counter.ToString() + " results saved to CSV file";
             }
 
-            if (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1)
+            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
             {
-                if (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+                if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                 {
                     statusLine += " and";
                 }
                 statusLine += " shapes saved to ";
 
-                statusLine += commonVars.getExternalTypes()[commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType)] + " files";
+                statusLine += commonVars.getExternalTypes()[commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType)] + " files";
             }
 
             updateStatus?.Invoke(statusLine);

@@ -162,7 +162,7 @@ namespace Variance
                 {
                     suspendSettingsUI();
                 }
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1)
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1)
                 {
                     checkBox_displayResults.Checked = true;
                 }
@@ -180,7 +180,7 @@ namespace Variance
                     checkBox_LERMode.Checked = false;
                 }
 
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.shape) == 1)
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1)
                 {
                     checkBox_displayShapes.Checked = true;
                 }
@@ -189,7 +189,7 @@ namespace Variance
                     checkBox_displayShapes.Checked = false;
                 }
 
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1)
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
                 {
                     checkBox_external.Checked = true;
                 }
@@ -198,9 +198,46 @@ namespace Variance
                     checkBox_external.Checked = false;
                 }
 
-                comboBox_externalTypes.SelectedIndex = commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType);
+                comboBox_externalTypes.SelectedIndex = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType);
 
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+                bool extCrit = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCriteria) == 1;
+                checkBox_externalCriteria.Checked = extCrit;
+
+                int extCritCond1 = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond1);
+                comboBox_externalCriteria1.SelectedIndex = extCritCond1;
+
+                decimal extCritVal1 = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond1);
+                num_externalCriteria1.Value = Convert.ToDouble(extCritVal1);
+
+                num_externalCriteria1.Enabled = extCritCond1 > 0;
+
+                int extCritCond2 = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond2);
+                comboBox_externalCriteria2.SelectedIndex = extCritCond2;
+
+                decimal extCritVal2 = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond2);
+                num_externalCriteria2.Value = Convert.ToDouble(extCritVal2);
+
+                num_externalCriteria2.Enabled = extCritCond2 > 0;
+
+                int extCritCond3 = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond3);
+                comboBox_externalCriteria3.SelectedIndex = extCritCond3;
+
+                decimal extCritVal3 = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond3);
+                num_externalCriteria3.Value = Convert.ToDouble(extCritVal3);
+
+                num_externalCriteria3.Enabled = extCritCond3 > 0;
+
+                int extCritCond4 = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond4);
+                comboBox_externalCriteria4.SelectedIndex = extCritCond4;
+
+                decimal extCritVal4 = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond4);
+                num_externalCriteria4.Value = Convert.ToDouble(extCritVal4);
+
+                num_externalCriteria4.Enabled = extCritCond4 > 0;
+
+                comboBox_externalTypes.SelectedIndex = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType);
+
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                 {
                     checkBox_CSV.Checked = true;
                 }
@@ -335,7 +372,7 @@ namespace Variance
                     checkBox_limitCornerPoints.Checked = false;
                 }
 
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.greedy) == 1)
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 1)
                 {
                     checkBox_greedyMultiCPU.Checked = true;
                 }
@@ -528,7 +565,7 @@ namespace Variance
 
                 try
                 {
-                    checkBox_CSV_implant.Checked = (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1);
+                    checkBox_CSV_implant.Checked = (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1);
                 }
                 catch (Exception)
                 {
@@ -536,7 +573,7 @@ namespace Variance
 
                 try
                 {
-                    checkBox_external_implant.Checked = ((commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1) && (commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType) == (Int32)CommonVars.external_Type.svg));
+                    checkBox_external_implant.Checked = ((commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1) && (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType) == (Int32)CommonVars.external_Type.svg));
                 }
                 catch (Exception)
                 {
@@ -544,7 +581,7 @@ namespace Variance
 
                 try
                 {
-                    comboBox_externalTypes_implant.SelectedIndex = commonVars.getImplantSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType);
+                    comboBox_externalTypes_implant.SelectedIndex = commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType);
                 }
                 catch (Exception)
                 {
@@ -808,7 +845,7 @@ namespace Variance
                         mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].tessPolyList.Clear();
                         mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].polyList.Clear();
                         mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].lineList.Clear();
-                        if ((commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1) || (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.shape) == 1))
+                        if ((commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1) || (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1))
                         {
                             commonVars.getSimPreview().updatePreview(entropyControl.getResultPackage());
                         }
@@ -854,9 +891,9 @@ namespace Variance
                 mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].tessPolyList.Clear();
                 mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].lineList.Clear();
                 // Draw our base shapes if user requested
-                if ((commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.shape) == 1) || (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1))
+                if ((commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1) || (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1))
                 {
-                    if ((commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.shape) == 1) && (commonVars.getSimPreview().getPreviewShapes().Count() != 0))
+                    if ((commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1) && (commonVars.getSimPreview().getPreviewShapes().Count() != 0))
                     {
                         for (Int32 layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
                         {
@@ -900,7 +937,7 @@ namespace Variance
                         });
                     }
 
-                    if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.results) == 1)
+                    if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1)
                     {
                         // Draw any boolean points :
                         for (Int32 poly = 0; poly < commonVars.getSimPreview().getPoints().Count(); poly++)

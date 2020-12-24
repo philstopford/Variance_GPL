@@ -48,6 +48,7 @@ namespace Variance
                 tipLocs = commonVars.getAvailableTipsLocations(),
                 rngTypeList = commonRNG.rngTypes,
                 externalTypeList = commonVars.getExternalTypes(),
+                externalFilterList = commonVars.getExternalFilterList(),
                 calcModes = commonVars.calcMode_names,
                 booleanList = booleanList_,
                 openGLMode = commonVars.getOpenGLModeList(),

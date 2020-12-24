@@ -384,23 +384,23 @@ namespace Variance
 
             if ((bool)checkBox_CSV_implant.Checked)
             {
-                commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.csv, 1);
+                commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.csv, 1);
             }
             else
             {
-                commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.csv, 0);
+                commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.csv, 0);
             }
 
             if ((bool)checkBox_external_implant.Checked)
             {
                 comboBox_externalTypes_implant.Enabled = true;
-                commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.external, 1);
-                commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
+                commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.external, 1);
+                commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
             }
             else
             {
                 comboBox_externalTypes_implant.Enabled = false;
-                commonVars.getImplantSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.external, 0);
+                commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.external, 0);
             }
 
             doImplantShadowing();

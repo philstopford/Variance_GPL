@@ -415,20 +415,29 @@ namespace Variance
                 new XElement("paSearchComment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.paComment)),
                 new XElement("numberOfCases", simulationSettings.getValue(EntropySettings.properties_i.nCases)),
                 new XElement("resolution", simulationSettings.getResolution()),
-                new XElement("displayResults", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.results)),
+                new XElement("displayResults", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.results)),
                 new XElement("displayZoomFactor", (camParameters != null) ? camParameters[2] : 1),
                 new XElement("viewportX", (camParameters != null) ? camParameters[0] : 0),
                 new XElement("viewportY", (camParameters != null) ? camParameters[1] : 0),
-                new XElement("displayShape", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.shape)),
-                new XElement("generateExternal", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.external)),
-                new XElement("externalType", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.externalType)),
-                new XElement("generateCSV", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.csv)),
+                new XElement("displayShape", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.shape)),
+                new XElement("generateExternal", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.external)),
+                new XElement("externalType", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalType)),
+                new XElement("externalCriteria", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalCriteria)),
+                new XElement("externalCritCond1", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalCritCond1)),
+                new XElement("externalCritValue1", simulationSettings_nonSim.getDecimal(EntropySettings_nonSim.properties_d.externalCritCond1)),
+                new XElement("externalCritCond2", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalCritCond2)),
+                new XElement("externalCritValue2", simulationSettings_nonSim.getDecimal(EntropySettings_nonSim.properties_d.externalCritCond2)),
+                new XElement("externalCritCond3", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalCritCond3)),
+                new XElement("externalCritValue3", simulationSettings_nonSim.getDecimal(EntropySettings_nonSim.properties_d.externalCritCond3)),
+                new XElement("externalCritCond4", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalCritCond4)),
+                new XElement("externalCritValue4", simulationSettings_nonSim.getDecimal(EntropySettings_nonSim.properties_d.externalCritCond4)),
+                new XElement("generateCSV", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.csv)),
                 new XElement("linkTipandSideCDU", simulationSettings.getValue(EntropySettings.properties_i.linkCDU)),
                 new XElement("lerFromLWR_by_sqrt2", simulationSettings.getValue(EntropySettings.properties_i.ler)),
                 new XElement("subMode", simulationSettings.getValue(EntropySettings.properties_i.subMode)),
                 new XElement("cornerSegments", simulationSettings.getValue(EntropySettings.properties_i.cSeg)),
                 new XElement("optimizeCorners", simulationSettings.getValue(EntropySettings.properties_i.optC)),
-                new XElement("greedyMode", simulationSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.greedy)),
+                new XElement("greedyMode", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.greedy)),
                 new XElement("rng", simulationSettings.getValue(EntropySettings.properties_i.rngType)),
                 new XElement("outputType", simulationSettings.getValue(EntropySettings.properties_i.oType)),
                 new XElement("layer1Operator", simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, 0)),
@@ -518,9 +527,9 @@ namespace Variance
                         new XElement("numberOfCases", implantSimSettings.getValue(EntropySettings.properties_i.nCases)),
                         new XElement("cornerSegments", implantSimSettings.getValue(EntropySettings.properties_i.cSeg)),
                         new XElement("rngType", implantSimSettings.getValue(EntropySettings.properties_i.rngType)),
-                        new XElement("generateCSV", implantSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.csv)),
-                        new XElement("generateExternal", implantSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.external)),
-                        new XElement("externalType", implantSettings_nonSim.getValue(EntropySettings_nonSim.properties_i.externalType))
+                        new XElement("generateCSV", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.csv)),
+                        new XElement("generateExternal", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.external)),
+                        new XElement("externalType", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalType))
             ));
 
             bool savedOK = true;
@@ -1854,20 +1863,20 @@ namespace Variance
 
                 try
                 {
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.results, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("displayResults").First().Value));
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.results, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("displayResults").First().Value));
                 }
                 catch (Exception)
                 {
-                    simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.results);
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.results);
                 }
 
                 try
                 {
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.shape, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("displayShape").First().Value));
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.shape, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("displayShape").First().Value));
                 }
                 catch (Exception)
                 {
-                    simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.shape);
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.shape);
                 }
 
                 double x = 0;
@@ -1895,35 +1904,35 @@ namespace Variance
 
                 if (svgCompat == 1)
                 {
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.external, 1);
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.external, 1);
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
                 }
                 else
                 {
                     try
                     {
-                        simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.external, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("generateExternal").First().Value));
+                        simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.external, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("generateExternal").First().Value));
                     }
                     catch (Exception)
                     {
-                        simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.external);
+                        simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.external);
                     }
                     try
                     {
-                        simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.externalType, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalType").First().Value));
+                        simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalType, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalType").First().Value));
                     }
                     catch (Exception)
                     {
-                        simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.externalType);
+                        simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalType);
                     }
                 }
                 try
                 {
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.csv, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("generateCSV").First().Value));
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.csv, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("generateCSV").First().Value));
                 }
                 catch (Exception)
                 {
-                    simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.csv);
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.csv);
                 }
 
                 try
@@ -1982,11 +1991,11 @@ namespace Variance
 
                 try
                 {
-                    simulationSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.greedy, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("greedyMode").First().Value));
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.greedy, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("greedyMode").First().Value));
                 }
                 catch (Exception)
                 {
-                    simulationSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.greedy);
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.greedy);
                 }
 
                 try
@@ -2101,6 +2110,88 @@ namespace Variance
                         simulationSettings.defaultOperator(EntropySettings.properties_o.twoLayer, 3);
                     }
                 }
+
+                try
+                {
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalCriteria, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCriteria").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalCriteria);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalCritCond1, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritCond1").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalCritCond1);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalCritCond2, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritCond2").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalCritCond2);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalCritCond3, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritCond3").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalCritCond3);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalCritCond4, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritCond4").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalCritCond4);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setDecimal(EntropySettings_nonSim.properties_d.externalCritCond1, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritValue1").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultDecimal(EntropySettings_nonSim.properties_d.externalCritCond1);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setDecimal(EntropySettings_nonSim.properties_d.externalCritCond2, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritValue2").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultDecimal(EntropySettings_nonSim.properties_d.externalCritCond2);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setDecimal(EntropySettings_nonSim.properties_d.externalCritCond3, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritValue3").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultDecimal(EntropySettings_nonSim.properties_d.externalCritCond3);
+                }
+
+                try
+                {
+                    simulationSettings_nonSim.setDecimal(EntropySettings_nonSim.properties_d.externalCritCond4, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("externalCritValue4").First().Value));
+                }
+                catch (Exception)
+                {
+                    simulationSettings_nonSim.defaultDecimal(EntropySettings_nonSim.properties_d.externalCritCond4);
+                }
+
                 updateSettingsUIFromSettings?.Invoke();
             }
             catch (Exception)
@@ -2414,11 +2505,11 @@ namespace Variance
                 }
                 try
                 {
-                    implantSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.csv, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("generateCSV").First().Value));
+                    implantSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.csv, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("generateCSV").First().Value));
                 }
                 catch (Exception)
                 {
-                    implantSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.csv);
+                    implantSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.csv);
                 }
 
                 int svgCompat = 0;
@@ -2432,26 +2523,26 @@ namespace Variance
 
                 if (svgCompat == 1)
                 {
-                    implantSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.external, 1);
-                    implantSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
+                    implantSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.external, 1);
+                    implantSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalType, (Int32)CommonVars.external_Type.svg);
                 }
                 else
                 {
                     try
                     {
-                        implantSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.external, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("generateExternal").First().Value));
+                        implantSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.external, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("generateExternal").First().Value));
                     }
                     catch (Exception)
                     {
-                        implantSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.external);
+                        implantSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.external);
                     }
                     try
                     {
-                        implantSettings_nonSim.setValue(EntropySettings_nonSim.properties_i.externalType, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("externalTyoe").First().Value));
+                        implantSettings_nonSim.setInt(EntropySettings_nonSim.properties_i.externalType, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("externalTyoe").First().Value));
                     }
                     catch (Exception)
                     {
-                        implantSettings_nonSim.defaultValue(EntropySettings_nonSim.properties_i.externalType);
+                        implantSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.externalType);
                     }
                 }
 

@@ -15,6 +15,10 @@ namespace Variance
         DropDown[] comboBox_geoEqtn_Op_8Layer;
         DropDown comboBox_calcModes, comboBox_RNG, comboBox_externalTypes;
 
+        CheckBox checkBox_externalCriteria;
+        DropDown comboBox_externalCriteria1, comboBox_externalCriteria2, comboBox_externalCriteria3, comboBox_externalCriteria4;
+        NumericStepper num_externalCriteria1, num_externalCriteria2, num_externalCriteria3, num_externalCriteria4;
+
         Label[] label_geoEqtn_Op; // container to simplify access to the menus programmatically.
         Label label_AB, lbl_multiThreadResultNote, lbl_ssNumOfCases, lbl_ssPrecision,
                 lbl_cornerSegments, lbl_rng, lbl_ssTotalPoints, lbl_testArea;
@@ -225,18 +229,108 @@ namespace Variance
             checkBox_CSV.ToolTip = "Write out a CSV file containing the result for each case and its inputs. Allows for offline deep-dive review.";
             tc1_tl.Rows[tc1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_CSV });
 
+            tc1_tl.Rows[tc1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+
+
+            groupBox_simSettings_table.Rows.Add(new TableRow());
+            TableCell tce = new TableCell();
+            groupBox_simSettings_table.Rows[groupBox_simSettings_table.Rows.Count - 1].Cells.Add(tce);
+
+            Panel tce_p = new Panel();
+            tce.Control = tce_p;
+            TableLayout tce_tl = new TableLayout();
+            tce_p.Content = tce_tl;
+
+            tce_tl.Rows.Add(new TableRow());
+
             checkBox_external = new CheckBox();
             checkBox_external.Text = "External";
             checkBox_external.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
-            tc1_tl.Rows[tc1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_external });
+            tce_tl.Rows[tce_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_external });
 
             comboBox_externalTypes = new DropDown();
             comboBox_externalTypes.DataContext = DataContext;
             comboBox_externalTypes.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalTypeList);
             comboBox_externalTypes.ToolTip = "Choose your external file type";
-            tc1_tl.Rows[tc1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalTypes });
+            tce_tl.Rows[tce_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalTypes });
 
-            tc1_tl.Rows[tc1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            tce_tl.Rows[tce_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+
+
+            groupBox_simSettings_table.Rows.Add(new TableRow());
+            TableCell tce2 = new TableCell();
+            groupBox_simSettings_table.Rows[groupBox_simSettings_table.Rows.Count - 1].Cells.Add(tce2);
+
+            Panel tce2_p = new Panel();
+            tce2.Control = tce2_p;
+            TableLayout tce2_tl = new TableLayout();
+            tce2_p.Content = tce2_tl;
+
+            tce2_tl.Rows.Add(new TableRow());
+
+            checkBox_externalCriteria = new CheckBox();
+            checkBox_externalCriteria.Text = "if";
+            checkBox_externalCriteria.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_externalCriteria });
+
+            comboBox_externalCriteria1 = new DropDown();
+            comboBox_externalCriteria1.DataContext = DataContext;
+            comboBox_externalCriteria1.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
+            comboBox_externalCriteria1.ToolTip = "Choose filter";
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalCriteria1 });
+
+            num_externalCriteria1 = new NumericStepper();
+            num_externalCriteria1.Value = 0.0;
+            num_externalCriteria1.Increment = 0.1;
+            num_externalCriteria1.DecimalPlaces = 2;
+            num_externalCriteria1.ToolTip = "Define value";
+            setSize(num_externalCriteria1, 55, num_Height);
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_externalCriteria1) });
+
+            comboBox_externalCriteria2 = new DropDown();
+            comboBox_externalCriteria2.DataContext = DataContext;
+            comboBox_externalCriteria2.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
+            comboBox_externalCriteria2.ToolTip = "Choose filter";
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalCriteria2 });
+
+            num_externalCriteria2 = new NumericStepper();
+            num_externalCriteria2.Value = 0.0;
+            num_externalCriteria2.Increment = 0.1;
+            num_externalCriteria2.DecimalPlaces = 2;
+            num_externalCriteria2.ToolTip = "Define value";
+            setSize(num_externalCriteria2, 55, num_Height);
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_externalCriteria2) });
+
+            comboBox_externalCriteria3 = new DropDown();
+            comboBox_externalCriteria3.DataContext = DataContext;
+            comboBox_externalCriteria3.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
+            comboBox_externalCriteria3.ToolTip = "Choose filter";
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalCriteria3 });
+
+            num_externalCriteria3 = new NumericStepper();
+            num_externalCriteria3.Value = 0.0;
+            num_externalCriteria3.Increment = 0.1;
+            num_externalCriteria3.DecimalPlaces = 2;
+            num_externalCriteria3.ToolTip = "Define value";
+            setSize(num_externalCriteria3, 55, num_Height);
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_externalCriteria3) });
+
+            comboBox_externalCriteria4 = new DropDown();
+            comboBox_externalCriteria4.DataContext = DataContext;
+            comboBox_externalCriteria4.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
+            comboBox_externalCriteria4.ToolTip = "Choose filter";
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalCriteria4 });
+
+            num_externalCriteria4 = new NumericStepper();
+            num_externalCriteria4.Value = 0.0;
+            num_externalCriteria4.Increment = 0.1;
+            num_externalCriteria4.DecimalPlaces = 2;
+            num_externalCriteria4.ToolTip = "Define value";
+            setSize(num_externalCriteria4, 55, num_Height);
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_externalCriteria4) });
+
+            tce2_tl.Rows[tce2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+
 
             groupBox_simSettings_table.Rows.Add(new TableRow());
             TableCell tc2 = new TableCell();

@@ -404,10 +404,17 @@ namespace Variance
 
         public enum external_Type { svg, gds, oas }
         List<string> externalTypes = new List<string>() { "SVG", "GDS", "Oasis" };
+        public enum external_Filter { none, lte, gte }
+        List<string> externalFilterList = new List<string>() { "", "<=", ">=" };
 
         public List<string> getExternalTypes()
         {
             return externalTypes;
+        }
+
+        public List<string> getExternalFilterList()
+        {
+            return externalFilterList;
         }
 
         NonSimulationSettings nonSimulationSettings;

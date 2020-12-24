@@ -78,19 +78,19 @@ namespace Variance
             }
             if (checkBox_displayResults.Checked == true)
             {
-                commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.results, 1);
+                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 1);
             }
             else
             {
-                commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.results, 0);
+                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 0);
             }
             if (checkBox_displayShapes.Checked == true)
             {
-                commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.shape, 1);
+                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape, 1);
             }
             else
             {
-                commonVars.getSimulationSettings_nonSim().setValue(EntropySettings_nonSim.properties_i.shape, 0);
+                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape, 0);
             }
 
             doStatusLine();

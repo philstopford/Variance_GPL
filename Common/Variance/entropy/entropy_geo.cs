@@ -134,7 +134,7 @@ namespace Variance
             resultPackage.nonGaussianInput = nonGaussianInput;
             sw.Reset();
 
-            int generateExternal = commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external);
+            int generateExternal = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external);
             if (doPASearch)
             {
                 generateExternal = 0; // no SVG storage in PA search mode.
@@ -348,7 +348,7 @@ namespace Variance
                 po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
             }
 
-            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.greedy) == 0)
+            if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
             {
                 if (po.MaxDegreeOfParallelism > 1) // avoid setting to 0
                 {
@@ -356,7 +356,7 @@ namespace Variance
                 }
             }
 
-            int generateExternal = commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external);
+            int generateExternal = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external);
             if (doPASearch)
             {
                 generateExternal = 0; // no SVG for the PA search mode.
@@ -367,6 +367,7 @@ namespace Variance
                 Parallel.For(0, numberOfCases, po, (i, loopState) =>
                 {
                     Results currentResult = new Results();
+                    string[] tempString = new string[] { "N/A", "N/A", "N/A", "N/A" };
                     try
                     {
                         ChaosSettings cs = sampler.getSample(i);
@@ -376,7 +377,7 @@ namespace Variance
                         if (doPASearch)
                         {
                             // Review results and check against any limits from the PA search.
-                            string[] tempString = currentResult.getResult().Split(csvSeparator);
+                            tempString = currentResult.getResult().Split(csvSeparator);
                             for (int r = 0; r < tempString.Length; r++)
                             {
                                 if (tempString[r] != "N/A")
@@ -411,16 +412,106 @@ namespace Variance
                             {
                                 if (!doPASearch)
                                 {
-                                    if ((commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1) && (baseFileName != ""))
+                                    if ((generateExternal == 1) && (baseFileName != ""))
                                     {
-                                        switch (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType))
+                                        bool doExternal = false;
+                                        switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCriteria))
                                         {
-                                            case (Int32)CommonVars.external_Type.svg:
-                                                writeSVG(currentResult, i, numberOfCases, tileHandling, col, row);
+                                            case 0:
+                                                doExternal = true;
                                                 break;
                                             default:
-                                                writeLayout(currentResult, i, numberOfCases, commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType), tileHandling, col, row);
+                                                // Is first result being filtered?
+                                                int rf = 0;
+                                                decimal compVal = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond1);
+                                                switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond1))
+                                                {
+                                                    case (int)CommonVars.external_Filter.gte:
+                                                        if (tempString[rf] != "N/A")
+                                                        {
+                                                            doExternal = Convert.ToDecimal(tempString[rf]) >= compVal;
+                                                        }
+                                                        break;
+                                                    case (int)CommonVars.external_Filter.lte:
+                                                        if (tempString[rf] != "N/A")
+                                                        {
+                                                            doExternal = Convert.ToDecimal(tempString[rf]) <= compVal;
+                                                        }
+                                                        break;
+                                                }
+                                                // Multi-result check.
+                                                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.chord)
+                                                {
+                                                    // Is second result being filtered?
+                                                    rf = 1;
+                                                    compVal = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond2);
+                                                    switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond2))
+                                                    {
+                                                        case (int)CommonVars.external_Filter.gte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) >= compVal;
+                                                            }
+                                                            break;
+                                                        case (int)CommonVars.external_Filter.lte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) <= compVal;
+                                                            }
+                                                            break;
+                                                    }
+
+                                                    // Is third result being filtered?
+                                                    rf = 2;
+                                                    compVal = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond3);
+                                                    switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond3))
+                                                    {
+                                                        case (int)CommonVars.external_Filter.gte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) >= compVal;
+                                                            }
+                                                            break;
+                                                        case (int)CommonVars.external_Filter.lte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) <= compVal;
+                                                            }
+                                                            break;
+                                                    }
+
+                                                    // Is fourth result being filtered?
+                                                    rf = 3;
+                                                    compVal = commonVars.getSimulationSettings_nonSim().getDecimal(EntropySettings_nonSim.properties_d.externalCritCond4);
+                                                    switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCritCond4))
+                                                    {
+                                                        case (int)CommonVars.external_Filter.gte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) >= compVal;
+                                                            }
+                                                            break;
+                                                        case (int)CommonVars.external_Filter.lte:
+                                                            if (tempString[rf] != "N/A")
+                                                            {
+                                                                doExternal = doExternal && Convert.ToDecimal(tempString[1]) <= compVal;
+                                                            }
+                                                            break;
+                                                    }
+                                                }
                                                 break;
+                                        }
+                                        if (doExternal)
+                                        {
+                                            switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType))
+                                            {
+                                                case (Int32)CommonVars.external_Type.svg:
+                                                    writeSVG(currentResult, i, numberOfCases, tileHandling, col, row);
+                                                    break;
+                                                default:
+                                                    writeLayout(currentResult, i, numberOfCases, commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType), tileHandling, col, row);
+                                                    break;
+                                            }
                                         }
                                     }
                                 }
@@ -726,7 +817,7 @@ namespace Variance
 
             string statusLine = "No CSV or external files written per job settings. All done.";
 
-            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+            if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
             {
                 // Set our parallel task options based on user settings.
                 ParallelOptions po = new ParallelOptions();
@@ -743,7 +834,7 @@ namespace Variance
                     {
                         if (resultPackage.getResult(resultEntry).isValid())
                         {
-                            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+                            if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                             {
                                 // result can be a CSV string for multiple values - header is aligned above
                                 string csvString = resultEntry.ToString() + "," + resultPackage.getResult(resultEntry).getResult();
@@ -815,9 +906,9 @@ namespace Variance
                 statusLine = tmp + " results saved to CSV file";
             }
 
-            if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.external) == 1)
+            if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
             {
-                if (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 1)
+                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                 {
                     statusLine += " and shapes ";
                 }
@@ -826,7 +917,7 @@ namespace Variance
                     statusLine = "Shapes ";
                 }
 
-                statusLine += "saved to " + commonVars.getExternalTypes()[commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.externalType)] + " files";
+                statusLine += "saved to " + commonVars.getExternalTypes()[commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType)] + " files";
             }
 
             updateStatus?.Invoke(statusLine);
@@ -1082,7 +1173,7 @@ namespace Variance
             nonGaussianInput = commonVars.nonGaussianInputs();
 
             // Warn user if the setup could be problematic.
-            if ((numberOfCases > 1) && !doPASearch && nonGaussianInput && (commonVars.getSimulationSettings_nonSim().getValue(EntropySettings_nonSim.properties_i.csv) == 0))
+            if ((numberOfCases > 1) && !doPASearch && nonGaussianInput && (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 0))
             {
                 ErrorReporter.showMessage_OK("Non-Gaussian inputs with no CSV requested!\r\nNon-Gaussian inputs require offline analysis of simulation results, through CSV", "Warning");
             }

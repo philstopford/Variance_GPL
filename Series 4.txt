@@ -1,5 +1,10 @@
 Changelog for Variance
 
+4.4a1
+
+	- External file generation control via filtering of result conditions.
+	 - Allows for 'fail' cases only to be exported based on user criteria.
+
 4.3.2
 
 	> Experimental dark UI mode for Windows.
