@@ -114,6 +114,10 @@ namespace Variance
                             Console.WriteLine(t[l]);
                         }
                     }
+                    catch (Exception)
+                    {
+                        // Histogram can fail in case of insufficient variation - i.e. all values are the same.
+                    }
                     finally
                     {
                         Monitor.Exit(varianceContext.previewLock);

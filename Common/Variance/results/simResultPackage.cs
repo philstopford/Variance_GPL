@@ -192,19 +192,26 @@ namespace Variance
         List<string> pGetHistograms(List<double>[] values, int buckets)
         {
             List<string> histograms = new List<string>();
-            // Generate histograms for each set, unless there are no results in that set.
-            for (int i = 0; i < values.Length; i++)
+            try
             {
-                if (values[i].Count == 0)
+                // Generate histograms for each set, unless there are no results in that set.
+                for (int i = 0; i < values.Length; i++)
                 {
-                    histograms.Add("No data for result " + i.ToString() + "\r\n");
+                    if (values[i].Count == 0)
+                    {
+                        histograms.Add("No data for result " + i.ToString() + "\r\n");
+                    }
+                    else
+                    {
+                        histograms.Add("Histogram for result " + i.ToString() + ":\r\n");
+                        Histo h = new Histo(10, values[i].ToArray());
+                        histograms.Add(h.StemLeaf(true, buckets));
+                    }
                 }
-                else
-                {
-                    histograms.Add("Histogram for result " + i.ToString() + ":\r\n");
-                    Histo h = new Histo(10, values[i].ToArray());
-                    histograms.Add(h.StemLeaf(true, buckets));
-                }
+            }
+            catch (Exception e)
+            {
+                // Histogram can fail in case of insufficient variation - i.e. all values are the same.
             }
 
             return histograms;

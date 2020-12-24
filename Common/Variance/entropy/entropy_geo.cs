@@ -367,17 +367,17 @@ namespace Variance
                 Parallel.For(0, numberOfCases, po, (i, loopState) =>
                 {
                     Results currentResult = new Results();
-                    string[] tempString = new string[] { "N/A", "N/A", "N/A", "N/A" };
                     try
                     {
                         ChaosSettings cs = sampler.getSample(i);
                         currentResult = EntropyEval(previewMode, doPASearch, row, col, cs);
 
+                        string[] tempString = currentResult.getResult().Split(csvSeparator);
+
                         bool addResultToPackage = true;
                         if (doPASearch)
                         {
                             // Review results and check against any limits from the PA search.
-                            tempString = currentResult.getResult().Split(csvSeparator);
                             for (int r = 0; r < tempString.Length; r++)
                             {
                                 if (tempString[r] != "N/A")
@@ -414,11 +414,10 @@ namespace Variance
                                 {
                                     if ((generateExternal == 1) && (baseFileName != ""))
                                     {
-                                        bool doExternal = false;
+                                        bool doExternal = true;
                                         switch (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalCriteria))
                                         {
                                             case 0:
-                                                doExternal = true;
                                                 break;
                                             default:
                                                 // Is first result being filtered?
@@ -1117,7 +1116,14 @@ namespace Variance
 
             linesToWrite.Add("");
 
-            linesToWrite.AddRange(resultPackage.getHistograms());
+            try
+            {
+                linesToWrite.AddRange(resultPackage.getHistograms());
+            }
+            catch (Exception)
+            {
+                // Histogram can fail in case of insufficient variation - i.e. all values are the same.
+            }
 
             // Simulation Settings
             linesToWrite.Add("");
