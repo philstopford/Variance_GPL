@@ -537,6 +537,17 @@ namespace Variance
 
             try
             {
+                string layerCol = "backgroundColor";
+                varianceContext.vc.colors.background_Color.R = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("R").First().Value);
+                varianceContext.vc.colors.background_Color.G = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("G").First().Value);
+                varianceContext.vc.colors.background_Color.B = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("B").First().Value);
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
                 string layerCol = "enabledColor";
                 varianceContext.vc.colors.enabled_Color.R = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("R").First().Value);
                 varianceContext.vc.colors.enabled_Color.G = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("G").First().Value);
@@ -777,6 +788,12 @@ namespace Variance
                     new XElement("G", varianceContext.vc.colors.minor_Color.G),
                     new XElement("B", varianceContext.vc.colors.minor_Color.B));
                 colorPrefs.Add(minorColor);
+
+                XElement backgroundColor = new XElement("backgroundColor",
+                    new XElement("R", varianceContext.vc.colors.background_Color.R),
+                    new XElement("G", varianceContext.vc.colors.background_Color.G),
+                    new XElement("B", varianceContext.vc.colors.background_Color.B));
+                colorPrefs.Add(backgroundColor);
 
                 prefsXML.Root.Add(colorPrefs);
 
@@ -1867,6 +1884,7 @@ namespace Variance
                 mcVPSettings[i].drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
                 mcVPSettings[i].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
                 mcVPSettings[i].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+                mcVPSettings[i].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
             }
             mcVPSettings[mcVPSettings.Length - 2].drawDrawn(true);
             mcVPSettings[mcVPSettings.Length - 1].drawDrawn(true);
@@ -1878,6 +1896,7 @@ namespace Variance
             otkVPSettings_implant.drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
             otkVPSettings_implant.minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
             otkVPSettings_implant.majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+            otkVPSettings_implant.backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
         }
 
         void setupOmitLayerCheckboxes(TableCell tc)

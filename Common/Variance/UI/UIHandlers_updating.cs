@@ -705,6 +705,7 @@ namespace Variance
                 lbl_enabledColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.enabled_Color.toArgb());
                 lbl_majorGridColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.major_Color.toArgb());
                 lbl_minorGridColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.minor_Color.toArgb());
+                lbl_vpbgColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.background_Color.toArgb());
                 lbl_implantMinColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.implantMin_Color.toArgb());
                 lbl_implantMeanColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.implantMean_Color.toArgb());
                 lbl_implantMaxColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.implantMax_Color.toArgb());
@@ -884,6 +885,7 @@ namespace Variance
                 {
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+                    mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
                 }
 
                 mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].bgPolyList.Clear();
@@ -1190,6 +1192,7 @@ namespace Variance
             // Brute force setting, to ensure we're aligned with user preferences that might have changed.
             mcVPSettings[settingsIndex].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
             mcVPSettings[settingsIndex].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+            mcVPSettings[settingsIndex].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
             mcVPSettings[settingsIndex].reset(false);
 
             // Iterate through our shapes
