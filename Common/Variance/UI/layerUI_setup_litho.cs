@@ -45,7 +45,6 @@ namespace Variance
                 tc.Control = p;
 
                 litho_icr_ocr(groupBox_layer_lithography_table);
-                litho_lens(groupBox_layer_lithography_table);
                 litho_lwr(groupBox_layer_lithography_table);
                 litho_lwr2(groupBox_layer_lithography_table);
                 litho_scdu(groupBox_layer_lithography_table);
@@ -62,30 +61,49 @@ namespace Variance
         {
             Panel outer = new Panel();
             TableLayout outer_tl = new TableLayout();
-            TableLayout row0_tl = new TableLayout();
+            TableLayout tl_leftCol = new TableLayout();
+            tl_leftCol.Rows.Add(new TableRow());
+            TableLayout tl_rightCol = new TableLayout();
+            tl_rightCol.Rows.Add(new TableRow());
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row0_tl });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tl_leftCol });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tl_rightCol });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null });
             outer.Content = outer_tl;
-            row0_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
             groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
 
             // Table layout within cell.
-            TableCell lit_tr0_0 = new TableCell();
-            row0_tl.Rows[0].Cells.Add(lit_tr0_0);
+            TableCell leftCol_tc = new TableCell();
+            tl_leftCol.Rows[0].Cells.Add(leftCol_tc);
 
-            TableLayout lit_tr0_0_tl = new TableLayout();
-            lit_tr0_0.Control = lit_tr0_0_tl;
+            TableCell rightCol_tc = new TableCell();
+            tl_rightCol.Rows[0].Cells.Add(rightCol_tc);
 
-            lit_tr0_0_tl.Rows.Add(new TableRow());
+            GroupBox groupBox_rounding = new GroupBox();
+            groupBox_rounding.Text = "Rounding";
+            leftCol_tc.Control = groupBox_rounding;
+
+            GroupBox groupBox_misc = new GroupBox();
+            groupBox_misc.Text = "Misc";
+            rightCol_tc.Control = groupBox_misc;
+
+            TableLayout rounding_table = new TableLayout();
+            groupBox_rounding.Content = rounding_table;
+
+            TableLayout litMisc_table = new TableLayout();
+            groupBox_misc.Content = litMisc_table;
+
+            rounding_table.Rows.Add(new TableRow());
+            litMisc_table.Rows.Add(new TableRow());
 
             lbl_layer_lithoICRR_exp = new Label();
             lbl_layer_lithoICRR_exp.Text = "Inner Radius";
             lbl_layer_lithoICRR_exp.ToolTip = "Inner vertex (concave) corner rounding radius.";
-            lit_tr0_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr0_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoICRR_exp;
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_layer_lithoICRR_exp;
 
             num_layer_lithoICRR_exp = new NumericStepper();
             num_layer_lithoICRR_exp.Increment = 0.1;
@@ -93,23 +111,15 @@ namespace Variance
             num_layer_lithoICRR_exp.MinValue = 0;
             num_layer_lithoICRR_exp.ToolTip = "Inner vertex (concave) corner rounding radius.";
             setSize(num_layer_lithoICRR_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr0_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr0_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoICRR_exp);
-
-            TableCell lit_tr0_1 = new TableCell();
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(lit_tr0_1);
-
-            TableLayout lit_tr0_1_tl = new TableLayout();
-            lit_tr0_1.Control = lit_tr0_1_tl;
-
-            lit_tr0_1_tl.Rows.Add(new TableRow());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_layer_lithoICRR_exp);
 
             lbl_layer_lithoICV_exp = new Label();
             lbl_layer_lithoICV_exp.Text = "Var";
             lbl_layer_lithoICV_exp.MouseDoubleClick += ICV_RNG;
             lbl_layer_lithoICV_exp.ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation.";
-            lit_tr0_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr0_1_tl.Rows[0].Cells[0].Control = lbl_layer_lithoICV_exp;
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_layer_lithoICV_exp;
 
             num_layer_lithoICV_exp = new NumericStepper();
             num_layer_lithoICV_exp.Increment = 0.1;
@@ -117,62 +127,16 @@ namespace Variance
             num_layer_lithoICV_exp.MinValue = 0;
             num_layer_lithoICV_exp.ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation.";
             setSize(num_layer_lithoICV_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr0_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr0_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoICV_exp);
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_layer_lithoICV_exp);
 
-
-            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
-
-
-            lbl_layer_lithoWobble_exp = new Label();
-            lbl_layer_lithoWobble_exp.Text = "Wobble";
-            lbl_layer_lithoWobble_exp.MouseDoubleClick += wobble_RNG;
-            lbl_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
-            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
-
-            num_layer_lithoWobble_exp = new NumericStepper();
-            num_layer_lithoWobble_exp.Increment = 0.1;
-            num_layer_lithoWobble_exp.DecimalPlaces = 2;
-            num_layer_lithoWobble_exp.MinValue = 0;
-            num_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
-            setSize(num_layer_lithoWobble_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr0_1_tl.Rows[lit_tr0_1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
-        }
-
-        void litho_lens(TableLayout groupBox_layer_lithography_table)
-        {
-            TableRow lit_lens = new TableRow();
-            groupBox_layer_lithography_table.Rows.Add(lit_lens);
-
-            Panel outer = new Panel();
-
-            TableLayout tl = new TableLayout();
-            tl.Rows.Add(new TableRow());
-
-            outer.Content = tl;
-
-            lit_lens.Cells.Add(new TableCell() { Control = outer });
-
-            Panel p1 = new Panel();
-            TableLayout p1tl = new TableLayout();
-            p1tl.Rows.Add(new TableRow());
-            p1.Content = p1tl;
-
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
-
-            TableCell lit_tr0_2 = new TableCell();
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(lit_tr0_2);
-
-            TableLayout lit_tr1_0_tl = new TableLayout();
-            lit_tr0_2.Control = lit_tr1_0_tl;
-
-            lit_tr1_0_tl.Rows.Add(new TableRow());
+            rounding_table.Rows.Add(new TableRow());
 
             lbl_layer_lithoOCRR_exp = new Label();
             lbl_layer_lithoOCRR_exp.Text = "Outer Radius";
             lbl_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
-            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCRR_exp;
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_layer_lithoOCRR_exp;
 
             num_layer_lithoOCRR_exp = new NumericStepper();
             num_layer_lithoOCRR_exp.Increment = 0.1;
@@ -180,23 +144,15 @@ namespace Variance
             num_layer_lithoOCRR_exp.MinValue = 0;
             num_layer_lithoOCRR_exp.ToolTip = "Outer vertex (concave) corner rounding radius.";
             setSize(num_layer_lithoOCRR_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr1_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCRR_exp);
-
-            TableCell lit_tr0_3 = new TableCell();
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(lit_tr0_3);
-
-            TableLayout lit_tr1_1_tl = new TableLayout();
-            lit_tr0_3.Control = lit_tr1_1_tl;
-
-            lit_tr1_1_tl.Rows.Add(new TableRow());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_layer_lithoOCRR_exp);
 
             lbl_layer_lithoOCV_exp = new Label();
             lbl_layer_lithoOCV_exp.Text = "Var";
             lbl_layer_lithoOCV_exp.MouseDoubleClick += ICV_RNG;
             lbl_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
-            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_1_tl.Rows[0].Cells[0].Control = lbl_layer_lithoOCV_exp;
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_layer_lithoOCV_exp;
 
             num_layer_lithoOCV_exp = new NumericStepper();
             num_layer_lithoOCV_exp.Increment = 0.1;
@@ -204,15 +160,34 @@ namespace Variance
             num_layer_lithoOCV_exp.MinValue = 0;
             num_layer_lithoOCV_exp.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
             setSize(num_layer_lithoOCV_exp, 55, (int)(label_Height * uiScaleFactor));
-            lit_tr1_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr1_1_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
+            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
 
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+
+            lbl_layer_lithoWobble_exp = new Label();
+            lbl_layer_lithoWobble_exp.Text = "Wobble";
+            lbl_layer_lithoWobble_exp.MouseDoubleClick += wobble_RNG;
+            lbl_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
+
+            num_layer_lithoWobble_exp = new NumericStepper();
+            num_layer_lithoWobble_exp.Increment = 0.1;
+            num_layer_lithoWobble_exp.DecimalPlaces = 2;
+            num_layer_lithoWobble_exp.MinValue = 0;
+            num_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
+            setSize(num_layer_lithoWobble_exp, 55, (int)(label_Height * uiScaleFactor));
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
+
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+
+            litMisc_table.Rows.Add(new TableRow());
 
             lbl_layer_coeff1_exp = new Label();
             lbl_layer_coeff1_exp.Text = "Lens k1";
             lbl_layer_coeff1_exp.ToolTip = "Lens k1";
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
 
             num_layer_coeff1_exp = new NumericStepper();
             num_layer_coeff1_exp.Increment = 0.1;
@@ -220,13 +195,13 @@ namespace Variance
             num_layer_coeff1_exp.Value = 0.0;
             num_layer_coeff1_exp.ToolTip = "Lens k1";
             setSize(num_layer_coeff1_exp, 55, num_Height);
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
 
 
             lbl_layer_coeff2_exp = new Label();
             lbl_layer_coeff2_exp.Text = "Lens k2";
             lbl_layer_coeff2_exp.ToolTip = "Lens k2";
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
 
             num_layer_coeff2_exp = new NumericStepper();
             num_layer_coeff2_exp.Increment = 0.1;
@@ -234,7 +209,8 @@ namespace Variance
             num_layer_coeff2_exp.Value = 0.0;
             num_layer_coeff2_exp.ToolTip = "Lens k2";
             setSize(num_layer_coeff2_exp, 55, num_Height);
-            p1tl.Rows[p1tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
+
         }
 
         void litho_lwr(TableLayout groupBox_layer_lithography_table)
