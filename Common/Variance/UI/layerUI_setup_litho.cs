@@ -239,11 +239,11 @@ namespace Variance
             p2.Content = p2tl;
 
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p2 });
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p2 });
 
             lbl_layer_lithoLWR_exp = new Label();
-            lbl_layer_lithoLWR_exp.Text = "LWR";
+            lbl_layer_lithoLWR_exp.Text = "3-sigma";
             lbl_layer_lithoLWR_exp.MouseDoubleClick += lwr_RNG;
             lbl_layer_lithoLWR_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
             p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR_exp });
@@ -325,8 +325,8 @@ namespace Variance
 
         void litho_lwr2(TableLayout groupBox_layer_lithography_table)
         {
-            TableRow lit_lwr2 = new TableRow();
-            groupBox_layer_lithography_table.Rows.Add(lit_lwr2);
+            TableRow tr0 = new TableRow();
+            groupBox_layer_lithography_table.Rows.Add(tr0);
 
             GroupBox outer_gb = new GroupBox();
             outer_gb.Text = "LWR2";
@@ -339,7 +339,7 @@ namespace Variance
 
             outer.Content = tl;
 
-            lit_lwr2.Cells.Add(new TableCell() { Control = outer_gb });
+            tr0.Cells.Add(new TableCell() { Control = outer_gb });
 
             Panel p1 = new Panel();
             TableLayout p1tl = new TableLayout();
@@ -355,7 +355,7 @@ namespace Variance
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
             lbl_layer_lithoLWR2_exp = new Label();
-            lbl_layer_lithoLWR2_exp.Text = "LWR2";
+            lbl_layer_lithoLWR2_exp.Text = "3-sigma";
             lbl_layer_lithoLWR2_exp.MouseDoubleClick += lwr_RNG;
             lbl_layer_lithoLWR2_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
             p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR2_exp });
@@ -438,35 +438,38 @@ namespace Variance
         // SCDU
         void litho_scdu(TableLayout groupBox_layer_lithography_table)
         {
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "Side CDU";
+
             Panel outer = new Panel();
+            outer_gb.Content = outer;
             TableLayout outer_tl = new TableLayout();
-            TableLayout row3_tl = new TableLayout();
+            TableLayout tc_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row3_tl });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tc_tl });
             outer.Content = outer_tl;
-            row3_tl.Rows.Add(new TableRow());
+            tc_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
 
             // Table layout within cell.
-            TableCell lit_tr2_0 = new TableCell();
-            row3_tl.Rows[0].Cells.Add(lit_tr2_0);
+            TableCell tc_0 = new TableCell();
+            tc_tl.Rows[0].Cells.Add(tc_0);
 
-            TableLayout lit_tr3_0_tl = new TableLayout();
-            lit_tr2_0.Control = lit_tr3_0_tl;
+            TableLayout tc_0_tl = new TableLayout();
+            tc_0.Control = tc_0_tl;
 
-            lit_tr3_0_tl.Rows.Add(new TableRow());
+            tc_0_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoCDUSide_exp = new Label();
-            lbl_layer_lithoCDUSide_exp.Text = "Side CDU";
+            lbl_layer_lithoCDUSide_exp.Text = "3-sigma";
             lbl_layer_lithoCDUSide_exp.MouseDoubleClick += sCDU_RNG;
             lbl_layer_lithoCDUSide_exp.ToolTip = "3-sigma CD variation applied to non-tip sides.";
-            lit_tr3_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr3_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoCDUSide_exp;
-            lit_tr3_0_tl.Rows[0].Cells[0].ScaleWidth = true;
+            tc_0_tl.Rows[0].Cells.Add(new TableCell());
+            tc_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoCDUSide_exp;
+            tc_0_tl.Rows[0].Cells[0].ScaleWidth = true;
 
             num_layer_lithoCDUSide_exp = new NumericStepper();
             num_layer_lithoCDUSide_exp.Increment = 0.1;
@@ -474,16 +477,16 @@ namespace Variance
             num_layer_lithoCDUSide_exp.MinValue = 0;
             num_layer_lithoCDUSide_exp.ToolTip = "3-sigma CD variation applied to non-tip sides.";
             setSize(num_layer_lithoCDUSide_exp, 55, num_Height);
-            lit_tr3_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr3_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoCDUSide_exp);
+            tc_0_tl.Rows[0].Cells.Add(new TableCell());
+            tc_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoCDUSide_exp);
 
-            row3_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
+            tc_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
 
-            TableCell lit_tr3_1 = new TableCell();
-            row3_tl.Rows[0].Cells.Add(lit_tr3_1);
+            TableCell tc_1 = new TableCell();
+            tc_tl.Rows[0].Cells.Add(tc_1);
 
             Panel p = new Panel();
-            lit_tr3_1.Control = p;
+            tc_1.Control = p;
 
             TableLayout ptl = new TableLayout();
             p.Content = ptl;
@@ -493,7 +496,7 @@ namespace Variance
 
             groupBox_layer_CDUCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_CDUCorrelation_content = new TableLayout();
-            groupBox_layer_CDUCorrelation_exp.Text = "Side CDU Correlation";
+            groupBox_layer_CDUCorrelation_exp.Text = "Correlation";
             groupBox_layer_CDUCorrelation_exp.Content = groupBox_layer_CDUCorrelation_content;
             ptc.Control = groupBox_layer_CDUCorrelation_exp;//, x, y);
 
@@ -533,34 +536,37 @@ namespace Variance
         // TCDU
         void litho_tcdu(TableLayout groupBox_layer_lithography_table)
         {
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "Tips CDU";
             Panel outer = new Panel();
+            outer_gb.Content = outer;
             TableLayout outer_tl = new TableLayout();
-            TableLayout row4_tl = new TableLayout();
+            TableLayout tc_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row4_tl });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tc_tl });
             outer.Content = outer_tl;
-            row4_tl.Rows.Add(new TableRow());
+            tc_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
+            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
 
             // Table layout within cell.
-            TableCell lit_tr4_0 = new TableCell();
-            row4_tl.Rows[0].Cells.Add(lit_tr4_0);
+            TableCell tc_0 = new TableCell();
+            tc_tl.Rows[0].Cells.Add(tc_0);
 
-            TableLayout lit_tr4_0_tl = new TableLayout();
-            lit_tr4_0.Control = lit_tr4_0_tl;
+            TableLayout tc_0_tl = new TableLayout();
+            tc_0.Control = tc_0_tl;
 
-            lit_tr4_0_tl.Rows.Add(new TableRow());
+            tc_0_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoCDUTips_exp = new Label();
-            lbl_layer_lithoCDUTips_exp.Text = "Tips CDU";
+            lbl_layer_lithoCDUTips_exp.Text = "3-sigma";
             lbl_layer_lithoCDUTips_exp.MouseDoubleClick += tCDU_RNG;
             lbl_layer_lithoCDUTips_exp.ToolTip = "3-sigma CD variation applied to tip sides.";
-            lit_tr4_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr4_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoCDUTips_exp;
-            lit_tr4_0_tl.Rows[0].Cells[0].ScaleWidth = true;
+            tc_0_tl.Rows[0].Cells.Add(new TableCell());
+            tc_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoCDUTips_exp;
+            tc_0_tl.Rows[0].Cells[0].ScaleWidth = true;
 
             num_layer_lithoCDUTips_exp = new NumericStepper();
             num_layer_lithoCDUTips_exp.Increment = 0.1;
@@ -568,16 +574,16 @@ namespace Variance
             num_layer_lithoCDUTips_exp.MinValue = 0;
             num_layer_lithoCDUTips_exp.ToolTip = "3-sigma CD variation applied to tip sides.";
             setSize(num_layer_lithoCDUTips_exp, 55, num_Height);
-            lit_tr4_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr4_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoCDUTips_exp);
+            tc_0_tl.Rows[0].Cells.Add(new TableCell());
+            tc_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoCDUTips_exp);
 
-            row4_tl.Rows[row4_tl.Rows.Count - 1].Cells.Add(new TableCell());
+            tc_tl.Rows[tc_tl.Rows.Count - 1].Cells.Add(new TableCell());
 
-            TableCell lit_tr3_1 = new TableCell();
-            row4_tl.Rows[row4_tl.Rows.Count - 1].Cells.Add(lit_tr3_1);
+            TableCell tc_1 = new TableCell();
+            tc_tl.Rows[tc_tl.Rows.Count - 1].Cells.Add(tc_1);
 
             Panel p = new Panel();
-            lit_tr3_1.Control = p;
+            tc_1.Control = p;
 
             TableLayout ptl = new TableLayout();
             p.Content = ptl;
@@ -588,7 +594,7 @@ namespace Variance
 
             groupBox_layer_TipCDUCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_TipCDUCorrelation_content = new TableLayout();
-            groupBox_layer_TipCDUCorrelation_exp.Text = "Tip CDU Correlation";
+            groupBox_layer_TipCDUCorrelation_exp.Text = "Correlation";
             groupBox_layer_TipCDUCorrelation_exp.Content = groupBox_layer_TipCDUCorrelation_content;
             ptc.Control = groupBox_layer_TipCDUCorrelation_exp;
 
@@ -668,7 +674,7 @@ namespace Variance
             sigma_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoHorOverlay_exp = new Label();
-            lbl_layer_lithoHorOverlay_exp.Text = "Hor Overlay";
+            lbl_layer_lithoHorOverlay_exp.Text = "3-sigma";
             lbl_layer_lithoHorOverlay_exp.MouseDoubleClick += hOverlay_RNG;
             lbl_layer_lithoHorOverlay_exp.ToolTip = "3-sigma horizontal overlay.";
             sigma_tl.Rows[0].Cells.Add(new TableCell());
@@ -866,7 +872,7 @@ namespace Variance
             sigma_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoVerOverlay_exp = new Label();
-            lbl_layer_lithoVerOverlay_exp.Text = "Ver Overlay";
+            lbl_layer_lithoVerOverlay_exp.Text = "3-sigma";
             lbl_layer_lithoVerOverlay_exp.MouseDoubleClick += vOverlay_RNG;
             lbl_layer_lithoVerOverlay_exp.ToolTip = "3-sigma verizontal overlay.";
             sigma_tl.Rows[0].Cells.Add(new TableCell());
