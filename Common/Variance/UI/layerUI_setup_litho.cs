@@ -50,9 +50,7 @@ namespace Variance
                 litho_scdu(groupBox_layer_lithography_table);
                 litho_tcdu(groupBox_layer_lithography_table);
                 litho_xol(groupBox_layer_lithography_table);
-                litho_colx(groupBox_layer_lithography_table);
                 litho_yol(groupBox_layer_lithography_table);
-                litho_coly(groupBox_layer_lithography_table);
             });
         }
 
@@ -218,14 +216,18 @@ namespace Variance
             TableRow lit_lwr = new TableRow();
             groupBox_layer_lithography_table.Rows.Add(lit_lwr);
 
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "LWR";
+
             Panel outer = new Panel();
+            outer_gb.Content = outer;
 
             TableLayout tl = new TableLayout();
             tl.Rows.Add(new TableRow());
 
             outer.Content = tl;
 
-            lit_lwr.Cells.Add(new TableCell() { Control = outer });
+            lit_lwr.Cells.Add(new TableCell() { Control = outer_gb });
 
             Panel p1 = new Panel();
             TableLayout p1tl = new TableLayout();
@@ -326,14 +328,18 @@ namespace Variance
             TableRow lit_lwr2 = new TableRow();
             groupBox_layer_lithography_table.Rows.Add(lit_lwr2);
 
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "LWR2";
+
             Panel outer = new Panel();
+            outer_gb.Content = outer;
 
             TableLayout tl = new TableLayout();
             tl.Rows.Add(new TableRow());
 
             outer.Content = tl;
 
-            lit_lwr2.Cells.Add(new TableCell() { Control = outer });
+            lit_lwr2.Cells.Add(new TableCell() { Control = outer_gb });
 
             Panel p1 = new Panel();
             TableLayout p1tl = new TableLayout();
@@ -428,7 +434,7 @@ namespace Variance
                 rB_CLWR2++;
             }
         }
-        
+
         // SCDU
         void litho_scdu(TableLayout groupBox_layer_lithography_table)
         {
@@ -443,7 +449,7 @@ namespace Variance
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
             groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true } );
+            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
             // Table layout within cell.
             TableCell lit_tr2_0 = new TableCell();
@@ -531,7 +537,7 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout row4_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row4_tl});
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row4_tl });
             outer.Content = outer_tl;
             row4_tl.Rows.Add(new TableRow());
 
@@ -619,38 +625,55 @@ namespace Variance
             }
         }
 
-        // XOL, XOLR
+        // XOL, XOLR, XCOL
         void litho_xol(TableLayout groupBox_layer_lithography_table)
         {
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "Horizontal Overlay";
             Panel outer = new Panel();
+            outer_gb.Content = outer;
             TableLayout outer_tl = new TableLayout();
-            TableLayout row5_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row5_tl });
+
+            Panel left = new Panel();
+            TableLayout left_tl = new TableLayout();
+            left_tl.Rows.Add(new TableRow());
+            Panel mid = new Panel();
+            TableLayout mid_tl = new TableLayout();
+            mid_tl.Rows.Add(new TableRow());
+            Panel right = new Panel();
+            TableLayout right_tl = new TableLayout();
+            right_tl.Rows.Add(new TableRow());
+
+            left.Content = left_tl;
+            mid.Content = mid_tl;
+            right.Content = right_tl;
+
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = left });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = mid, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = right });
             outer.Content = outer_tl;
-            row5_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
 
             // Table layout within cell.
-            TableCell lit_tr5_0 = new TableCell();
-            row5_tl.Rows[0].Cells.Add(lit_tr5_0);
+            TableCell sigma_tc = new TableCell();
+            left_tl.Rows[0].Cells.Add(sigma_tc);
 
-            TableLayout lit_tr5_0_tl = new TableLayout();
-            lit_tr5_0.Control = lit_tr5_0_tl;
+            TableLayout sigma_tl = new TableLayout();
+            sigma_tc.Control = sigma_tl;
 
-            lit_tr5_0_tl.Rows.Add(new TableRow());
+            sigma_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoHorOverlay_exp = new Label();
             lbl_layer_lithoHorOverlay_exp.Text = "Hor Overlay";
             lbl_layer_lithoHorOverlay_exp.MouseDoubleClick += hOverlay_RNG;
             lbl_layer_lithoHorOverlay_exp.ToolTip = "3-sigma horizontal overlay.";
-            lit_tr5_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr5_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoHorOverlay_exp;
-            lit_tr5_0_tl.Rows[0].Cells[0].ScaleWidth = true;
+            sigma_tl.Rows[0].Cells.Add(new TableCell());
+            sigma_tl.Rows[0].Cells[0].Control = lbl_layer_lithoHorOverlay_exp;
+            sigma_tl.Rows[0].Cells[0].ScaleWidth = true;
 
             num_layer_lithoHorOverlay_exp = new NumericStepper();
             num_layer_lithoHorOverlay_exp.Increment = 0.1;
@@ -658,40 +681,40 @@ namespace Variance
             num_layer_lithoHorOverlay_exp.MinValue = 0;
             num_layer_lithoHorOverlay_exp.ToolTip = "3-sigma horizontal overlay.";
             setSize(num_layer_lithoHorOverlay_exp, 55, num_Height);
-            lit_tr5_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr5_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoHorOverlay_exp);
+            sigma_tl.Rows[0].Cells.Add(new TableCell());
+            sigma_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoHorOverlay_exp);
 
-            row5_tl.Rows[row5_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
-            TableCell lit_tr5_1 = new TableCell();
-            row5_tl.Rows[row5_tl.Rows.Count - 1].Cells.Add(lit_tr5_1);
+            TableCell check_tc = new TableCell();
+            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(check_tc);
 
-            TableLayout lit_tr5_1_tl = new TableLayout();
-            lit_tr5_1.Control = lit_tr5_1_tl;
+            TableLayout check_tl = new TableLayout();
+            check_tc.Control = check_tl;
 
-            lit_tr5_1_tl.Rows.Add(new TableRow());
+            check_tl.Rows.Add(new TableRow());
+            check_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
             checkBox_layer_overlayXReference_Av_exp = new CheckBox();
             checkBox_layer_overlayXReference_Av_exp.Text = "Av";
             checkBox_layer_overlayXReference_Av_exp.ToolTip = "Use the average displaced location of layers as a reference for horizontal overlay";
-            lit_tr5_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr5_1_tl.Rows[0].Cells[0].Control = TableLayout.AutoSized(checkBox_layer_overlayXReference_Av_exp);
+            check_tl.Rows[0].Cells.Add(new TableCell());
+            check_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(checkBox_layer_overlayXReference_Av_exp);
 
-            TableCell lit_tr5_2 = new TableCell();
-            row5_tl.Rows[row5_tl.Rows.Count - 1].Cells.Add(lit_tr5_2);
+            TableCell right_tc = new TableCell();
+            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc);
 
             groupBox_layer_overlayXReference_exp = new GroupBox();
-            TableLayout groupBox_layer_overlayXReference_table = new TableLayout();
+            TableLayout groupBox_layer_overlayXReference_content = new TableLayout();
             groupBox_layer_overlayXReference_exp.Text = "X Overlay Reference";
-            groupBox_layer_overlayXReference_exp.Content = groupBox_layer_overlayXReference_table;
+            groupBox_layer_overlayXReference_exp.Content = groupBox_layer_overlayXReference_content;
             pnl_overlayRefX = new Panel();
-            lit_tr5_2.Control = pnl_overlayRefX;
-            pnl_overlayRefX.Content = groupBox_layer_overlayXReference_exp;
+            right_tc.Control = pnl_overlayRefX;
 
             TableRow olrx_tr0 = new TableRow();
-            groupBox_layer_overlayXReference_table.Rows.Add(olrx_tr0);
+            groupBox_layer_overlayXReference_content.Rows.Add(olrx_tr0);
             TableRow olrx_tr1 = new TableRow();
-            groupBox_layer_overlayXReference_table.Rows.Add(olrx_tr1);
+            groupBox_layer_overlayXReference_content.Rows.Add(olrx_tr1);
 
             rB_layer_OLRX_exp[0] = new RadioButton();
             rB_layer_OLRX_exp[0].Text = "0";
@@ -700,18 +723,19 @@ namespace Variance
             TableCell rB_layer_OLRX_0tc = new TableCell();
             rB_layer_OLRX_0tc.Control = rB_layer_OLRX_exp[0];
 
-            groupBox_layer_overlayXReference_table.Rows[0].Cells.Add(rB_layer_OLRX_0tc);
+            groupBox_layer_overlayXReference_content.Rows[0].Cells.Add(rB_layer_OLRX_0tc);
 
             int rB_OLRX = 1;
             int olrx_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
+                // Don't add a button for our current layer
                 rB_layer_OLRX_exp[rB_OLRX] = new RadioButton(rB_layer_OLRX_exp[0]);
                 rB_layer_OLRX_exp[rB_OLRX].Text = rB_OLRX.ToString();
                 rB_layer_OLRX_exp[rB_OLRX].Checked = false;
                 TableCell tc0 = new TableCell();
                 tc0.Control = rB_layer_OLRX_exp[rB_OLRX];
-                groupBox_layer_overlayXReference_table.Rows[olrx_rowIndex].Cells.Add(tc0);
+                groupBox_layer_overlayXReference_content.Rows[olrx_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if (rB_OLRX + 1 == CentralProperties.maxLayersForMC / 2)
                 {
@@ -741,69 +765,30 @@ namespace Variance
                 tc0.Control = cB_layer_OLRX_Av_exp[cb];
                 groupBox_layer_overlayXReference_Av_table.Rows[avolrx_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (cb + 1 == CentralProperties.maxLayersForMC / 2)
+                if ((cb + 1) == CentralProperties.maxLayersForMC / 2)
                 {
                     avolrx_rowIndex++;
                 }
             }
-        }
+            pnl_overlayRefX.Content = groupBox_layer_overlayXReference_exp;
 
-        // COLX
-        void litho_colx(TableLayout groupBox_layer_lithography_table)
-        {
-            Panel outer = new Panel();
-            TableLayout outer_tl = new TableLayout();
-            TableLayout row6_tl = new TableLayout();
-            outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row6_tl) });
-            outer.Content = outer_tl;
-            row6_tl.Rows.Add(new TableRow());
+            left_tl.Rows.Add(new TableRow());
+            mid_tl.Rows.Add(new TableRow());
+            right_tl.Rows.Add(new TableRow());
 
-            // Outer table, row 1
-            groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
-            // Table layout within cell.
-            TableCell lit_tr6_0 = new TableCell();
-            row6_tl.Rows[0].Cells.Add(lit_tr6_0);
 
-            TableLayout lit_tr6_0_tl = new TableLayout();
-            lit_tr6_0.Control = lit_tr6_0_tl;
+            TableCell right_tc2 = new TableCell();
+            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc2);
 
-            lit_tr6_0_tl.Rows.Add(new TableRow());
-
-            lit_tr6_0_tl.Rows.Add(new TableRow());
-
-            Panel p1 = new Panel();
-            lit_tr6_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr6_0_tl.Rows[0].Cells[0].Control = p1;
-
-            Panel p2 = new Panel();
-            lit_tr6_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr6_0_tl.Rows[0].Cells[1].Control = p2;
-
-            TableCell lit_tr6_1 = new TableCell();
-            row6_tl.Rows[row6_tl.Rows.Count - 1].Cells.Add(lit_tr6_1);
-
-            TableLayout lit_tr6_1_tl = new TableLayout();
-            lit_tr6_1.Control = lit_tr6_1_tl;
-
-            lit_tr6_1_tl.Rows.Add(new TableRow());
-
-            Panel p3 = new Panel();
-            lit_tr6_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr6_1_tl.Rows[0].Cells[0].Control = p3;
-
-            TableCell lit_tr5_2 = new TableCell();
-            row6_tl.Rows[row6_tl.Rows.Count - 1].Cells.Add(lit_tr5_2);
 
             groupBox_layer_overlayXCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_overlayXCorrelation_content = new TableLayout();
             groupBox_layer_overlayXCorrelation_exp.Text = "X Overlay Correlation";
             groupBox_layer_overlayXCorrelation_exp.Content = groupBox_layer_overlayXCorrelation_content;
-            lit_tr5_2.Control = groupBox_layer_overlayXCorrelation_exp;
+            right_tc2.Control = groupBox_layer_overlayXCorrelation_exp;
 
             TableRow olcx_tr0 = new TableRow();
             groupBox_layer_overlayXCorrelation_content.Rows.Add(olcx_tr0);
@@ -838,38 +823,55 @@ namespace Variance
             }
         }
 
-        // YOL, YOLR
+        // YOL, YOLR, YCOL
         void litho_yol(TableLayout groupBox_layer_lithography_table)
         {
+            GroupBox outer_gb = new GroupBox();
+            outer_gb.Text = "Vertical Overlay";
             Panel outer = new Panel();
+            outer_gb.Content = outer;
             TableLayout outer_tl = new TableLayout();
-            TableLayout row7_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = row7_tl });
+
+            Panel left = new Panel();
+            TableLayout left_tl = new TableLayout();
+            left_tl.Rows.Add(new TableRow());
+            Panel mid = new Panel();
+            TableLayout mid_tl = new TableLayout();
+            mid_tl.Rows.Add(new TableRow());
+            Panel right = new Panel();
+            TableLayout right_tl = new TableLayout();
+            right_tl.Rows.Add(new TableRow());
+
+            left.Content = left_tl;
+            mid.Content = mid_tl;
+            right.Content = right_tl;
+
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = left });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = mid, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = right });
             outer.Content = outer_tl;
-            row7_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
 
             // Table layout within cell.
-            TableCell lit_tr7_0 = new TableCell();
-            row7_tl.Rows[0].Cells.Add(lit_tr7_0);
+            TableCell sigma_tc = new TableCell();
+            left_tl.Rows[0].Cells.Add(sigma_tc);
 
-            TableLayout lit_tr7_0_tl = new TableLayout();
-            lit_tr7_0.Control = lit_tr7_0_tl;
+            TableLayout sigma_tl = new TableLayout();
+            sigma_tc.Control = sigma_tl;
 
-            lit_tr7_0_tl.Rows.Add(new TableRow());
+            sigma_tl.Rows.Add(new TableRow());
 
             lbl_layer_lithoVerOverlay_exp = new Label();
             lbl_layer_lithoVerOverlay_exp.Text = "Ver Overlay";
             lbl_layer_lithoVerOverlay_exp.MouseDoubleClick += vOverlay_RNG;
             lbl_layer_lithoVerOverlay_exp.ToolTip = "3-sigma verizontal overlay.";
-            lit_tr7_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr7_0_tl.Rows[0].Cells[0].Control = lbl_layer_lithoVerOverlay_exp;
-            lit_tr7_0_tl.Rows[0].Cells[0].ScaleWidth = true;
+            sigma_tl.Rows[0].Cells.Add(new TableCell());
+            sigma_tl.Rows[0].Cells[0].Control = lbl_layer_lithoVerOverlay_exp;
+            sigma_tl.Rows[0].Cells[0].ScaleWidth = true;
 
             num_layer_lithoVerOverlay_exp = new NumericStepper();
             num_layer_lithoVerOverlay_exp.Increment = 0.1;
@@ -877,34 +879,35 @@ namespace Variance
             num_layer_lithoVerOverlay_exp.MinValue = 0;
             num_layer_lithoVerOverlay_exp.ToolTip = "3-sigma vertical overlay.";
             setSize(num_layer_lithoVerOverlay_exp, 55, num_Height);
-            lit_tr7_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr7_0_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoVerOverlay_exp);
+            sigma_tl.Rows[0].Cells.Add(new TableCell());
+            sigma_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(num_layer_lithoVerOverlay_exp);
 
-            row7_tl.Rows[row7_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
-            TableCell lit_tr7_1 = new TableCell();
-            row7_tl.Rows[row7_tl.Rows.Count - 1].Cells.Add(lit_tr7_1);
+            TableCell check_tc = new TableCell();
+            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(check_tc);
 
-            TableLayout lit_tr7_1_tl = new TableLayout();
-            lit_tr7_1.Control = lit_tr7_1_tl;
+            TableLayout check_tl = new TableLayout();
+            check_tc.Control = check_tl;
 
-            lit_tr7_1_tl.Rows.Add(new TableRow());
+            check_tl.Rows.Add(new TableRow());
+            check_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
             checkBox_layer_overlayYReference_Av_exp = new CheckBox();
             checkBox_layer_overlayYReference_Av_exp.Text = "Av";
             checkBox_layer_overlayYReference_Av_exp.ToolTip = "Use the average displaced location of layers as a reference for vertical overlay";
-            lit_tr7_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr7_1_tl.Rows[0].Cells[0].Control = TableLayout.AutoSized(checkBox_layer_overlayYReference_Av_exp);
+            check_tl.Rows[0].Cells.Add(new TableCell());
+            check_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(checkBox_layer_overlayYReference_Av_exp);
 
-            TableCell lit_tr7_2 = new TableCell();
-            row7_tl.Rows[row7_tl.Rows.Count - 1].Cells.Add(lit_tr7_2);
+            TableCell right_tc = new TableCell();
+            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc);
 
             groupBox_layer_overlayYReference_exp = new GroupBox();
             TableLayout groupBox_layer_overlayYReference_content = new TableLayout();
             groupBox_layer_overlayYReference_exp.Text = "Y Overlay Reference";
             groupBox_layer_overlayYReference_exp.Content = groupBox_layer_overlayYReference_content;
             pnl_overlayRefY = new Panel();
-            lit_tr7_2.Control = pnl_overlayRefY;
+            right_tc.Control = pnl_overlayRefY;
 
             TableRow olry_tr0 = new TableRow();
             groupBox_layer_overlayYReference_content.Rows.Add(olry_tr0);
@@ -966,64 +969,24 @@ namespace Variance
                 }
             }
             pnl_overlayRefY.Content = groupBox_layer_overlayYReference_exp;
-        }
 
-        // COLY
-        void litho_coly(TableLayout groupBox_layer_lithography_table)
-        {
-            Panel outer = new Panel();
-            TableLayout outer_tl = new TableLayout();
-            TableLayout row8_tl = new TableLayout();
-            outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(row8_tl) });
-            outer.Content = outer_tl;
-            row8_tl.Rows.Add(new TableRow());
+            left_tl.Rows.Add(new TableRow());
+            mid_tl.Rows.Add(new TableRow());
+            right_tl.Rows.Add(new TableRow());
 
-            // Outer table, row 1
-            groupBox_layer_lithography_table.Rows.Add(new TableRow());
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
-            groupBox_layer_lithography_table.Rows[groupBox_layer_lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
-            // Table layout within cell.
-            TableCell lit_tr8_0 = new TableCell();
-            row8_tl.Rows[0].Cells.Add(lit_tr8_0);
 
-            TableLayout lit_tr8_0_tl = new TableLayout();
-            lit_tr8_0.Control = lit_tr8_0_tl;
+            TableCell right_tc2 = new TableCell();
+            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc2);
 
-            lit_tr8_0_tl.Rows.Add(new TableRow());
-
-            lit_tr8_0_tl.Rows.Add(new TableRow());
-
-            Panel p1 = new Panel();
-            lit_tr8_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr8_0_tl.Rows[0].Cells[0].Control = p1;
-
-            Panel p2 = new Panel();
-            lit_tr8_0_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr8_0_tl.Rows[0].Cells[1].Control = p2;
-
-            TableCell lit_tr8_1 = new TableCell();
-            row8_tl.Rows[row8_tl.Rows.Count - 1].Cells.Add(lit_tr8_1);
-
-            TableLayout lit_tr8_1_tl = new TableLayout();
-            lit_tr8_1.Control = lit_tr8_1_tl;
-
-            lit_tr8_1_tl.Rows.Add(new TableRow());
-
-            Panel p3 = new Panel();
-            lit_tr8_1_tl.Rows[0].Cells.Add(new TableCell());
-            lit_tr8_1_tl.Rows[0].Cells[0].Control = p3;
-
-            TableCell lit_tr8_2 = new TableCell();
-            row8_tl.Rows[row8_tl.Rows.Count - 1].Cells.Add(lit_tr8_2);
 
             groupBox_layer_overlayYCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_overlayYCorrelation_content = new TableLayout();
             groupBox_layer_overlayYCorrelation_exp.Text = "Y Overlay Correlation";
             groupBox_layer_overlayYCorrelation_exp.Content = groupBox_layer_overlayYCorrelation_content;
-            lit_tr8_2.Control = groupBox_layer_overlayYCorrelation_exp;
+            right_tc2.Control = groupBox_layer_overlayYCorrelation_exp;
 
             TableRow olcy_tr0 = new TableRow();
             groupBox_layer_overlayYCorrelation_content.Rows.Add(olcy_tr0);
