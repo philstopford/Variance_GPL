@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.4a1
 
+	- Allow viewport background color to be changed.
 	- External file generation control via filtering of result conditions.
 	 - Allows for 'fail' cases only to be exported based on user criteria.
 	> Experimental dark UI mode for Windows.
