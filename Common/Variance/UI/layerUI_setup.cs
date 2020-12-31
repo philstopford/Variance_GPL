@@ -595,9 +595,10 @@ namespace Variance
 
             layerGadgets_table.Rows.Add(new TableRow());
 
-            Panel p = new Panel();
-            p.Content = TableLayout.AutoSized(layerGadgets_table);
-            tc.Control = p;
+            GroupBox gadgets_gb = new GroupBox();
+            gadgets_gb.Text = "Layer";
+            gadgets_gb.Content = TableLayout.AutoSized(layerGadgets_table);
+            tc.Control = gadgets_gb;
         }
 
         void layerGadgets_row1(TableLayout layerGadgets_table)
