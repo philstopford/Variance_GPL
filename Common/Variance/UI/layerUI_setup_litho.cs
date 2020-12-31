@@ -229,24 +229,25 @@ namespace Variance
 
             lit_lwr.Cells.Add(new TableCell() { Control = outer_gb });
 
-            Panel p1 = new Panel();
-            TableLayout p1tl = new TableLayout();
-            p1tl.Rows.Add(new TableRow());
-            p1.Content = p1tl;
-            Panel p2 = new Panel();
-            TableLayout p2tl = new TableLayout();
-            p2tl.Rows.Add(new TableRow());
-            p2.Content = p2tl;
+            Panel leftPnl = new Panel();
+            TableLayout left_tl = new TableLayout();
+            left_tl.Rows.Add(new TableRow());
+            leftPnl.Content = left_tl;
+            Panel rightPnl = new Panel();
 
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = leftPnl });
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p2 });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rightPnl });
+
+            TableLayout upper_tl = new TableLayout();
+            upper_tl.Rows.Add(new TableRow());
+            left_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(upper_tl) });
 
             lbl_layer_lithoLWR_exp = new Label();
             lbl_layer_lithoLWR_exp.Text = "3-sigma";
             lbl_layer_lithoLWR_exp.MouseDoubleClick += lwr_RNG;
             lbl_layer_lithoLWR_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR_exp });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR_exp });
 
             num_layer_lithoLWR_exp = new NumericStepper();
             num_layer_lithoLWR_exp.Increment = 0.1;
@@ -254,12 +255,12 @@ namespace Variance
             num_layer_lithoLWR_exp.MinValue = 0;
             num_layer_lithoLWR_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
             setSize(num_layer_lithoLWR_exp, 55, (int)(label_Height * uiScaleFactor));
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR_exp) });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR_exp) });
 
             lbl_layer_lithoLWRFreq_exp = new Label();
             lbl_layer_lithoLWRFreq_exp.Text = "Freq";
             lbl_layer_lithoLWRFreq_exp.ToolTip = "Frequency of LWR";
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWRFreq_exp });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWRFreq_exp });
 
             num_layer_lithoLWRFreq_exp = new NumericStepper();
             num_layer_lithoLWRFreq_exp.Increment = 0.1;
@@ -268,27 +269,21 @@ namespace Variance
             num_layer_lithoLWRFreq_exp.MinValue = 0.01;
             num_layer_lithoLWRFreq_exp.ToolTip = "Frequency of LWR";
             setSize(num_layer_lithoLWRFreq_exp, 55, num_Height);
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWRFreq_exp) });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWRFreq_exp) });
 
             comboBox_layerLWRNoiseType_exp = new DropDown();
             comboBox_layerLWRNoiseType_exp.DataContext = DataContext;
             comboBox_layerLWRNoiseType_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.noiseTypeList);
             comboBox_layerLWRNoiseType_exp.SelectedIndex = 0;
             comboBox_layerLWRNoiseType_exp.ToolTip = "Noise type for LWR";
-            p1tl.Rows.Add(new TableRow());
-            p1tl.Rows[1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerLWRNoiseType_exp) });
-
-            TableLayout ptl = new TableLayout();
-            p2.Content = ptl;
-            ptl.Rows.Add(new TableRow());
-            TableCell ptc = new TableCell();
-            ptl.Rows[0].Cells.Add(ptc);
+            left_tl.Rows.Add(new TableRow());
+            left_tl.Rows[1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerLWRNoiseType_exp) });
 
             groupBox_layer_LWRCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_LWRCorrelation_content = new TableLayout();
             groupBox_layer_LWRCorrelation_exp.Text = "LWR Seed Correlation";
             groupBox_layer_LWRCorrelation_exp.Content = groupBox_layer_LWRCorrelation_content;
-            ptc.Control = groupBox_layer_LWRCorrelation_exp;
+            rightPnl.Content = groupBox_layer_LWRCorrelation_exp;
 
             TableRow clwr_tr0 = new TableRow();
             groupBox_layer_LWRCorrelation_content.Rows.Add(clwr_tr0);
@@ -325,8 +320,8 @@ namespace Variance
 
         void litho_lwr2(TableLayout groupBox_layer_lithography_table)
         {
-            TableRow tr0 = new TableRow();
-            groupBox_layer_lithography_table.Rows.Add(tr0);
+            TableRow lit_lwr = new TableRow();
+            groupBox_layer_lithography_table.Rows.Add(lit_lwr);
 
             GroupBox outer_gb = new GroupBox();
             outer_gb.Text = "LWR2";
@@ -339,26 +334,27 @@ namespace Variance
 
             outer.Content = tl;
 
-            tr0.Cells.Add(new TableCell() { Control = outer_gb });
+            lit_lwr.Cells.Add(new TableCell() { Control = outer_gb });
 
-            Panel p1 = new Panel();
-            TableLayout p1tl = new TableLayout();
-            p1tl.Rows.Add(new TableRow());
-            p1.Content = p1tl;
-            Panel p2 = new Panel();
-            TableLayout p2tl = new TableLayout();
-            p2tl.Rows.Add(new TableRow());
-            p2.Content = p2tl;
+            Panel leftPnl = new Panel();
+            TableLayout left_tl = new TableLayout();
+            left_tl.Rows.Add(new TableRow());
+            leftPnl.Content = left_tl;
+            Panel rightPnl = new Panel();
 
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p1 });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = p2 });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = leftPnl });
             tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rightPnl });
+
+            TableLayout upper_tl = new TableLayout();
+            upper_tl.Rows.Add(new TableRow());
+            left_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(upper_tl) });
 
             lbl_layer_lithoLWR2_exp = new Label();
             lbl_layer_lithoLWR2_exp.Text = "3-sigma";
             lbl_layer_lithoLWR2_exp.MouseDoubleClick += lwr_RNG;
             lbl_layer_lithoLWR2_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR2_exp });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR2_exp });
 
             num_layer_lithoLWR2_exp = new NumericStepper();
             num_layer_lithoLWR2_exp.Increment = 0.1;
@@ -366,46 +362,40 @@ namespace Variance
             num_layer_lithoLWR2_exp.MinValue = 0;
             num_layer_lithoLWR2_exp.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
             setSize(num_layer_lithoLWR2_exp, 55, (int)(label_Height * uiScaleFactor));
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR2_exp) });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR2_exp) });
 
             lbl_layer_lithoLWR2Freq_exp = new Label();
             lbl_layer_lithoLWR2Freq_exp.Text = "Freq";
-            lbl_layer_lithoLWR2Freq_exp.ToolTip = "Frequency of LWR2";
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR2Freq_exp });
+            lbl_layer_lithoLWR2Freq_exp.ToolTip = "Frequency of LWR";
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_lithoLWR2Freq_exp });
 
             num_layer_lithoLWR2Freq_exp = new NumericStepper();
             num_layer_lithoLWR2Freq_exp.Increment = 0.1;
             num_layer_lithoLWR2Freq_exp.DecimalPlaces = 2;
             num_layer_lithoLWR2Freq_exp.Value = 0.1;
             num_layer_lithoLWR2Freq_exp.MinValue = 0.01;
-            num_layer_lithoLWR2Freq_exp.ToolTip = "Frequency of LWR2";
+            num_layer_lithoLWR2Freq_exp.ToolTip = "Frequency of LWR";
             setSize(num_layer_lithoLWR2Freq_exp, 55, num_Height);
-            p1tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR2Freq_exp) });
+            upper_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoLWR2Freq_exp) });
 
             comboBox_layerLWR2NoiseType_exp = new DropDown();
             comboBox_layerLWR2NoiseType_exp.DataContext = DataContext;
             comboBox_layerLWR2NoiseType_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.noiseTypeList);
             comboBox_layerLWR2NoiseType_exp.SelectedIndex = 0;
-            comboBox_layerLWR2NoiseType_exp.ToolTip = "Noise type for LWR2";
-            p1tl.Rows.Add(new TableRow());
-            p1tl.Rows[1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerLWR2NoiseType_exp) });
-
-            TableLayout ptl = new TableLayout();
-            p2.Content = ptl;
-            ptl.Rows.Add(new TableRow());
-            TableCell ptc = new TableCell();
-            ptl.Rows[0].Cells.Add(ptc);
+            comboBox_layerLWR2NoiseType_exp.ToolTip = "Noise type for LWR";
+            left_tl.Rows.Add(new TableRow());
+            left_tl.Rows[1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerLWR2NoiseType_exp) });
 
             groupBox_layer_LWR2Correlation_exp = new GroupBox();
             TableLayout groupBox_layer_LWR2Correlation_content = new TableLayout();
-            groupBox_layer_LWR2Correlation_exp.Text = "LWR2 Seed Correlation";
+            groupBox_layer_LWR2Correlation_exp.Text = "LWR Seed Correlation";
             groupBox_layer_LWR2Correlation_exp.Content = groupBox_layer_LWR2Correlation_content;
-            ptc.Control = groupBox_layer_LWR2Correlation_exp;
+            rightPnl.Content = groupBox_layer_LWR2Correlation_exp;
 
-            TableRow clwr2_tr0 = new TableRow();
-            groupBox_layer_LWR2Correlation_content.Rows.Add(clwr2_tr0);
-            TableRow clwr2_tr1 = new TableRow();
-            groupBox_layer_LWR2Correlation_content.Rows.Add(clwr2_tr1);
+            TableRow clwr_tr0 = new TableRow();
+            groupBox_layer_LWR2Correlation_content.Rows.Add(clwr_tr0);
+            TableRow clwr_tr1 = new TableRow();
+            groupBox_layer_LWR2Correlation_content.Rows.Add(clwr_tr1);
 
             rB_layer_CLWR2_exp[0] = new RadioButton();
             rB_layer_CLWR2_exp[0].Text = "0";
@@ -416,22 +406,22 @@ namespace Variance
 
             groupBox_layer_LWR2Correlation_content.Rows[0].Cells.Add(rB_layer_CLWR2_0tc);
 
-            int rB_CLWR2 = 1;
-            int clwr2_rowIndex = 0;
+            int rB_CLWR = 1;
+            int clwr_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_layer_CLWR2_exp[rB_CLWR2] = new RadioButton(rB_layer_CLWR2_exp[0]);
-                rB_layer_CLWR2_exp[rB_CLWR2].Text = rB_CLWR2.ToString();
-                rB_layer_CLWR2_exp[rB_CLWR2].Checked = false;
+                rB_layer_CLWR2_exp[rB_CLWR] = new RadioButton(rB_layer_CLWR2_exp[0]);
+                rB_layer_CLWR2_exp[rB_CLWR].Text = rB_CLWR.ToString();
+                rB_layer_CLWR2_exp[rB_CLWR].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = rB_layer_CLWR2_exp[rB_CLWR2];
-                groupBox_layer_LWR2Correlation_content.Rows[clwr2_rowIndex].Cells.Add(tc0);
+                tc0.Control = rB_layer_CLWR2_exp[rB_CLWR];
+                groupBox_layer_LWR2Correlation_content.Rows[clwr_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_CLWR2 + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_CLWR + 1 == CentralProperties.maxLayersForMC / 2)
                 {
-                    clwr2_rowIndex++;
+                    clwr_rowIndex++;
                 }
-                rB_CLWR2++;
+                rB_CLWR++;
             }
         }
 
