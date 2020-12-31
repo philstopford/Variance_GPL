@@ -526,6 +526,17 @@ namespace Variance
 
             try
             {
+                string layerCol = "axisColor";
+                varianceContext.vc.colors.axis_Color.R = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("R").First().Value);
+                varianceContext.vc.colors.axis_Color.G = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("G").First().Value);
+                varianceContext.vc.colors.axis_Color.B = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("B").First().Value);
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
                 string layerCol = "minorColor";
                 varianceContext.vc.colors.minor_Color.R = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("R").First().Value);
                 varianceContext.vc.colors.minor_Color.G = Convert.ToInt32(prefs.Descendants("colors").Descendants(layerCol).Descendants("G").First().Value);
@@ -776,6 +787,12 @@ namespace Variance
                     new XElement("G", varianceContext.vc.colors.enabled_Color.G),
                     new XElement("B", varianceContext.vc.colors.enabled_Color.B));
                 colorPrefs.Add(enabledColor);
+
+                XElement axisColor = new XElement("axisColor",
+                    new XElement("R", varianceContext.vc.colors.axis_Color.R),
+                    new XElement("G", varianceContext.vc.colors.axis_Color.G),
+                    new XElement("B", varianceContext.vc.colors.axis_Color.B));
+                colorPrefs.Add(axisColor);
 
                 XElement majorColor = new XElement("majorColor",
                     new XElement("R", varianceContext.vc.colors.major_Color.R),
@@ -1884,6 +1901,7 @@ namespace Variance
                 mcVPSettings[i].drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
                 mcVPSettings[i].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
                 mcVPSettings[i].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+                mcVPSettings[i].axisColor = Color.FromArgb(commonVars.getColors().axis_Color.toArgb());
                 mcVPSettings[i].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
             }
             mcVPSettings[mcVPSettings.Length - 2].drawDrawn(true);
@@ -1896,6 +1914,7 @@ namespace Variance
             otkVPSettings_implant.drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
             otkVPSettings_implant.minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
             otkVPSettings_implant.majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+            otkVPSettings_implant.axisColor = Color.FromArgb(commonVars.getColors().axis_Color.toArgb());
             otkVPSettings_implant.backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
         }
 

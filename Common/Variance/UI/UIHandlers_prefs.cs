@@ -120,6 +120,10 @@ namespace Variance
                 {
                     varianceContext.vc.colors.major_Color = UIHelper.colorToMyColor(colDialogColor);
                 }
+                if (id == lbl_axisColor)
+                {
+                    varianceContext.vc.colors.axis_Color = UIHelper.colorToMyColor(colDialogColor);
+                }
                 if (id == lbl_vpbgColor)
                 {
                     varianceContext.vc.colors.background_Color = UIHelper.colorToMyColor(colDialogColor);
@@ -290,6 +294,10 @@ namespace Variance
                         sourceColor = UIHelper.myColorToColor(varianceContext.vc.colors.subshape3_Color);
                     }
 
+                    if (senderLabel == lbl_axisColor)
+                    {
+                        sourceColor = UIHelper.myColorToColor(varianceContext.vc.colors.axis_Color);
+                    }
                     if (senderLabel == lbl_majorGridColor)
                     {
                         sourceColor = UIHelper.myColorToColor(varianceContext.vc.colors.major_Color);

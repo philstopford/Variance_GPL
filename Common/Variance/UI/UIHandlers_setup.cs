@@ -167,6 +167,7 @@ namespace Variance
                 lbl_minorGridColor.MouseDoubleClick += layerColorChange;
                 lbl_majorGridColor.MouseDoubleClick += layerColorChange;
                 lbl_vpbgColor.MouseDoubleClick += layerColorChange;
+                lbl_axisColor.MouseDoubleClick += layerColorChange;
 
                 lbl_Result1Color.MouseDoubleClick += layerColorChange;
                 lbl_Result2Color.MouseDoubleClick += layerColorChange;

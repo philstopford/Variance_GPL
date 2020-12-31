@@ -27,7 +27,7 @@ namespace Variance
                 lbl_Result1Color, lbl_Result2Color, lbl_Result3Color, lbl_Result4Color,
                 lbl_ss1Color, lbl_ss2Color, lbl_ss3Color,
                 lbl_implantMinColor, lbl_implantMeanColor, lbl_implantMaxColor, lbl_implantResistColor,
-                lbl_enabledColor, lbl_majorGridColor, lbl_minorGridColor, lbl_vpbgColor, 
+                lbl_enabledColor, lbl_majorGridColor, lbl_minorGridColor, lbl_axisColor, lbl_vpbgColor, 
                 lbl_Layer1Color_name, lbl_Layer2Color_name, lbl_Layer3Color_name, lbl_Layer4Color_name,
                 lbl_Layer5Color_name, lbl_Layer6Color_name, lbl_Layer7Color_name, lbl_Layer8Color_name,
                 lbl_Layer9Color_name, lbl_Layer10Color_name, lbl_Layer11Color_name, lbl_Layer12Color_name,
@@ -35,7 +35,7 @@ namespace Variance
                 lbl_Result1Color_name, lbl_Result2Color_name, lbl_Result3Color_name, lbl_Result4Color_name,
                 lbl_ss1Color_name, lbl_ss2Color_name, lbl_ss3Color_name,
                 lbl_implantMinColor_name, lbl_implantMeanColor_name, lbl_implantMaxColor_name, lbl_implantResistColor_name,
-                lbl_enabledColor_name, lbl_majorGridColor_name, lbl_minorGridColor_name, lbl_vpbgColor_name, 
+                lbl_enabledColor_name, lbl_majorGridColor_name, lbl_minorGridColor_name, lbl_axisColor_name, lbl_vpbgColor_name, 
                 lbl_emailAddress, lbl_emailPwd, lbl_server, lbl_port, lbl_zoomSpeed, lbl_fgOpacity, lbl_bgOpacity;
 
         ListBox listBox_rngCustomMapping;
@@ -566,17 +566,30 @@ namespace Variance
             c2.Content = c2TL;
             c2TL.Rows.Add(new TableRow());
 
-            lbl_vpbgColor = new Label();
-            lbl_vpbgColor.BackgroundColor = UIHelper.myColorToColor(commonVars.getColors().background_Color);
-            setSize(lbl_vpbgColor, label_Height, label_Height);
-            c2TL.Rows[0].Cells.Add(lbl_vpbgColor);
+            lbl_axisColor = new Label();
+            lbl_axisColor.BackgroundColor = UIHelper.myColorToColor(commonVars.getColors().axis_Color);
+            setSize(lbl_axisColor, label_Height, label_Height);
+            c2TL.Rows[0].Cells.Add(lbl_axisColor);
 
-            lbl_vpbgColor_name = new Label();
-            lbl_vpbgColor_name.Text = "VP Background";
-            c2TL.Rows[0].Cells.Add(lbl_vpbgColor_name);
+            lbl_axisColor_name = new Label();
+            lbl_axisColor_name.Text = "Axis";
+            c2TL.Rows[0].Cells.Add(lbl_axisColor_name);
 
             Panel c3 = new Panel();
             tr.Cells.Add(new TableCell() { Control = c3 });
+
+            TableLayout c3TL = new TableLayout();
+            c3.Content = c3TL;
+            c3TL.Rows.Add(new TableRow());
+
+            lbl_vpbgColor = new Label();
+            lbl_vpbgColor.BackgroundColor = UIHelper.myColorToColor(commonVars.getColors().background_Color);
+            setSize(lbl_vpbgColor, label_Height, label_Height);
+            c3TL.Rows[0].Cells.Add(lbl_vpbgColor);
+
+            lbl_vpbgColor_name = new Label();
+            lbl_vpbgColor_name.Text = "VP Background";
+            c3TL.Rows[0].Cells.Add(lbl_vpbgColor_name);
         }
 
         void opengl_swatchrow1(TableRow tr)

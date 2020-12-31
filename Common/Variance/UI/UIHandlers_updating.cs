@@ -703,6 +703,7 @@ namespace Variance
                 lbl_ss3Color.BackgroundColor = ss3Color;
 
                 lbl_enabledColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.enabled_Color.toArgb());
+                lbl_axisColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.axis_Color.toArgb());
                 lbl_majorGridColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.major_Color.toArgb());
                 lbl_minorGridColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.minor_Color.toArgb());
                 lbl_vpbgColor.BackgroundColor = Color.FromArgb(varianceContext.vc.colors.background_Color.toArgb());
@@ -885,6 +886,7 @@ namespace Variance
                 {
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+                    mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].axisColor = Color.FromArgb(commonVars.getColors().axis_Color.toArgb());
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
                 }
 
@@ -1192,6 +1194,7 @@ namespace Variance
             // Brute force setting, to ensure we're aligned with user preferences that might have changed.
             mcVPSettings[settingsIndex].minorGridColor = Color.FromArgb(commonVars.getColors().minor_Color.toArgb());
             mcVPSettings[settingsIndex].majorGridColor = Color.FromArgb(commonVars.getColors().major_Color.toArgb());
+            mcVPSettings[settingsIndex].axisColor = Color.FromArgb(commonVars.getColors().axis_Color.toArgb());
             mcVPSettings[settingsIndex].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
             mcVPSettings[settingsIndex].reset(false);
 
