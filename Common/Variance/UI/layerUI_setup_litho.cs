@@ -162,30 +162,14 @@ namespace Variance
             rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_layer_lithoOCV_exp);
 
 
-            lbl_layer_lithoWobble_exp = new Label();
-            lbl_layer_lithoWobble_exp.Text = "Wobble";
-            lbl_layer_lithoWobble_exp.MouseDoubleClick += wobble_RNG;
-            lbl_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
-
-            num_layer_lithoWobble_exp = new NumericStepper();
-            num_layer_lithoWobble_exp.Increment = 0.1;
-            num_layer_lithoWobble_exp.DecimalPlaces = 2;
-            num_layer_lithoWobble_exp.MinValue = 0;
-            num_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
-            setSize(num_layer_lithoWobble_exp, 55, (int)(label_Height * uiScaleFactor));
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
-
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
-
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
-
-            litMisc_table.Rows.Add(new TableRow());
+            TableLayout distortion_tl = new TableLayout();
+            distortion_tl.Rows.Add(new TableRow());
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(distortion_tl) });
 
             lbl_layer_coeff1_exp = new Label();
             lbl_layer_coeff1_exp.Text = "Lens k1";
             lbl_layer_coeff1_exp.ToolTip = "Lens k1";
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
+            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff1_exp });
 
             num_layer_coeff1_exp = new NumericStepper();
             num_layer_coeff1_exp.Increment = 0.1;
@@ -193,13 +177,13 @@ namespace Variance
             num_layer_coeff1_exp.Value = 0.0;
             num_layer_coeff1_exp.ToolTip = "Lens k1";
             setSize(num_layer_coeff1_exp, 55, num_Height);
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
+            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff1_exp) });
 
 
             lbl_layer_coeff2_exp = new Label();
             lbl_layer_coeff2_exp.Text = "Lens k2";
             lbl_layer_coeff2_exp.ToolTip = "Lens k2";
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
+            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_coeff2_exp });
 
             num_layer_coeff2_exp = new NumericStepper();
             num_layer_coeff2_exp.Increment = 0.1;
@@ -207,8 +191,44 @@ namespace Variance
             num_layer_coeff2_exp.Value = 0.0;
             num_layer_coeff2_exp.ToolTip = "Lens k2";
             setSize(num_layer_coeff2_exp, 55, num_Height);
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
+            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_coeff2_exp) });
 
+            litMisc_table.Rows.Add(new TableRow());
+
+            TableLayout edge_slide_tl = new TableLayout();
+            edge_slide_tl.Rows.Add(new TableRow());
+            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(edge_slide_tl) });
+
+            checkBox_layer_edgeSlide_exp = new CheckBox();
+            checkBox_layer_edgeSlide_exp.Text = "Edge Slide";
+            checkBox_layer_edgeSlide_exp.Width = 90;
+            checkBox_layer_edgeSlide_exp.ToolTip = "If checked, apply tension to each edge for the contour generation";
+            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(checkBox_layer_edgeSlide_exp) });
+            if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 1)
+            {
+                checkBox_layer_edgeSlide_exp.Checked = true;
+            }
+
+            lbl_layer_edgeSlideTension_exp = new Label();
+            lbl_layer_edgeSlideTension_exp.Text = "Tension";
+            lbl_layer_edgeSlideTension_exp.Width = 50;
+            lbl_layer_edgeSlideTension_exp.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
+            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_edgeSlideTension_exp });
+
+            num_layer_edgeSlideTension_exp = new NumericStepper();
+            num_layer_edgeSlideTension_exp.DecimalPlaces = 2;
+            num_layer_edgeSlideTension_exp.Increment = 0.1;
+            num_layer_edgeSlideTension_exp.Value = (double)EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal.eTension);
+            num_layer_edgeSlideTension_exp.MinValue = 0.01;
+            setSize(num_layer_edgeSlideTension_exp, 55, num_Height);
+            num_layer_edgeSlideTension_exp.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
+            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_edgeSlideTension_exp) });
+            num_layer_edgeSlideTension_exp.Enabled = true;
+
+            if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 0)
+            {
+                num_layer_edgeSlideTension_exp.Enabled = false;
+            }
         }
 
         void litho_lwr(TableLayout groupBox_layer_lithography_table)

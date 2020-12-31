@@ -591,7 +591,6 @@ namespace Variance
 
             layerGadgets_row1(layerGadgets_table);
             layerGadgets_row2(layerGadgets_table);
-            layerGadgets_row3(layerGadgets_table);
 
             layerGadgets_table.Rows.Add(new TableRow());
 
@@ -660,65 +659,6 @@ namespace Variance
             comboBox_layerShape_exp.SelectedIndex = 0;
             comboBox_layerShape_exp.ToolTip = "Type of shape to generate";
             gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = comboBox_layerShape_exp });
-        }
-
-        void layerGadgets_row3(TableLayout layerGadgets_table)
-        {
-            // Outer table, row 3
-            TableRow gadgets_tr2 = new TableRow();
-            layerGadgets_table.Rows.Add(gadgets_tr2);
-            gadgets_tr2.Cells.Add(new TableCell());
-
-            // Table layout within row 3
-            TableLayout row2_tl = new TableLayout();
-            gadgets_tr2.Cells[0].Control = row2_tl;
-            row2_tl.Rows.Add(new TableRow());
-
-            // Table layout within cell.
-            TableCell gadgets_tr2_0 = new TableCell();
-            row2_tl.Rows[0].Cells.Add(gadgets_tr2_0);
-
-            GroupBox edgeslide_gb = new GroupBox();
-            edgeslide_gb.Text = "Edge Slide";
-
-            TableLayout gadgets_tr2_0_tl = new TableLayout();
-            gadgets_tr2_0.Control = edgeslide_gb;
-
-            edgeslide_gb.Content = gadgets_tr2_0_tl;
-
-            gadgets_tr2_0_tl.Rows.Add(new TableRow());
-
-            checkBox_layer_edgeSlide_exp = new CheckBox();
-            checkBox_layer_edgeSlide_exp.Text = "Edge Slide";
-            checkBox_layer_edgeSlide_exp.Width = 90;
-            checkBox_layer_edgeSlide_exp.ToolTip = "If checked, apply tension to each edge for the contour generation";
-            gadgets_tr2_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(checkBox_layer_edgeSlide_exp) });
-            if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 1)
-            {
-                checkBox_layer_edgeSlide_exp.Checked = true;
-            }
-
-            lbl_layer_edgeSlideTension_exp = new Label();
-            lbl_layer_edgeSlideTension_exp.Text = "Tension";
-            lbl_layer_edgeSlideTension_exp.Width = 50;
-            lbl_layer_edgeSlideTension_exp.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
-            gadgets_tr2_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layer_edgeSlideTension_exp });
-            gadgets_tr2_0_tl.Rows[0].Cells[gadgets_tr2_0_tl.Rows[0].Cells.Count - 1].ScaleWidth = true;
-
-            num_layer_edgeSlideTension_exp = new NumericStepper();
-            num_layer_edgeSlideTension_exp.DecimalPlaces = 2;
-            num_layer_edgeSlideTension_exp.Increment = 0.1;
-            num_layer_edgeSlideTension_exp.Value = (double)EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal.eTension);
-            num_layer_edgeSlideTension_exp.MinValue = 0.01;
-            setSize(num_layer_edgeSlideTension_exp, 55, num_Height);
-            num_layer_edgeSlideTension_exp.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
-            gadgets_tr2_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_edgeSlideTension_exp) });
-            num_layer_edgeSlideTension_exp.Enabled = true;
-
-            if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 0)
-            {
-                num_layer_edgeSlideTension_exp.Enabled = false;
-            }
         }
 
         void layerGadgets2(TableCell tc)

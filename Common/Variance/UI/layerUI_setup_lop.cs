@@ -87,64 +87,78 @@ namespace Variance
         void lop_row2(TableLayout groupBox_layer_LOP_table)
         {
             // Outer table, row 1
-            TableRow lop_tr1 = new TableRow();
-            groupBox_layer_LOP_table.Rows.Add(lop_tr1);
-            lop_tr1.Cells.Add(new TableCell());
+            TableRow tr = new TableRow();
+            groupBox_layer_LOP_table.Rows.Add(tr);
+            tr.Cells.Add(new TableCell());
 
             // Table layout within row 1
-            TableLayout row1_tl = new TableLayout();
-            lop_tr1.Cells[0].Control = row1_tl;
-            row1_tl.Rows.Add(new TableRow());
+            TableLayout tc_tl = new TableLayout();
+            tr.Cells[0].Control = tc_tl;
+            tc_tl.Rows.Add(new TableRow());
 
             // Table layout within cell.
-            TableCell lop_tr1_0 = new TableCell();
-            row1_tl.Rows[0].Cells.Add(lop_tr1_0);
+            TableCell tc_0 = new TableCell();
+            tc_tl.Rows[0].Cells.Add(tc_0);
 
-            TableLayout lop_tr1_0_tl = new TableLayout();
-            lop_tr1_0.Control = lop_tr1_0_tl;
+            TableLayout tc_0_tl = new TableLayout();
+            tc_0.Control = TableLayout.AutoSized(tc_0_tl);
 
-            lop_tr1_0_tl.Rows.Add(new TableRow());
+            tc_0_tl.Rows.Add(new TableRow());
 
             lbl_layerGlobalHorOffset_exp = new Label();
             lbl_layerGlobalHorOffset_exp.Text = "Global Hor Offset";
             lbl_layerGlobalHorOffset_exp.Width = 120;
             lbl_layerGlobalHorOffset_exp.ToolTip = "Horizontal offset from the world origin";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layerGlobalHorOffset_exp });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerGlobalHorOffset_exp });
 
             num_layerGlobalHorOffset_exp = new NumericStepper();
             num_layerGlobalHorOffset_exp.Increment = 0.1;
             num_layerGlobalHorOffset_exp.DecimalPlaces = 2;
             setSize(num_layerGlobalHorOffset_exp, 55, num_Height);
             num_layerGlobalHorOffset_exp.ToolTip = "Horizontal offset from the world origin";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerGlobalHorOffset_exp) });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerGlobalHorOffset_exp) });
 
             lbl_layerGlobalVerOffset_exp = new Label();
             lbl_layerGlobalVerOffset_exp.Text = "Global Ver Offset";
             lbl_layerGlobalVerOffset_exp.Width = 120;
             lbl_layerGlobalVerOffset_exp.ToolTip = "Horizontal offset from the world origin";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layerGlobalVerOffset_exp });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerGlobalVerOffset_exp });
 
             num_layerGlobalVerOffset_exp = new NumericStepper();
             num_layerGlobalVerOffset_exp.Increment = 0.1;
             num_layerGlobalVerOffset_exp.DecimalPlaces = 2;
             setSize(num_layerGlobalVerOffset_exp, 55, num_Height);
             num_layerGlobalVerOffset_exp.ToolTip = "Horizontal offset from the world origin";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerGlobalVerOffset_exp) });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerGlobalVerOffset_exp) });
+
+            tc_0_tl.Rows.Add(new TableRow());
 
             lbl_layerRotation_exp = new Label();
             lbl_layerRotation_exp.Text = "Rotation";
             lbl_layerRotation_exp.Width = 70;
             lbl_layerRotation_exp.ToolTip = "Counter-clockwise rotation around center of bounding box of shape";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layerRotation_exp });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerRotation_exp });
 
             num_layerRotation_exp = new NumericStepper();
             num_layerRotation_exp.Increment = 0.1;
             num_layerRotation_exp.DecimalPlaces = 2;
             setSize(num_layerRotation_exp, 55, num_Height);
             num_layerRotation_exp.ToolTip = "Counter-clockwise rotation around center of bounding box of shape";
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerRotation_exp) });
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layerRotation_exp) });
 
-            lop_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = null });
+            lbl_layer_lithoWobble_exp = new Label();
+            lbl_layer_lithoWobble_exp.Text = "Wobble";
+            lbl_layer_lithoWobble_exp.MouseDoubleClick += wobble_RNG;
+            lbl_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layer_lithoWobble_exp });
+
+            num_layer_lithoWobble_exp = new NumericStepper();
+            num_layer_lithoWobble_exp.Increment = 0.1;
+            num_layer_lithoWobble_exp.DecimalPlaces = 2;
+            num_layer_lithoWobble_exp.MinValue = 0;
+            num_layer_lithoWobble_exp.ToolTip = "3-sigma rotational variation.";
+            setSize(num_layer_lithoWobble_exp, 55, (int)(label_Height * uiScaleFactor));
+            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_layer_lithoWobble_exp) });
         }
     }
 }
