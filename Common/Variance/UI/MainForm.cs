@@ -828,9 +828,6 @@ namespace Variance
             // Set controls to null afterwards.
             label_Height = 13; //  (int)Math.Ceiling(qLabel.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
             num_Height = 13; //  (int)Math.Ceiling(qNum.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
-            checkBox_Height = 13; // (int)Math.Ceiling(qCheckBox.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
-            comboBox_Height = 13; // (int)Math.Ceiling(qDropDown.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
-            radioButton_Height = 13; // (int)Math.Ceiling(qRButton.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
 
             uiScaleFactor = 0.66f;
 
@@ -857,8 +854,6 @@ namespace Variance
             oneDMinInsLblWidth = 100;
 
             oneDMinInsWidth = 100;
-
-            omitLayerBoxY = 2;
 
             commentBoxWidth = previewWidth + 2;
             commentBoxHeight = 160 - (label_Height * 2);

@@ -122,8 +122,6 @@ namespace Variance
                     multiThreadWarnWidth,
                     resultFieldWidth,
                     commentBoxWidth, commentBoxHeight,
-                    omitLayerBoxY,
-                    comboBox_Height,
                     num_Height,
                     label_Height,
                     radioButton_Height,
@@ -144,7 +142,7 @@ namespace Variance
 
         ProgressBar statusProgressBar;
 
-        GroupBox bgLayerBox, omitLayerBox, simPreviewBox;
+        GroupBox bgLayerBox, omitLayerBox, simPreviewBox, miscControlsBox;
         CheckBox checkBox_displayShapes, checkBox_displayResults;
         CheckBox[] checkBox_bg_lyr, checkBox_omit_lyr;
         NumericStepper num_viewportZoom, num_viewportX, num_viewportY;

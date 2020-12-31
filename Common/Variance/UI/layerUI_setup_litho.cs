@@ -65,8 +65,8 @@ namespace Variance
             tl_rightCol.Rows.Add(new TableRow());
             outer_tl.Rows.Add(new TableRow());
             outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tl_leftCol });
+            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
             outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tl_rightCol });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = null });
             outer.Content = outer_tl;
 
             // Outer table, row 1
@@ -692,7 +692,7 @@ namespace Variance
             check_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
             checkBox_layer_overlayXReference_Av_exp = new CheckBox();
-            checkBox_layer_overlayXReference_Av_exp.Text = "Av";
+            checkBox_layer_overlayXReference_Av_exp.Text = "Average";
             checkBox_layer_overlayXReference_Av_exp.ToolTip = "Use the average displaced location of layers as a reference for horizontal overlay";
             check_tl.Rows[0].Cells.Add(new TableCell());
             check_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(checkBox_layer_overlayXReference_Av_exp);
@@ -702,7 +702,7 @@ namespace Variance
 
             groupBox_layer_overlayXReference_exp = new GroupBox();
             TableLayout groupBox_layer_overlayXReference_content = new TableLayout();
-            groupBox_layer_overlayXReference_exp.Text = "X Overlay Reference";
+            groupBox_layer_overlayXReference_exp.Text = "Reference";
             groupBox_layer_overlayXReference_exp.Content = groupBox_layer_overlayXReference_content;
             pnl_overlayRefX = new Panel();
             right_tc.Control = pnl_overlayRefX;
@@ -742,7 +742,7 @@ namespace Variance
 
             groupBox_layer_overlayXReference_Av_exp = new GroupBox();
             groupBox_layer_overlayXReference_Av_table = new TableLayout();
-            groupBox_layer_overlayXReference_Av_exp.Text = "X Overlay References";
+            groupBox_layer_overlayXReference_Av_exp.Text = "References";
             groupBox_layer_overlayXReference_Av_exp.Content = groupBox_layer_overlayXReference_Av_table;
 
             TableRow avolrx_tr0 = new TableRow();
@@ -782,7 +782,7 @@ namespace Variance
 
             groupBox_layer_overlayXCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_overlayXCorrelation_content = new TableLayout();
-            groupBox_layer_overlayXCorrelation_exp.Text = "X Overlay Correlation";
+            groupBox_layer_overlayXCorrelation_exp.Text = "Correlation";
             groupBox_layer_overlayXCorrelation_exp.Content = groupBox_layer_overlayXCorrelation_content;
             right_tc2.Control = groupBox_layer_overlayXCorrelation_exp;
 
@@ -890,7 +890,7 @@ namespace Variance
             check_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
 
             checkBox_layer_overlayYReference_Av_exp = new CheckBox();
-            checkBox_layer_overlayYReference_Av_exp.Text = "Av";
+            checkBox_layer_overlayYReference_Av_exp.Text = "Average";
             checkBox_layer_overlayYReference_Av_exp.ToolTip = "Use the average displaced location of layers as a reference for vertical overlay";
             check_tl.Rows[0].Cells.Add(new TableCell());
             check_tl.Rows[0].Cells[1].Control = TableLayout.AutoSized(checkBox_layer_overlayYReference_Av_exp);
@@ -900,7 +900,7 @@ namespace Variance
 
             groupBox_layer_overlayYReference_exp = new GroupBox();
             TableLayout groupBox_layer_overlayYReference_content = new TableLayout();
-            groupBox_layer_overlayYReference_exp.Text = "Y Overlay Reference";
+            groupBox_layer_overlayYReference_exp.Text = "Reference";
             groupBox_layer_overlayYReference_exp.Content = groupBox_layer_overlayYReference_content;
             pnl_overlayRefY = new Panel();
             right_tc.Control = pnl_overlayRefY;
@@ -940,7 +940,7 @@ namespace Variance
 
             groupBox_layer_overlayYReference_Av_exp = new GroupBox();
             groupBox_layer_overlayYReference_Av_table = new TableLayout();
-            groupBox_layer_overlayYReference_Av_exp.Text = "Y Overlay References";
+            groupBox_layer_overlayYReference_Av_exp.Text = "References";
             groupBox_layer_overlayYReference_Av_exp.Content = groupBox_layer_overlayYReference_Av_table;
 
             TableRow avolry_tr0 = new TableRow();
@@ -980,7 +980,7 @@ namespace Variance
 
             groupBox_layer_overlayYCorrelation_exp = new GroupBox();
             TableLayout groupBox_layer_overlayYCorrelation_content = new TableLayout();
-            groupBox_layer_overlayYCorrelation_exp.Text = "Y Overlay Correlation";
+            groupBox_layer_overlayYCorrelation_exp.Text = "Correlation";
             groupBox_layer_overlayYCorrelation_exp.Content = groupBox_layer_overlayYCorrelation_content;
             right_tc2.Control = groupBox_layer_overlayYCorrelation_exp;
 

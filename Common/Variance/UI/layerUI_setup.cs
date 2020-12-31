@@ -677,8 +677,13 @@ namespace Variance
             TableCell gadgets_tr2_0 = new TableCell();
             row2_tl.Rows[0].Cells.Add(gadgets_tr2_0);
 
+            GroupBox edgeslide_gb = new GroupBox();
+            edgeslide_gb.Text = "Edge Slide";
+
             TableLayout gadgets_tr2_0_tl = new TableLayout();
-            gadgets_tr2_0.Control = gadgets_tr2_0_tl;
+            gadgets_tr2_0.Control = edgeslide_gb;
+
+            edgeslide_gb.Content = gadgets_tr2_0_tl;
 
             gadgets_tr2_0_tl.Rows.Add(new TableRow());
 
@@ -722,9 +727,12 @@ namespace Variance
 
             layerGadgets2_row1(layerGadgets2_table);
 
+            GroupBox gadgets_gb = new GroupBox();
+            gadgets_gb.Text = "Misc";
             Panel p = new Panel();
+            gadgets_gb.Content = p;
             p.Content = layerGadgets2_table;
-            tc.Control = p;
+            tc.Control = gadgets_gb;
         }
 
         void layerGadgets2_row1(TableLayout layerGadgets2_table)
