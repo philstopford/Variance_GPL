@@ -115,7 +115,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lwr_corr_ref) + 1;
 
-                rB_layer_CLWR_exp[0].Enabled = true;
+                rB_CLWR[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -136,8 +136,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_CLWR_exp[bIndex].Text = name; 
-                        rB_layer_CLWR_exp[bIndex].Enabled = CLWRRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_CLWR[bIndex].Text = name; 
+                        rB_CLWR[bIndex].Enabled = CLWRRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -146,7 +146,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_CLWR_exp[sIndex].Checked = true;
+                rB_CLWR[sIndex].Checked = true;
             });
         }
 
@@ -157,7 +157,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref) + 1;
 
-                rB_layer_CLWR2_exp[0].Enabled = true;
+                rB_CLWR2[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -178,8 +178,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_CLWR2_exp[bIndex].Text = name;
-                        rB_layer_CLWR2_exp[bIndex].Enabled = CLWR2RBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_CLWR2[bIndex].Text = name;
+                        rB_CLWR2[bIndex].Enabled = CLWR2RBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -188,7 +188,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_CLWR2_exp[sIndex].Checked = true;
+                rB_CLWR2[sIndex].Checked = true;
             });
         }
 
@@ -199,7 +199,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) + 1;
 
-                rB_layer_CCDU_exp[0].Enabled = true;
+                rB_CCDU[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -220,8 +220,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_CCDU_exp[bIndex].Text = name;
-                        rB_layer_CCDU_exp[bIndex].Enabled = SCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_CCDU[bIndex].Text = name;
+                        rB_CCDU[bIndex].Enabled = SCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -230,7 +230,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_CCDU_exp[sIndex].Checked = true;
+                rB_CCDU[sIndex].Checked = true;
             });
         }
 
@@ -241,7 +241,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) + 1;
 
-                rB_layer_CTCDU_exp[0].Enabled = true;
+                rB_CTCDU[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -262,8 +262,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_CTCDU_exp[bIndex].Text = name;
-                        rB_layer_CTCDU_exp[bIndex].Enabled = TCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_CTCDU[bIndex].Text = name;
+                        rB_CTCDU[bIndex].Enabled = TCDURBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -272,7 +272,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_CTCDU_exp[sIndex].Checked = true;
+                rB_CTCDU[sIndex].Checked = true;
             });
         }
 
@@ -283,7 +283,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.xOL_ref) + 1;
 
-                rB_layer_OLRX_exp[0].Enabled = true;
+                rB_OLRX[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -304,8 +304,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_OLRX_exp[bIndex].Text = name;
-                        rB_layer_OLRX_exp[bIndex].Enabled = xOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_OLRX[bIndex].Text = name;
+                        rB_OLRX[bIndex].Enabled = xOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -314,7 +314,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_OLRX_exp[sIndex].Checked = true;
+                rB_OLRX[sIndex].Checked = true;
             });
         }
 
@@ -325,7 +325,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.yOL_ref) + 1;
 
-                rB_layer_OLRY_exp[0].Enabled = true;
+                rB_OLRY_exp[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -346,8 +346,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_OLRY_exp[bIndex].Text = name;
-                        rB_layer_OLRY_exp[bIndex].Enabled = yOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_OLRY_exp[bIndex].Text = name;
+                        rB_OLRY_exp[bIndex].Enabled = yOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -356,7 +356,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_OLRY_exp[sIndex].Checked = true;
+                rB_OLRY_exp[sIndex].Checked = true;
             });
         }
 
@@ -367,7 +367,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) + 1;
 
-                rB_layer_COLX_exp[0].Enabled = true;
+                rB_COLX[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -388,8 +388,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_COLX_exp[bIndex].Text = name;
-                        rB_layer_COLX_exp[bIndex].Enabled = xCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_COLX[bIndex].Text = name;
+                        rB_COLX[bIndex].Enabled = xCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -398,7 +398,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_COLX_exp[sIndex].Checked = true;
+                rB_COLX[sIndex].Checked = true;
             });
         }
 
@@ -409,7 +409,7 @@ namespace Variance
                 // -1 is off, which is the 0th radio button.
                 int sIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) + 1;
 
-                rB_layer_COLY_exp[0].Enabled = true;
+                rB_COLY[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -430,8 +430,8 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layer_COLY_exp[bIndex].Text = name;
-                        rB_layer_COLY_exp[bIndex].Enabled = yCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
+                        rB_COLY[bIndex].Text = name;
+                        rB_COLY[bIndex].Enabled = yCOLRBs_enabledState[layer][i]; // don't offset this because the enabled array is matched to the full number of layers.
                     }
                 }
 
@@ -440,7 +440,7 @@ namespace Variance
                     sIndex--;
                 }
 
-                rB_layer_COLY_exp[sIndex].Checked = true;
+                rB_COLY[sIndex].Checked = true;
             });
         }
 
@@ -452,8 +452,8 @@ namespace Variance
                 int sIndex1 = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerA) + 1;
                 int sIndex2 = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerB) + 1;
 
-                rB_layerBooleanA_exp[0].Enabled = true;
-                rB_layerBooleanB_exp[0].Enabled = true;
+                rB_BooleanA[0].Enabled = true;
+                rB_BooleanB[0].Enabled = true;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     if (i == layer)
@@ -473,10 +473,10 @@ namespace Variance
                             // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                             name = (i + 1).ToString();
                         }
-                        rB_layerBooleanA_exp[bIndex].Text = name;
-                        rB_layerBooleanA_exp[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
-                        rB_layerBooleanB_exp[bIndex].Text = name;
-                        rB_layerBooleanB_exp[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+                        rB_BooleanA[bIndex].Text = name;
+                        rB_BooleanA[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
+                        rB_BooleanB[bIndex].Text = name;
+                        rB_BooleanB[bIndex].Enabled = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
                     }
                 }
 
@@ -489,8 +489,8 @@ namespace Variance
                     sIndex2--;
                 }
 
-                rB_layerBooleanA_exp[sIndex1].Checked = true;
-                rB_layerBooleanB_exp[sIndex2].Checked = true;
+                rB_BooleanA[sIndex1].Checked = true;
+                rB_BooleanB[sIndex2].Checked = true;
             });
         }
 
@@ -510,24 +510,24 @@ namespace Variance
                         // add 1 as the arrays are 0-indexed, so the button text need to be compensated.
                         name = (i + 1).ToString();
                     }
-                    cB_layer_OLRX_Av_exp[i].Text = name;
-                    cB_layer_OLRY_Av_exp[i].Text = name;
+                    cB_OLRX_Av[i].Text = name;
+                    cB_layer_OLRY_Av[i].Text = name;
 
                     if (index == i)
                     {
-                        cB_layer_OLRX_Av_exp[i].Enabled = false;
-                        cB_layer_OLRX_Av_exp[i].Checked = false;
+                        cB_OLRX_Av[i].Enabled = false;
+                        cB_OLRX_Av[i].Checked = false;
 
-                        cB_layer_OLRY_Av_exp[i].Enabled = false;
-                        cB_layer_OLRY_Av_exp[i].Checked = false;
+                        cB_layer_OLRY_Av[i].Enabled = false;
+                        cB_layer_OLRY_Av[i].Checked = false;
                     }
                     else
                     {
-                        cB_layer_OLRX_Av_exp[i].Enabled = (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
-                        cB_layer_OLRX_Av_exp[i].Checked = ((commonVars.getLayerSettings(index).getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i) == 1) && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1));
+                        cB_OLRX_Av[i].Enabled = (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
+                        cB_OLRX_Av[i].Checked = ((commonVars.getLayerSettings(index).getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i) == 1) && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1));
 
-                        cB_layer_OLRY_Av_exp[i].Enabled = (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
-                        cB_layer_OLRY_Av_exp[i].Checked = ((commonVars.getLayerSettings(index).getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, i) == 1) && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1));
+                        cB_layer_OLRY_Av[i].Enabled = (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
+                        cB_layer_OLRY_Av[i].Checked = ((commonVars.getLayerSettings(index).getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, i) == 1) && (commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1));
                     }
                     colIndex++;
                     if (colIndex == CentralProperties.maxLayersForMC / 2)

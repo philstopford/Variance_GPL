@@ -101,15 +101,13 @@ namespace Variance
 
         // Layer UI element arrays.
         // 2D Layer UI stuff.
-        DropDown comboBox_layerShape_exp;
-        CheckBox checkBox_Layer_exp,
-                    checkBox_Layer_alignGeometryX_exp, checkBox_Layer_alignGeometryY_exp, checkBox_Layer_ShowDrawn_exp, checkBox_Layer_FlipH_exp, checkBox_Layer_FlipV_exp,
-                    checkBox_layer_edgeSlide_exp;
-        NumericStepper num_layer_edgeSlideTension_exp;
-        Label lbl_layer_edgeSlideTension_exp;
-        TextBox text_layerName_exp;
+        DropDown comboBox_layerShape;
+        CheckBox cB_Layer, cB_alignGeometryX, cB_alignGeometryY, cB_ShowDrawn, cB_FlipH, cB_FlipV, cB_edgeSlide;
+        NumericStepper num_edgeSlideTension;
+        Label lbl_edgeSlideTension;
+        TextBox text_layerName;
 
-        TableLayout tabPage_2D_layer_content_exp;
+        TableLayout tabPage_2D_layer_table;
 
         Int32 simulationOutputGroupBoxHeight,
                     simulationSettingsGroupBoxHeight,
@@ -143,8 +141,8 @@ namespace Variance
         ProgressBar statusProgressBar;
 
         GroupBox bgLayerBox, omitLayerBox, simPreviewBox, miscControlsBox;
-        CheckBox checkBox_displayShapes, checkBox_displayResults;
-        CheckBox[] checkBox_bg_lyr, checkBox_omit_lyr;
+        CheckBox cB_displayShapes, cB_displayResults;
+        CheckBox[] cB_bg, cB_omit;
         NumericStepper num_viewportZoom, num_viewportX, num_viewportY;
 
         Button btn_singleCPU, btn_multiCPU, btn_STOP, btn_Cancel;
@@ -152,7 +150,7 @@ namespace Variance
         TabControl tabControl_main, tabControl_2D_simsettings;
         TabPage tab_1DCalc, tabPage2, tabPage_implant, tabPage_utilities, tabPage_2D_Settings, tabPage_2D_DOE, tabPage_2D_PASearch, tabPage_2D_experiment;
 
-        ListBox experimental_listBox_layers;
+        ListBox listBox_layers;
         TableLayout experiment_table;
 
         TableLayout bgLayerBox_table;
@@ -165,6 +163,7 @@ namespace Variance
 
         ContextMenu listbox_menu;
         ButtonMenuItem lb_copy, lb_paste, lb_enableDisable, lb_clear;
+        ButtonMenuItem litho_rounding_copy, litho_rounding_paste;
 
     }
 }

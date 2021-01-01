@@ -164,11 +164,11 @@ namespace Variance
                 }
                 if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1)
                 {
-                    checkBox_displayResults.Checked = true;
+                    cB_displayResults.Checked = true;
                 }
                 else
                 {
-                    checkBox_displayResults.Checked = false;
+                    cB_displayResults.Checked = false;
                 }
 
                 if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.ler) == 1)
@@ -182,11 +182,11 @@ namespace Variance
 
                 if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1)
                 {
-                    checkBox_displayShapes.Checked = true;
+                    cB_displayShapes.Checked = true;
                 }
                 else
                 {
-                    checkBox_displayShapes.Checked = false;
+                    cB_displayShapes.Checked = false;
                 }
 
                 if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
@@ -661,42 +661,42 @@ namespace Variance
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
                     label_geoEqtn_Op[i].TextColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[i].toArgb());
-                    checkBox_bg_lyr[i].TextColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[i].toArgb());
-                    checkBox_omit_lyr[i].TextColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[i].toArgb());
+                    cB_bg[i].TextColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[i].toArgb());
+                    cB_omit[i].TextColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[i].toArgb());
                 }
 
                 Color ss1Color = Color.FromArgb(varianceContext.vc.colors.subshape1_Color.R,
                                                 varianceContext.vc.colors.subshape1_Color.G,
                                                 varianceContext.vc.colors.subshape1_Color.B);
 
-                comboBox_layerTipLocations_exp.TextColor = ss1Color;
+                comboBox_tipLocations.TextColor = ss1Color;
 
-                num_layer_subshape_hl_exp.TextColor = ss1Color;
-                num_layer_subshape_vl_exp.TextColor = ss1Color;
-                num_layer_subshape_ho_exp.TextColor = ss1Color;
-                num_layer_subshape_vo_exp.TextColor = ss1Color;
+                num_subshape_hl.TextColor = ss1Color;
+                num_subshape_vl.TextColor = ss1Color;
+                num_subshape_ho.TextColor = ss1Color;
+                num_subshape_vo.TextColor = ss1Color;
 
                 Color ss2Color = Color.FromArgb(varianceContext.vc.colors.subshape2_Color.R,
                                                 varianceContext.vc.colors.subshape2_Color.G,
                                                 varianceContext.vc.colors.subshape2_Color.B);
 
-                comboBox_layerTipLocations2_exp.TextColor = ss2Color;
+                comboBox_tipLocations2.TextColor = ss2Color;
 
-                num_layer_subshape2_hl_exp.TextColor = ss2Color;
-                num_layer_subshape2_vl_exp.TextColor = ss2Color;
-                num_layer_subshape2_ho_exp.TextColor = ss2Color;
-                num_layer_subshape2_vo_exp.TextColor = ss2Color;
+                num_subshape2_hl.TextColor = ss2Color;
+                num_subshape2_vl.TextColor = ss2Color;
+                num_subshape2_ho.TextColor = ss2Color;
+                num_subshape2_vo.TextColor = ss2Color;
 
                 Color ss3Color = Color.FromArgb(varianceContext.vc.colors.subshape3_Color.R,
                                                 varianceContext.vc.colors.subshape3_Color.G,
                                                 varianceContext.vc.colors.subshape3_Color.B);
 
-                comboBox_layerTipLocations3_exp.TextColor = ss3Color;
+                comboBox_tipLocations3.TextColor = ss3Color;
 
-                num_layer_subshape3_hl_exp.TextColor = ss3Color;
-                num_layer_subshape3_vl_exp.TextColor = ss3Color;
-                num_layer_subshape3_ho_exp.TextColor = ss3Color;
-                num_layer_subshape3_vo_exp.TextColor = ss3Color;
+                num_subshape3_hl.TextColor = ss3Color;
+                num_subshape3_vl.TextColor = ss3Color;
+                num_subshape3_ho.TextColor = ss3Color;
+                num_subshape3_vo.TextColor = ss3Color;
 
                 lbl_ss1Color.BackgroundColor = ss1Color;
                 lbl_ss2Color.BackgroundColor = ss2Color;

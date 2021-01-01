@@ -5,42 +5,42 @@ namespace Variance
     public partial class MainForm : Form
     {
         // 2D Layer GeoCore
-        GroupBox groupBox_layer_lithography_exp;
-        GroupBox groupBox_layer_geoCore_exp;
-        Button button_layer_chooseFile_geoCore_exp, button_layer_globalApply_geoCore_exp;
-        DropDown comboBox_layerLDList_geoCore_exp, comboBox_layerStructureList_geoCore_exp, comboBox_layerPolyFill_geoCore_exp, comboBox_layerTipLocations_geoCore_exp;
-        Label lbl_layerLD_geoCore_exp, lbl_layerCell_geoCore_exp, lbl_layerTipLocations_geoCore_exp;
-        TextBox textBox_layer_FileLocation_geoCore_exp;
-        CheckBox checkBox_DOELayer_geoCore_exp, checkBox_layer_geoCore_shapeEngine_exp, checkBox_layer_geoCore_shapeEngine_perPoly_exp, checkBox_layer_geoCore_layoutReference_exp;
+        GroupBox gB_layer_lithography;
+        GroupBox gB_layer_geoCore;
+        Button btn_chooseFile_geoCore, btn_globalApply_geoCore;
+        DropDown comboBox_lDList_geoCore, comboBox_structureList_geoCore, comboBox_polyFill_geoCore, comboBox_tipLocations_geoCore;
+        Label lbl_lD_geoCore, lbl_cell_geoCore, lbl_tipLocations_geoCore;
+        TextBox textBox_fileLocation_geoCore;
+        CheckBox cB_DOE_geoCore, cB_geoCore_shapeEngine, cB_geoCore_shapeEngine_perPoly, cB_geoCore_layoutReference;
 
-        void twoD_LayerUISetup_geoCore_exp()
+        void twoD_LayerUISetup_geoCore()
         {
             Application.Instance.Invoke(() =>
             {
-                groupBox_layer_geoCore_exp = new GroupBox();
-                TableLayout groupBox_layer_geoCore_table = new TableLayout();
-                groupBox_layer_geoCore_exp.Content = groupBox_layer_geoCore_table;
-                groupBox_layer_geoCore_exp.Text = "Layout Controls";
+                gB_layer_geoCore = new GroupBox();
+                TableLayout geoCore_table = new TableLayout();
+                gB_layer_geoCore.Content = geoCore_table;
+                gB_layer_geoCore.Text = "Layout Controls";
 
-                geocore_table(groupBox_layer_geoCore_table);
+                geocore_table(geoCore_table);
 
-                layerShapeProperties_tcPanel.Content = groupBox_layer_geoCore_exp;
+                layerShapeProperties_tcPanel.Content = gB_layer_geoCore;
 
                 setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             });
         }
 
-        void geocore_table(TableLayout groupBox_layer_geoCore_table)
+        void geocore_table(TableLayout geoCore_table)
         {
             // Outer table, row 1
             TableRow geocore_tr0 = new TableRow();
-            groupBox_layer_geoCore_table.Rows.Add(geocore_tr0);
+            geoCore_table.Rows.Add(geocore_tr0);
             geocore_tr0.Cells.Add(new TableCell());
 
             geocore_row0(geocore_tr0.Cells[0]);
 
             TableRow geocore_tr1 = new TableRow();
-            groupBox_layer_geoCore_table.Rows.Add(geocore_tr1);
+            geoCore_table.Rows.Add(geocore_tr1);
             geocore_tr1.Cells.Add(new TableCell());
 
             geocore_row1(geocore_tr1.Cells[0]);
@@ -48,21 +48,18 @@ namespace Variance
 
         void geocore_row0(TableCell tc)
         {
-            Panel p = new Panel();
-            tc.Control = p;
-
             TableLayout tl = new TableLayout();
-            p.Content = tl;
+            tc.Control = tl;
 
             tl.Rows.Add(new TableRow());
 
             TableCell tr0_0 = new TableCell();
-            tl.Rows[0].Cells.Add(tr0_0);
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(tr0_0);
 
             geocore_row0_0(tr0_0);
 
             TableCell tr0_1 = new TableCell();
-            tl.Rows[0].Cells.Add(tr0_1);
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(tr0_1);
 
             geocore_row0_1(tr0_1);
         }
@@ -70,132 +67,118 @@ namespace Variance
         void geocore_row0_0(TableCell tc)
         {
             TableLayout tl = new TableLayout();
-            Panel p = new Panel();
-            p.Content = tl;
 
-            tc.Control = p;
+            tc.Control = tl;
 
-            TableRow tr0 = new TableRow();
-            tl.Rows.Add(tr0);
+            tl.Rows.Add(new TableRow());
 
-            TableLayout tr0_tl = new TableLayout();
-            tr0.Cells.Add(new TableCell() { Control = tr0_tl });
-            tr0_tl.Rows.Add(new TableRow());
+            TableLayout tl0 = new TableLayout();
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = tl0 });
+            tl0.Rows.Add(new TableRow());
 
-            button_layer_chooseFile_geoCore_exp = new Button();
-            button_layer_chooseFile_geoCore_exp.Text = "Choose File";
-            button_layer_chooseFile_geoCore_exp.ToolTip = "Browse for GDS or Oasis file";
-            tr0_tl.Rows[0].Cells.Add(new TableCell() { Control = button_layer_chooseFile_geoCore_exp });
+            btn_chooseFile_geoCore = new Button();
+            btn_chooseFile_geoCore.Text = "Choose File";
+            btn_chooseFile_geoCore.ToolTip = "Browse for GDS or Oasis file";
+            tl0.Rows[tl0.Rows.Count - 1].Cells.Add(new TableCell() { Control = btn_chooseFile_geoCore });
 
-            checkBox_DOELayer_geoCore_exp = new CheckBox();
-            checkBox_DOELayer_geoCore_exp.Text = "DOE";
-            checkBox_DOELayer_geoCore_exp.Width = 60;
-            checkBox_DOELayer_geoCore_exp.ToolTip = "This is a DOE layout, to be used with tile extraction.";
-            tr0_tl.Rows[0].Cells.Add(new TableCell() { Control = checkBox_DOELayer_geoCore_exp });
+            cB_DOE_geoCore = new CheckBox();
+            cB_DOE_geoCore.Text = "DOE";
+            cB_DOE_geoCore.Width = 60;
+            cB_DOE_geoCore.ToolTip = "This is a DOE layout, to be used with tile extraction.";
+            tl0.Rows[tl0.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_DOE_geoCore });
 
-            checkBox_layer_geoCore_shapeEngine_exp = new CheckBox();
-            checkBox_layer_geoCore_shapeEngine_exp.Text = "Contour";
-            checkBox_layer_geoCore_shapeEngine_exp.Width = 75;
-            checkBox_layer_geoCore_shapeEngine_exp.ToolTip = "Use layout polygons as inputs for contour generation";
-            tr0_tl.Rows[0].Cells.Add(new TableCell() { Control = checkBox_layer_geoCore_shapeEngine_exp });
+            cB_geoCore_shapeEngine = new CheckBox();
+            cB_geoCore_shapeEngine.Text = "Contour";
+            cB_geoCore_shapeEngine.Width = 75;
+            cB_geoCore_shapeEngine.ToolTip = "Use layout polygons as inputs for contour generation";
+            tl0.Rows[tl0.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_geoCore_shapeEngine });
 
-            checkBox_layer_geoCore_shapeEngine_perPoly_exp = new CheckBox();
-            checkBox_layer_geoCore_shapeEngine_perPoly_exp.Text = "Per-Poly";
-            checkBox_layer_geoCore_shapeEngine_perPoly_exp.Width = 75;
-            checkBox_layer_geoCore_shapeEngine_perPoly_exp.ToolTip = "Rotation per-polyon";
-            tr0_tl.Rows[0].Cells.Add(new TableCell() { Control = checkBox_layer_geoCore_shapeEngine_perPoly_exp });
+            cB_geoCore_shapeEngine_perPoly = new CheckBox();
+            cB_geoCore_shapeEngine_perPoly.Text = "Per-Poly";
+            cB_geoCore_shapeEngine_perPoly.Width = 75;
+            cB_geoCore_shapeEngine_perPoly.ToolTip = "Rotation per-polyon";
+            tl0.Rows[tl0.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_geoCore_shapeEngine_perPoly });
 
-            TableRow tr1 = new TableRow();
-            tl.Rows.Add(tr1);
+            tl.Rows.Add(new TableRow());
 
-            TableLayout tr1_tl = new TableLayout();
-            tr1.Cells.Add(new TableCell() { Control = tr1_tl });
-            tr1_tl.Rows.Add(new TableRow());
+            TableLayout tl1 = new TableLayout();
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = tl1 });
+            tl1.Rows.Add(new TableRow());
 
-            button_layer_globalApply_geoCore_exp = new Button();
-            button_layer_globalApply_geoCore_exp.Text = "Apply To All";
-            button_layer_globalApply_geoCore_exp.ToolTip = "Use this geoCore input in all layers of the simulation.";
-            tr1_tl.Rows[0].Cells.Add(new TableCell() { Control = button_layer_globalApply_geoCore_exp });
+            btn_globalApply_geoCore = new Button();
+            btn_globalApply_geoCore.Text = "Apply To All";
+            btn_globalApply_geoCore.ToolTip = "Use this geoCore input in all layers of the simulation.";
+            tl1.Rows[tl1.Rows.Count - 1].Cells.Add(new TableCell() { Control = btn_globalApply_geoCore });
 
-            checkBox_layer_geoCore_layoutReference_exp = new CheckBox();
-            checkBox_layer_geoCore_layoutReference_exp.Text = "Reference";
-            checkBox_layer_geoCore_layoutReference_exp.Width = 75;
-            checkBox_layer_geoCore_layoutReference_exp.ToolTip = "Reference the layout file";
-            tr1_tl.Rows[0].Cells.Add(new TableCell() { Control = checkBox_layer_geoCore_layoutReference_exp });
+            cB_geoCore_layoutReference = new CheckBox();
+            cB_geoCore_layoutReference.Text = "Reference";
+            cB_geoCore_layoutReference.Width = 75;
+            cB_geoCore_layoutReference.ToolTip = "Reference the layout file";
+            tl1.Rows[tl1.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_geoCore_layoutReference });
 
-            tr1_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
+            tl1.Rows[tl1.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
 
-            TableRow tr2 = new TableRow();
-            tl.Rows.Add(tr2);
+            tl.Rows.Add(new TableRow());
 
-            TableLayout tr2_tl = new TableLayout();
-            tr2.Cells.Add(new TableCell() { Control = tr2_tl });
-            tr2_tl.Rows.Add(new TableRow());
+            TableLayout tl2 = new TableLayout();
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = tl2 });
+            tl2.Rows.Add(new TableRow());
 
-            comboBox_layerPolyFill_geoCore_exp = new DropDown();
-            comboBox_layerPolyFill_geoCore_exp.Width = 88;
-            comboBox_layerPolyFill_geoCore_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.polyFillList);
-            tr2_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerPolyFill_geoCore_exp) });
+            comboBox_polyFill_geoCore = new DropDown();
+            comboBox_polyFill_geoCore.Width = 88;
+            comboBox_polyFill_geoCore.BindDataContext(c => c.DataStore, (UIStringLists m) => m.polyFillList);
+            tl2.Rows[tl2.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_polyFill_geoCore) });
 
-            tr2_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
+            tl2.Rows[tl2.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
         }
 
         void geocore_row0_1(TableCell tc)
         {
-            Panel p = new Panel();
-
             TableLayout tl = new TableLayout();
-            p.Content = tl;
+            tc.Control = tl;
 
-            tc.Control = p;
+            tl.Rows.Add(new TableRow());
 
-            TableRow tr0 = new TableRow();
-            tl.Rows.Add(tr0);
+            lbl_cell_geoCore = new Label();
+            lbl_cell_geoCore.Text = "Cell";
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_cell_geoCore });
 
-            lbl_layerCell_geoCore_exp = new Label();
-            lbl_layerCell_geoCore_exp.Text = "Cell";
-            tr0.Cells.Add(new TableCell() { Control = lbl_layerCell_geoCore_exp });
+            comboBox_structureList_geoCore = new DropDown();
+            comboBox_structureList_geoCore.Enabled = false;
+            comboBox_structureList_geoCore.BindDataContext(c => c.DataStore, (UIStringLists m) => m.geoCoreStructureList_exp);
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_structureList_geoCore) });
 
-            comboBox_layerStructureList_geoCore_exp = new DropDown();
-            comboBox_layerStructureList_geoCore_exp.Enabled = false;
-            comboBox_layerStructureList_geoCore_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.geoCoreStructureList_exp);
-            tr0.Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerStructureList_geoCore_exp) });
+            tl.Rows.Add(new TableRow());
 
-            TableRow tr1 = new TableRow();
-            tl.Rows.Add(tr1);
+            lbl_lD_geoCore = new Label();
+            lbl_lD_geoCore.Text = "L/D";
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lD_geoCore });
 
-            lbl_layerLD_geoCore_exp = new Label();
-            lbl_layerLD_geoCore_exp.Text = "L/D";
-            tr1.Cells.Add(new TableCell() { Control = lbl_layerLD_geoCore_exp });
-
-            comboBox_layerLDList_geoCore_exp = new DropDown();
-            comboBox_layerLDList_geoCore_exp.Enabled = false;
-            comboBox_layerLDList_geoCore_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.geoCoreLDList_exp);
-            tr1.Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerLDList_geoCore_exp) });
+            comboBox_lDList_geoCore = new DropDown();
+            comboBox_lDList_geoCore.Enabled = false;
+            comboBox_lDList_geoCore.BindDataContext(c => c.DataStore, (UIStringLists m) => m.geoCoreLDList_exp);
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_lDList_geoCore) });
         }
 
         void geocore_row1(TableCell tc)
         {
-            Panel p = new Panel();
-            tc.Control = p;
-
             TableLayout tl = new TableLayout();
-            p.Content = tl;
-
+            tc.Control = tl;
+                
             tl.Rows.Add(new TableRow());
 
-            lbl_layerTipLocations_geoCore_exp = new Label();
-            lbl_layerTipLocations_geoCore_exp.Text = "Tip Locs";
-            tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_layerTipLocations_geoCore_exp });
+            lbl_tipLocations_geoCore = new Label();
+            lbl_tipLocations_geoCore.Text = "Tip Locs";
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_tipLocations_geoCore });
 
-            comboBox_layerTipLocations_geoCore_exp = new DropDown();
-            comboBox_layerTipLocations_geoCore_exp.Enabled = false;
-            tl.Rows[0].Cells.Add(new TableCell() { Control = comboBox_layerTipLocations_geoCore_exp });
-            comboBox_layerTipLocations_geoCore_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
+            comboBox_tipLocations_geoCore = new DropDown();
+            comboBox_tipLocations_geoCore.Enabled = false;
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_tipLocations_geoCore });
+            comboBox_tipLocations_geoCore.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
 
-            textBox_layer_FileLocation_geoCore_exp = new TextBox();
-            textBox_layer_FileLocation_geoCore_exp.ReadOnly = true;
-            tl.Rows[0].Cells.Add(new TableCell() { Control = textBox_layer_FileLocation_geoCore_exp, ScaleWidth = true });
+            textBox_fileLocation_geoCore = new TextBox();
+            textBox_fileLocation_geoCore.ReadOnly = true;
+            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = textBox_fileLocation_geoCore, ScaleWidth = true });
         }
     }
 }

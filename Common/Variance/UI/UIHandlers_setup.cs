@@ -98,12 +98,12 @@ namespace Variance
                 updateSettingsUIFromSettings();
                 updateDOESettingsUIFromSettings();
 
-                for (int i = 0; i < checkBox_bg_lyr.Length; i++)
+                for (int i = 0; i < cB_bg.Length; i++)
                 {
-                    checkBox_bg_lyr[i].Checked = false;
-                    checkBox_bg_lyr[i].Enabled = false;
-                    checkBox_omit_lyr[i].Checked = false;
-                    checkBox_omit_lyr[i].Enabled = false;
+                    cB_bg[i].Checked = false;
+                    cB_bg[i].Enabled = false;
+                    cB_omit[i].Checked = false;
+                    cB_omit[i].Enabled = false;
                 }
 
                 updateStatusLine(CentralProperties.productName + " " + CentralProperties.version);
@@ -114,7 +114,7 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                addLayerHandlers_exp();
+                addLayerHandlers();
                 addSettingsHandlers();
                 addDOESettingsHandlers();
                 addOmitHandlers();
@@ -127,7 +127,7 @@ namespace Variance
         {
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
-                checkBox_omit_lyr[i].CheckedChanged += omitLayerCheckboxChanged;
+                cB_omit[i].CheckedChanged += omitLayerCheckboxChanged;
             }
         }
 
@@ -135,7 +135,7 @@ namespace Variance
         {
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
-                checkBox_bg_lyr[i].CheckedChanged += bgLayerCheckboxChanged;
+                cB_bg[i].CheckedChanged += bgLayerCheckboxChanged;
             }
         }
 

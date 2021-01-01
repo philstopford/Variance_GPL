@@ -927,7 +927,7 @@ namespace Variance
                 commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.enabled, 1);
             }
             set_ui_from_settings(index);
-            do2DLayerUI_exp(index);
+            do2DLayerUI(index);
         }
 
 
@@ -1198,7 +1198,7 @@ namespace Variance
             viewPort.updateViewport();
 
             setDefaultIndices();
-            do2DLayerUI_exp(0, updateUI: true);
+            do2DLayerUI(0, updateUI: true);
             addAllUIHandlers();
             commonVars.setHashes();
 
@@ -1240,7 +1240,7 @@ namespace Variance
 
             try
             {
-                experimental_listBox_layers.SelectedIndex = 0;
+                listBox_layers.SelectedIndex = 0;
             }
             catch (Exception)
             {
@@ -1929,16 +1929,16 @@ namespace Variance
             omitLayerBox_table.Rows.Add(new TableRow());
             omitLayerBox_table.Rows.Add(new TableRow());
 
-            checkBox_omit_lyr = new CheckBox[CentralProperties.maxLayersForMC];
+            cB_omit = new CheckBox[CentralProperties.maxLayersForMC];
             int rowIndex = 0;
             for (int cb = 0; cb < CentralProperties.maxLayersForMC; cb++)
             {
                 // Don't add a button for our current layer
-                checkBox_omit_lyr[cb] = new CheckBox();
-                checkBox_omit_lyr[cb].Text = (cb + 1).ToString();
+                cB_omit[cb] = new CheckBox();
+                cB_omit[cb].Text = (cb + 1).ToString();
 
                 TableCell tc0 = new TableCell();
-                tc0.Control = checkBox_omit_lyr[cb];
+                tc0.Control = cB_omit[cb];
                 omitLayerBox_table.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if ((cb + 1) == CentralProperties.maxLayersForMC / 2)
@@ -1952,9 +1952,9 @@ namespace Variance
         {
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
-                checkBox_omit_lyr[i].CheckedChanged -= omitLayerCheckboxChanged;
-                checkBox_omit_lyr[i].Checked = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.omit) == 1;
-                checkBox_omit_lyr[i].CheckedChanged += omitLayerCheckboxChanged;
+                cB_omit[i].CheckedChanged -= omitLayerCheckboxChanged;
+                cB_omit[i].Checked = commonVars.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.omit) == 1;
+                cB_omit[i].CheckedChanged += omitLayerCheckboxChanged;
             }
         }
 
@@ -1973,17 +1973,17 @@ namespace Variance
             bgLayerBox_table.Rows.Add(new TableRow());
             bgLayerBox_table.Rows.Add(new TableRow());
 
-            checkBox_bg_lyr = new CheckBox[CentralProperties.maxLayersForMC];
+            cB_bg = new CheckBox[CentralProperties.maxLayersForMC];
 
             int rowIndex = 0;
             for (int cb = 0; cb < CentralProperties.maxLayersForMC; cb++)
             {
                 // Don't add a button for our current layer
-                checkBox_bg_lyr[cb] = new CheckBox();
-                checkBox_bg_lyr[cb].Text = (cb + 1).ToString();
+                cB_bg[cb] = new CheckBox();
+                cB_bg[cb].Text = (cb + 1).ToString();
 
                 TableCell tc0 = new TableCell();
-                tc0.Control = checkBox_bg_lyr[cb];
+                tc0.Control = cB_bg[cb];
                 bgLayerBox_table.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if ((cb + 1) == CentralProperties.maxLayersForMC / 2)
@@ -2002,18 +2002,18 @@ namespace Variance
             simPreviewBox.Content = simPreviewBox_table;
             simPreviewBox_table.Rows.Add(new TableRow());
 
-            checkBox_displayShapes = new CheckBox();
-            checkBox_displayShapes.Text = "Display input shapes for each case";
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = checkBox_displayShapes });
-            checkBox_displayShapes.Checked = true;
+            cB_displayShapes = new CheckBox();
+            cB_displayShapes.Text = "Display input shapes for each case";
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = cB_displayShapes });
+            cB_displayShapes.Checked = true;
 
-            checkBox_displayResults = new CheckBox();
-            checkBox_displayResults.Text = "Display results for each case";
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = checkBox_displayResults });
+            cB_displayResults = new CheckBox();
+            cB_displayResults.Text = "Display results for each case";
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = cB_displayResults });
 
             simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = null });
 
-            checkBox_displayResults.Checked = true;
+            cB_displayResults.Checked = true;
         }
 
         void setSize(Button _control, int width, int height)

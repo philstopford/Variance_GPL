@@ -76,7 +76,7 @@ namespace Variance
             {
                 upperGadgets_panel.Content = simPreviewBox;
             }
-            if (checkBox_displayResults.Checked == true)
+            if (cB_displayResults.Checked == true)
             {
                 commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 1);
             }
@@ -84,7 +84,7 @@ namespace Variance
             {
                 commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 0);
             }
-            if (checkBox_displayShapes.Checked == true)
+            if (cB_displayShapes.Checked == true)
             {
                 commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape, 1);
             }
@@ -186,7 +186,7 @@ namespace Variance
             {
                 case (Int32)CommonVars.twoDTabNames.layer:
                     listbox_change();
-                    do2DLayerUI_exp(getSelectedLayerIndex(), updateUI: true);
+                    do2DLayerUI(getSelectedLayerIndex(), updateUI: true);
                     break;
                 case (Int32)CommonVars.twoDTabNames.settings:
                     updateSettingsUIFromSettings();

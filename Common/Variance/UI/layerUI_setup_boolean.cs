@@ -5,37 +5,37 @@ namespace Variance
     public partial class MainForm : Form
     {
         // 2D Layer Boolean
-        GroupBox groupBox_layerBoolean_exp;
-        DropDown comboBox_layerBooleanOpAB_exp, comboBox_layerBooleanOpA_exp, comboBox_layerBooleanOpB_exp, comboBox_layerTipLocations_boolean_exp;
-        RadioButton[] rB_layerBooleanA_exp, rB_layerBooleanB_exp;
-        Label lbl_layerTipLocations_boolean_exp, lbl_rayExtension;
+        GroupBox gB_layerBoolean;
+        DropDown comboBox_BooleanOpAB, comboBox_BooleanOpA, comboBox_BooleanOpB, comboBox_TipLocations_boolean;
+        RadioButton[] rB_BooleanA, rB_BooleanB;
+        Label lbl_TipLocations_boolean, lbl_rayExtension;
         NumericStepper num_rayExtension;
 
-        void twoD_LayerUISetup_boolean_exp()
+        void twoD_LayerUISetup_boolean()
         {
             Application.Instance.Invoke(() =>
             {
-                groupBox_layerBoolean_exp = new GroupBox();
+                gB_layerBoolean = new GroupBox();
                 TableLayout groupBox_layerBoolean_table = new TableLayout();
-                groupBox_layerBoolean_exp.Content = groupBox_layerBoolean_table;
-                groupBox_layerBoolean_exp.Text = "Boolean";
+                gB_layerBoolean.Content = groupBox_layerBoolean_table;
+                gB_layerBoolean.Text = "Boolean";
 
-                rB_layerBooleanA_exp = new RadioButton[CentralProperties.maxLayersForMC];
-                rB_layerBooleanB_exp = new RadioButton[CentralProperties.maxLayersForMC];
+                rB_BooleanA = new RadioButton[CentralProperties.maxLayersForMC];
+                rB_BooleanB = new RadioButton[CentralProperties.maxLayersForMC];
 
                 boolean_table(groupBox_layerBoolean_table);
 
-                layerShapeProperties_tcPanel.Content = groupBox_layerBoolean_exp;
+                layerShapeProperties_tcPanel.Content = gB_layerBoolean;
 
                 setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             });
         }
 
-        void boolean_table(TableLayout groupBox_layerBoolean_table)
+        void boolean_table(TableLayout layerBoolean_table)
         {
             // Outer table, row 1
             TableRow boolean_tr0 = new TableRow();
-            groupBox_layerBoolean_table.Rows.Add(boolean_tr0);
+            layerBoolean_table.Rows.Add(boolean_tr0);
             boolean_tr0.Cells.Add(new TableCell());
 
             // Table layout within row 1
@@ -47,7 +47,7 @@ namespace Variance
 
             // Outer table, row 2
             TableRow boolean_tr1 = new TableRow();
-            groupBox_layerBoolean_table.Rows.Add(boolean_tr1);
+            layerBoolean_table.Rows.Add(boolean_tr1);
 
             // Table layout within row 2
             TableLayout row1_tl = new TableLayout();
@@ -58,7 +58,7 @@ namespace Variance
 
             // Outer table, row 3
             TableRow boolean_tr2 = new TableRow();
-            groupBox_layerBoolean_table.Rows.Add(boolean_tr2);
+            layerBoolean_table.Rows.Add(boolean_tr2);
 
             // Table layout within row 3
             TableLayout row2_tl = new TableLayout();
@@ -69,7 +69,7 @@ namespace Variance
 
             // Outer table, row 4
             TableRow boolean_tr3 = new TableRow();
-            groupBox_layerBoolean_table.Rows.Add(boolean_tr3);
+            layerBoolean_table.Rows.Add(boolean_tr3);
 
             // Table layout within row 4
             TableLayout row3_tl = new TableLayout();
@@ -83,9 +83,9 @@ namespace Variance
         {
             row0_tl.Rows.Add(new TableRow());
 
-            comboBox_layerBooleanOpA_exp = new DropDown();
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerBooleanOpA_exp) });
-            comboBox_layerBooleanOpA_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
+            comboBox_BooleanOpA = new DropDown();
+            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_BooleanOpA) });
+            comboBox_BooleanOpA.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
 
             Panel p = new Panel();
             TableLayout boolATable = new TableLayout();
@@ -97,12 +97,12 @@ namespace Variance
             TableRow boolA_tr1 = new TableRow();
             boolATable.Rows.Add(boolA_tr1);
 
-            rB_layerBooleanA_exp[0] = new RadioButton();
-            rB_layerBooleanA_exp[0].Text = "0";
-            rB_layerBooleanA_exp[0].Checked = true;
+            rB_BooleanA[0] = new RadioButton();
+            rB_BooleanA[0].Text = "0";
+            rB_BooleanA[0].Checked = true;
 
             TableCell rB_boolA_0tc = new TableCell();
-            rB_boolA_0tc.Control = rB_layerBooleanA_exp[0];
+            rB_boolA_0tc.Control = rB_BooleanA[0];
 
             boolATable.Rows[0].Cells.Add(rB_boolA_0tc);
 
@@ -110,11 +110,11 @@ namespace Variance
             int rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_layerBooleanA_exp[button] = new RadioButton(rB_layerBooleanA_exp[0]);
-                rB_layerBooleanA_exp[button].Text = button.ToString();
-                rB_layerBooleanA_exp[button].Checked = false;
+                rB_BooleanA[button] = new RadioButton(rB_BooleanA[0]);
+                rB_BooleanA[button].Text = button.ToString();
+                rB_BooleanA[button].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = rB_layerBooleanA_exp[button];
+                tc0.Control = rB_BooleanA[button];
                 boolATable.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if (button + 1 == CentralProperties.maxLayersForMC / 2)
@@ -130,9 +130,9 @@ namespace Variance
         {
             row1_tl.Rows.Add(new TableRow());
 
-            comboBox_layerBooleanOpAB_exp = new DropDown();
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerBooleanOpAB_exp) });
-            comboBox_layerBooleanOpAB_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.booleanList);
+            comboBox_BooleanOpAB = new DropDown();
+            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_BooleanOpAB) });
+            comboBox_BooleanOpAB.BindDataContext(c => c.DataStore, (UIStringLists m) => m.booleanList);
 
             row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
         }
@@ -141,9 +141,9 @@ namespace Variance
         {
             row2_tl.Rows.Add(new TableRow());
 
-            comboBox_layerBooleanOpB_exp = new DropDown();
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerBooleanOpB_exp) });
-            comboBox_layerBooleanOpB_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
+            comboBox_BooleanOpB = new DropDown();
+            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_BooleanOpB) });
+            comboBox_BooleanOpB.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
 
             Panel p = new Panel();
             TableLayout boolBTable = new TableLayout();
@@ -155,12 +155,12 @@ namespace Variance
             TableRow boolB_tr1 = new TableRow();
             boolBTable.Rows.Add(boolB_tr1);
 
-            rB_layerBooleanB_exp[0] = new RadioButton();
-            rB_layerBooleanB_exp[0].Text = "0";
-            rB_layerBooleanB_exp[0].Checked = true;
+            rB_BooleanB[0] = new RadioButton();
+            rB_BooleanB[0].Text = "0";
+            rB_BooleanB[0].Checked = true;
 
             TableCell rB_boolB_0tc = new TableCell();
-            rB_boolB_0tc.Control = rB_layerBooleanB_exp[0];
+            rB_boolB_0tc.Control = rB_BooleanB[0];
 
             boolBTable.Rows[0].Cells.Add(rB_boolB_0tc);
 
@@ -168,11 +168,11 @@ namespace Variance
             int rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_layerBooleanB_exp[button] = new RadioButton(rB_layerBooleanB_exp[0]);
-                rB_layerBooleanB_exp[button].Text = button.ToString();
-                rB_layerBooleanB_exp[button].Checked = false;
+                rB_BooleanB[button] = new RadioButton(rB_BooleanB[0]);
+                rB_BooleanB[button].Text = button.ToString();
+                rB_BooleanB[button].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = rB_layerBooleanB_exp[button];
+                tc0.Control = rB_BooleanB[button];
                 boolBTable.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if (button + 1 == CentralProperties.maxLayersForMC / 2)
@@ -188,13 +188,13 @@ namespace Variance
         {
             row3_tl.Rows.Add(new TableRow());
 
-            lbl_layerTipLocations_boolean_exp = new Label();
-            lbl_layerTipLocations_boolean_exp.Text = "Tip Locs";
-            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTipLocations_boolean_exp });
+            lbl_TipLocations_boolean = new Label();
+            lbl_TipLocations_boolean.Text = "Tip Locs";
+            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_TipLocations_boolean });
 
-            comboBox_layerTipLocations_boolean_exp = new DropDown();
-            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_layerTipLocations_boolean_exp) });
-            comboBox_layerTipLocations_boolean_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
+            comboBox_TipLocations_boolean = new DropDown();
+            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_TipLocations_boolean) });
+            comboBox_TipLocations_boolean.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
 
 
             row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });

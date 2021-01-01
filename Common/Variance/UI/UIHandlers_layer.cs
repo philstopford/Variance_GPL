@@ -19,18 +19,18 @@ namespace Variance
                 return;
             }
 
-            int index = experimental_listBox_layers.SelectedIndex;
+            int index = listBox_layers.SelectedIndex;
 
             if (index == -1)
             {
-                experimental_listBox_layers.SelectedIndex = 0;
+                listBox_layers.SelectedIndex = 0;
                 index = 0;
             }
 
             selectedLayer = index;
 
             set_ui_from_settings(index);
-            do2DLayerUI_exp(index);
+            do2DLayerUI(index);
         }
 
         void showDrawn_exp(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace Variance
             {
                 return;
             }
-            showDrawn_exp(settingsIndex);
+            showDrawn(settingsIndex);
         }
 
         void twoDLayerEventHandler_exp(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace Variance
             bool updateUI = false;
             try
             {
-                if (comboBox_layerShape_exp == (DropDown)sender)
+                if (comboBox_layerShape == (DropDown)sender)
                 {
                     updateUI = true;
                 }
@@ -71,7 +71,7 @@ namespace Variance
             }
             try
             {
-                if ((checkBox_layer_overlayXReference_Av_exp == (CheckBox)sender) || (checkBox_layer_overlayYReference_Av_exp == (CheckBox)sender))
+                if ((cB_overlayXReference_Av == (CheckBox)sender) || (cB_overlayYReference_Av == (CheckBox)sender))
                 {
                     updateUI = true;
                 }
@@ -81,7 +81,7 @@ namespace Variance
 
             }
 
-            do2DLayerUI_exp(index, updateUI);
+            do2DLayerUI(index, updateUI);
         }
 
         void suspendLayerUI_exp()
@@ -174,7 +174,7 @@ namespace Variance
         void omitLayerCheckboxChanged(object sender, EventArgs e)
         {
             // Establish which sender raised the event so that we can push the value to the correct layer.
-            int index = Array.IndexOf(checkBox_omit_lyr, sender);
+            int index = Array.IndexOf(cB_omit, sender);
             setOmitLayer(index, (bool)((CheckBox)sender).Checked);
         }
 
@@ -208,9 +208,9 @@ namespace Variance
 
         void bgLayerCheckboxChanged(int settingsIndex)
         {
-            for (int i = 0; i < checkBox_bg_lyr.Length; i++)
+            for (int i = 0; i < cB_bg.Length; i++)
             {
-                if (((bool)checkBox_bg_lyr[i].Checked) && checkBox_bg_lyr[i].Enabled)
+                if (((bool)cB_bg[i].Checked) && cB_bg[i].Enabled)
                 {
                     commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, i, 1);
                 }

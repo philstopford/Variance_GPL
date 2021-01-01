@@ -472,8 +472,8 @@ namespace Variance
                 comboBox_calcModes.SelectedIndexChanged += entropySettingsChanged;
                 checkBox_withinMode.CheckedChanged += entropySettingsChanged;
                 checkBox_useShortestEdge.CheckedChanged += entropySettingsChanged;
-                checkBox_displayResults.CheckedChanged += mcPreviewSettingsChanged;
-                checkBox_displayShapes.CheckedChanged += mcPreviewSettingsChanged;
+                cB_displayResults.CheckedChanged += mcPreviewSettingsChanged;
+                cB_displayShapes.CheckedChanged += mcPreviewSettingsChanged;
                 num_ssNumOfCases.LostFocus += entropySettingsChanged;
                 num_ssPrecision.LostFocus += entropySettingsChanged;
                 num_cornerSegments.LostFocus += entropySettingsChanged;

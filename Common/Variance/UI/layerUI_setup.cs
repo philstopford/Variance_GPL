@@ -11,20 +11,20 @@ namespace Variance
 
         void twoD_LayerUISetup()
         {
-            rB_layer_OLRX_exp = new RadioButton[CentralProperties.maxLayersForMC];
-            rB_layer_OLRY_exp = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_OLRX = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_OLRY_exp = new RadioButton[CentralProperties.maxLayersForMC];
 
-            rB_layer_COLX_exp = new RadioButton[CentralProperties.maxLayersForMC];
-            rB_layer_COLY_exp = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_COLX = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_COLY = new RadioButton[CentralProperties.maxLayersForMC];
 
-            rB_layer_CCDU_exp = new RadioButton[CentralProperties.maxLayersForMC];
-            rB_layer_CTCDU_exp = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_CCDU = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_CTCDU = new RadioButton[CentralProperties.maxLayersForMC];
 
-            cB_layer_OLRX_Av_exp = new CheckBox[CentralProperties.maxLayersForMC];
-            cB_layer_OLRY_Av_exp = new CheckBox[CentralProperties.maxLayersForMC];
+            cB_OLRX_Av = new CheckBox[CentralProperties.maxLayersForMC];
+            cB_layer_OLRY_Av = new CheckBox[CentralProperties.maxLayersForMC];
 
-            rB_layer_CLWR_exp = new RadioButton[CentralProperties.maxLayersForMC];
-            rB_layer_CLWR2_exp = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_CLWR = new RadioButton[CentralProperties.maxLayersForMC];
+            rB_CLWR2 = new RadioButton[CentralProperties.maxLayersForMC];
 
             xOLRBs_enabledState = new List<bool[]>();
             yOLRBs_enabledState = new List<bool[]>();
@@ -67,23 +67,23 @@ namespace Variance
             Panel p = new Panel();
             row0.Cells.Add(new TableCell() { Control = p });
 
-            experimental_listBox_layers = new ListBox();
-            experimental_listBox_layers.Width = 55;
-            experimental_listBox_layers.DataContext = DataContext;
-            experimental_listBox_layers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.layerNames);
-            experimental_listBox_layers.ContextMenu = listbox_menu;
+            listBox_layers = new ListBox();
+            listBox_layers.Width = 55;
+            listBox_layers.DataContext = DataContext;
+            listBox_layers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.layerNames);
+            listBox_layers.ContextMenu = listbox_menu;
 
-            experimental_listBox_layers.SelectedIndexChanged += listbox_change;
+            listBox_layers.SelectedIndexChanged += listbox_change;
 
             Scrollable scrollable_twoDLayer = new Scrollable();
-            tabPage_2D_layer_content_exp = new TableLayout();
-            scrollable_twoDLayer.Content = tabPage_2D_layer_content_exp;
+            tabPage_2D_layer_table = new TableLayout();
+            scrollable_twoDLayer.Content = tabPage_2D_layer_table;
 
             Splitter sp = new Splitter
             {
                 Orientation = Orientation.Horizontal,
                 FixedPanel = SplitterFixedPanel.Panel1,
-                Panel1 = experimental_listBox_layers,
+                Panel1 = listBox_layers,
                 Panel2 = scrollable_twoDLayer,
             };
             p.Content = sp;
@@ -98,9 +98,9 @@ namespace Variance
                 TableLayout tl = new TableLayout();
                 Panel p = new Panel();
                 p.Content = tl;
-                tabPage_2D_layer_content_exp.Rows.Add(new TableRow());
-                tabPage_2D_layer_content_exp.Rows[0].Cells.Add(new TableCell() { Control = p });
-                tabPage_2D_layer_content_exp.Rows.Add(new TableRow() { ScaleHeight = true });
+                tabPage_2D_layer_table.Rows.Add(new TableRow());
+                tabPage_2D_layer_table.Rows[0].Cells.Add(new TableCell() { Control = p });
+                tabPage_2D_layer_table.Rows.Add(new TableRow() { ScaleHeight = true });
 
                 tl.Rows.Add(new TableRow());
                 TableCell topRowTC = new TableCell();
@@ -126,7 +126,7 @@ namespace Variance
                 TableCell lopTC = new TableCell();
                 tl_lop.Rows[0].Cells.Add(lopTC);
 
-                twoD_LayerUISetup_layoutOriginParameters_exp(lopTC);
+                twoD_LayerUISetup_layoutOriginParameters(lopTC);
 
                 TableCell gadgets2TC = new TableCell();
                 tl_lop.Rows[0].Cells.Add(gadgets2TC);
@@ -140,7 +140,7 @@ namespace Variance
                 tl.Rows.Add(new TableRow());
                 TableCell biasEtchTC = new TableCell();
                 tl.Rows[tl.Rows.Count - 1].Cells.Add(biasEtchTC);
-                twoD_LayerUISetup_biasEtch_exp(biasEtchTC);
+                twoD_LayerUISetup_biasEtch(biasEtchTC);
 
                 tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true }); // padding.
 
@@ -149,7 +149,7 @@ namespace Variance
                 tl.Rows.Add(new TableRow());
                 TableCell lithoTC = new TableCell();
                 tl.Rows[tl.Rows.Count - 1].Cells.Add(lithoTC);
-                twoD_LayerUISetup_litho_exp(lithoTC);
+                twoD_LayerUISetup_litho(lithoTC);
 
                 // Button export
                 tl.Rows.Add(new TableRow());
@@ -200,105 +200,105 @@ namespace Variance
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.edgeSlide) == 1)
                 {
-                    checkBox_layer_edgeSlide_exp.Checked = true;
-                    num_layer_edgeSlideTension_exp.Enabled = true;
+                    cB_edgeSlide.Checked = true;
+                    num_edgeSlideTension.Enabled = true;
                 }
                 else
                 {
-                    checkBox_layer_edgeSlide_exp.Checked = false;
-                    checkBox_layer_edgeSlide_exp.Enabled = false;
+                    cB_edgeSlide.Checked = false;
+                    cB_edgeSlide.Enabled = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1)
                 {
-                    checkBox_Layer_FlipH_exp.Checked = true;
+                    cB_FlipH.Checked = true;
                 }
                 else
                 {
-                    checkBox_Layer_FlipH_exp.Checked = false;
+                    cB_FlipH.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
                 {
-                    checkBox_Layer_FlipV_exp.Checked = true;
+                    cB_FlipV.Checked = true;
                 }
                 else
                 {
-                    checkBox_Layer_FlipV_exp.Checked = false;
+                    cB_FlipV.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignX) == 1)
                 {
-                    checkBox_Layer_alignGeometryX_exp.Checked = true;
+                    cB_alignGeometryX.Checked = true;
                 }
                 else
                 {
-                    checkBox_Layer_alignGeometryX_exp.Checked = false;
+                    cB_alignGeometryX.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignY) == 1)
                 {
-                    checkBox_Layer_alignGeometryY_exp.Checked = true;
+                    cB_alignGeometryY.Checked = true;
                 }
                 else
                 {
-                    checkBox_Layer_alignGeometryY_exp.Checked = false;
+                    cB_alignGeometryY.Checked = false;
                 }
 
-                checkBox_Layer_alignGeometryX_exp.Enabled = false;
-                checkBox_Layer_alignGeometryY_exp.Enabled = false;
+                cB_alignGeometryX.Enabled = false;
+                cB_alignGeometryY.Enabled = false;
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1)
                 {
-                    checkBox_Layer_alignGeometryX_exp.Enabled = true;
+                    cB_alignGeometryX.Enabled = true;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
                 {
-                    checkBox_Layer_alignGeometryY_exp.Enabled = true;
+                    cB_alignGeometryY.Enabled = true;
                 }
 
-                text_layerName_exp.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.name);
+                text_layerName.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.name);
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
                 {
-                    checkBox_Layer_exp.Checked = true;
-                    checkBox_Layer_ShowDrawn_exp.Enabled = true;
+                    cB_Layer.Checked = true;
+                    cB_ShowDrawn.Enabled = true;
                 }
                 else
                 {
-                    checkBox_Layer_exp.Checked = false;
-                    checkBox_Layer_ShowDrawn_exp.Enabled = false;
+                    cB_Layer.Checked = false;
+                    cB_ShowDrawn.Enabled = false;
                 }
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.omit) == 1)
                 {
-                    checkBox_omit_lyr[settingsIndex].Checked = true;
+                    cB_omit[settingsIndex].Checked = true;
                 }
                 else
                 {
-                    checkBox_omit_lyr[settingsIndex].Checked = false;
+                    cB_omit[settingsIndex].Checked = false;
                 }
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.showDrawn) == 1)
                 {
-                    checkBox_Layer_ShowDrawn_exp.Checked = true;
+                    cB_ShowDrawn.Checked = true;
                 }
                 else
                 {
-                    checkBox_Layer_ShowDrawn_exp.Checked = false;
+                    cB_ShowDrawn.Checked = false;
                 }
-                num_layer_subshape_hl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
-                num_layer_subshape_vl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
-                num_layer_subshape_ho_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset);
-                num_layer_subshape_vo_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset);
-                num_layer_subshape2_hl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength);
-                num_layer_subshape2_vl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
-                num_layer_subshape2_ho_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset);
-                num_layer_subshape2_vo_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset);
-                num_layer_subshape3_hl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength);
-                num_layer_subshape3_vl_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength);
-                num_layer_subshape3_ho_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset);
-                num_layer_subshape3_vo_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset);
+                num_subshape_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
+                num_subshape_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
+                num_subshape_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset);
+                num_subshape_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset);
+                num_subshape2_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength);
+                num_subshape2_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+                num_subshape2_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset);
+                num_subshape2_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset);
+                num_subshape3_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength);
+                num_subshape3_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength);
+                num_subshape3_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset);
+                num_subshape3_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset);
                 try
                 {
-                    comboBox_layerShape_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex);
+                    comboBox_layerShape.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex);
                 }
                 catch (Exception)
                 {
@@ -306,7 +306,7 @@ namespace Variance
 
                 try
                 {
-                    comboBox_layerPolyFill_geoCore_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill);
+                    comboBox_polyFill_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill);
                 }
                 catch (Exception)
                 {
@@ -315,33 +315,33 @@ namespace Variance
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
                 {
-                    checkBox_layer_geoCore_shapeEngine_exp.Checked = true;
+                    cB_geoCore_shapeEngine.Checked = true;
                 }
                 else
                 {
-                    checkBox_layer_geoCore_shapeEngine_exp.Checked = false;
+                    cB_geoCore_shapeEngine.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.perPoly) == 1)
                 {
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Checked = true;
+                    cB_geoCore_shapeEngine_perPoly.Checked = true;
                 }
                 else
                 {
-                    checkBox_layer_geoCore_shapeEngine_perPoly_exp.Checked = false;
+                    cB_geoCore_shapeEngine_perPoly.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.refLayout) == 1)
                 {
-                    checkBox_layer_geoCore_layoutReference_exp.Checked = true;
+                    cB_geoCore_layoutReference.Checked = true;
                 }
                 else
                 {
-                    checkBox_layer_geoCore_layoutReference_exp.Checked = false;
+                    cB_geoCore_layoutReference.Checked = false;
                 }
 
                 // Layout handling
-                textBox_layer_FileLocation_geoCore_exp.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.file);
+                textBox_fileLocation_geoCore.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.file);
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE)
                 {
                     if (commonVars.isCopyPrepped())
@@ -350,7 +350,7 @@ namespace Variance
                     }
                     try
                     {
-                        comboBox_layerStructureList_geoCore_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure);
+                        comboBox_structureList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure);
                     }
                     catch (Exception)
                     {
@@ -358,7 +358,7 @@ namespace Variance
                     }
                     try
                     {
-                        comboBox_layerLDList_geoCore_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD);
+                        comboBox_lDList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD);
                     }
                     catch (Exception)
                     {
@@ -367,17 +367,17 @@ namespace Variance
                     // Enable UI elements if layout is valid/loaded.
                     // Block UI elements if reloaded as we don't have the layout to move to a different structure/layer-datatype.
                     // Need to check state of this conditional in case 'reference' is selected.
-                    button_layer_globalApply_geoCore_exp.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
-                    comboBox_layerStructureList_geoCore_exp.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
-                    comboBox_layerLDList_geoCore_exp.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
-                    comboBox_layerTipLocations_geoCore_exp.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
+                    btn_globalApply_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
+                    comboBox_structureList_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
+                    comboBox_lDList_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
+                    comboBox_tipLocations_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
                 }
 
                 try
                 {
-                    comboBox_layerTipLocations_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
-                    comboBox_layerTipLocations_geoCore_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
-                    comboBox_layerTipLocations_boolean_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
+                    comboBox_tipLocations.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
+                    comboBox_tipLocations_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
+                    comboBox_TipLocations_boolean.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
                 }
                 catch (Exception)
                 {
@@ -394,92 +394,92 @@ namespace Variance
 
                 try
                 {
-                    comboBox_layerTipLocations2_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape1Tip);
+                    comboBox_tipLocations2.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape1Tip);
                 }
                 catch (Exception)
                 {
                 }
                 try
                 {
-                    comboBox_layerTipLocations3_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape2Tip);
+                    comboBox_tipLocations3.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape2Tip);
                 }
                 catch (Exception)
                 {
                 }
                 try
                 {
-                    comboBox_layerSubShapeRef_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.subShapeIndex);
+                    comboBox_subShapeRef.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.subShapeIndex);
                 }
                 catch (Exception)
                 {
                 }
                 try
                 {
-                    comboBox_layerPosSubShape_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.posIndex);
+                    comboBox_posSubShape.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.posIndex);
                 }
                 catch (Exception)
                 {
                 }
-                num_layerGlobalHorOffset_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset);
-                num_layerGlobalVerOffset_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset);
-                num_layerRotation_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rot);
-                num_layer_lithoWobble_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
-                num_layerSidebias_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.sBias);
-                num_layerHTipbias_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTBias);
-                num_layerhTipPVar_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTPVar);
-                num_layerhTipNVar_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTNVar);
-                num_layerVTipbias_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTBias);
-                num_layervTipPVar_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTPVar);
-                num_layervTipNVar_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTNVar);
-                num_pitchDepBias_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBias);
-                num_pitchDepBiasIsoDistance_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist);
-                num_pitchDepBiasSideRays_exp.Value = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxRays);
+                num_globalHorOffset.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset);
+                num_globalVerOffset.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset);
+                num_rotation.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rot);
+                num_lithoWobble.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
+                num_sidebias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.sBias);
+                num_hTipbias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTBias);
+                num_hTipPVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTPVar);
+                num_hTipNVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTNVar);
+                num_vTipbias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTBias);
+                num_vTipPVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTPVar);
+                num_vTipNVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.vTNVar);
+                num_pitchDepBias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBias);
+                num_pitchDepBiasIsoDistance.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist);
+                num_pitchDepBiasSideRays.Value = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxRays);
                 comboBox_proxBiasFallOff.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff);
                 num_proxBiasFallOffMultiplier.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier);
-                num_layer_lithoICRR_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCR);
-                num_layer_lithoOCRR_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCR);
-                num_layer_lithoICV_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCV);
-                num_layer_lithoOCV_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCV);
-                num_layer_lithoLWR_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr);
-                num_layer_lithoLWRFreq_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq);
-                num_layer_lithoLWR2_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2);
-                num_layer_lithoLWR2Freq_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq);
+                num_lithoICRR.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCR);
+                num_lithoOCRR.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCR);
+                num_lithoICV.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCV);
+                num_lithoOCV.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCV);
+                num_lithoLWR.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr);
+                num_lithoLWRFreq.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq);
+                num_lithoLWR2.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2);
+                num_lithoLWR2Freq.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq);
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1)
                 {
-                    cB_layer_LWRPreview_exp.Checked = true;
+                    cB_layer_LWRPreview.Checked = true;
                 }
                 else
                 {
-                    cB_layer_LWRPreview_exp.Checked = false;
+                    cB_layer_LWRPreview.Checked = false;
                 }
                 try
                 {
-                    comboBox_layerLWRNoiseType_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrType);
+                    comboBox_LWRNoiseType.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrType);
                 }
                 catch (Exception)
                 {
                 }
                 try
                 {
-                    comboBox_layerLWR2NoiseType_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwr2Type);
+                    comboBox_LWR2NoiseType.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwr2Type);
                 }
                 catch (Exception)
                 {
                 }
 
-                num_layer_coeff1_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC1);
-                num_layer_coeff2_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC2);
+                num_coeff1.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC1);
+                num_coeff2.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC2);
 
-                num_layer_lithoCDUSide_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.sCDU);
-                num_layer_lithoCDUTips_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.tCDU);
-                num_layer_lithoHorOverlay_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.xOL);
-                num_layer_lithoVerOverlay_exp.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.yOL);
+                num_lithoCDUSide.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.sCDU);
+                num_lithoCDUTips.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.tCDU);
+                num_lithoHorOverlay.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.xOL);
+                num_lithoVerOverlay.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.yOL);
 
                 if (booleanGBVisible[settingsIndex])
                 {
-                    comboBox_layerBooleanOpA_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpA);
-                    comboBox_layerBooleanOpB_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpB);
-                    comboBox_layerBooleanOpAB_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpAB);
+                    comboBox_BooleanOpA.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpA);
+                    comboBox_BooleanOpB.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpB);
+                    comboBox_BooleanOpAB.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.bLayerOpAB);
                     num_rayExtension.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension);
                 }
 
@@ -494,45 +494,45 @@ namespace Variance
                 updateLayerOLRYRadioButtons_exp(settingsIndex);
                 updateLayerBooleanRadioButtons_exp(settingsIndex);
 
-                comboBox_layerSubShapeRef_exp.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.subShapeIndex);
+                comboBox_subShapeRef.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.subShapeIndex);
 
                 // Average overlay handling
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.xOL_av) == 1)
                 {
-                    pnl_overlayRefX.Content = groupBox_layer_overlayXReference_Av_exp;
-                    checkBox_layer_overlayXReference_Av_exp.Checked = true;
+                    pnl_overlayRefX.Content = gB_overlayXReference_Av;
+                    cB_overlayXReference_Av.Checked = true;
                 }
                 else
                 {
-                    pnl_overlayRefX.Content = groupBox_layer_overlayXReference_exp;
-                    checkBox_layer_overlayXReference_Av_exp.Checked = false;
+                    pnl_overlayRefX.Content = gB_overlayXReference;
+                    cB_overlayXReference_Av.Checked = false;
                 }
 
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.yOL_av) == 1)
                 {
-                    pnl_overlayRefY.Content = groupBox_layer_overlayYReference_Av_exp;
-                    checkBox_layer_overlayYReference_Av_exp.Checked = true;
+                    pnl_overlayRefY.Content = gB_overlayYReference_Av;
+                    cB_overlayYReference_Av.Checked = true;
                 }
                 else
                 {
-                    pnl_overlayRefY.Content = groupBox_layer_overlayYReference_exp;
-                    checkBox_layer_overlayYReference_Av_exp.Checked = false;
+                    pnl_overlayRefY.Content = gB_overlayYReference;
+                    cB_overlayYReference_Av.Checked = false;
                 }
 
                 updateAverageOverlayCheckboxes_exp(settingsIndex);
 
-                checkBox_DOELayer_geoCore_exp.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
-                checkBox_DOELayer_geoCore_exp.Checked = false;
+                cB_DOE_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
+                cB_DOE_geoCore.Checked = false;
                 if (commonVars.getGeoCoreHandler(settingsIndex).isValid())
                 {
                     if (commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1)
                     {
-                        checkBox_DOELayer_geoCore_exp.Checked = true;
+                        cB_DOE_geoCore.Checked = true;
                     }
                 }
 
-                do2DLayerUI_exp(settingsIndex, updateUI: true);
-                updateGroupBoxVisibility_exp(settingsIndex);
+                do2DLayerUI(settingsIndex, updateUI: true);
+                updateGroupBoxVisibility(settingsIndex);
 
                 layerUIFrozen_exp = alreadyFrozen;
 
@@ -576,11 +576,11 @@ namespace Variance
 
             tc1.Control = layerShapeProperties;
 
-            twoD_LayerUISetup_boolean_exp();
+            twoD_LayerUISetup_boolean();
 
-            twoD_LayerUISetup_subShape_exp();
+            twoD_LayerUISetup_subShape();
 
-            twoD_LayerUISetup_geoCore_exp();
+            twoD_LayerUISetup_geoCore();
         }
 
         void layerGadgets_setup(TableCell tc)
@@ -621,14 +621,14 @@ namespace Variance
 
             gadgets_tr0_0_tl.Rows.Add(new TableRow());
 
-            checkBox_Layer_exp = new CheckBox();
-            checkBox_Layer_exp.Text = "Enabled";
-            checkBox_Layer_exp.ToolTip = "If checked, include the layer in the simulation";
-            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = checkBox_Layer_exp });
+            cB_Layer = new CheckBox();
+            cB_Layer.Text = "Enabled";
+            cB_Layer.ToolTip = "If checked, include the layer in the simulation";
+            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = cB_Layer });
 
-            text_layerName_exp = new TextBox();
-            text_layerName_exp.ToolTip = "Layer name. If blank, the layer number will be used";
-            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = text_layerName_exp });
+            text_layerName = new TextBox();
+            text_layerName.ToolTip = "Layer name. If blank, the layer number will be used";
+            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = text_layerName });
             gadgets_tr0_0_tl.Rows[0].Cells[gadgets_tr0_0_tl.Rows[0].Cells.Count - 1].ScaleWidth = true;
         }
 
@@ -653,12 +653,12 @@ namespace Variance
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            comboBox_layerShape_exp = new DropDown();
-            comboBox_layerShape_exp.DataContext = DataContext;
-            comboBox_layerShape_exp.BindDataContext(c => c.DataStore, (UIStringLists m) => m.shapes);
-            comboBox_layerShape_exp.SelectedIndex = 0;
-            comboBox_layerShape_exp.ToolTip = "Type of shape to generate";
-            gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = comboBox_layerShape_exp });
+            comboBox_layerShape = new DropDown();
+            comboBox_layerShape.DataContext = DataContext;
+            comboBox_layerShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.shapes);
+            comboBox_layerShape.SelectedIndex = 0;
+            comboBox_layerShape.ToolTip = "Type of shape to generate";
+            gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = comboBox_layerShape });
         }
 
         void layerGadgets2(TableCell tc)
@@ -698,44 +698,44 @@ namespace Variance
             TableLayout flipAign_tl = new TableLayout();
             flipAign_tl.Rows.Add(new TableRow());
 
-            checkBox_Layer_FlipH_exp = new CheckBox();
-            checkBox_Layer_FlipH_exp.Text = "Flip H";
-            checkBox_Layer_FlipH_exp.ToolTip = "Flip shape horizontally";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_FlipH_exp });
+            cB_FlipH = new CheckBox();
+            cB_FlipH.Text = "Flip H";
+            cB_FlipH.ToolTip = "Flip shape horizontally";
+            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_FlipH });
 
-            checkBox_Layer_alignGeometryX_exp = new CheckBox();
-            checkBox_Layer_alignGeometryX_exp.Text = "Align X";
-            checkBox_Layer_alignGeometryX_exp.ToolTip = "Centers the flipped shape on the non-flipped shape in X";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_alignGeometryX_exp });
+            cB_alignGeometryX = new CheckBox();
+            cB_alignGeometryX.Text = "Align X";
+            cB_alignGeometryX.ToolTip = "Centers the flipped shape on the non-flipped shape in X";
+            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_alignGeometryX });
 
             flipAign_tl.Rows.Add(new TableRow());
 
-            checkBox_Layer_FlipV_exp = new CheckBox();
-            checkBox_Layer_FlipV_exp.Text = "Flip V";
-            checkBox_Layer_FlipV_exp.ToolTip = "Flip shape vertically";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_FlipV_exp });
+            cB_FlipV = new CheckBox();
+            cB_FlipV.Text = "Flip V";
+            cB_FlipV.ToolTip = "Flip shape vertically";
+            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_FlipV });
 
-            checkBox_Layer_alignGeometryY_exp = new CheckBox();
-            checkBox_Layer_alignGeometryY_exp.Text = "Align Y";
-            checkBox_Layer_alignGeometryY_exp.ToolTip = "Centers the flipped shape on the non-flipped shape in Y";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_alignGeometryY_exp });
+            cB_alignGeometryY = new CheckBox();
+            cB_alignGeometryY.Text = "Align Y";
+            cB_alignGeometryY.ToolTip = "Centers the flipped shape on the non-flipped shape in Y";
+            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_alignGeometryY });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
             gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(flipAign_tl) });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            checkBox_Layer_ShowDrawn_exp = new CheckBox();
-            checkBox_Layer_ShowDrawn_exp.Text = "Show Drawn";
-            checkBox_Layer_ShowDrawn_exp.ToolTip = "Show drawn shape for the contour";
-            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_Layer_ShowDrawn_exp });
+            cB_ShowDrawn = new CheckBox();
+            cB_ShowDrawn.Text = "Show Drawn";
+            cB_ShowDrawn.ToolTip = "Show drawn shape for the contour";
+            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_ShowDrawn });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            cB_layer_LWRPreview_exp = new CheckBox();
-            cB_layer_LWRPreview_exp.Text = "Show LWR";
-            cB_layer_LWRPreview_exp.ToolTip = "Preview of LWR";
-            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_layer_LWRPreview_exp });
+            cB_layer_LWRPreview = new CheckBox();
+            cB_layer_LWRPreview.Text = "Show LWR";
+            cB_layer_LWRPreview.ToolTip = "Preview of LWR";
+            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_layer_LWRPreview });
         }
     }
 }

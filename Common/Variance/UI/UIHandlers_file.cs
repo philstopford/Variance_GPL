@@ -199,7 +199,7 @@ namespace Variance
                 }
                 if (subTabIndex == (int)CommonVars.twoDTabNames.layer)
                 {
-                    do2DLayerUI_exp(getSelectedLayerIndex(), updateUI: false);
+                    do2DLayerUI(getSelectedLayerIndex(), updateUI: false);
                 }
                 if (mainTabIndex == (int)CommonVars.upperTabNames.Implant)
                 {
@@ -270,7 +270,7 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                experimental_listBox_layers.SelectedIndexChanged -= listbox_change;
+                listBox_layers.SelectedIndexChanged -= listbox_change;
                 suspendUIHandlers();
                 btn_Cancel.Enabled = true;
             });
@@ -282,7 +282,7 @@ namespace Variance
             {
                 btn_Cancel.Enabled = false;
                 resumeUIHandlers();
-                experimental_listBox_layers.SelectedIndexChanged += listbox_change;
+                listBox_layers.SelectedIndexChanged += listbox_change;
             });
         }
 
@@ -408,7 +408,7 @@ namespace Variance
                         commonVars.getLayerSettings(settingsIndex).setReloaded(false);
                         try
                         {
-                            comboBox_layerStructureList_geoCore_exp.SelectedIndex = commonVars.getGeoCoreHandler(settingsIndex).getGeo().activeStructure;
+                            comboBox_structureList_geoCore.SelectedIndex = commonVars.getGeoCoreHandler(settingsIndex).getGeo().activeStructure;
                         }
                         catch (Exception)
                         {
@@ -416,14 +416,14 @@ namespace Variance
                         }
                         try
                         {
-                            comboBox_layerLDList_geoCore_exp.SelectedIndex = commonVars.getGeoCoreHandler(settingsIndex).getGeo().activeLD;
+                            comboBox_lDList_geoCore.SelectedIndex = commonVars.getGeoCoreHandler(settingsIndex).getGeo().activeLD;
                         }
                         catch (Exception)
                         {
 
                         }
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.structure, comboBox_layerStructureList_geoCore_exp.SelectedIndex);
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lD, comboBox_layerLDList_geoCore_exp.SelectedIndex);
+                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.structure, comboBox_structureList_geoCore.SelectedIndex);
+                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lD, comboBox_lDList_geoCore.SelectedIndex);
 
                         commonVars.getGeoCoreHandler(settingsIndex).setPoints(commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure), commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD));
                     });
@@ -449,8 +449,8 @@ namespace Variance
                 Application.Instance.Invoke(() =>
                 {
                     // Refresh layer UI : a little hacky due to the suspended UI elements, but it works.
-                    do2DLayerUI_exp(settingsIndex, updateUI: true);
-                    do2DLayerUI_geoCore_exp(settingsIndex);
+                    do2DLayerUI(settingsIndex, updateUI: true);
+                    do2DLayerUI_geoCore(settingsIndex);
                     prepUIPostLoad();
                     resumeUIHandlers();
                 });
@@ -460,7 +460,7 @@ namespace Variance
             {
                 stopIndeterminateProgress();
                 geoCoreLoadingUI(false);
-                do2DLayerUI_exp(settingsIndex, updateUI: true);
+                do2DLayerUI(settingsIndex, updateUI: true);
                 if (!fileOK)
                 {
                     ErrorReporter.showMessage_OK(error, "Error(s) loading file");
@@ -647,7 +647,7 @@ namespace Variance
 
         void updateLayerNames()
         {
-            experimental_listBox_layers.SelectedIndexChanged -= listbox_change;
+            listBox_layers.SelectedIndexChanged -= listbox_change;
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
                 string name = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
@@ -657,7 +657,7 @@ namespace Variance
                 }
                 commonVars.layerNames[i] = name;
             }
-            experimental_listBox_layers.SelectedIndexChanged += listbox_change;
+            listBox_layers.SelectedIndexChanged += listbox_change;
         }
 
         void stopIndeterminateProgress()

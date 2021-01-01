@@ -55,7 +55,7 @@ namespace Variance
             if (updateUI)
             {
                 set_ui_from_settings(index);
-                do2DLayerUI_exp(index, updateUI: true);
+                do2DLayerUI(index, updateUI: true);
             }
         }
 
