@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/Color" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/KDTree" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/LibTessDotNet" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/MersenneTwister" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/MiscUtil" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/Noise" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/clipper" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/entropyRNG" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/geoCore" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/geoLib" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/geoWrangler" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/info.lundin.math" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Common/utility" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Eto/DynamicAero2" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Eto/Eto.VeldridSurface" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Eto/errorReporter" />
+    <content url="file://$MODULE_DIR$/../../../DesignLibs_GPL/Eto/shaders" />
+    <content url="file://$MODULE_DIR$/../.." />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
