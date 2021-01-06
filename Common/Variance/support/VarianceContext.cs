@@ -36,15 +36,12 @@ namespace Variance
         public bool geoCoreCDVariation { get; set; }
         public Int32 HTCount { get; set; }
         public List<string> rngMappingEquations { get; set; }
-        public string licenseLocation { get; set; }
-        public byte[] _certPubicKeyData { get; set; }
         public bool friendlyNumber { get; set; }
+        public double angularTolerance { get; set; }
 
         // License data.
         public SimpleAES aes { get; set; }
         public string licenceName { get; set; }
-        public string licenceType { get; set; }
-        public string licenceExpiration { get; set; }
 
         public VarianceContext(bool implantMode_, string xmlFileArg_, int numberOfThreads_,
                              Int32 HTCount, string refName = "Variance")
@@ -79,12 +76,11 @@ namespace Variance
             this.HTCount = HTCount;
             rngMappingEquations = new List<string>();
             friendlyNumber = false;
+            angularTolerance = 0.2;
 
             string _msg = string.Empty;
 
             aes = new SimpleAES(Arrays.nameKey, Arrays.nameVector);
-            licenceExpiration = "";
-            licenceType = "advanced_permanent";
             licenceName = "GPLv3";
         }
     }

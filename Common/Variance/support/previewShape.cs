@@ -18,6 +18,7 @@ namespace Variance
 
     public class PreviewShape
     {
+        double angularTolerance;
         bool DOEDependency; // due to the DOE grid, we need this to sort out offsets. This includes buried references in Booleans. The min X/Y values for this case need to be at least the col/row offset.
         double doeMinX, doeMinY;
 
@@ -861,15 +862,17 @@ namespace Variance
             color = new MyColor(source.color);
         }
 
-        public PreviewShape(CommonVars commonVars, Int32 settingsIndex, Int32 subShapeIndex, Int32 mode, bool doPASearch, bool previewMode, Int32 currentRow, Int32 currentCol)
+        public PreviewShape(CommonVars commonVars, Int32 settingsIndex, Int32 subShapeIndex, Int32 mode, bool doPASearch, bool previewMode, Int32 currentRow, Int32 currentCol, double angularTolerance)
         {
+            this.angularTolerance = angularTolerance;
             xOffset = 0;
             yOffset = 0;
             init(commonVars, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol);
         }
 
-        public PreviewShape(CommonVars commonVars, ChaosSettings jobSettings_, Int32 settingsIndex, Int32 subShapeIndex, Int32 mode, bool doPASearch, bool previewMode, Int32 currentRow, Int32 currentCol)
+        public PreviewShape(CommonVars commonVars, ChaosSettings jobSettings_, Int32 settingsIndex, Int32 subShapeIndex, Int32 mode, bool doPASearch, bool previewMode, Int32 currentRow, Int32 currentCol, double angularTolerance)
         {
+            this.angularTolerance = angularTolerance;
             xOffset = 0;
             yOffset = 0;
             init(commonVars, jobSettings_, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol);
@@ -1443,7 +1446,7 @@ namespace Variance
                             // Complex shape
                             try
                             {
-                                EntropyShape complexPoints = new EntropyShape(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings);
+                                EntropyShape complexPoints = new EntropyShape(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, angularTolerance);
                                 previewPoints.Add(complexPoints.getPoints());
                                 drawnPoly.Add(false);
                             }
@@ -1708,10 +1711,10 @@ namespace Variance
                         else
                         {
                             // Feed tempPoly to shape engine.
-                            ShapeLibrary shape = new ShapeLibrary(entropyLayerSettings);
+                            ShapeLibrary shape = new ShapeLibrary(entropyLayerSettings, angularTolerance);
 
                             shape.setShape(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex), tempPoly.ToArray()); // feed the shape engine with the geometry using our optional parameter.
-                            EntropyShape complexPoints = new EntropyShape(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, shape, bb_mid);
+                            EntropyShape complexPoints = new EntropyShape(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, angularTolerance, shape, bb_mid);
                             // Add resulting shape to the previewPoints.
                             previewPoints.Add(complexPoints.getPoints());
                             // This list entry does matter - we need to choose the right expansion method in case contouring has been chosen, but the
@@ -1858,7 +1861,7 @@ namespace Variance
                 return;
             }
             EntropyLayerSettings layerA = commonVars.getLayerSettings(layerAIndex);
-            PreviewShape a_pShape = new PreviewShape(commonVars, layerAIndex, layerA.getInt(EntropyLayerSettings.properties_i.subShapeIndex), mode: 1, doPASearch, previewMode, currentRow, currentCol);
+            PreviewShape a_pShape = new PreviewShape(commonVars, layerAIndex, layerA.getInt(EntropyLayerSettings.properties_i.subShapeIndex), mode: 1, doPASearch, previewMode, currentRow, currentCol, angularTolerance);
 
             int layerBIndex = entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerB);
             if ((settingsIndex == layerBIndex) || (layerBIndex < 0))
@@ -1866,7 +1869,7 @@ namespace Variance
                 return;
             }
             EntropyLayerSettings layerB = commonVars.getLayerSettings(layerBIndex);
-            PreviewShape b_pShape = new PreviewShape(commonVars, layerBIndex, layerB.getInt(EntropyLayerSettings.properties_i.subShapeIndex), mode: 1, doPASearch, previewMode, currentRow, currentCol);
+            PreviewShape b_pShape = new PreviewShape(commonVars, layerBIndex, layerB.getInt(EntropyLayerSettings.properties_i.subShapeIndex), mode: 1, doPASearch, previewMode, currentRow, currentCol, angularTolerance);
 
             // We need to map the geometry into Paths for use in the Boolean
             Paths layerAPaths = GeoWrangler.pathsFromPointFs(a_pShape.getPoints(), CentralProperties.scaleFactorForOperation);

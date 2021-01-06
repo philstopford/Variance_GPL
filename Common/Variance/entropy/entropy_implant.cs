@@ -14,6 +14,7 @@ namespace Variance
 {
     public partial class Entropy
     {
+        double angularTolerance;
         public delegate void forceImplantRepaint();
         public forceImplantRepaint forceImplantRepaintFunc { get; set; }
 
@@ -262,7 +263,7 @@ namespace Variance
         {
             // UI handler has already applied 'accuracy' to the resolution and angular resolution values.
 
-            ChaosEngine_implant currentJobEngine = new ChaosEngine_implant(currentJobSettings, commonVars.getImplantSimulationSettings(), commonVars.getImplantSettings());
+            ChaosEngine_implant currentJobEngine = new ChaosEngine_implant(currentJobSettings, commonVars.getImplantSimulationSettings(), commonVars.getImplantSettings(), angularTolerance: angularTolerance);
 
             Results_implant evalResults = new Results_implant();
 
@@ -282,8 +283,9 @@ namespace Variance
             return evalResults;
         }
 
-        public void entropyRun_implant(Int32 numberOfCases, string csvFile, bool useThreads)
+        public void entropyRun_implant(Int32 numberOfCases, string csvFile, bool useThreads, double angularTolerance)
         {
+            this.angularTolerance = angularTolerance;
             pEntropyRun_implant(numberOfCases, csvFile, useThreads);
         }
 

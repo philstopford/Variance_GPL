@@ -212,7 +212,7 @@ namespace Variance
                     }
                     if (mode == (Int32)CommonVars.upperTabNames.Implant)
                     {
-                        entropyControl.entropyRun_implant(commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases), outFile, useThreads);
+                        entropyControl.entropyRun_implant(commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases), outFile, useThreads, varianceContext.vc.angularTolerance);
                     }
                 }
                 );

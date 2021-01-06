@@ -12,6 +12,8 @@ namespace Variance
     {
         Fragmenter fragment;
 
+        double angularTolerance;
+
         GeoLibPointF[] points;
 
         public GeoLibPointF[] getPoints()
@@ -176,8 +178,9 @@ namespace Variance
             return tempList;
         }
 
-        public EntropyShape(EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, Int32 settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape = null, GeoLibPointF pivot = null)
+        public EntropyShape(EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, Int32 settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, double angularTolerance, ShapeLibrary shape = null, GeoLibPointF pivot = null)
         {
+            this.angularTolerance = angularTolerance;
             makeEntropyShape(entropySettings, entropyLayerSettingsList, settingsIndex, doPASearch, previewMode, chaosSettings, shape, pivot);
         }
 
@@ -1021,7 +1024,7 @@ namespace Variance
 
             if (shape == null)
             {
-                shape = new ShapeLibrary(entropyLayerSettingsList[settingsIndex]);
+                shape = new ShapeLibrary(entropyLayerSettingsList[settingsIndex], angularTolerance);
                 shape.setShape(entropyLayerSettingsList[settingsIndex].getInt(EntropyLayerSettings.properties_i.shapeIndex));
             }
 
