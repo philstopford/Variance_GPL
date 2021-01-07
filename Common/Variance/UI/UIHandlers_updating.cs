@@ -1284,7 +1284,7 @@ namespace Variance
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
                 {
                     // Draw curves
-                    PreviewShape pShape = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.enabled), doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0, varianceContext.vc.angularTolerance);
+                    PreviewShape pShape = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.enabled), doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);
                     pShape.setColor(varianceContext.vc.colors.enabled_Color);
                     previewShapes.Add(pShape);
                 }
@@ -1295,17 +1295,17 @@ namespace Variance
                     (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.BOOLEAN)
                    )
                 {
-                    PreviewShape pShape1 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0, varianceContext.vc.angularTolerance);
+                    PreviewShape pShape1 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);
                     pShape1.setColor(varianceContext.vc.colors.subshape1_Color);
                     previewShapes.Add(pShape1);
                 }
                 else
                 {
-                    PreviewShape pShape1 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0, varianceContext.vc.angularTolerance);
+                    PreviewShape pShape1 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 0, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);
                     pShape1.setColor(varianceContext.vc.colors.subshape1_Color);
-                    PreviewShape pShape2 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 1, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0, varianceContext.vc.angularTolerance);
+                    PreviewShape pShape2 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 1, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);
                     pShape2.setColor(varianceContext.vc.colors.subshape2_Color);
-                    PreviewShape pShape3 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 2, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0, varianceContext.vc.angularTolerance);
+                    PreviewShape pShape3 = new PreviewShape(commonVars, settingsIndex, subShapeIndex: 2, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);
                     pShape3.setColor(varianceContext.vc.colors.subshape3_Color);
                     previewShapes.Add(pShape1);
                     previewShapes.Add(pShape2);

@@ -410,7 +410,7 @@ namespace Variance
 
         void doImplantShadowing()
         {
-            entropyControl.entropyRun_implant(1, null, false, varianceContext.vc.angularTolerance);
+            entropyControl.entropyRun_implant(1, null, false);
         }
 
         void setImplantViewportCamera(double[] parameters)

@@ -9,8 +9,6 @@ namespace Variance
     public class ShapeLibrary
     {
         Int32 shapeIndex;
-
-        double angularTolerance;
         public Boolean shapeValid { get; set; }
         public Boolean geoCoreShapeOrthogonal { get; set; }
         public MyVertex[] Vertex { get; set; }
@@ -18,27 +16,25 @@ namespace Variance
         public Boolean[] tips { get; set; }
         EntropyLayerSettings layerSettings;
 
-        public ShapeLibrary(EntropyLayerSettings mcLayerSettings, double angularTolerance)
+        public ShapeLibrary(EntropyLayerSettings mcLayerSettings)
         {
-            pShapeLibrary(mcLayerSettings, angularTolerance);
+            pShapeLibrary(mcLayerSettings);
         }
 
-        void pShapeLibrary(EntropyLayerSettings mcLayerSettings, double angularTolerance)
+        void pShapeLibrary(EntropyLayerSettings mcLayerSettings)
         {
             shapeValid = false;
             layerSettings = mcLayerSettings;
-            this.angularTolerance = angularTolerance;
         }
 
-        public ShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings, double angularTolerance)
+        public ShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings)
         {
-            pShapeLibrary(shapeIndex, mcLayerSettings, angularTolerance);
+            pShapeLibrary(shapeIndex, mcLayerSettings);
         }
 
-        void pShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings, double angularTolerance)
+        void pShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings)
         {
             this.shapeIndex = shapeIndex;
-            this.angularTolerance = angularTolerance;
             shapeValid = false;
             layerSettings = mcLayerSettings;
             pSetShape(shapeIndex);
@@ -1469,7 +1465,7 @@ namespace Variance
             sourcePoly = GeoWrangler.clockwise(sourcePoly);
 
             // We need to look at our incoming shape to see whether it's orthogonal and suitable for contouring.
-            geoCoreShapeOrthogonal = GeoWrangler.orthogonal(sourcePoly, angularTolerance);
+            geoCoreShapeOrthogonal = GeoWrangler.orthogonal(sourcePoly);
 
             if (!geoCoreShapeOrthogonal)
             {

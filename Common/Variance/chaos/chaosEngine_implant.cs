@@ -108,12 +108,12 @@ namespace Variance
             return maxShadow;
         }
 
-        public ChaosEngine_implant(ChaosSettings_implant chaosSettings, EntropySettings entropySettings, EntropyImplantSettings implantCalcSettings, double angularTolerance)
+        public ChaosEngine_implant(ChaosSettings_implant chaosSettings, EntropySettings entropySettings, EntropyImplantSettings implantCalcSettings)
         {
-            pChaosEngine_implant(chaosSettings, entropySettings, implantCalcSettings, angularTolerance);
+            pChaosEngine_implant(chaosSettings, entropySettings, implantCalcSettings);
         }
 
-        void pChaosEngine_implant(ChaosSettings_implant chaosSettings, EntropySettings entropySettings, EntropyImplantSettings implantCalcSettings, double angularTolerance)
+        void pChaosEngine_implant(ChaosSettings_implant chaosSettings, EntropySettings entropySettings, EntropyImplantSettings implantCalcSettings)
         {
             outputValid = false;
 
@@ -137,7 +137,7 @@ namespace Variance
                 ChaosSettings implant_js = new ChaosSettings(true, implant_MLS, entropySettings);
 
                 // Use our shape engine to create a nice ellipse.
-                EntropyShape ms = new EntropyShape(entropySettings, implant_MLS, settingsIndex: 0, doPASearch: false, previewMode: true, implant_js, angularTolerance);
+                EntropyShape ms = new EntropyShape(entropySettings, implant_MLS, settingsIndex: 0, doPASearch: false, previewMode: true, implant_js);
 
                 // Set up our sourcePath for clipping, recentering it at 0,0 as well.
                 Path sourcePath = new Path();

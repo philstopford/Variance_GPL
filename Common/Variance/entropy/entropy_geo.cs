@@ -1430,8 +1430,7 @@ namespace Variance
                         doPASearch: doPASearch,
                         previewMode: false,
                         currentRow: currentRow,
-                        currentCol: currentCol,
-                        angularTolerance: varianceContext.angularTolerance)
+                        currentCol: currentCol)
                     );
                 }
             }
