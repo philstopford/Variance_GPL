@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.4a1
 
+	- Various small fixes and upstream enhancements.
 	- UI clean-up using groupboxes to make control behavior easier to comprehend at a glance.
 	- Allow axis color to be changed.
 	- Allow viewport background color to be changed.
