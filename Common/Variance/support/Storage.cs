@@ -1633,7 +1633,7 @@ namespace Variance
 
                 try
                 {
-                    readSettings.setDecimal(EntropyLayerSettings.properties_decimal.rayExtension, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("rayExtension").First().Value));
+                    readSettings.setDecimal(EntropyLayerSettings.properties_decimal.rayExtension, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("rayExtension").First().Value));
                 }
                 catch (Exception)
                 {
