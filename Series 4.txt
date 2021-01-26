@@ -3,6 +3,7 @@ Changelog for Variance
 4.4b1
 
 	- Keyholer bug fix.
+	- Bug fix for ray extension reading.
 
 4.4a1
 
