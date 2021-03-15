@@ -198,17 +198,56 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
-    <li><a href="#releases_440">4.4</a>
+    <li><a href="#releases_401">4.0.1</a>
+    <li><a href="#releases_400">4.0</a>
   </ul>
 
     <blockquote>
-      <a name="releases_440"></a>
-      <h2 class="western">New to 4.4 (Feb 8 2021)</h2>
+      <a name="releases_401"></a>
+      <h2 class="western">New to 4.0.1 (Sep 23 2019)</h2>
       <blockquote>
         <ul>
-          <li>Export of case geometry to external files can now be controlled using critera on the results field(s).</li>
-          <li>UI refinements.</li>
-          <li>Bug fix to keyholer extension read from project file.</li>
+          <li>Added an option for the 'friendly' numeric output.</li>
+          <li>Fixed 'update' label jumping around.</li>
+          <li>Histograms (10 buckets) provided in summary output for each result.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_400"></a>
+      <h2 class="western">New to 4.0 (Sep 13 2019)</h2>
+      <blockquote>
+        <ul>
+          <li>Background geometry is now re-evaluated with foreground changes.</li>
+          <ul>
+            <li>Particularly useful for ILB workflows.</li>
+          </ul>
+          <li>Geometry pipeline enhancements continue.</li>
+          <ul>
+            <li>Performance optimizations.</li>
+            <li>Keyholer enhancements, particularly for handling pre-existing keyholes and complex ILB scenarios.</li>
+            <li>Sliver removal in ILB pipeline - removes spikes from inversion of keyholed geometry.</li>
+            <li>Interior wall removal (from keyholes) at calculation stage (best effort).</li>
+            <li>For non-spacing/enclosure calculations, auto-decimation is used to simplify the analysis.</li>
+            <ul>
+              <li>Gains in performance can be significant, geometry permitting</li>
+            </ul>
+            <li>Overlap handling in shape generation has been made more robust.</li>
+          </ul>
+          <li>A sampling engine has been implemented, allowing for different sampling strategies to be explored.</li>
+          <ul>
+            <li>Input sample points are now pre-calculated (except for PA search).</li>
+          </ul>
+          <li>Export enhancements.</li>
+          <ul>
+            <li>Viewport contents can now be written to GDSII or Oasis files, supplementing the SVG feature.</li>
+            <li>Simulation geometry can be written to GDSII or Oasis files, supplementing the SVG feature.</li>
+            <li>Export of simulation geometry is now performed on-the-fly rather than at the end of the simulation. Greatly reduces memory load, but there is a significant cost in runtime.</li>
+            <li>Exporting of simulation data to CSV now runs multithreaded.</li>
+          </ul>
+          <li>Large values are now reported in a friendly way.</li>
+          <li>Viewport performance and reliability improvements.</li>
         </ul>
       </blockquote>
     </blockquote>

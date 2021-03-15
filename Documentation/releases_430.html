@@ -198,17 +198,46 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
-    <li><a href="#releases_440">4.4</a>
+    <li><a href="#releases_432">4.3.2</a>
+    <li><a href="#releases_431">4.3.1</a>
+    <li><a href="#releases_430">4.3</a>
   </ul>
 
     <blockquote>
-      <a name="releases_440"></a>
-      <h2 class="western">New to 4.4 (Feb 8 2021)</h2>
+      <a name="releases_432"></a>
+      <h2 class="western">New to 4.3.2 (Nov 30 2020)</h2>
       <blockquote>
         <ul>
-          <li>Export of case geometry to external files can now be controlled using critera on the results field(s).</li>
-          <li>UI refinements.</li>
-          <li>Bug fix to keyholer extension read from project file.</li>
+          <li>Bug fix for layout handling.</li>
+          <li>Target .NET 5 for performance and improved platform support.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_431"></a>
+      <h2 class="western">New to 4.3.1 (Oct 30 2020)</h2>
+      <blockquote>
+        <ul>
+          <li>Support GZIP-compressed layout files, and more extensions.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_430"></a>
+      <h2 class="western">New to 4.3 (Oct 20 2020)</h2>
+      <blockquote>
+        <ul>
+          <li>Multiple refinements to the raycaster, keyholer and boolean systems.</li>
+          <li>Proximity bias overhauled.</li>
+      	  <ul>
+      	    <li>Side ray contributions are now able to be weighted based on fall-offs (linear, Gaussian, Cosine) with strength multiplier.</li>
+      	  </ul>
+          <li>Use DesignLibs enhancements to flatten complex layout (e.g. cellref arrays).</li>
+          <li>Context menu for layer list box. Allows various convenient actions.</li>
+          <li>Message boxes for confirmation when clearing a layer or resetting the tool.</li>
+          <li>Layer-related elements (e.g. correlation / reference controls) now update to show the layer name, to ease understanding.</li>
         </ul>
       </blockquote>
     </blockquote>
