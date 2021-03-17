@@ -349,16 +349,6 @@ namespace Variance
                 prepUIForLoad();
 
                 commonVars.loadAbort = false;
-                System.Timers.Timer timer = new System.Timers.Timer();
-                timer.AutoReset = true;
-                timer.Interval = 100;
-                timer.Elapsed += new System.Timers.ElapsedEventHandler(abortFileLoad);
-
-                fileLoad_cancelTS = new CancellationTokenSource();
-
-                string[] tokens = ofd.FileName.Split(new char[] { '.' });
-
-                timer.Start();
 
                 // The thread abort approach is regarded as an ugly hack and strongly discouraged, but seems to be the only way to abort a long-running single-stage task.
                 // As the geoCore readers don't necessarily lend themselves well to gentle interruption, the big hammer below is used.
@@ -367,23 +357,17 @@ namespace Variance
                     {
                         try
                         {
-                            using (fileLoad_cancelTS.Token.Register(Thread.CurrentThread.Abort))
+                            Application.Instance.Invoke(() =>
                             {
-                                Application.Instance.Invoke(() =>
-                                {
-                                    fileOK = layoutLoad(settingsIndex, ofd.FileName);
-                                });
-                            }
+                                fileOK = layoutLoad(settingsIndex, ofd.FileName);
+                            });
                         }
-                        catch (ThreadAbortException)
+                        catch (Exception)
                         {
                             fileOK = false;
                         }
-                        finally
-                        {
-                        }
                     }
-                , fileLoad_cancelTS.Token);
+                );
 
                 try
                 {
@@ -393,12 +377,7 @@ namespace Variance
                 {
                     fileOK = false;
                 }
-
-                timer.Stop();
-                timer.Dispose();
-                fileLoad_cancelTS.Dispose();
-                fileLoadTask.Dispose();
-
+                
                 if (fileOK)
                 {
                     Application.Instance.Invoke(() =>
