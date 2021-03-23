@@ -334,16 +334,16 @@ namespace Variance
                     int numberOfCases = commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases);
 
                     TimeSpan eT = TimeSpan.FromSeconds(swTime);
-                    string statusLineString = eT.Seconds.ToString() + " s elapsed";
+                    string statusLineString = eT.Seconds + " s elapsed";
                     if (eT.Minutes >= 1)
                     {
                         // We have minutes
-                        statusLineString = eT.Minutes.ToString() + " m, " + statusLineString;
+                        statusLineString = eT.Minutes + " m, " + statusLineString;
                     }
                     if (eT.Hours >= 1)
                     {
                         // We have hours.
-                        statusLineString = eT.Hours.ToString() + " h, " + statusLineString;
+                        statusLineString = eT.Hours + " h, " + statusLineString;
                     }
 
                     if (currentProgress != numberOfCases)
@@ -355,7 +355,7 @@ namespace Variance
                         if (cT.Hours >= 1)
                         {
                             // We have hours.
-                            statusLineString += cT.Hours.ToString() + " h";
+                            statusLineString += cT.Hours + " h";
                         }
                         if (cT.Minutes >= 1)
                         {
@@ -364,13 +364,13 @@ namespace Variance
                                 statusLineString += ", ";
                             }
                             // We have minutes
-                            statusLineString += cT.Minutes.ToString() + " m";
+                            statusLineString += cT.Minutes + " m";
                         }
                         if (!((cT.Minutes < 1) && (cT.Hours < 1)))
                         {
                             statusLineString += ", ";
                         }
-                        statusLineString += cT.Seconds.ToString() + " s remaining";
+                        statusLineString += cT.Seconds + " s remaining";
                     }
 
                     string tmp;
@@ -380,7 +380,7 @@ namespace Variance
                     }
                     else
                     {
-                        tmp = currentProgress.ToString() + "/" + numberOfCases.ToString();
+                        tmp = currentProgress + "/" + numberOfCases;
                     }
 
                     statusLineString += " => (" + tmp + ") complete";
@@ -447,12 +447,12 @@ namespace Variance
                             if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                             {
                                 // result can be a CSV string for multiple values - header is aligned above
-                                string csvString = resultEntry.ToString() + "," + implantResultPackage.getImplantResult(resultEntry).getResult();
+                                string csvString = resultEntry + "," + implantResultPackage.getImplantResult(resultEntry).getResult();
                                 csvString += ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistWidthVar.ToString() + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistHeightVar.ToString() + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistCRRVar.ToString() + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).tiltVar.ToString() + ",";
+                                csvString += implantResultPackage.getImplantResult(resultEntry).resistWidthVar + ",";
+                                csvString += implantResultPackage.getImplantResult(resultEntry).resistHeightVar + ",";
+                                csvString += implantResultPackage.getImplantResult(resultEntry).resistCRRVar + ",";
+                                csvString += implantResultPackage.getImplantResult(resultEntry).tiltVar + ",";
                                 csvString += implantResultPackage.getImplantResult(resultEntry).twistVar.ToString();
                                 stringList[resultEntry + 1] = csvString;
                             }
@@ -473,7 +473,7 @@ namespace Variance
                 });
 
                 File.WriteAllLines(csvFileName, stringList);
-                statusLine = counter.ToString() + " results saved to CSV file";
+                statusLine = counter + " results saved to CSV file";
             }
 
             if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
@@ -496,7 +496,7 @@ namespace Variance
         {
             string svgFileName = baseFileName;
 
-            string paddingString = "D" + numberOfCases.ToString().Length.ToString(); // count chars in the number of cases as a string, use that to define padding.
+            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
             svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
             SVGBuilder svg = new SVGBuilder();
@@ -523,7 +523,7 @@ namespace Variance
         {
             string layoutFileName = baseFileName;
 
-            string paddingString = "D" + numberOfCases.ToString().Length.ToString(); // count chars in the number of cases as a string, use that to define padding.
+            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
             layoutFileName += "_run" + resultEntry.ToString(paddingString);
 
             int scale = 100; // for 0.01 nm resolution
@@ -559,13 +559,13 @@ namespace Variance
             gcell_root.modhour = (short)DateTime.Now.Hour;
             gcell_root.modmin = (short)DateTime.Now.Minute;
             gcell_root.modsec = (short)DateTime.Now.Second;
-            gcell_root.cellName = "implantCase" + resultEntry.ToString();
+            gcell_root.cellName = "implantCase" + resultEntry;
 
             // Resist
             for (int i = 0; i < 2; i++)
             {
                 List<GeoLibPointF[]> resistPolys = currentResult.getResistShapes()[i].getPoints();
-                g.addLayerName("L" + (i + 1).ToString() + "D0", "resistPolys" + i.ToString());
+                g.addLayerName("L" + (i + 1) + "D0", "resistPolys" + i);
 
                 for (int poly = 0; poly < resistPolys.Count; poly++)
                 {
@@ -627,7 +627,7 @@ namespace Variance
             linesToWrite.Add("");
             for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.properties.mean).Length; resultGroup++)
             {
-                linesToWrite.Add("result " + resultGroup.ToString() + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count().ToString() + " cases: x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, resultGroup).ToString("0.##"));
+                linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count() + " cases: x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, resultGroup).ToString("0.##"));
             }
 
             linesToWrite.Add("");
@@ -638,17 +638,17 @@ namespace Variance
             linesToWrite.Add("");
             linesToWrite.Add("Implant settings for job");
             linesToWrite.Add("");
-            linesToWrite.Add("Resist Width: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.w).ToString());
-            linesToWrite.Add("Resist CDU: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.wV).ToString());
-            linesToWrite.Add("Resist Height: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.h).ToString());
-            linesToWrite.Add("Resist Height Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.hV).ToString());
-            linesToWrite.Add("Resist Top CRR: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cRR).ToString());
-            linesToWrite.Add("Resist Top CRR Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cV).ToString());
+            linesToWrite.Add("Resist Width: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.w));
+            linesToWrite.Add("Resist CDU: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.wV));
+            linesToWrite.Add("Resist Height: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.h));
+            linesToWrite.Add("Resist Height Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.hV));
+            linesToWrite.Add("Resist Top CRR: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cRR));
+            linesToWrite.Add("Resist Top CRR Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cV));
             linesToWrite.Add("");
-            linesToWrite.Add("Implant Tilt Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tilt).ToString());
-            linesToWrite.Add("Implant Tilt Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tiltV).ToString());
-            linesToWrite.Add("Implant Twist Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twist).ToString());
-            linesToWrite.Add("Implant Twist Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twistV).ToString());
+            linesToWrite.Add("Implant Tilt Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tilt));
+            linesToWrite.Add("Implant Tilt Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tiltV));
+            linesToWrite.Add("Implant Twist Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twist));
+            linesToWrite.Add("Implant Twist Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twistV));
 
             // Simulation Settings
             linesToWrite.Add("");

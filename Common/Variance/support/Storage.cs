@@ -197,11 +197,11 @@ namespace Variance
             {
                 int poly = 0;
                 int pt = 0;
-                returnString += fileData[poly][pt].X.ToString() + "," + fileData[poly][pt].Y.ToString();
+                returnString += fileData[poly][pt].X + "," + fileData[poly][pt].Y;
                 pt++;
                 while (pt < fileData[poly].Count())
                 {
-                    returnString += "," + fileData[poly][pt].X.ToString() + "," + fileData[poly][pt].Y.ToString();
+                    returnString += "," + fileData[poly][pt].X + "," + fileData[poly][pt].Y;
                     pt++;
                 }
                 poly++;
@@ -209,11 +209,11 @@ namespace Variance
                 {
                     returnString += ";";
                     pt = 0;
-                    returnString += fileData[poly][0].X.ToString() + "," + fileData[poly][0].Y.ToString();
+                    returnString += fileData[poly][0].X + "," + fileData[poly][0].Y;
                     pt++;
                     while (pt < fileData[poly].Count())
                     {
-                        returnString += "," + fileData[poly][pt].X.ToString() + "," + fileData[poly][pt].Y.ToString();
+                        returnString += "," + fileData[poly][pt].X + "," + fileData[poly][pt].Y;
                         pt++;
                     }
                     poly++;
@@ -238,7 +238,7 @@ namespace Variance
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
                 camParameters = viewportSave?.Invoke(i);
-                XElement xelement = new XElement("layer" + (i + 1).ToString(),
+                XElement xelement = new XElement("layer" + (i + 1),
                     new XElement("name", listOfSettings[i].getString(EntropyLayerSettings.properties_s.name)),
                     new XElement("comment", listOfSettings[i].getString(EntropyLayerSettings.properties_s.comment)),
                     new XElement("enabled", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.enabled)),
@@ -561,7 +561,7 @@ namespace Variance
             }
             catch (Exception ex)
             {
-                return ex.Message.ToString();
+                return ex.Message;
             }
 
             // root is required for legacy projects.
@@ -591,7 +591,7 @@ namespace Variance
                     continue;
                 }
 
-                string layerref = "layer" + (layer + 1).ToString();
+                string layerref = "layer" + (layer + 1);
                 try
                 {
                     readSettings.setInt(EntropyLayerSettings.properties_i.enabled, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("enabled").First().Value));
@@ -2018,7 +2018,7 @@ namespace Variance
 
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
-                    string ts = "layer" + (i + 1).ToString() + "Operator";
+                    string ts = "layer" + (i + 1) + "Operator";
                     try
                     {
                         simulationSettings.setOperatorValue(EntropySettings.properties_o.layer, i, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants(ts).First().Value));
@@ -2031,7 +2031,7 @@ namespace Variance
 
                 for (int i = 0; i < simulationSettings.getOperator(EntropySettings.properties_o.twoLayer).Length; i++)
                 {
-                    string ts = "layer" + ((i * 2) + 1).ToString() + "_" + ((i + 1) * 2).ToString() + "Operator";
+                    string ts = "layer" + ((i * 2) + 1) + "_" + ((i + 1) * 2) + "Operator";
                     try
                     {
                         simulationSettings.setOperatorValue(EntropySettings.properties_o.twoLayer, i, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants(ts).First().Value));
@@ -2045,7 +2045,7 @@ namespace Variance
                 for (int i = 0; i < simulationSettings.getOperator(EntropySettings.properties_o.fourLayer).Length; i++)
                 {
                     int v = (i * simulationSettings.getOperator(EntropySettings.properties_o.fourLayer).Length) + 1;
-                    string ts = "layer" + v.ToString() + (v + 1).ToString() + "_" + (v + 2).ToString() + (v + 3).ToString() + "Operator";
+                    string ts = "layer" + v + (v + 1) + "_" + (v + 2) + (v + 3) + "Operator";
                     try
                     {
                         simulationSettings.setOperatorValue(EntropySettings.properties_o.fourLayer, i, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants(ts).First().Value));
@@ -2220,7 +2220,7 @@ namespace Variance
 
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
-                    string t = "layer" + (i + 1).ToString() + "Affected";
+                    string t = "layer" + (i + 1) + "Affected";
                     try
                     {
                         simulationSettings.getDOESettings().setLayerAffected(layer:i, Convert.ToInt32(simulationFromFile.Descendants(doeLabel).Descendants(t).First().Value));
@@ -2390,7 +2390,7 @@ namespace Variance
             }
             catch (Exception ex)
             {
-                ErrorReporter.showMessage_OK("Failed in DOE loading: " + ex.ToString(), "Error");
+                ErrorReporter.showMessage_OK("Failed in DOE loading: " + ex, "Error");
                 error = true;
             }
 
@@ -2573,7 +2573,7 @@ namespace Variance
             }
             catch (Exception ex)
             {
-                ErrorReporter.showMessage_OK("Failed in implant loading: " + ex.ToString(), "Error");
+                ErrorReporter.showMessage_OK("Failed in implant loading: " + ex, "Error");
                 error = true;
             }
 

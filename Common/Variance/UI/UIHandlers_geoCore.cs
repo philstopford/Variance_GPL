@@ -113,7 +113,7 @@ namespace Variance
                 drawing_.libname = "variance";
 
                 // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
-                g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
+                g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
 
                 GCCell gcell_root = drawing_.addCell();
                 gcell_root.accyear = (short)DateTime.Now.Year;

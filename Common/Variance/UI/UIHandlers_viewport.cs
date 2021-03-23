@@ -255,11 +255,11 @@ namespace Variance
                     // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
                     if (layerIndex < CentralProperties.maxLayersForMC)
                     {
-                        g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
+                        g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
                     }
                     else
                     {
-                        g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC).ToString());
+                        g.addLayerName("L" + (layerIndex + 1) + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC));
                     }
                 }
 
@@ -307,11 +307,11 @@ namespace Variance
                         // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
                         if (layerIndex < CentralProperties.maxLayersForMC)
                         {
-                            g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
+                            g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
                         }
                         else
                         {
-                            g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC).ToString());
+                            g.addLayerName("L" + (layerIndex + 1) + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC));
                         }
                     }
 
@@ -356,11 +356,11 @@ namespace Variance
                         // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
                         if (layerIndex < CentralProperties.maxLayersForMC)
                         {
-                            g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
+                            g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
                         }
                         else
                         {
-                            g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC).ToString());
+                            g.addLayerName("L" + (layerIndex + 1) + "D0", "result" + (layerIndex - CentralProperties.maxLayersForMC));
                         }
                     }
 

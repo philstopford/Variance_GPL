@@ -279,7 +279,7 @@ namespace Variance
         {
             Application.Instance.AsyncInvoke(() =>
             {
-                lbl_multiThreadResultNote.Text = "Update ~" + (CentralProperties.timer_interval / 1000).ToString() + "s";
+                lbl_multiThreadResultNote.Text = "Update ~" + (CentralProperties.timer_interval / 1000) + "s";
                 lbl_multiThreadResultNote.Visible = true;
             });
         }

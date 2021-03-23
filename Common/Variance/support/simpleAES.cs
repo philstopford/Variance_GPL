@@ -163,9 +163,9 @@ namespace Variance
             {
                 val = byteArr[i];
                 if (val < 10)
-                    tempStr += "00" + val.ToString();
+                    tempStr += "00" + val;
                 else if (val < 100)
-                    tempStr += "0" + val.ToString();
+                    tempStr += "0" + val;
                 else
                     tempStr += val.ToString();
             }

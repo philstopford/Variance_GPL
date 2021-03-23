@@ -103,43 +103,43 @@ namespace Variance
                 switch (rngLabelIndex)
                 {
                     case (int)layerLookUpOrder.ICV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.iCV_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.iCV_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.OCV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.oCV_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.oCV_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.SCDU:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.sCDU_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.sCDU_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.TCDU:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.tCDU_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.tCDU_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.XOL:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.xOL_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.xOL_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.YOL:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.yOL_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.yOL_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.HTNV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.hTipNVar_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.hTipNVar_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.HTPV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.hTipPVar_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.hTipPVar_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.VTNV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.vTipNVar_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.vTipNVar_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.VTPV:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.vTipPVar_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.vTipPVar_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.WOB:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.wobble_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.wobble_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.LWR:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.lwr_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.lwr_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                     case (int)layerLookUpOrder.LWR2:
-                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.lwr2_RNG, commonVars.rngCustomMapping[itemIndex].ToString());
+                        commonVars.getLayerSettings(layer).setString(EntropyLayerSettings.properties_s.lwr2_RNG, commonVars.rngCustomMapping[itemIndex]);
                         break;
                 }
 

@@ -766,7 +766,7 @@ namespace Variance
 
                             if (simulationSettings.getValue(EntropySettings.properties_i.subMode) != (int)CommonVars.chordCalcElements.b)
                             {
-                                result = fraggedResult[0].ToString() + "," + fraggedResult[1].ToString();
+                                result = fraggedResult[0] + "," + fraggedResult[1];
                             }
                             else
                             {
@@ -775,7 +775,7 @@ namespace Variance
 
                             if (simulationSettings.getValue(EntropySettings.properties_i.subMode) >= (int)CommonVars.chordCalcElements.b)
                             {
-                                result += "," + fraggedResult[2].ToString() + "," + fraggedResult[3].ToString();
+                                result += "," + fraggedResult[2] + "," + fraggedResult[3];
                             }
                             else
                             {

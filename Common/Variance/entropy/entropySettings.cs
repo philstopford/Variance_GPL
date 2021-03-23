@@ -378,11 +378,11 @@ namespace Variance
             if (DOESettings.getTileList_ColRow().Count() > 0)
             {
                 int entry = 0;
-                returnString += (DOESettings.getTileList_Value(entry, 0) + offset).ToString() + "," + (DOESettings.getTileList_Value(entry, 1) + offset).ToString();
+                returnString += (DOESettings.getTileList_Value(entry, 0) + offset) + "," + (DOESettings.getTileList_Value(entry, 1) + offset);
                 entry++;
                 while (entry < DOESettings.getTileList_ColRow().Count())
                 {
-                    returnString += ";" + (DOESettings.getTileList_Value(entry, 0) + offset).ToString() + "," + (DOESettings.getTileList_Value(entry, 1) + offset).ToString();
+                    returnString += ";" + (DOESettings.getTileList_Value(entry, 0) + offset) + "," + (DOESettings.getTileList_Value(entry, 1) + offset);
                     entry++;
                 }
             }

@@ -108,7 +108,7 @@ namespace Variance
                 var i = passCaseVal; // for event handler binding.
 
                 groupBox_passCaseValues[passCaseVal] = new GroupBox();
-                groupBox_passCaseValues[passCaseVal].Text = "Filter result " + passCaseVal.ToString();
+                groupBox_passCaseValues[passCaseVal].Text = "Filter result " + passCaseVal;
 
                 passCaseValues_pnl[passCaseVal] = new Panel();
                 passCaseValues_pnl[passCaseVal].Content = groupBox_passCaseValues[passCaseVal];
@@ -195,7 +195,7 @@ namespace Variance
                     cb_searchPA[layer, pa] = new CheckBox();
                     cb_searchPA[layer, pa].Text = "";
                     cb_searchPA[layer, pa].CheckedChanged += paSearchUI_Handler;
-                    cb_searchPA[layer, pa].ToolTip = "Layer " + (pa + 1).ToString() + ": " + PASearch.paNames[pa];
+                    cb_searchPA[layer, pa].ToolTip = "Layer " + (pa + 1) + ": " + PASearch.paNames[pa];
                     tc_ur_0.Control = cb_searchPA[layer, pa];
                     tc0p_tl.Rows[0].Cells.Add(tc_ur_0);
 
@@ -208,7 +208,7 @@ namespace Variance
                         num_searchPA_UpperLimit[layer, pa].MinValue = 0;
                     }
                     num_searchPA_UpperLimit[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
-                    num_searchPA_UpperLimit[layer, pa].ToolTip = "Layer " + (layer + 1).ToString() + ": " + PASearch.paNames[pa];
+                    num_searchPA_UpperLimit[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
 
                     setSize(num_searchPA_UpperLimit[layer, pa], 55, label_Height * 2);
                     num_searchPA_UpperLimit[layer, pa].LostFocus += paSearchUI_Handler;
@@ -223,7 +223,7 @@ namespace Variance
                     text_searchPA_Result[layer, pa].ReadOnly = true;
                     text_searchPA_Result[layer, pa].Width = 55 * 2;
                     text_searchPA_Result[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
-                    text_searchPA_Result[layer, pa].ToolTip = "Layer " + (layer + 1).ToString() + ": " + PASearch.paNames[pa];
+                    text_searchPA_Result[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
                     tmp_tl.Rows[1].Cells.Add(new TableCell() { Control = text_searchPA_Result[layer, pa] });
 
                     tr.Cells.Add(new TableCell() { Control = bTc_p });
@@ -322,7 +322,7 @@ namespace Variance
             }
 
             updateProgressBar(resultPackage.getListOfResults().Count);
-            updateStatusLine("PA Search for " + resultPackage.getListOfResults().Count.ToString() + " results in " + resultPackage.runTime.ToString("0.##") + " seconds.");
+            updateStatusLine("PA Search for " + resultPackage.getListOfResults().Count + " results in " + resultPackage.runTime.ToString("0.##") + " seconds.");
         }
     }
 }

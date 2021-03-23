@@ -108,7 +108,7 @@ namespace Variance
                         }
                         catch (Exception ex)
                         {
-                            ErrorReporter.showMessage_OK("Oops", "jobEngine() KDTree error: " + ex.ToString());
+                            ErrorReporter.showMessage_OK("Oops", "jobEngine() KDTree error: " + ex);
                         }
                     }
                 }

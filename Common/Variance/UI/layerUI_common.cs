@@ -745,7 +745,7 @@ namespace Variance
                     if (warnArray[w])
                     {
                         warnNeeded = true;
-                        warningString += (w + 1).ToString() + " ";
+                        warningString += (w + 1) + " ";
                     }
                 }
 

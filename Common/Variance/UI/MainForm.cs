@@ -1037,7 +1037,7 @@ namespace Variance
             vSurface = new VeldridSurface(varianceContext.backend, options);
             vSurface.VeldridInitialized += (sender, e) => VeldridReady = true;
 
-            commonVars.titleText += " " + vSurface.Backend.ToString();
+            commonVars.titleText += " " + vSurface.Backend;
 
             Title = commonVars.titleText;
 

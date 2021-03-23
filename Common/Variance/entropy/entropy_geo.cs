@@ -676,16 +676,16 @@ namespace Variance
                         numberOfCases = commonVars.getPASearch().numberofPassCases;
                     }
                     TimeSpan eT = TimeSpan.FromSeconds(swTime);
-                    string statusLineString = eT.Seconds.ToString() + " s elapsed";
+                    string statusLineString = eT.Seconds + " s elapsed";
                     if (eT.Minutes >= 1)
                     {
                         // We have minutes
-                        statusLineString = eT.Minutes.ToString() + " m, " + statusLineString;
+                        statusLineString = eT.Minutes + " m, " + statusLineString;
                     }
                     if (eT.Hours >= 1)
                     {
                         // We have hours.
-                        statusLineString = eT.Hours.ToString() + " h, " + statusLineString;
+                        statusLineString = eT.Hours + " h, " + statusLineString;
                     }
 
                     if (currentProgress != numberOfCases)
@@ -697,7 +697,7 @@ namespace Variance
                         if (cT.Hours >= 1)
                         {
                             // We have hours.
-                            statusLineString += cT.Hours.ToString() + " h";
+                            statusLineString += cT.Hours + " h";
                         }
                         if (cT.Minutes >= 1)
                         {
@@ -706,13 +706,13 @@ namespace Variance
                                 statusLineString += ", ";
                             }
                             // We have minutes
-                            statusLineString += cT.Minutes.ToString() + " m";
+                            statusLineString += cT.Minutes + " m";
                         }
                         if (!((cT.Minutes < 1) && (cT.Hours < 1)))
                         {
                             statusLineString += ", ";
                         }
-                        statusLineString += cT.Seconds.ToString() + " s remaining";
+                        statusLineString += cT.Seconds + " s remaining";
                     }
 
                     string tmp;
@@ -722,7 +722,7 @@ namespace Variance
                     }
                     else
                     {
-                        tmp = currentProgress.ToString() + "/" + numberOfCases.ToString();
+                        tmp = currentProgress + "/" + numberOfCases;
                     }
 
                     statusLineString += " => (" + tmp + ") complete";
@@ -740,7 +740,7 @@ namespace Variance
             string csvFileName = baseFileName;
             if (tileHandling)
             {
-                csvFileName += "_col" + col.ToString() + "_row" + row.ToString();
+                csvFileName += "_col" + col + "_row" + row;
             }
 
             csvFileName += ".csv";
@@ -793,7 +793,7 @@ namespace Variance
                     headerString += ",";
                     for (int i = 0; i < CommonVars.csvHeader.Length; i++)
                     {
-                        headerString += CommonVars.csvHeader[i] + layer.ToString();
+                        headerString += CommonVars.csvHeader[i] + layer;
                         if (i != CommonVars.csvHeader.Length - 1)
                         {
                             headerString += ",";
@@ -836,24 +836,24 @@ namespace Variance
                             if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
                             {
                                 // result can be a CSV string for multiple values - header is aligned above
-                                string csvString = resultEntry.ToString() + "," + resultPackage.getResult(resultEntry).getResult();
+                                string csvString = resultEntry + "," + resultPackage.getResult(resultEntry).getResult();
                                 for (Int32 layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
                                 {
                                     if (commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
                                     {
                                         csvString += ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.svar, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.tvar, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.lwr, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getSeed(Results.fields_i.lwrs, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.lwr2, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getSeed(Results.fields_i.lwr2s, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.htip, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.vtip, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.icv, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.ocv, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.olx, layer).ToString() + ",";
-                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.oly, layer).ToString() + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.svar, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.tvar, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.lwr, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getSeed(Results.fields_i.lwrs, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.lwr2, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getSeed(Results.fields_i.lwr2s, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.htip, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.vtip, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.icv, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.ocv, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.olx, layer) + ",";
+                                        csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.oly, layer) + ",";
                                         csvString += resultPackage.getResult(resultEntry).getField(Results.fields_d.wob, layer).ToString();
                                     }
                                 }
@@ -929,10 +929,10 @@ namespace Variance
             string svgFileName = baseFileName;
             if (tileHandling)
             {
-                svgFileName += "_col" + col.ToString() + "_row" + row.ToString();
+                svgFileName += "_col" + col + "_row" + row;
             }
 
-            string paddingString = "D" + numberOfCases.ToString().Length.ToString(); // count chars in the number of cases as a string, use that to define padding.
+            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
             svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
             SVGBuilder svg = new SVGBuilder();
@@ -963,10 +963,10 @@ namespace Variance
 
             if (tileHandling)
             {
-                layoutFileName += "_col" + col.ToString() + "_row" + row.ToString();
+                layoutFileName += "_col" + col + "_row" + row;
             }
 
-            string paddingString = "D" + numberOfCases.ToString().Length.ToString(); // count chars in the number of cases as a string, use that to define padding.
+            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
             layoutFileName += "_run" + resultEntry.ToString(paddingString);
 
             int scale = 100; // for 0.01 nm resolution
@@ -1002,7 +1002,7 @@ namespace Variance
             gcell_root.modhour = (short)DateTime.Now.Hour;
             gcell_root.modmin = (short)DateTime.Now.Minute;
             gcell_root.modsec = (short)DateTime.Now.Second;
-            gcell_root.cellName = "result" + resultEntry.ToString();
+            gcell_root.cellName = "result" + resultEntry;
 
             List<Int32> layers = new List<int>();
             // Input shapes.
@@ -1017,7 +1017,7 @@ namespace Variance
                 {
                     layers.Add(layerIndex);
                     // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
-                    g.addLayerName("L" + (layerIndex + 1).ToString() + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
+                    g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
                 }
 
                 for (int poly = 0; poly < polys.Count; poly++)
@@ -1038,7 +1038,7 @@ namespace Variance
             for (int poly = 0; poly < rpolys.Count; poly++)
             {
                 int layerNum = CentralProperties.maxLayersForMC + poly + 1;
-                g.addLayerName("L" + layerNum.ToString() + "D0", "result" + poly.ToString());
+                g.addLayerName("L" + layerNum + "D0", "result" + poly);
                 int polyLength = rpolys[poly].Length;
                 if (polyLength > 2)
                 {
@@ -1070,7 +1070,7 @@ namespace Variance
             string internalFileName = baseFileName; // (remove the .csv from the string)
             if (tileHandling)
             {
-                internalFileName += "_col" + col.ToString() + "_row" + row.ToString();
+                internalFileName += "_col" + col + "_row" + row;
             }
 
             // Force an evaluation.
@@ -1096,12 +1096,12 @@ namespace Variance
             linesToWrite.Add("");
             for (int resultGroup = 0; resultGroup < resultPackage.getValues(SimResultPackage.properties.mean).Length; resultGroup++)
             {
-                string tempString = "result " + resultGroup.ToString() + " mean";
+                string tempString = "result " + resultGroup + " mean";
                 if (!resultPackage.nonGaussianInput)
                 {
                     tempString += " and standard deviation";
                 }
-                tempString += " for " + resultPackage.getListOfResults().Count().ToString() + " cases:";
+                tempString += " for " + resultPackage.getListOfResults().Count() + " cases:";
                 tempString += " x: " + resultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##");
                 if (!resultPackage.nonGaussianInput)
                 {
@@ -1300,14 +1300,14 @@ namespace Variance
                                         // Email notification
                                         if (commonVars.getNonSimulationSettings().emailPerJob)
                                         {
-                                            emailString = "Variance run aborted for tile " + tileCol.ToString() + "," + tileRow.ToString();
+                                            emailString = "Variance run aborted for tile " + tileCol + "," + tileRow;
                                         }
                                     }
                                 }
                             }
                             else
                             {
-                                emailString = "Variance run completed for tile " + tileCol.ToString() + "," + tileRow.ToString();
+                                emailString = "Variance run completed for tile " + tileCol + "," + tileRow;
                             }
                         }
                         catch (Exception)
@@ -1349,14 +1349,14 @@ namespace Variance
                                             row = endRow;
                                             if (commonVars.getNonSimulationSettings().emailPerJob)
                                             {
-                                                emailString = "Variance run aborted for tile " + col.ToString() + "," + row.ToString();
+                                                emailString = "Variance run aborted for tile " + col + "," + row;
                                             }
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    emailString = "Variance run completed for tile " + col.ToString() + "," + row.ToString();
+                                    emailString = "Variance run completed for tile " + col + "," + row;
                                 }
                             }
                             catch (Exception)

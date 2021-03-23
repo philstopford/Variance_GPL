@@ -199,11 +199,11 @@ namespace Variance
                 {
                     if (values[i].Count == 0)
                     {
-                        histograms.Add("No data for result " + i.ToString() + "\r\n");
+                        histograms.Add("No data for result " + i + "\r\n");
                     }
                     else
                     {
-                        histograms.Add("Histogram for result " + i.ToString() + ":\r\n");
+                        histograms.Add("Histogram for result " + i + ":\r\n");
                         Histo h = new Histo(10, values[i].ToArray());
                         histograms.Add(h.StemLeaf(true, buckets));
                     }

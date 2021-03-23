@@ -271,7 +271,7 @@ namespace Variance
 
                 for (int j = 0; j < CommonVars.csvHeader.Length; j++)
                 {
-                    searchString = CommonVars.csvHeader[j] + (i).ToString();
+                    searchString = CommonVars.csvHeader[j] + (i);
                     colIndex = Array.IndexOf(parsed[0], searchString);
                     switch (CommonVars.csvHeader[j])
                     {

@@ -1751,9 +1751,9 @@ namespace Variance
         {
             // Simulation settings
             linesToWrite.Add("Simulation Settings:");
-            linesToWrite.Add("  Number of Cases: " + implantSimulationSettings.getValue(EntropySettings.properties_i.nCases).ToString());
-            linesToWrite.Add("  Edge resolution: " + implantSimulationSettings.getResolution().ToString());
-            linesToWrite.Add("  Corner segments: " + implantSimulationSettings.getValue(EntropySettings.properties_i.cSeg).ToString());
+            linesToWrite.Add("  Number of Cases: " + implantSimulationSettings.getValue(EntropySettings.properties_i.nCases));
+            linesToWrite.Add("  Edge resolution: " + implantSimulationSettings.getResolution());
+            linesToWrite.Add("  Corner segments: " + implantSimulationSettings.getValue(EntropySettings.properties_i.cSeg));
             if (implantSimulationSettings.getValue(EntropySettings.properties_i.optC) == 1)
             {
                 linesToWrite.Add("  Override corner angle step by edge resolution: yes");
@@ -1775,9 +1775,9 @@ namespace Variance
         {
             // Simulation settings
             linesToWrite.Add("Simulation Settings:");
-            linesToWrite.Add("  Number of Cases: " + simulationSettings.getValue(EntropySettings.properties_i.nCases).ToString());
-            linesToWrite.Add("  Edge resolution: " + simulationSettings.getResolution().ToString());
-            linesToWrite.Add("  Corner segments: " + simulationSettings.getValue(EntropySettings.properties_i.cSeg).ToString());
+            linesToWrite.Add("  Number of Cases: " + simulationSettings.getValue(EntropySettings.properties_i.nCases));
+            linesToWrite.Add("  Edge resolution: " + simulationSettings.getResolution());
+            linesToWrite.Add("  Corner segments: " + simulationSettings.getValue(EntropySettings.properties_i.cSeg));
             if (simulationSettings.getValue(EntropySettings.properties_i.optC) == 1)
             {
                 linesToWrite.Add("  Override corner angle step by edge resolution: yes");
@@ -1817,11 +1817,11 @@ namespace Variance
             if (!onlyActive || (onlyActive && (listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.enabled) == 1)))
             {
                 // Layer was active in simulation.
-                string layerRefString = "Layer " + layer.ToString();
+                string layerRefString = "Layer " + layer;
                 layerName = listOfSettings[layer].getString(EntropyLayerSettings.properties_s.name);
                 if (layerName == "")
                 {
-                    layerName = "layer" + layer.ToString();
+                    layerName = "layer" + layer;
                 }
                 if (!onlyActive)
                 {
@@ -1866,17 +1866,17 @@ namespace Variance
 
                     linesToWrite.Add("Layout Cell: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.structure));
                     linesToWrite.Add("Layout Layer/Datatype: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lD));
-                    linesToWrite.Add("Contouring: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.gCSEngine).ToString());
-                    linesToWrite.Add("Per-Poly: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.perPoly).ToString());
+                    linesToWrite.Add("Contouring: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.gCSEngine));
+                    linesToWrite.Add("Per-Poly: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.perPoly));
                     linesToWrite.Add("Poly Fill Type: " + polyFillTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.fill)]);
-                    linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset).ToString());
-                    linesToWrite.Add("Vertical Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset).ToString());
-                    linesToWrite.Add("Horizontal Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.xOL).ToString());
+                    linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
+                    linesToWrite.Add("Vertical Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset));
+                    linesToWrite.Add("Horizontal Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.xOL));
                     linesToWrite.Add("Horizontal Overlay RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.xOL_RNG));
-                    linesToWrite.Add("Vertical Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.yOL).ToString());
+                    linesToWrite.Add("Vertical Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.yOL));
                     linesToWrite.Add("Vertical Overlay RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.yOL_RNG));
-                    linesToWrite.Add("Side Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sBias).ToString());
-                    linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU).ToString());
+                    linesToWrite.Add("Side Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sBias));
+                    linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU));
                     linesToWrite.Add("Side CDU RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.sCDU_RNG));
                     string[] tempArray = summaryFile_LitData(layer);
                     for (int i = 0; i < tempArray.Length; i++)
@@ -1889,90 +1889,90 @@ namespace Variance
                     // Internal shape
                     for (int part = 0; part < shapeParts; part++)
                     {
-                        linesToWrite.Add("Subshape " + part.ToString() + ": ");
+                        linesToWrite.Add("Subshape " + part + ": ");
                         switch (part)
                         {
                             case 0:
-                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength).ToString());
-                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength).ToString());
-                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset).ToString());
-                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset).ToString());
+                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength));
+                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength));
+                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset));
+                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset));
                                 linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape0Tip)]);
                                 break;
                             case 1:
-                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength).ToString());
-                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength).ToString());
-                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset).ToString());
-                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset).ToString());
+                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength));
+                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength));
+                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset));
+                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset));
                                 linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape1Tip)]);
                                 break;
                             case 2:
-                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength).ToString());
-                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength).ToString());
-                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset).ToString());
-                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset).ToString());
+                                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength));
+                                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength));
+                                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset));
+                                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset));
                                 linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape2Tip)]);
                                 break;
                         }
                     }
 
                     // Subshape reference
-                    linesToWrite.Add("SubshapeReference: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.subShapeIndex).ToString());
+                    linesToWrite.Add("SubshapeReference: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.subShapeIndex));
                     // Subshape positioning
-                    linesToWrite.Add("PositionInSubshape: " + availableSubShapePositions[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.posIndex)].ToString());
+                    linesToWrite.Add("PositionInSubshape: " + availableSubShapePositions[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.posIndex)]);
 
                     // Global offsets.
-                    linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset).ToString());
-                    linesToWrite.Add("Vertical Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset).ToString());
+                    linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
+                    linesToWrite.Add("Vertical Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset));
 
                     // Rotation
-                    linesToWrite.Add("Rotation: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.rot).ToString());
+                    linesToWrite.Add("Rotation: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.rot));
                     // Wobble
-                    linesToWrite.Add("Wobble: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.wobble).ToString());
+                    linesToWrite.Add("Wobble: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.wobble));
                     linesToWrite.Add("Wobble RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.wobble_RNG));
 
                     // Biases
-                    linesToWrite.Add("Side Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sBias).ToString());
-                    linesToWrite.Add("HorTip Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTBias).ToString());
-                    linesToWrite.Add("  HorTip Bias +ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTPVar).ToString());
+                    linesToWrite.Add("Side Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sBias));
+                    linesToWrite.Add("HorTip Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTBias));
+                    linesToWrite.Add("  HorTip Bias +ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTPVar));
                     linesToWrite.Add("  HorTip Bias +ve Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.hTipPVar_RNG));
-                    linesToWrite.Add("  HorTip Bias -ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTNVar).ToString());
+                    linesToWrite.Add("  HorTip Bias -ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.hTNVar));
                     linesToWrite.Add("  HorTip Bias -ve Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.hTipNVar_RNG));
-                    linesToWrite.Add("VerTip Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTBias).ToString());
-                    linesToWrite.Add("  VerTip Bias +ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar).ToString());
+                    linesToWrite.Add("VerTip Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTBias));
+                    linesToWrite.Add("  VerTip Bias +ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar));
                     linesToWrite.Add("  VerTip Bias +ve Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG));
-                    linesToWrite.Add("  VerTip Bias -ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTNVar).ToString());
+                    linesToWrite.Add("  VerTip Bias -ve Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.vTNVar));
                     linesToWrite.Add("  VerTip Bias -ve Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.vTipNVar_RNG));
-                    linesToWrite.Add("Proximity Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.pBias).ToString());
-                    linesToWrite.Add("  Proximity Bias Isolated Distance: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist).ToString());
-                    linesToWrite.Add("  Proximity Bias Side Rays: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.proxRays).ToString());
+                    linesToWrite.Add("Proximity Bias: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.pBias));
+                    linesToWrite.Add("  Proximity Bias Isolated Distance: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist));
+                    linesToWrite.Add("  Proximity Bias Side Rays: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.proxRays));
 
                     // Corner rounding.
-                    linesToWrite.Add("Inner CRR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.iCR).ToString());
-                    linesToWrite.Add("  Inner CR Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.iCV).ToString());
+                    linesToWrite.Add("Inner CRR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.iCR));
+                    linesToWrite.Add("  Inner CR Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.iCV));
                     linesToWrite.Add("  Inner CR Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.iCV_RNG));
-                    linesToWrite.Add("Outer CRR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.oCR).ToString());
-                    linesToWrite.Add("  Outer CR Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.oCV).ToString());
+                    linesToWrite.Add("Outer CRR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.oCR));
+                    linesToWrite.Add("  Outer CR Var: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.oCV));
                     linesToWrite.Add("  Outer CR Var RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.oCV_RNG));
 
                     // CDU/LWR
-                    linesToWrite.Add("LWR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr).ToString());
+                    linesToWrite.Add("LWR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr));
                     linesToWrite.Add("LWR RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lwr_RNG));
-                    linesToWrite.Add("LWR Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq).ToString());
-                    linesToWrite.Add("LWR Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwrType)].ToString());
-                    linesToWrite.Add("LWR2: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2).ToString());
+                    linesToWrite.Add("LWR Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq));
+                    linesToWrite.Add("LWR Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwrType)]);
+                    linesToWrite.Add("LWR2: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2));
                     linesToWrite.Add("LWR2 RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lwr2_RNG));
-                    linesToWrite.Add("LWR2 Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq).ToString());
-                    linesToWrite.Add("LWR2 Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwr2Type)].ToString());
-                    linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU).ToString());
+                    linesToWrite.Add("LWR2 Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq));
+                    linesToWrite.Add("LWR2 Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwr2Type)]);
+                    linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU));
                     linesToWrite.Add("Side CDU RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.sCDU_RNG));
-                    linesToWrite.Add("Tips CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.tCDU).ToString());
+                    linesToWrite.Add("Tips CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.tCDU));
                     linesToWrite.Add("Tips CDU RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.tCDU_RNG));
 
                     // Overlay
-                    linesToWrite.Add("Horizontal Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.xOL).ToString());
+                    linesToWrite.Add("Horizontal Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.xOL));
                     linesToWrite.Add("Horizontal Overlay RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.xOL_RNG));
-                    linesToWrite.Add("Vertical Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.yOL).ToString());
+                    linesToWrite.Add("Vertical Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.yOL));
                     linesToWrite.Add("Vertical Overlay RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.yOL_RNG));
                     // Correlation data
                     string[] tempArray = summaryFile_LitData(layer);
@@ -2035,7 +2035,7 @@ namespace Variance
                     }
                     else
                     {
-                        xOverlayCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.xOL_corr_ref).ToString();
+                        xOverlayCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.xOL_corr_ref);
                     }
                 }
 
@@ -2051,7 +2051,7 @@ namespace Variance
                     }
                     else
                     {
-                        yOverlayCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.yOL_corr_ref).ToString();
+                        yOverlayCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.yOL_corr_ref);
                     }
                 }
 
@@ -2067,7 +2067,7 @@ namespace Variance
                     }
                     else
                     {
-                        xOverlayRefString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.xOL_ref).ToString();
+                        xOverlayRefString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.xOL_ref);
                     }
                 }
 
@@ -2083,7 +2083,7 @@ namespace Variance
                     }
                     else
                     {
-                        yOverlayRefString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.yOL_ref).ToString();
+                        yOverlayRefString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.yOL_ref);
                     }
                 }
 
@@ -2093,7 +2093,7 @@ namespace Variance
                 {
                     if (listOfSettings[layer].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, tmp) == 1)
                     {
-                        xOLAV_layers += (tmp + 1).ToString() + " ";
+                        xOLAV_layers += (tmp + 1) + " ";
                     }
                 }
 
@@ -2112,7 +2112,7 @@ namespace Variance
                 {
                     if (listOfSettings[layer].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, tmp) == 1)
                     {
-                        yOLAV_layers += (tmp + 1).ToString() + " ";
+                        yOLAV_layers += (tmp + 1) + " ";
                     }
                 }
 
@@ -2138,7 +2138,7 @@ namespace Variance
                     }
                     else
                     {
-                        cduCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.CDU_corr_ref).ToString();
+                        cduCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.CDU_corr_ref);
                     }
                 }
 
@@ -2155,7 +2155,7 @@ namespace Variance
                     }
                     else
                     {
-                        tipCDUCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref).ToString();
+                        tipCDUCorrString += "layer" + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref);
                     }
                 }
 
@@ -2186,10 +2186,10 @@ namespace Variance
             linesToWrite.Add("Utilities Settings:");
             linesToWrite.Add("  Email Server: " + nonSimulationSettings.host);
             linesToWrite.Add("  Email Port: " + nonSimulationSettings.port);
-            linesToWrite.Add("  Email Port: " + nonSimulationSettings.ssl.ToString());
+            linesToWrite.Add("  Email Port: " + nonSimulationSettings.ssl);
             linesToWrite.Add("  Email Address: " + nonSimulationSettings.emailAddress);
-            linesToWrite.Add("  Email On Completion: " + nonSimulationSettings.emailOnCompletion.ToString());
-            linesToWrite.Add("  Email Per Job: " + nonSimulationSettings.emailPerJob.ToString());
+            linesToWrite.Add("  Email On Completion: " + nonSimulationSettings.emailOnCompletion);
+            linesToWrite.Add("  Email Per Job: " + nonSimulationSettings.emailPerJob);
         }
 
         public void getDOESettings(List<string> linesToWrite)
@@ -2208,7 +2208,7 @@ namespace Variance
                     string layerName = listOfSettings[i].getString(EntropyLayerSettings.properties_s.name);
                     if (layerName == "")
                     {
-                        layerName = "(layer" + i.ToString() + ") ";
+                        layerName = "(layer" + i + ") ";
                     }
                     layersAffected += layerName;
                 }
@@ -2217,10 +2217,10 @@ namespace Variance
             {
                 linesToWrite.Add("Layout DOE Settings:");
                 linesToWrite.Add("  Affected layers: " + layersAffected);
-                linesToWrite.Add("  Column Offset: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colOffset).ToString());
-                linesToWrite.Add("  Row Offset: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowOffset).ToString());
-                linesToWrite.Add("  Column Pitch: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colPitch).ToString());
-                linesToWrite.Add("  Row Pitch: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowPitch).ToString());
+                linesToWrite.Add("  Column Offset: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colOffset));
+                linesToWrite.Add("  Row Offset: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowOffset));
+                linesToWrite.Add("  Column Pitch: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colPitch));
+                linesToWrite.Add("  Row Pitch: " + simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
             }
         }
 

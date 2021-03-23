@@ -282,7 +282,7 @@ namespace Variance
             entropyControl.updateImplantSimUIFunc = updateSimUIST;
             entropyControl.updateImplantSimUIMTFunc = updateSimUIMT;
             entropyControl.implantSimRunningUIFunc = simRunning;
-            Console.WriteLine("Starting run for " + commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases).ToString() + " cases.");
+            Console.WriteLine("Starting run for " + commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases) + " cases.");
             entropyControl.swTime = 0.0;
             bool threaded = true;
             if (varianceContext.numberOfThreads == 1)
@@ -479,7 +479,7 @@ namespace Variance
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Something went wrong: " + ex.Message.ToString());
+                        Console.WriteLine("Something went wrong: " + ex.Message);
                     }
                 }
                 else
