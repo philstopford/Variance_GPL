@@ -2,11 +2,9 @@ using color;
 using entropyRNG;
 using Error;
 using geoCoreLib;
-using keys;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Threading;
 using utility;
 
@@ -76,9 +74,7 @@ namespace Variance
 
             return ret;
         }
-
-        SimpleAES aes;
-
+        
         public Thread mainThreadIndex;
         Colors colors;
         public Colors getColors()
@@ -282,7 +278,6 @@ namespace Variance
             }
         }
 
-        int openGLMode; // 0 is VBO, 1 is immediate mode
         public object drawingLock { get; set; }
         public object implantDrawingLock { get; set; }
 

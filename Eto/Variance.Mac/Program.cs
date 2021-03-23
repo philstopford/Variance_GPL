@@ -1,9 +1,6 @@
-﻿using Eto.Forms;
-using Eto.Veldrid;
+﻿using Eto.Veldrid;
 using Eto.Veldrid.Mac;
 using System;
-using System.Diagnostics;
-using System.IO;
 using Veldrid;
 
 namespace Variance.Mac

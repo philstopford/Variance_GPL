@@ -3,7 +3,6 @@ using VeldridEto;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using Eto.Veldrid;
 
 namespace Variance
@@ -122,8 +121,6 @@ namespace Variance
                     commentBoxWidth, commentBoxHeight,
                     num_Height,
                     label_Height,
-                    radioButton_Height,
-                    checkBox_Height,
                     simButtonWidth, simButtonHeight,
                     replayNumWidth, replayNumHeight
         ;
@@ -132,7 +129,6 @@ namespace Variance
         int simRunningTabToFreeze;
 
         Scrollable controls;
-        PixelLayout controls_content;
         Scrollable tabPage_2D_PASearch_scrollable;
         TableLayout mainTable, tabPage2_table, tab_1DCalc_table, tabPage_2D_DOE_table, tabPage_implant_table, tabPage_utilities_table, tabPage_2D_PASearch_table;
 
@@ -140,7 +136,7 @@ namespace Variance
 
         ProgressBar statusProgressBar;
 
-        GroupBox bgLayerBox, omitLayerBox, simPreviewBox, miscControlsBox;
+        GroupBox bgLayerBox, omitLayerBox, simPreviewBox;
         CheckBox cB_displayShapes, cB_displayResults;
         CheckBox[] cB_bg, cB_omit;
         NumericStepper num_viewportZoom, num_viewportX, num_viewportY;
@@ -158,12 +154,8 @@ namespace Variance
         Panel upperGadgets_panel;
 
         TableLayout upperGadgets_table; // background and omit.
-
-        CancellationTokenSource fileLoad_cancelTS;
-
+        
         ContextMenu listbox_menu;
         ButtonMenuItem lb_copy, lb_paste, lb_enableDisable, lb_clear;
-        ButtonMenuItem litho_rounding_copy, litho_rounding_paste;
-
     }
 }

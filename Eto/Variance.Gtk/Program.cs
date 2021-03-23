@@ -1,8 +1,6 @@
-﻿using Eto.Forms;
-using Eto.Veldrid;
+﻿using Eto.Veldrid;
 using Eto.Veldrid.Gtk;
 using System;
-using Variance;
 using Veldrid;
 
 namespace Variance.Gtk

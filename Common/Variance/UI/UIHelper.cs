@@ -1,7 +1,6 @@
 ﻿using color;
 using Eto.Drawing;
 using geoLib;
-using System.Threading.Tasks;
 
 namespace Variance
 {

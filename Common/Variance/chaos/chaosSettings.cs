@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -439,7 +438,7 @@ namespace Variance
 #if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
 #else
-            for (Int32 i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
 #endif
             {
                 iC_PAsearch[i] = false;
@@ -593,7 +592,7 @@ namespace Variance
 #if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
 #else
-            for (Int32 i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
 #endif
             {
                 if (listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_corr) == 1)

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using utility;
 
 namespace Variance
@@ -209,7 +208,7 @@ namespace Variance
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Histogram can fail in case of insufficient variation - i.e. all values are the same.
             }

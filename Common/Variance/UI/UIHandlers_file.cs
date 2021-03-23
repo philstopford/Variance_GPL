@@ -2,7 +2,6 @@ using Error;
 using Eto.Forms;
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Variance
@@ -299,15 +298,7 @@ namespace Variance
                 updateStatusLine(UtilityFuncs.summarizeDOEResults(ofd.Directory, Directory.GetFiles(ofd.Directory, "*_summary.txt")));
             }
         }
-
-        void abortFileLoad(object sender, EventArgs e)
-        {
-            if (commonVars.loadAbort)
-            {
-                fileLoad_cancelTS.Cancel();
-            }
-        }
-
+        
         async void geoFileChooser_Handler_exp(object sender, EventArgs e)
         {
             Int32 settingsIndex = -1;

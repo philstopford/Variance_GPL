@@ -1,5 +1,3 @@
-using Error;
-using Eto;
 using Eto.Forms;
 using System;
 using System.IO;

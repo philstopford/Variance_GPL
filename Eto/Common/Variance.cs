@@ -2,7 +2,6 @@
 using Eto.Forms;
 using System;
 using System.ComponentModel;
-using Error;
 
 namespace Variance
 {

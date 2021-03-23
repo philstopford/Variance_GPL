@@ -2,7 +2,6 @@ using Eto.Drawing;
 using Eto.Forms;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Variance
 {
