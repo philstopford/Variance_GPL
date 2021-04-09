@@ -517,7 +517,7 @@ namespace Variance
 
         string pGetMeanAndStdDev()
         {
-            string returnString = lastMeanStdDev;
+            string returnString = "";
             Monitor.Enter(meanStdLock);
             try
             {
