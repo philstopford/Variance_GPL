@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ClipperLib;
 using geoWrangler;
 
@@ -465,7 +466,7 @@ namespace Variance
               1 : only the right layer is enabled.
              */
             int[] doLayer8Boolean = new int[limit8];
-
+            
 #if CHAOSTHREADED
             Parallel.For(0, limit8, (i) =>
 #else
