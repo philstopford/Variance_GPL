@@ -3,7 +3,7 @@ using Eto.Forms;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         GroupBox groupBox_DOESettings, groupBox_tileSubSet;
 
@@ -38,7 +38,7 @@ namespace Variance
             masterTable.Rows[0].Cells.Add(left_tc);
             TableCell right_tc = new TableCell();
             masterTable.Rows[0].Cells.Add(right_tc);
-            masterTable.Rows[0].Cells.Add(new TableCell() { Control = null });
+            masterTable.Rows[0].Cells.Add(new TableCell { Control = null });
 
             Panel leftPanel = new Panel();
             TableLayout leftTable = new TableLayout();
@@ -47,7 +47,7 @@ namespace Variance
             leftTable.Rows.Add(new TableRow());
             TableCell ltc0 = new TableCell();
             leftTable.Rows[0].Cells.Add(ltc0);
-            leftTable.Rows[0].Cells.Add(new TableCell() { Control = null });
+            leftTable.Rows[0].Cells.Add(new TableCell { Control = null });
             twoD_DOEUISetup_settings(ltc0);
 
             leftTable.Rows.Add(new TableRow());
@@ -93,29 +93,29 @@ namespace Variance
             lbl_rowOffset.Text = "Row Offset";
             lbl_rowOffset.ToolTip = "Vertical coordinate of lower left corner of lower left tile in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_rowOffset });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_rowOffset });
 
             num_rowOffset = new NumericStepper();
             num_rowOffset.Value = 0;
             num_rowOffset.Increment = 1;
             num_rowOffset.ToolTip = "Vertical coordinate of lower left corner of lower left tile in DOE grid.";
-            setSize(num_rowOffset, 80, num_Height);
+            setSize(num_rowOffset, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_rowOffset) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_rowOffset) });
 
             lbl_colOffset = new Label();
             lbl_colOffset.Text = "Col Offset";
             lbl_colOffset.ToolTip = "Horizontal coordinate of lower left corner of lower left tile in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_colOffset });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_colOffset });
 
             num_colOffset = new NumericStepper();
             num_colOffset.Value = 0;
             num_colOffset.Increment = 1;
             num_colOffset.ToolTip = "Horizontal coordinate of lower left corner of lower left tile in DOE grid.";
-            setSize(num_colOffset, 80, num_Height);
+            setSize(num_colOffset, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_colOffset) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_colOffset) });
 
             groupBox_DOESettings_table.Rows.Add(new TableRow());
 
@@ -123,31 +123,31 @@ namespace Variance
             lbl_DOERows.Text = "Rows";
             lbl_DOERows.ToolTip = "Number of rows in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOERows });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOERows });
 
             num_DOERows = new NumericStepper();
             num_DOERows.Value = 1;
             num_DOERows.Increment = 1;
             num_DOERows.MinValue = 1;
             num_DOERows.ToolTip = "Number of rows in DOE grid.";
-            setSize(num_DOERows, 80, num_Height);
+            setSize(num_DOERows, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOERows) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOERows) });
 
             lbl_DOECols = new Label();
             lbl_DOECols.Text = "Cols";
             lbl_DOECols.ToolTip = "Number of columns in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOECols });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOECols });
 
             num_DOECols = new NumericStepper();
             num_DOECols.Value = 1;
             num_DOECols.Increment = 1;
             num_DOECols.MinValue = 1;
             num_DOECols.ToolTip = "Number of columns in DOE grid.";
-            setSize(num_DOECols, 80, num_Height);
+            setSize(num_DOECols, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOECols) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOECols) });
 
             groupBox_DOESettings_table.Rows.Add(new TableRow());
 
@@ -155,32 +155,32 @@ namespace Variance
             lbl_DOERowPitch.Text = "Row Pitch";
             lbl_DOERowPitch.ToolTip = "Row height in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOERowPitch });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOERowPitch });
 
             num_DOERowPitch = new NumericStepper();
             num_DOERowPitch.Value = 1;
             num_DOERowPitch.Increment = 1;
             num_DOERowPitch.MinValue = 1;
             num_DOERowPitch.ToolTip = "Row height in DOE grid.";
-            setSize(num_DOERowPitch, 80, num_Height);
+            setSize(num_DOERowPitch, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOERowPitch) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOERowPitch) });
 
 
             lbl_DOEColPitch = new Label();
             lbl_DOEColPitch.Text = "Col Pitch";
             lbl_DOEColPitch.ToolTip = "Column width in DOE grid.";
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOEColPitch });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOEColPitch });
 
             num_DOEColPitch = new NumericStepper();
             num_DOEColPitch.Value = 1;
             num_DOEColPitch.Increment = 1;
             num_DOEColPitch.MinValue = 1;
             num_DOEColPitch.ToolTip = "Column width in DOE grid.";
-            setSize(num_DOEColPitch, 80, num_Height);
+            setSize(num_DOEColPitch, 80);
 
-            groupBox_DOESettings_table.Rows[groupBox_DOESettings_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOEColPitch) });
+            groupBox_DOESettings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOEColPitch) });
         }
 
         void twoD_DOEUISetup_tileset(TableCell tc)
@@ -197,15 +197,15 @@ namespace Variance
             Panel p0 = new Panel();
             TableLayout groupBox_tileSubSet_table = new TableLayout();
             p0.Content = groupBox_tileSubSet_table;
-            masterTable.Rows[0].Cells.Add(new TableCell() { Control = p0 });
-            masterTable.Rows[0].Cells.Add(new TableCell() { Control = null }); //padding
+            masterTable.Rows[0].Cells.Add(new TableCell { Control = p0 });
+            masterTable.Rows[0].Cells.Add(new TableCell { Control = null }); //padding
             groupBox_tileSubSet.Text = "Subset of Tiles";
 
             groupBox_tileSubSet_table.Rows.Add(new TableRow());
 
             Panel row0 = new Panel();
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row0 });
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = row0 });
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             TableLayout row0_tl = new TableLayout();
             row0.Content = row0_tl;
@@ -216,14 +216,14 @@ namespace Variance
             radioButton_allTiles.Checked = true;
             radioButton_allTiles.ToolTip = "Use all tiles in DOE grid.\nStart in lower left, end in upper right.";
 
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = radioButton_allTiles });
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = radioButton_allTiles });
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             groupBox_tileSubSet_table.Rows.Add(new TableRow());
 
             Panel row1 = new Panel();
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row1 });
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = row1 });
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             TableLayout row1_tl = new TableLayout();
             row1.Content = row1_tl;
@@ -233,44 +233,44 @@ namespace Variance
             radio_useSpecificTile.Text = "Use Specific Tile";
             radio_useSpecificTile.ToolTip = "Use single tile from DOE grid.";
 
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = radio_useSpecificTile });
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = radio_useSpecificTile });
 
             lbl_DOESCRow = new Label();
             lbl_DOESCRow.Text = "Row";
             lbl_DOESCRow.ToolTip = "Row index for tile.\n1 is lowest row.";
 
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOESCRow });
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOESCRow });
 
             num_DOESCRow = new NumericStepper();
             num_DOESCRow.Value = 1;
             num_DOESCRow.Increment = 1;
             num_DOESCRow.MinValue = 1;
             num_DOESCRow.ToolTip = "Row index for tile.\n1 is lowest row.";
-            setSize(num_DOESCRow, 80, num_Height);
+            setSize(num_DOESCRow, 80);
 
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOESCRow) });
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOESCRow) });
 
             lbl_DOESCCol = new Label();
             lbl_DOESCCol.Text = "Col";
             lbl_DOESCCol.ToolTip = "Column index for tile.\n1 is leftmost column.";
 
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_DOESCCol });
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_DOESCCol });
 
             num_DOESCCol = new NumericStepper();
             num_DOESCCol.Value = 1;
             num_DOESCCol.Increment = 1;
             num_DOESCCol.MinValue = 1;
             num_DOESCCol.ToolTip = "Column index for tile.\n1 is leftmost column.";
-            setSize(num_DOESCCol, 80, num_Height);
+            setSize(num_DOESCCol, 80);
 
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_DOESCCol) });
-            row1_tl.Rows[row1_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_DOESCCol) });
+            row1_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             groupBox_tileSubSet_table.Rows.Add(new TableRow());
 
             Panel row2 = new Panel();
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row2 });
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = row2 });
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             TableLayout row2_tl = new TableLayout();
             row2.Content = row2_tl;
@@ -280,8 +280,8 @@ namespace Variance
             radio_useSpecificTiles.Text = "Use Specific Tiles (col,row;col,row;col;row)";
             radio_useSpecificTiles.ToolTip = "Use these tiles in grid.\nNote syntax.\n1:1 is the lower left tile.";
 
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = radio_useSpecificTiles });
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            row2_tl.Rows[^1].Cells.Add(new TableCell { Control = radio_useSpecificTiles });
+            row2_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             row2_tl.Rows.Add(new TableRow());
 
@@ -289,13 +289,13 @@ namespace Variance
             textBox_useSpecificTiles.Width = 200;
             textBox_useSpecificTiles.ToolTip = "Use these tiles in grid.\nNote syntax.\n1:1 is the lower left tile.";
 
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = textBox_useSpecificTiles });
-            row2_tl.Rows[row2_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            row2_tl.Rows[^1].Cells.Add(new TableCell { Control = textBox_useSpecificTiles });
+            row2_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             groupBox_tileSubSet_table.Rows.Add(new TableRow());
 
             Panel row3 = new Panel();
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row3 });
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = row3 });
 
             TableLayout row3_tl = new TableLayout();
             row3.Content = row3_tl;
@@ -305,18 +305,18 @@ namespace Variance
             radio_useCSViDRM.Text = "Use iDRM CSV";
             radio_useCSViDRM.ToolTip = "Use iDRM CSV output to tag tiles for use in DOE.";
 
-            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = radio_useCSViDRM });
+            row3_tl.Rows[^1].Cells.Add(new TableCell { Control = radio_useCSViDRM });
 
             btn_useCSViDRM = new Button();
             btn_useCSViDRM.Text = "Choose File";
             btn_useCSViDRM.Click += iDRMFileChooser_Handler;
 
-            row3_tl.Rows[row3_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(btn_useCSViDRM) });
+            row3_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(btn_useCSViDRM) });
 
             groupBox_tileSubSet_table.Rows.Add(new TableRow());
 
             Panel row4 = new Panel();
-            groupBox_tileSubSet_table.Rows[groupBox_tileSubSet_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row4 });
+            groupBox_tileSubSet_table.Rows[^1].Cells.Add(new TableCell { Control = row4 });
 
             TableLayout row4_tl = new TableLayout();
             row4.Content = row4_tl;
@@ -325,13 +325,13 @@ namespace Variance
             radio_useCSVQuilt = new RadioButton(radioButton_allTiles);
             radio_useCSVQuilt.Text = "Use Quilt CSV";
 
-            row4_tl.Rows[row4_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = radio_useCSVQuilt });
+            row4_tl.Rows[^1].Cells.Add(new TableCell { Control = radio_useCSVQuilt });
 
             btn_useCSVQuilt = new Button();
             btn_useCSVQuilt.Text = "Choose File";
             btn_useCSVQuilt.Click += QuiltFileChooser_Handler;
 
-            row4_tl.Rows[row4_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(btn_useCSVQuilt) });
+            row4_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(btn_useCSVQuilt) });
         }
     }
 }

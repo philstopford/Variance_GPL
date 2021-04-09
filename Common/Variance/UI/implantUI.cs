@@ -1,9 +1,9 @@
-﻿using Eto.Forms;
-using System;
+﻿using System;
+using Eto.Forms;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         NumericStepper num_implantResistCD, num_implantResistCDVar,
                             num_implantResistHeight, num_implantResistHeightVar,
@@ -34,17 +34,17 @@ namespace Variance
             TableCell tc0 = new TableCell();
             tc0.Control = groupBox_implant;
             tabPage_implant_table.Rows[0].Cells.Add(tc0);
-            tabPage_implant_table.Rows[0].Cells.Add(new TableCell() { Control = null });
+            tabPage_implant_table.Rows[0].Cells.Add(new TableCell { Control = null });
             tabPage_implant_table.Rows.Add(new TableRow());
 
             TableLayout groupBox_implant_table = new TableLayout();
             groupBox_implant.Content = groupBox_implant_table;
 
             groupBox_implant_table.Rows.Add(new TableRow());
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             Panel row0p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row0p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row0p });
 
             TableLayout row0ptl = new TableLayout();
             row0p.Content = row0ptl;
@@ -52,20 +52,20 @@ namespace Variance
 
             lbl_implantNom = new Label();
             lbl_implantNom.Text = "Nominal";
-            row0ptl.Rows[row0ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantNom });
+            row0ptl.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantNom });
 
             lbl_implantVar = new Label();
             lbl_implantVar.Text = "3-sigma";
-            row0ptl.Rows[row0ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantVar });
+            row0ptl.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantVar });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantResistCD = new Label();
             lbl_implantResistCD.Text = "Developed resist CD";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantResistCD });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantResistCD });
 
             Panel row1p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row1p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row1p });
 
             TableLayout row1ptl = new TableLayout();
             row1p.Content = row1ptl;
@@ -77,8 +77,8 @@ namespace Variance
             num_implantResistCD.MinValue = 1;
             num_implantResistCD.Increment = 0.1;
             num_implantResistCD.LostFocus += doImplantShadowing;
-            setSize(num_implantResistCD, 50, num_Height);
-            row1ptl.Rows[row1ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistCD) });
+            setSize(num_implantResistCD, 50);
+            row1ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistCD) });
 
             num_implantResistCDVar = new NumericStepper();
             num_implantResistCDVar.Value = 0;
@@ -86,19 +86,19 @@ namespace Variance
             num_implantResistCDVar.MinValue = 0;
             num_implantResistCDVar.Increment = 0.1;
             num_implantResistCDVar.LostFocus += doImplantShadowing;
-            setSize(num_implantResistCDVar, 50, num_Height);
-            row1ptl.Rows[row1ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistCDVar) });
+            setSize(num_implantResistCDVar, 50);
+            row1ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistCDVar) });
 
-            row1ptl.Rows[row1ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row1ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantResistHeight = new Label();
             lbl_implantResistHeight.Text = "Developed resist height";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantResistHeight });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantResistHeight });
 
             Panel row2p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row2p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row2p });
 
             TableLayout row2ptl = new TableLayout();
             row2p.Content = row2ptl;
@@ -110,8 +110,8 @@ namespace Variance
             num_implantResistHeight.MinValue = 1;
             num_implantResistHeight.Increment = 0.1;
             num_implantResistHeight.LostFocus += doImplantShadowing;
-            setSize(num_implantResistHeight, 50, num_Height);
-            row2ptl.Rows[row2ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistHeight) });
+            setSize(num_implantResistHeight, 50);
+            row2ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistHeight) });
 
             num_implantResistHeightVar = new NumericStepper();
             num_implantResistHeightVar.Value = 0;
@@ -119,19 +119,19 @@ namespace Variance
             num_implantResistHeightVar.MinValue = 0;
             num_implantResistHeightVar.Increment = 0.1;
             num_implantResistHeightVar.LostFocus += doImplantShadowing;
-            setSize(num_implantResistHeightVar, 50, num_Height);
-            row2ptl.Rows[row2ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistHeightVar) });
+            setSize(num_implantResistHeightVar, 50);
+            row2ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistHeightVar) });
 
-            row2ptl.Rows[row2ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row2ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantResistTopCRR = new Label();
             lbl_implantResistTopCRR.Text = "Resist Top Corner Rounding";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantResistTopCRR });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantResistTopCRR });
 
             Panel row3p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row3p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row3p });
 
             TableLayout row3ptl = new TableLayout();
             row3p.Content = row3ptl;
@@ -143,27 +143,27 @@ namespace Variance
             num_implantResistTopCRR.MinValue = 0;
             num_implantResistTopCRR.Increment = 0.1;
             num_implantResistTopCRR.LostFocus += doImplantShadowing;
-            setSize(num_implantResistTopCRR, 50, num_Height);
-            row3ptl.Rows[row3ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistTopCRR) });
+            setSize(num_implantResistTopCRR, 50);
+            row3ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistTopCRR) });
 
             num_implantResistTopCRRVar = new NumericStepper();
             num_implantResistTopCRRVar.Value = 0;
             num_implantResistTopCRRVar.DecimalPlaces = 2;
             num_implantResistTopCRRVar.MinValue = 0;
             num_implantResistTopCRRVar.LostFocus += doImplantShadowing;
-            setSize(num_implantResistTopCRRVar, 50, num_Height);
-            row3ptl.Rows[row3ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantResistTopCRRVar) });
+            setSize(num_implantResistTopCRRVar, 50);
+            row3ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantResistTopCRRVar) });
 
-            row3ptl.Rows[row3ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row3ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantTiltAngle = new Label();
             lbl_implantTiltAngle.Text = "Implant Tilt Angle (deg)";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantTiltAngle });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantTiltAngle });
 
             Panel row4p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row4p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row4p });
 
             TableLayout row4ptl = new TableLayout();
             row4p.Content = row4ptl;
@@ -175,8 +175,8 @@ namespace Variance
             num_implantTiltAngle.MinValue = 0;
             num_implantTiltAngle.MaxValue = 90;
             num_implantTiltAngle.LostFocus += doImplantShadowing;
-            setSize(num_implantTiltAngle, 50, num_Height);
-            row4ptl.Rows[row4ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantTiltAngle) });
+            setSize(num_implantTiltAngle, 50);
+            row4ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantTiltAngle) });
 
             num_implantTiltAngleVar = new NumericStepper();
             num_implantTiltAngleVar.Value = 0;
@@ -184,19 +184,19 @@ namespace Variance
             num_implantTiltAngleVar.MinValue = 0;
             num_implantTiltAngleVar.MaxValue = 90;
             num_implantTiltAngleVar.LostFocus += doImplantShadowing;
-            setSize(num_implantTiltAngleVar, 50, num_Height);
-            row4ptl.Rows[row4ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantTiltAngleVar) });
+            setSize(num_implantTiltAngleVar, 50);
+            row4ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantTiltAngleVar) });
 
-            row4ptl.Rows[row4ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row4ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantTwistAngle = new Label();
             lbl_implantTwistAngle.Text = "Implant Twist Angle (deg)";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantTwistAngle });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantTwistAngle });
 
             Panel row5p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row5p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row5p });
 
             TableLayout row5ptl = new TableLayout();
             row5p.Content = row5ptl;
@@ -207,27 +207,27 @@ namespace Variance
             num_implantTwistAngle.DecimalPlaces = 2;
             num_implantTwistAngle.MinValue = 0;
             num_implantTwistAngle.LostFocus += doImplantShadowing;
-            setSize(num_implantTwistAngle, 50, num_Height);
-            row5ptl.Rows[row5ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantTwistAngle) });
+            setSize(num_implantTwistAngle, 50);
+            row5ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantTwistAngle) });
 
             num_implantTwistAngleVar = new NumericStepper();
             num_implantTwistAngleVar.Value = 0;
             num_implantTwistAngleVar.DecimalPlaces = 2;
             num_implantTwistAngleVar.MinValue = 0;
             num_implantTwistAngleVar.LostFocus += doImplantShadowing;
-            setSize(num_implantTwistAngleVar, 50, num_Height);
-            row5ptl.Rows[row5ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantTwistAngleVar) });
+            setSize(num_implantTwistAngleVar, 50);
+            row5ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantTwistAngleVar) });
 
-            row5ptl.Rows[row5ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row5ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantCornerSegments = new Label();
             lbl_implantCornerSegments.Text = "Corner Segments";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantCornerSegments });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantCornerSegments });
 
             Panel row6p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row6p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row6p });
 
             TableLayout row6ptl = new TableLayout();
             row6p.Content = row6ptl;
@@ -238,19 +238,19 @@ namespace Variance
             num_implantCornerSegments.MinValue = 2;
             num_implantCornerSegments.Increment = 1;
             num_implantCornerSegments.LostFocus += doImplantShadowing;
-            setSize(num_implantCornerSegments, 80, num_Height);
-            row6ptl.Rows[row6ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantCornerSegments) });
+            setSize(num_implantCornerSegments, 80);
+            row6ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantCornerSegments) });
 
-            row6ptl.Rows[row6ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row6ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantNumOfCases = new Label();
             lbl_implantNumOfCases.Text = "Number of Cases";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantNumOfCases });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantNumOfCases });
 
             Panel row7p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row7p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row7p });
 
             TableLayout row7ptl = new TableLayout();
             row7p.Content = row7ptl;
@@ -261,20 +261,20 @@ namespace Variance
             num_implantNumOfCases.DecimalPlaces = 0;
             num_implantNumOfCases.MinValue = 1;
             num_implantNumOfCases.LostFocus += doImplantShadowing;
-            setSize(num_implantNumOfCases, 80, num_Height);
+            setSize(num_implantNumOfCases, 80);
 
-            row7ptl.Rows[row7ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_implantNumOfCases) });
+            row7ptl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_implantNumOfCases) });
 
-            row7ptl.Rows[row7ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row7ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantRNG = new Label();
             lbl_implantRNG.Text = "RNG";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantRNG });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantRNG });
 
             Panel row8p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row8p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row8p });
 
             TableLayout row8ptl = new TableLayout();
             row8p.Content = row8ptl;
@@ -284,17 +284,17 @@ namespace Variance
             comboBox_implantRNG.DataContext = DataContext;
             comboBox_implantRNG.BindDataContext(c => c.DataStore, (UIStringLists m) => m.rngTypeList);
             comboBox_implantRNG.SelectedIndexChanged += doImplantShadowing;
-            setSize(comboBox_implantRNG, 175, label_Height);
+            setSize(comboBox_implantRNG, 175);
 
-            row8ptl.Rows[row8ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_implantRNG });
+            row8ptl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_implantRNG });
 
-            row8ptl.Rows[row8ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row8ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             Panel row9p = new Panel();
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row9p });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row9p });
 
             TableLayout row9ptl = new TableLayout();
             row9p.Content = row9ptl;
@@ -305,14 +305,14 @@ namespace Variance
             checkBox_CSV_implant.CheckedChanged += doImplantShadowing;
             checkBox_CSV_implant.ToolTip = "Write out a CSV file containing the result for each case and its inputs. Allows for offline deep-dive review.";
 
-            row9ptl.Rows[row9ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_CSV_implant });
+            row9ptl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_CSV_implant });
 
             checkBox_external_implant = new CheckBox();
             checkBox_external_implant.Text = "External";
             checkBox_external_implant.CheckedChanged += doImplantShadowing;
             checkBox_external_implant.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
 
-            row9ptl.Rows[row9ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = checkBox_external_implant });
+            row9ptl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_external_implant });
 
             comboBox_externalTypes_implant = new DropDown();
             comboBox_externalTypes_implant.DataContext = DataContext;
@@ -320,39 +320,39 @@ namespace Variance
             comboBox_externalTypes_implant.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalTypeList);
             comboBox_externalTypes_implant.ToolTip = "Choose your external file type";
 
-            row9ptl.Rows[row9ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = comboBox_externalTypes_implant });
+            row9ptl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalTypes_implant });
 
-            row9ptl.Rows[row9ptl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            row9ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantShadowNom = new Label();
             lbl_implantShadowNom.Text = "Implant Shadowing (Mean)";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantShadowNom });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantShadowNom });
 
             textBox_implantShadowNom = new TextBox();
             textBox_implantShadowNom.ReadOnly = true;
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = textBox_implantShadowNom });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = textBox_implantShadowNom });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantShadowMin = new Label();
             lbl_implantShadowMin.Text = "Implant Shadowing (Min)";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantShadowMin });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantShadowMin });
 
             textBox_implantShadowMin = new TextBox();
             textBox_implantShadowMin.ReadOnly = true;
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = textBox_implantShadowMin });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = textBox_implantShadowMin });
 
             groupBox_implant_table.Rows.Add(new TableRow());
 
             lbl_implantShadowMax = new Label();
             lbl_implantShadowMax.Text = "Implant Shadowing (Max)";
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_implantShadowMax });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantShadowMax });
 
             textBox_implantShadowMax = new TextBox();
             textBox_implantShadowMax.ReadOnly = true;
-            groupBox_implant_table.Rows[groupBox_implant_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = textBox_implantShadowMax });
+            groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = textBox_implantShadowMax });
         }
 
         void doImplantShadowing(object sender, EventArgs e)
@@ -424,7 +424,7 @@ namespace Variance
             double x = otkVPSettings_implant.getCameraX();
             double y = otkVPSettings_implant.getCameraY();
             double zoom = otkVPSettings_implant.getZoomFactor();
-            return new double[] { x, y, zoom };
+            return new[] { x, y, zoom };
         }
     }
 }

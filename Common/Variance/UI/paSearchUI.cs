@@ -1,5 +1,5 @@
-using Eto.Forms;
 using System;
+using Eto.Forms;
 
 namespace Variance
 {
@@ -36,19 +36,19 @@ namespace Variance
             tabPage_2D_PASearch_table.Rows.Add(new TableRow());
 
             Panel row0 = new Panel();
-            tabPage_2D_PASearch_table.Rows[tabPage_2D_PASearch_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row0 });
+            tabPage_2D_PASearch_table.Rows[^1].Cells.Add(new TableCell { Control = row0 });
             paSearchUI_setup_row0(ref row0);
 
             tabPage_2D_PASearch_table.Rows.Add(new TableRow());
 
             Panel row1 = new Panel();
-            tabPage_2D_PASearch_table.Rows[tabPage_2D_PASearch_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row1 });
+            tabPage_2D_PASearch_table.Rows[^1].Cells.Add(new TableCell { Control = row1 });
             paSearchUI_setup_row1(ref row1);
 
             tabPage_2D_PASearch_table.Rows.Add(new TableRow());
 
             Panel row2 = new Panel();
-            tabPage_2D_PASearch_table.Rows[tabPage_2D_PASearch_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = row2 });
+            tabPage_2D_PASearch_table.Rows[^1].Cells.Add(new TableCell { Control = row2 });
             paSearchUI_setup_row2(ref row2);
 
             tabPage_2D_PASearch_table.Rows.Add(new TableRow()); // padding.
@@ -67,7 +67,7 @@ namespace Variance
             lbl_passCase = new Label();
             lbl_passCase.Text = "Pass Cases to Find";
             lbl_passCase.ToolTip = "Minimum number of pass cases to find.";
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_passCase });
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_passCase });
 
             num_passCase = new NumericStepper();
             num_passCase.Increment = 1;
@@ -75,19 +75,19 @@ namespace Variance
             num_passCase.Value = 25000;
             num_passCase.LostFocus += paSearchUI_Handler;
             num_passCase.ToolTip = "Minimum number of pass cases to find.";
-            setSize(num_passCase, 80, num_Height);
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_passCase) });
+            setSize(num_passCase, 80);
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCase) });
 
             lbl_paSearch_readOut = new Label();
             lbl_paSearch_readOut.Text = "Last result:";
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_paSearch_readOut });
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_paSearch_readOut });
 
             text_paSearch = new TextBox();
             text_paSearch.ReadOnly = true;
             text_paSearch.Width = resultFieldWidth;
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_paSearch });
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_paSearch });
 
-            row0_tl.Rows[row0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            row0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
         }
 
         void paSearchUI_setup_row1(ref Panel p)
@@ -121,32 +121,32 @@ namespace Variance
                 cb_passCaseValues[passCaseVal] = new CheckBox();
                 cb_passCaseValues[passCaseVal].Text = "";
                 cb_passCaseValues[i].CheckedChanged += paSearchUI_Handler;
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cb_passCaseValues[passCaseVal] });
+                tl.Rows[^1].Cells.Add(new TableCell { Control = cb_passCaseValues[passCaseVal] });
 
                 rb_passValueRadioButtons[passCaseVal, 0] = new RadioButton();
                 rb_passValueRadioButtons[passCaseVal, 0].Text = "Min";
                 rb_passValueRadioButtons[passCaseVal, 0].Checked = true;
                 rb_passValueRadioButtons[passCaseVal, 0].Enabled = false;
                 rb_passValueRadioButtons[i, 0].CheckedChanged += paSearchUI_Handler;
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rb_passValueRadioButtons[i, 0] });
+                tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 0] });
 
                 rb_passValueRadioButtons[passCaseVal, 1] = new RadioButton(rb_passValueRadioButtons[passCaseVal, 0]);
                 rb_passValueRadioButtons[passCaseVal, 1].Text = "Max";
                 rb_passValueRadioButtons[passCaseVal, 1].Enabled = false;
                 rb_passValueRadioButtons[i, 1].CheckedChanged += paSearchUI_Handler;
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rb_passValueRadioButtons[i, 1] });
+                tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 1] });
 
                 num_passCaseValues[passCaseVal] = new NumericStepper();
                 num_passCaseValues[passCaseVal].DecimalPlaces = 2;
                 num_passCaseValues[passCaseVal].Increment = 0.01f;
-                setSize(num_passCaseValues[passCaseVal], 55, num_Height);
+                setSize(num_passCaseValues[passCaseVal], 55);
                 num_passCaseValues[passCaseVal].Enabled = false;
                 num_passCaseValues[i].LostFocus += paSearchUI_Handler;
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_passCaseValues[passCaseVal]) });
+                tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCaseValues[passCaseVal]) });
 
-                resultFilter_table.Rows[resultFilter_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = passCaseValues_pnl[passCaseVal] });
+                resultFilter_table.Rows[^1].Cells.Add(new TableCell { Control = passCaseValues_pnl[passCaseVal] });
             }
-            resultFilter_table.Rows[resultFilter_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            resultFilter_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
         }
 
         void paSearchUI_setup_row2(ref Panel p)
@@ -156,7 +156,7 @@ namespace Variance
 
             tabPage_2D_PASearch_bigTable.Rows.Add(new TableRow()); // header row
 
-            tabPage_2D_PASearch_bigTable.Rows[0].Cells.Add(new TableCell() { Control = null }); // blank, for row header
+            tabPage_2D_PASearch_bigTable.Rows[0].Cells.Add(new TableCell { Control = null }); // blank, for row header
 
             for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
             {
@@ -165,7 +165,7 @@ namespace Variance
                 lbl_paSearchLayers[layer].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
                 lbl_paSearchLayers[layer].TextAlignment = TextAlignment.Center;
 
-                tabPage_2D_PASearch_bigTable.Rows[0].Cells.Add(new TableCell() { Control = lbl_paSearchLayers[layer] });
+                tabPage_2D_PASearch_bigTable.Rows[0].Cells.Add(new TableCell { Control = lbl_paSearchLayers[layer] });
             }
 
             for (int pa = 0; pa < PASearch.paNames.Length; pa++)
@@ -174,7 +174,7 @@ namespace Variance
 
                 lbl_paSearchPAs[pa] = new Label();
                 lbl_paSearchPAs[pa].Text = PASearch.paNames[pa];
-                tr.Cells.Add(new TableCell() { Control = lbl_paSearchPAs[pa] });
+                tr.Cells.Add(new TableCell { Control = lbl_paSearchPAs[pa] });
 
                 for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
                 {
@@ -185,7 +185,7 @@ namespace Variance
                     // Upper row of tmp_tl
                     tmp_tl.Rows.Add(new TableRow());
                     Panel tc0p = new Panel();
-                    tmp_tl.Rows[0].Cells.Add(new TableCell() { Control = tc0p });
+                    tmp_tl.Rows[0].Cells.Add(new TableCell { Control = tc0p });
 
                     TableLayout tc0p_tl = new TableLayout();
                     tc0p.Content = tc0p_tl;
@@ -210,7 +210,7 @@ namespace Variance
                     num_searchPA_UpperLimit[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
                     num_searchPA_UpperLimit[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
 
-                    setSize(num_searchPA_UpperLimit[layer, pa], 55, label_Height * 2);
+                    setSize(num_searchPA_UpperLimit[layer, pa], 55);
                     num_searchPA_UpperLimit[layer, pa].LostFocus += paSearchUI_Handler;
                     tc_ur_1.Control = TableLayout.AutoSized(num_searchPA_UpperLimit[layer, pa]);
 
@@ -224,9 +224,9 @@ namespace Variance
                     text_searchPA_Result[layer, pa].Width = 55 * 2;
                     text_searchPA_Result[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
                     text_searchPA_Result[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
-                    tmp_tl.Rows[1].Cells.Add(new TableCell() { Control = text_searchPA_Result[layer, pa] });
+                    tmp_tl.Rows[1].Cells.Add(new TableCell { Control = text_searchPA_Result[layer, pa] });
 
-                    tr.Cells.Add(new TableCell() { Control = bTc_p });
+                    tr.Cells.Add(new TableCell { Control = bTc_p });
                 }
                 tabPage_2D_PASearch_bigTable.Rows.Add(tr);
             }
@@ -280,7 +280,7 @@ namespace Variance
             {
                 if (!chordMode)
                 {
-                    groupBox_passCaseValues[i].Enabled = chordMode;
+                    groupBox_passCaseValues[i].Enabled = false;
                     cb_passCaseValues[i].Checked = false;
                 }
                 commonVars.getPASearch().useFilter[i] = (bool)cb_passCaseValues[i].Checked;

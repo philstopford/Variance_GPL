@@ -1,9 +1,8 @@
-﻿using ClipperLib;
+﻿using System;
+using System.Collections.Generic;
+using ClipperLib;
 using geoLib;
 using geoWrangler;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using utility;
 
 namespace Variance
@@ -152,7 +151,7 @@ namespace Variance
                 source.Add(sourcePath);
 
                 // Build our mask polygon from the bounds and 0,0 reference. Curiously, Clipper's top/bottom bounds are flipped from what might be expected.
-                IntRect bounds = Clipper.GetBounds(source);
+                IntRect bounds = ClipperBase.GetBounds(source);
                 Path maskPoly = new Path();
                 maskPoly.Add(new IntPoint(0, 0));
                 maskPoly.Add(new IntPoint(0, bounds.bottom));
@@ -216,7 +215,7 @@ namespace Variance
                     );
 #endif
                 }
-                points[points.Length - 1] = new GeoLibPoint(points[0].X, points[0].Y); // close it, for the sake of it.
+                points[^1] = new GeoLibPoint(points[0].X, points[0].Y); // close it, for the sake of it.
 
                 // Clockwise spin.
                 points = GeoWrangler.clockwise(points);

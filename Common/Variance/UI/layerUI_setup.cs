@@ -1,10 +1,10 @@
-using Eto.Forms;
 using System;
 using System.Collections.Generic;
+using Eto.Forms;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         TableLayout layerProperties_tl;
         TableCell layerProperties_tc;
@@ -65,7 +65,7 @@ namespace Variance
             experiment_table.Rows.Add(row0);
 
             Panel p = new Panel();
-            row0.Cells.Add(new TableCell() { Control = p });
+            row0.Cells.Add(new TableCell { Control = p });
 
             listBox_layers = new ListBox();
             listBox_layers.Width = 55;
@@ -99,15 +99,15 @@ namespace Variance
                 Panel p = new Panel();
                 p.Content = tl;
                 tabPage_2D_layer_table.Rows.Add(new TableRow());
-                tabPage_2D_layer_table.Rows[0].Cells.Add(new TableCell() { Control = p });
-                tabPage_2D_layer_table.Rows.Add(new TableRow() { ScaleHeight = true });
+                tabPage_2D_layer_table.Rows[0].Cells.Add(new TableCell { Control = p });
+                tabPage_2D_layer_table.Rows.Add(new TableRow { ScaleHeight = true });
 
                 tl.Rows.Add(new TableRow());
                 TableCell topRowTC = new TableCell();
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(topRowTC);
+                tl.Rows[^1].Cells.Add(topRowTC);
 
                 TableLayout tl_toprow = new TableLayout();
-                Panel tl_panel = new Panel() { Content = tl_toprow };
+                Panel tl_panel = new Panel { Content = tl_toprow };
                 topRowTC.Control = tl_panel;
 
                 layerUI_topRow_setup(tl_toprow);
@@ -116,7 +116,7 @@ namespace Variance
 
                 tl.Rows.Add(new TableRow());
                 Panel lop_panel = new Panel();
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lop_panel });
+                tl.Rows[^1].Cells.Add(new TableCell { Control = lop_panel });
 
                 TableLayout tl_lop = new TableLayout();
                 lop_panel.Content = tl_lop;
@@ -133,28 +133,28 @@ namespace Variance
 
                 layerGadgets2(gadgets2TC);
 
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true }); // padding.
+                tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding.
 
                 // Bias etch
 
                 tl.Rows.Add(new TableRow());
                 TableCell biasEtchTC = new TableCell();
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(biasEtchTC);
+                tl.Rows[^1].Cells.Add(biasEtchTC);
                 twoD_LayerUISetup_biasEtch(biasEtchTC);
 
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true }); // padding.
+                tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding.
 
                 // Another table needs to be injected 
 
                 tl.Rows.Add(new TableRow());
                 TableCell lithoTC = new TableCell();
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(lithoTC);
+                tl.Rows[^1].Cells.Add(lithoTC);
                 twoD_LayerUISetup_litho(lithoTC);
 
                 // Button export
                 tl.Rows.Add(new TableRow());
                 TableCell exportTC = new TableCell();
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(exportTC);
+                tl.Rows[^1].Cells.Add(exportTC);
 
                 Panel pExportTL = new Panel();
                 exportTC.Control = pExportTL;
@@ -164,10 +164,10 @@ namespace Variance
 
                 Button exportToLayout = new Button();
                 exportToLayout.Text = "Export to Layout";
-                exportTL.Rows[exportTL.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(exportToLayout) });
+                exportTL.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
                 exportToLayout.Click += exportActiveLayerToLayout;
 
-                tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true }); // padding.
+                tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding.
             });
         }
 
@@ -624,12 +624,12 @@ namespace Variance
             cB_Layer = new CheckBox();
             cB_Layer.Text = "Enabled";
             cB_Layer.ToolTip = "If checked, include the layer in the simulation";
-            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = cB_Layer });
+            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = cB_Layer });
 
             text_layerName = new TextBox();
             text_layerName.ToolTip = "Layer name. If blank, the layer number will be used";
-            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = text_layerName });
-            gadgets_tr0_0_tl.Rows[0].Cells[gadgets_tr0_0_tl.Rows[0].Cells.Count - 1].ScaleWidth = true;
+            gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = text_layerName });
+            gadgets_tr0_0_tl.Rows[0].Cells[^1].ScaleWidth = true;
         }
 
         void layerGadgets_row2(TableLayout layerGadgets_table)
@@ -658,7 +658,7 @@ namespace Variance
             comboBox_layerShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.shapes);
             comboBox_layerShape.SelectedIndex = 0;
             comboBox_layerShape.ToolTip = "Type of shape to generate";
-            gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell() { Control = comboBox_layerShape });
+            gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell { Control = comboBox_layerShape });
         }
 
         void layerGadgets2(TableCell tc)
@@ -701,41 +701,41 @@ namespace Variance
             cB_FlipH = new CheckBox();
             cB_FlipH.Text = "Flip H";
             cB_FlipH.ToolTip = "Flip shape horizontally";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_FlipH });
+            flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_FlipH });
 
             cB_alignGeometryX = new CheckBox();
             cB_alignGeometryX.Text = "Align X";
             cB_alignGeometryX.ToolTip = "Centers the flipped shape on the non-flipped shape in X";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_alignGeometryX });
+            flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_alignGeometryX });
 
             flipAign_tl.Rows.Add(new TableRow());
 
             cB_FlipV = new CheckBox();
             cB_FlipV.Text = "Flip V";
             cB_FlipV.ToolTip = "Flip shape vertically";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_FlipV });
+            flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_FlipV });
 
             cB_alignGeometryY = new CheckBox();
             cB_alignGeometryY.Text = "Align Y";
             cB_alignGeometryY.ToolTip = "Centers the flipped shape on the non-flipped shape in Y";
-            flipAign_tl.Rows[flipAign_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_alignGeometryY });
+            flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_alignGeometryY });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
-            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(flipAign_tl) });
+            gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(flipAign_tl) });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
             cB_ShowDrawn = new CheckBox();
             cB_ShowDrawn.Text = "Show Drawn";
             cB_ShowDrawn.ToolTip = "Show drawn shape for the contour";
-            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_ShowDrawn });
+            gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_ShowDrawn });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
             cB_layer_LWRPreview = new CheckBox();
             cB_layer_LWRPreview.Text = "Show LWR";
             cB_layer_LWRPreview.ToolTip = "Preview of LWR";
-            gadgets_tr1_0_tl.Rows[gadgets_tr1_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = cB_layer_LWRPreview });
+            gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_layer_LWRPreview });
         }
     }
 }

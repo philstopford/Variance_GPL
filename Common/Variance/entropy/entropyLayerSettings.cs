@@ -1,7 +1,7 @@
-﻿using geoLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using geoLib;
 
 namespace Variance
 {
@@ -9,7 +9,7 @@ namespace Variance
     public class EntropyLayerSettings
     {
         static string default_comment = "";
-        static Int32[] default_bgLayers = new Int32[CentralProperties.maxLayersForMC] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static Int32[] default_bgLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         static Int32 default_enabled = 0;
         static Int32 default_geoCoreShapeEngine = 0;
         static Int32 default_showDrawn = 0;
@@ -84,14 +84,14 @@ namespace Variance
         static Int32 default_overlayYReferenceLayer = -1;
         static Int32 default_averageOverlayX = 0;
         static Int32 default_averageOverlayY = 0;
-        static Int32[] default_overlayXReferenceLayers = new Int32[CentralProperties.maxLayersForMC] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        static Int32[] default_overlayYReferenceLayers = new Int32[CentralProperties.maxLayersForMC] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static Int32[] default_overlayXReferenceLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static Int32[] default_overlayYReferenceLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         static Int32 default_flipH = 0;
         static Int32 default_flipV = 0;
 
         static Int32 default_fileType = 0; // layout (now exposed by geoCore - could be redundant)
-        static List<GeoLibPointF[]> default_fileData = new List<GeoLibPointF[]> { new GeoLibPointF[] { new GeoLibPointF(0, 0) } };
+        static List<GeoLibPointF[]> default_fileData = new List<GeoLibPointF[]> { new [] { new GeoLibPointF(0, 0) } };
         static string default_fileToLoad = "";
         static string default_ldNameFromFile = "";
         static string default_structureNameFromFile = "";
@@ -142,7 +142,7 @@ namespace Variance
 
         Int32[] pGetIntArray(properties_intarray p)
         {
-            Int32[] ret = new Int32[] { };
+            Int32[] ret = { };
             switch (p)
             {
                 case properties_intarray.bglayers:
@@ -235,7 +235,7 @@ namespace Variance
             switch (p)
             {
                 case properties_intarray.bglayers:
-                    bgLayers[index] = val; ;
+                    bgLayers[index] = val;
                     break;
                 case properties_intarray.xOLRefs:
                     overlayXReferenceLayers[index] = val;

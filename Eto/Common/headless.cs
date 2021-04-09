@@ -317,13 +317,13 @@ namespace Variance
             commonVars.setSimRunning(true);
         }
 
-        public void setLayerSettings(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool resumeUI = false, bool updateGeoCoreGeometryFromFile = false)
+        public void setLayerSettings(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false)
         {
             // Ignore resumeUI - only for GUI modes.
-            pSetLayerSettings(readSettings, layer, gdsOnly, resumeUI, updateGeoCoreGeometryFromFile);
+            pSetLayerSettings(readSettings, layer, gdsOnly, updateGeoCoreGeometryFromFile);
         }
 
-        void pSetLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool resumeUI, bool updateGeoCoreGeometryFromFile = false)
+        void pSetLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false)
         {
             // This is used by the pasteHandler and clearHandler to set user interface values to align with the settings.
             // It is also used by the load from disk file system, using a temporary MCSettings instance as the source

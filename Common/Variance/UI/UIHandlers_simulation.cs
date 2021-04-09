@@ -1,8 +1,8 @@
-using Eto.Forms;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Eto.Forms;
 
 namespace Variance
 {
@@ -10,7 +10,7 @@ namespace Variance
     {
         bool abortCheck()
         {
-            if (commonVars.runAbort == true)
+            if (commonVars.runAbort)
             {
                 DialogResult dR = MessageBox.Show("Abort saving of results?", "Abort save?", MessageBoxButtons.YesNo);
                 if (dR != DialogResult.Yes)
@@ -158,7 +158,7 @@ namespace Variance
                     fileDialogExt = ".csv";
                 }
 
-                SaveFileDialog sfd = new SaveFileDialog()
+                SaveFileDialog sfd = new SaveFileDialog
                 {
                     Title = fileDialogTitle,
                     Filters =
@@ -168,13 +168,13 @@ namespace Variance
                 };
                 try
                 {
-                    string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new char[] { '.' });
+                    string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new[] { '.' });
                     string fileName = "";
                     for (int i = 0; i < tokens.Length - 2; i++)
                     {
                         fileName += tokens[i] + ".";
                     }
-                    fileName += tokens[tokens.Length - 2];
+                    fileName += tokens[^2];
                     sfd.FileName = fileName;
                 }
                 catch (Exception)
@@ -284,7 +284,7 @@ namespace Variance
 
         void configProgressBar(int value, int max)
         {
-            if (System.Threading.Thread.CurrentThread == commonVars.mainThreadIndex)
+            if (Thread.CurrentThread == commonVars.mainThreadIndex)
             {
                 statusProgressBar.Value = value;
                 statusProgressBar.MaxValue = max;
@@ -620,8 +620,6 @@ namespace Variance
 
         async void entropySettingsChanged(object sender)
         {
-            bool updateNeeded = false;
-
             // Force base configuration as the table layout lazy evaluation can result in trouble.
             try
             {
@@ -696,7 +694,7 @@ namespace Variance
                 // We force the update flag to on and then clear it if the control is not supposed to trigger a re-evaluation.
             }
 
-            updateNeeded = true;
+            bool updateNeeded = true;
 
             if (commonVars.getReplayMode() == 0)
             {
@@ -811,7 +809,7 @@ namespace Variance
                     comboBox_calcModes.SelectedIndexChanged -= entropySettingsChanged;
                     checkBox_withinMode.Enabled = true;
                     commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.enclosure_spacing_overlap);
-                    string t = "";
+                    string t;
                     if ((bool)checkBox_withinMode.Checked)
                     {
                         checkBox_useShortestEdge.Enabled = false;
@@ -1016,7 +1014,7 @@ namespace Variance
                             }
                             else
                             {
-                                entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false, setJobSettings: true, loadedJobSettings: simReplay.getChaosSettings(), replayRow: simReplay.getValue(Replay.properties_i.row), replayCol: simReplay.getValue(Replay.properties_i.col));
+                                entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false, setJobSettings: true, loadedJobSettings: simReplay.getChaosSettings(), replayRow_: simReplay.getValue(Replay.properties_i.row), replayCol_: simReplay.getValue(Replay.properties_i.col));
                             }
                         });
                     }
@@ -1072,7 +1070,7 @@ namespace Variance
 
         void replayLoadCSV(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog()
+            OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Select CSV file to Load",
                 MultiSelect = false,

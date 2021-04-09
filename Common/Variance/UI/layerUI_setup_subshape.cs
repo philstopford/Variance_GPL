@@ -2,7 +2,7 @@
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         // 2D Layer Shapes
         GroupBox gB_subShapes;
@@ -53,11 +53,11 @@ namespace Variance
 
             lbl_subshape_hl = new Label();
             lbl_subshape_hl.Text = "Hor. Length";
-            subshapes_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_subshape_hl });
+            subshapes_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_hl });
 
             TableLayout row0_1 = new TableLayout();
-            Panel pr0 = new Panel() { Content = row0_1 };
-            subshapes_tr0_0_tl.Rows[0].Cells.Add(new TableCell() { Control = pr0 });
+            Panel pr0 = new Panel { Content = row0_1 };
+            subshapes_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = pr0 });
             subshapes_tr0_0_tl.Rows[0].Cells[1].ScaleWidth = true;
 
             subshapes_row0_1(row0_1);
@@ -66,11 +66,11 @@ namespace Variance
 
             lbl_subshape_ho = new Label();
             lbl_subshape_ho.Text = "Hor. Offset";
-            subshapes_tr0_0_tl.Rows[1].Cells.Add(new TableCell() { Control = lbl_subshape_ho });
+            subshapes_tr0_0_tl.Rows[1].Cells.Add(new TableCell { Control = lbl_subshape_ho });
 
             TableLayout row1_1 = new TableLayout();
-            Panel pr1 = new Panel() { Content = row1_1 };
-            subshapes_tr0_0_tl.Rows[1].Cells.Add(new TableCell() { Control = pr1 });
+            Panel pr1 = new Panel { Content = row1_1 };
+            subshapes_tr0_0_tl.Rows[1].Cells.Add(new TableCell { Control = pr1 });
             subshapes_tr0_0_tl.Rows[1].Cells[1].ScaleWidth = true;
 
             subshapes_row1_1(row1_1);
@@ -79,11 +79,11 @@ namespace Variance
 
             lbl_tipLocations = new Label();
             lbl_tipLocations.Text = "Tip Locs";
-            subshapes_tr0_0_tl.Rows[2].Cells.Add(new TableCell() { Control = lbl_tipLocations });
+            subshapes_tr0_0_tl.Rows[2].Cells.Add(new TableCell { Control = lbl_tipLocations });
 
             TableLayout row2_1 = new TableLayout();
-            Panel pr2 = new Panel() { Content = row2_1 };
-            subshapes_tr0_0_tl.Rows[2].Cells.Add(new TableCell() { Control = pr2 });
+            Panel pr2 = new Panel { Content = row2_1 };
+            subshapes_tr0_0_tl.Rows[2].Cells.Add(new TableCell { Control = pr2 });
             subshapes_tr0_0_tl.Rows[2].Cells[1].ScaleWidth = true;
 
             subshapes_row2_1(row2_1);
@@ -99,57 +99,57 @@ namespace Variance
             num_subshape_hl.Increment = 0.1;
             num_subshape_hl.DecimalPlaces = 2;
             num_subshape_hl.MinValue = 0;
-            setSize(num_subshape_hl, numWidth, num_Height);
+            setSize(num_subshape_hl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape_hl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_hl) });
 
             num_subshape2_hl = new NumericStepper();
             num_subshape2_hl.Increment = 0.1;
             num_subshape2_hl.DecimalPlaces = 2;
             num_subshape2_hl.MinValue = 0;
-            setSize(num_subshape2_hl, numWidth, num_Height);
+            setSize(num_subshape2_hl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape2_hl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_hl) });
 
             num_subshape3_hl = new NumericStepper();
             num_subshape3_hl.Increment = 0.1;
             num_subshape3_hl.DecimalPlaces = 2;
             num_subshape3_hl.MinValue = 0;
-            setSize(num_subshape3_hl, numWidth, num_Height);
+            setSize(num_subshape3_hl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape3_hl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_hl) });
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = new Panel() });
-            row0_1.Rows[0].Cells[row0_1.Rows[0].Cells.Count - 1].ScaleWidth = true;
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = new Panel() });
+            row0_1.Rows[0].Cells[^1].ScaleWidth = true;
 
             lbl_subshape_vl = new Label();
             lbl_subshape_vl.Text = "Ver. Length";
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = lbl_subshape_vl });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_vl });
 
             num_subshape_vl = new NumericStepper();
             num_subshape_vl.Increment = 0.1;
             num_subshape_vl.DecimalPlaces = 2;
             num_subshape_vl.MinValue = 0;
-            setSize(num_subshape_vl, numWidth, num_Height);
+            setSize(num_subshape_vl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape_vl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_vl) });
 
             num_subshape2_vl = new NumericStepper();
             num_subshape2_vl.Increment = 0.1;
             num_subshape2_vl.DecimalPlaces = 2;
             num_subshape2_vl.MinValue = 0;
-            setSize(num_subshape2_vl, numWidth, num_Height);
+            setSize(num_subshape2_vl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape2_vl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_vl) });
 
             num_subshape3_vl = new NumericStepper();
             num_subshape3_vl.Increment = 0.1;
             num_subshape3_vl.DecimalPlaces = 2;
             num_subshape3_vl.MinValue = 0;
-            setSize(num_subshape3_vl, numWidth, num_Height);
+            setSize(num_subshape3_vl, numWidth);
 
-            row0_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape3_vl) });
+            row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_vl) });
         }
 
         void subshapes_row1_1(TableLayout row1_1)
@@ -161,52 +161,52 @@ namespace Variance
             num_subshape_ho = new NumericStepper();
             num_subshape_ho.Increment = 0.1;
             num_subshape_ho.DecimalPlaces = 2;
-            setSize(num_subshape_ho, numWidth, num_Height);
+            setSize(num_subshape_ho, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape_ho) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_ho) });
 
             num_subshape2_ho = new NumericStepper();
             num_subshape2_ho.Increment = 0.1;
             num_subshape2_ho.DecimalPlaces = 2;
-            setSize(num_subshape2_ho, numWidth, num_Height);
+            setSize(num_subshape2_ho, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape2_ho) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_ho) });
 
             num_subshape3_ho = new NumericStepper();
             num_subshape3_ho.Increment = 0.1;
             num_subshape3_ho.DecimalPlaces = 2;
-            setSize(num_subshape3_ho, numWidth, num_Height);
+            setSize(num_subshape3_ho, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape3_ho) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_ho) });
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = new Panel() });
-            row1_1.Rows[0].Cells[row1_1.Rows[0].Cells.Count - 1].ScaleWidth = true;
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = new Panel() });
+            row1_1.Rows[0].Cells[^1].ScaleWidth = true;
 
             lbl_subshape_vo = new Label();
             lbl_subshape_vo.Text = "Ver. Offset";
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = lbl_subshape_vo });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_vo });
 
             num_subshape_vo = new NumericStepper();
             num_subshape_vo.Increment = 0.1;
             num_subshape_vo.DecimalPlaces = 2;
-            setSize(num_subshape_vo, numWidth, num_Height);
+            setSize(num_subshape_vo, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape_vo) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_vo) });
 
             num_subshape2_vo = new NumericStepper();
             num_subshape2_vo.Increment = 0.1;
             num_subshape2_vo.DecimalPlaces = 2;
-            setSize(num_subshape2_vo, numWidth, num_Height);
+            setSize(num_subshape2_vo, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape2_vo) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_vo) });
 
             num_subshape3_vo = new NumericStepper();
             num_subshape3_vo.Increment = 0.1;
             num_subshape3_vo.DecimalPlaces = 2;
-            setSize(num_subshape3_vo, numWidth, num_Height);
+            setSize(num_subshape3_vo, numWidth);
 
-            row1_1.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_subshape3_vo) });
+            row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_vo) });
         }
 
         void subshapes_row2_1(TableLayout row2_1)
@@ -215,19 +215,19 @@ namespace Variance
 
             comboBox_tipLocations = new DropDown();
 
-            row2_1.Rows[0].Cells.Add(new TableCell() { Control = comboBox_tipLocations });
+            row2_1.Rows[0].Cells.Add(new TableCell { Control = comboBox_tipLocations });
 
             comboBox_tipLocations.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
 
             comboBox_tipLocations2 = new DropDown();
 
-            row2_1.Rows[0].Cells.Add(new TableCell() { Control = comboBox_tipLocations2 });
+            row2_1.Rows[0].Cells.Add(new TableCell { Control = comboBox_tipLocations2 });
 
             comboBox_tipLocations2.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
 
             comboBox_tipLocations3 = new DropDown();
 
-            row2_1.Rows[0].Cells.Add(new TableCell() { Control = comboBox_tipLocations3 });
+            row2_1.Rows[0].Cells.Add(new TableCell { Control = comboBox_tipLocations3 });
 
             comboBox_tipLocations3.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
         }

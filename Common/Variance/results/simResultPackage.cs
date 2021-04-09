@@ -139,14 +139,13 @@ namespace Variance
             {
                 return pGetHistograms(pGetResultStrings(), buckets);
             }
-            else if (listOfResults_implant.Count > 0)
+
+            if (listOfResults_implant.Count > 0)
             {
                 return pGetHistograms(pGetImplantResultStrings(), buckets);
             }
-            else
-            {
-                return new List<string>() { "No results" };
-            }
+
+            return new List<string> { "No results" };
         }
 
         List<string> pGetHistograms(List<string[]> results, int buckets)
@@ -235,7 +234,7 @@ namespace Variance
 
         double[] pGetValues(properties p)
         {
-            double[] ret = new double[] { };
+            double[] ret = { };
 
             switch (p)
             {
@@ -285,7 +284,7 @@ namespace Variance
         }
 
         public string resultString { get; set; }
-        char[] csvSeparator = new char[] { ',' }; // to cleave the results apart.
+        char[] csvSeparator = { ',' }; // to cleave the results apart.
         Results lastResult;
         Results_implant lastResult_implant;
         public double runTime { get; set; }
@@ -296,15 +295,15 @@ namespace Variance
             runTime = swTime;
         }
 
-        public SimResultPackage(ref object previewLock, Int32 numberOfCases, Int32 numberOfResultsFields, bool state = true)
+        public SimResultPackage(ref object previewLock_, Int32 numberOfCases, Int32 numberOfResultsFields, bool state_ = true)
         {
-            pSimResultPackage(ref previewLock, numberOfCases, numberOfResultsFields, state);
+            pSimResultPackage(ref previewLock_, numberOfCases, numberOfResultsFields, state_);
         }
 
-        void pSimResultPackage(ref object previewLock, Int32 numberOfCases, Int32 numberOfResultsFields, bool state = true)
+        void pSimResultPackage(ref object previewLock_, Int32 numberOfCases, Int32 numberOfResultsFields, bool state_ = true)
         {
             nonGaussianInput = false;
-            this.previewLock = previewLock;
+            previewLock = previewLock_;
             resultLock = new object();
             cleavedResultLock = new object();
             meanStdLock = new object();
@@ -313,7 +312,7 @@ namespace Variance
             runTime = 0.0;
             previewResult = new Results();
             previewResult_implant = new Results_implant();
-            this.state = state;
+            state = state_;
             listOfResults = new List<Results>(numberOfCases);
             listOfResults_implant = new List<Results_implant>(numberOfCases);
             createCleavedResults(numberOfCases, numberOfResultsFields);
@@ -351,7 +350,7 @@ namespace Variance
 
             lastResult_implant = newResult;
 
-            updateCleavedResults(new string[] { newResult.getResult() });
+            updateCleavedResults(new [] { newResult.getResult() });
         }
 
         public void Add(Results newResult, Int32 retainGeometry)
@@ -522,8 +521,7 @@ namespace Variance
             Monitor.Enter(meanStdLock);
             try
             {
-                returnString = "";
-                string[] tempString = new string[] { "" };
+                string[] tempString = { "" };
 
                 if (lastResult != null)
                 {

@@ -1,8 +1,9 @@
-using ClipperLib;
-using geoWrangler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClipperLib;
+using geoWrangler;
+using KDTree;
 
 namespace Variance
 {
@@ -19,8 +20,8 @@ namespace Variance
         public double[] bChordLengths { get; set; }
         Int32 aPath_maxX_index;
         Int32 bPath_maxY_index;
-        KDTree.KDTree<IntPoint> aTree;
-        KDTree.KDTree<IntPoint> bTree;
+        KDTree<IntPoint> aTree;
+        KDTree<IntPoint> bTree;
 
         void ZFillCallback(IntPoint bot1, IntPoint top1, IntPoint bot2, IntPoint top2, ref IntPoint pt)
         {
@@ -412,8 +413,8 @@ namespace Variance
             a_chordPaths = new Paths(2);
             b_chordPaths = new Paths(2);
 
-            aChordLengths = new double[2] { 0, 0 };
-            bChordLengths = new double[2] { 0, 0 };
+            aChordLengths = new double[] { 0, 0 };
+            bChordLengths = new double[] { 0, 0 };
 
             // Max and min indices for each path.
             // We'll use these for our chord within the edge checks.
@@ -421,12 +422,12 @@ namespace Variance
             bPath_maxY_index = GeoWrangler.MaxY(b);
 
             // Set up KDTrees for edge inspection.
-            aTree = new KDTree.KDTree<IntPoint>(2, a.Count);
+            aTree = new KDTree<IntPoint>(2, a.Count);
             for (int aPt = 0; aPt < a.Count; aPt++)
             {
                 aTree.AddPoint(new double[] { a[aPt].X, a[aPt].Y }, new IntPoint(a[aPt].X, a[aPt].Y));
             }
-            bTree = new KDTree.KDTree<IntPoint>(2, b.Count);
+            bTree = new KDTree<IntPoint>(2, b.Count);
             for (int bPt = 0; bPt < b.Count; bPt++)
             {
                 bTree.AddPoint(new double[] { b[bPt].X, b[bPt].Y }, new IntPoint(b[bPt].X, b[bPt].Y));
@@ -511,7 +512,7 @@ namespace Variance
                 a_chordPaths[0].Add(new IntPoint(0, 0));
                 a_chordPaths[1] = new Path();
                 a_chordPaths[1].Add(new IntPoint(0, 0));
-                aChordLengths = new double[2] { 0, 0 };
+                aChordLengths = new double[] { 0, 0 };
             }
 
             if (!bChordsValid)
@@ -520,7 +521,7 @@ namespace Variance
                 b_chordPaths[0].Add(new IntPoint(0, 0));
                 b_chordPaths[1] = new Path();
                 b_chordPaths[1].Add(new IntPoint(0, 0));
-                bChordLengths = new double[2] { 0, 0 };
+                bChordLengths = new double[] { 0, 0 };
             }
         }
     }

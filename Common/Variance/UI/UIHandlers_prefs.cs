@@ -1,7 +1,7 @@
+using System;
 using Error;
 using Eto.Drawing;
 using Eto.Forms;
-using System;
 
 namespace Variance
 {
@@ -176,11 +176,9 @@ namespace Variance
 
             try
             {
-                Label senderLabel = sender as Label;
-
-                if (senderLabel != null)
+                if (sender is Label senderLabel)
                 {
-                    Color sourceColor = Eto.Drawing.Colors.Black;
+                    Color sourceColor = Colors.Black;
                     if (senderLabel == lbl_Layer1Color)
                     {
                         sourceColor = UIHelper.myColorToColor(varianceContext.vc.colors.layer1_Color);
@@ -372,12 +370,12 @@ namespace Variance
             varianceContext.vc.BGOpacity = num_bgOpacity.Value;
             commonVars.setOpacity(CommonVars.opacity_gl.bg, num_bgOpacity.Value);
 
-            for (int i = 0; i < mcVPSettings.Length; i++)
+            foreach (var t in mcVPSettings)
             {
-                mcVPSettings[i].aA(commonVars.getOpenGLProp(CommonVars.properties_gl.aa));
-                mcVPSettings[i].setZoomStep(commonVars.getGLInt(CommonVars.gl_i.zoom));
-                mcVPSettings[i].drawFilled(commonVars.getOpenGLProp(CommonVars.properties_gl.fill));
-                mcVPSettings[i].drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
+                t.aA(commonVars.getOpenGLProp(CommonVars.properties_gl.aa));
+                t.setZoomStep(commonVars.getGLInt(CommonVars.gl_i.zoom));
+                t.drawFilled(commonVars.getOpenGLProp(CommonVars.properties_gl.fill));
+                t.drawPoints(commonVars.getOpenGLProp(CommonVars.properties_gl.points));
             }
 
             utilsUIFrozen = false;

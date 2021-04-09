@@ -1,7 +1,7 @@
-﻿using Eto;
-using Eto.Forms;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Eto;
+using Eto.Forms;
 
 namespace Variance
 {

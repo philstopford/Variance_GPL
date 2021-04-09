@@ -1,11 +1,10 @@
-using color;
-using geoLib;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using color;
+using geoLib;
 
 namespace Variance
 {
@@ -210,25 +209,6 @@ namespace Variance
                 writer.Write("</svg>\n");
             }
             return true;
-        }
-
-        static private GeoLibPointF[] PolygonToPointFArray(Polygon pg, float scale)
-        {
-            int l = pg.Count;
-            GeoLibPointF[] result = new GeoLibPointF[l];
-#if SVGTHREADED
-            Parallel.For(0, l, (i) =>
-#else
-            for (Int32 i = 0; i < pg.Count; ++i)
-#endif
-            {
-                result[i].X = (float)pg[i].X / scale;
-                result[i].Y = (float)pg[i].Y / scale;
-            }
-#if SVGTHREADED
-            );
-#endif
-            return result;
         }
     }
 }

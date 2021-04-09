@@ -1,5 +1,5 @@
-using Error;
 using System;
+using Error;
 using MailKit.Net.Smtp;
 using MimeKit;
 

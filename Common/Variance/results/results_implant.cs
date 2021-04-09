@@ -1,7 +1,7 @@
-﻿using color;
-using geoLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using color;
+using geoLib;
 
 namespace Variance
 {
@@ -19,12 +19,12 @@ namespace Variance
             return resistShapes;
         }
 
-        public void setResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min, GeoLibPointF[] max)
+        public void setResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min_, GeoLibPointF[] max_)
         {
-            pSetResistShapes(colors, geom, bgGeom, shadow, min, max);
+            pSetResistShapes(colors, geom, bgGeom, shadow, min_, max_);
         }
 
-        void pSetResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min, GeoLibPointF[] max)
+        void pSetResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min_, GeoLibPointF[] max_)
         {
             resistShapes.Clear();
 
@@ -41,11 +41,11 @@ namespace Variance
             shadowLine.setColor(colors.implantMean_Color);
 
             minShadowLine = new PreviewShape();
-            minShadowLine.addPoints(min);
+            minShadowLine.addPoints(min_);
             minShadowLine.setColor(colors.implantMin_Color);
 
             maxShadowLine = new PreviewShape();
-            maxShadowLine.addPoints(max);
+            maxShadowLine.addPoints(max_);
             maxShadowLine.setColor(colors.implantMax_Color);
 
         }
@@ -100,7 +100,7 @@ namespace Variance
 
         PreviewShape pGetLine(lines l)
         {
-            PreviewShape ret = new PreviewShape(); ;
+            PreviewShape ret = new PreviewShape();
             switch (l)
             {
                 case lines.shadow:

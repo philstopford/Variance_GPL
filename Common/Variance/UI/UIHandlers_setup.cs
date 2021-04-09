@@ -40,19 +40,19 @@ namespace Variance
                     comboBox_geoEqtn_Op[i].Enabled = false;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                foreach (var t in comboBox_geoEqtn_Op_2Layer)
                 {
-                    comboBox_geoEqtn_Op_2Layer[i].Enabled = false;
+                    t.Enabled = false;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+                foreach (var t in comboBox_geoEqtn_Op_4Layer)
                 {
-                    comboBox_geoEqtn_Op_4Layer[i].Enabled = false;
+                    t.Enabled = false;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+                foreach (var t in comboBox_geoEqtn_Op_8Layer)
                 {
-                    comboBox_geoEqtn_Op_8Layer[i].Enabled = false;
+                    t.Enabled = false;
                 }
 
                 // Chord selection modes.

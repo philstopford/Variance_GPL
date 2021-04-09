@@ -1,12 +1,13 @@
-using color;
-using entropyRNG;
-using Error;
-using geoCoreLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
+using color;
+using entropyRNG;
+using Error;
+using geoCoreLib;
 using utility;
+using Timer = System.Timers.Timer;
 
 namespace Variance
 {
@@ -97,7 +98,7 @@ namespace Variance
             colors = source;
         }
 
-        public System.Timers.Timer m_timer { get; set; }
+        public Timer m_timer { get; set; }
 
         public bool userCancelQuery { get; set; } // used to track whether user is being queried.
         public bool cancelling { get; set; } // used to track whether we are currently in the abort check method, to avoid duplicate calls.
@@ -366,16 +367,6 @@ namespace Variance
         public string projectFileName = "";
         bool warningShown, geoCoreCDUWarningShown;
 
-        public bool wasWarningShown()
-        {
-            return pWarningShown();
-        }
-
-        bool pWarningShown()
-        {
-            return warningShown;
-        }
-
         public void setWarningShown(bool val)
         {
             pSetWarningShown(val);
@@ -386,21 +377,21 @@ namespace Variance
             warningShown = val;
         }
 
-        string[] calcMode = new string[] { "AREA", "SPACING_ENCLOSURE", "CHORD", "ANGLE" };
-        public enum calcModes { area, enclosure_spacing_overlap, chord, angle };
-        string[] spacEncMode = new string[] { "SPACING", "ENCLOSURE", "SPACINGOLD", "ENCLOSUREOLD" };
-        public enum areaCalcModes { all, perpoly };
-        public enum spacingCalcModes { spacing, enclosure, spacingOld, enclosureOld }; // exp triggers projection from shortest edge for overlap evaluation.
-        public enum chordCalcElements { none, a, b };
-        public enum upperTabNames { twoD, Implant, oneD, Utilities };
-        public enum twoDTabNames { layer, settings, DOE, paSearch };
+        string[] calcMode = { "AREA", "SPACING_ENCLOSURE", "CHORD", "ANGLE" };
+        public enum calcModes { area, enclosure_spacing_overlap, chord, angle }
+        string[] spacEncMode = { "SPACING", "ENCLOSURE", "SPACINGOLD", "ENCLOSUREOLD" };
+        public enum areaCalcModes { all, perpoly }
+        public enum spacingCalcModes { spacing, enclosure, spacingOld, enclosureOld } // exp triggers projection from shortest edge for overlap evaluation.
+        public enum chordCalcElements { none, a, b }
+        public enum upperTabNames { twoD, Implant, oneD, Utilities }
+        public enum twoDTabNames { layer, settings, DOE, paSearch }
 
-        public static string[] csvHeader = new string[] { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
+        public static string[] csvHeader = { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
 
         public enum external_Type { svg, gds, oas }
-        List<string> externalTypes = new List<string>() { "SVG", "GDS", "Oasis" };
+        List<string> externalTypes = new List<string> { "SVG", "GDS", "Oasis" };
         public enum external_Filter { none, lte, gte }
-        List<string> externalFilterList = new List<string>() { "", "<=", ">=" };
+        List<string> externalFilterList = new List<string> { "", "<=", ">=" };
 
         public List<string> getExternalTypes()
         {
@@ -578,7 +569,7 @@ namespace Variance
             {
             }
 
-            if ((entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m) && (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE) &&
+            if ((entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m) && (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)shapeNames.GEOCORE) &&
                 (geoCoreCDVariation == false))
             {
                 if (!geoCoreCDUWarningShown)
@@ -597,7 +588,7 @@ namespace Variance
             else
             {
                 getGeoCoreHandler(index).setValid(false);
-                if ((entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE) && (entropyLayerSettings.isReloaded()))
+                if ((entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)shapeNames.GEOCORE) && (entropyLayerSettings.isReloaded()))
                 {
                     getGeoCoreHandler(index).setFilename(entropyLayerSettings.getString(EntropyLayerSettings.properties_s.file));
                     getGeoCoreHandler(index).setValid(true);
@@ -796,8 +787,7 @@ namespace Variance
             return availableShapes;
         }
 
-        string[] shapesShortNames = new string[] { "NONE", "RECT", "L", "T", "X", "U", "S", "GEOCORE", "BOOLEAN" };
-        public enum shapeNames { none, rect, Lshape, Tshape, Xshape, Ushape, Sshape, GEOCORE, BOOLEAN };
+        public enum shapeNames { none, rect, Lshape, Tshape, Xshape, Ushape, Sshape, GEOCORE, BOOLEAN }
         List<string> availableTipsLocations;
         public List<string> getAvailableTipsLocations()
         {
@@ -809,7 +799,7 @@ namespace Variance
             return availableTipsLocations;
         }
 
-        public enum tipLocations { none, L, R, LR, T, B, TB, TL, TR, TLR, BL, BR, BLR, TBL, TBR, all };
+        public enum tipLocations { none, L, R, LR, T, B, TB, TL, TR, TLR, BL, BR, BLR, TBL, TBR, all }
 
         List<string> availableSubShapePositions;
 
@@ -823,7 +813,7 @@ namespace Variance
             return availableSubShapePositions;
         }
 
-        public enum subShapeLocations { TL, TR, BL, BR, TS, RS, BS, LS, C };
+        public enum subShapeLocations { TL, TR, BL, BR, TS, RS, BS, LS, C }
 
         List<string> noiseTypes;
         public List<string> getNoiseTypes()
@@ -836,7 +826,7 @@ namespace Variance
             return noiseTypes;
         }
 
-        public enum noiseIndex { perlin, simplex, opensimplex };
+        public enum noiseIndex { perlin, simplex, opensimplex }
 
         List<string> polyFillTypes;
         public List<string> getPolyFillTypes()
@@ -849,7 +839,7 @@ namespace Variance
             return polyFillTypes;
         }
 
-        public enum PolyFill { pftEvenOdd, pftNonZero, pftPositive, pftNegative };
+        public enum PolyFill { pftEvenOdd, pftNonZero, pftPositive, pftNegative }
 
         List<string> openGLModeList;
 
@@ -1025,11 +1015,11 @@ namespace Variance
 
         void pCommonVars(VarianceContext varianceContext)
         {
-            mainThreadIndex = System.Threading.Thread.CurrentThread;
+            mainThreadIndex = Thread.CurrentThread;
             subshapes = new ObservableCollection<string>[CentralProperties.maxLayersForMC];
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
-                subshapes[i] = new ObservableCollection<string>() { "1" };
+                subshapes[i] = new ObservableCollection<string> { "1" };
             }
 
             subShapesList_exp = new ObservableCollection<string>();
@@ -1045,28 +1035,31 @@ namespace Variance
                 }
             }
 
-            noiseTypes = new List<string>() { "Perlin", "Simplex", "OpenSimplex" };
+            noiseTypes = new List<string> { "Perlin", "Simplex", "OpenSimplex" };
 
-            availableSubShapePositions = new List<string>() { "Corner: Top Left", "Corner: Top Right", "Corner: Bottom Left", "Corner: Bottom Right",
+            availableSubShapePositions = new List<string>
+            { "Corner: Top Left", "Corner: Top Right", "Corner: Bottom Left", "Corner: Bottom Right",
                                                              "Middle: Top Side", "Middle: Right Side", "Middle: Bottom Side", "Middle: Left Side",
                                                              "Center"};
 
-            availableTipsLocations = new List<string>() { "None", "Left", "Right", "Left & Right",
+            availableTipsLocations = new List<string>
+            { "None", "Left", "Right", "Left & Right",
                                                         "Top", "Bottom", "Top & Bottom",
                                                         "Top & Left", "Top & Right", "Top & Left & Right",
                                                         "Bottom & Left", "Bottom & Right", "Bottom & Left & Right",
                                                         "Top & Bottom & Left", "Top & Bottom & Right",
                                                     "All"};
 
-            availableShapes = new List<string>() { "(None)", "Rectangle/Square", "L-shape", "T-shape", "X-shape", "U-shape", "S-shape", "GDS/Oasis", "Boolean" };
-            calcMode_names = new ObservableCollection<string>() { "Compute Area Distribution",
+            availableShapes = new List<string> { "(None)", "Rectangle/Square", "L-shape", "T-shape", "X-shape", "U-shape", "S-shape", "GDS/Oasis", "Boolean" };
+            calcMode_names = new ObservableCollection<string>
+            { "Compute Area Distribution",
                                                     "Compute Spacing/Overlap Distribution",
                                                     "Compute Chord Distribution",
                                                     "Compute Angle Distribution"
                                                   };
-            polyFillTypes = new List<string>() { "Even/Odd", "Non-zero", "Positive", "Negative" };
+            polyFillTypes = new List<string> { "Even/Odd", "Non-zero", "Positive", "Negative" };
 
-            openGLModeList = new List<string>() { "VBO", "Immediate" };
+            openGLModeList = new List<string> { "VBO", "Immediate" };
 
             drawingLock = new object();
             implantDrawingLock = new object();
@@ -1439,16 +1432,16 @@ namespace Variance
 
             switch (simulationSettings.getValue(EntropySettings.properties_i.oType))
             {
-                case (int)CommonVars.calcModes.area: // area
+                case (int)calcModes.area: // area
                     boolString += "AND";
                     break;
-                case (int)CommonVars.calcModes.enclosure_spacing_overlap: // spacing
+                case (int)calcModes.enclosure_spacing_overlap: // spacing
                     boolString += "MIN SPACE/OVERLAP/ENCL TO/WITH";
                     break;
-                case (int)CommonVars.calcModes.chord: // chords
+                case (int)calcModes.chord: // chords
                     boolString += "MIN CHORDS WITH";
                     break;
-                case (int)CommonVars.calcModes.angle: // angle
+                case (int)calcModes.angle: // angle
                     boolString += "MIN INTERSECTION ANGLE WITH";
                     break;
             }
@@ -1808,12 +1801,11 @@ namespace Variance
 
         void pGetLayerSettings(Int32 layer, ref List<string> linesToWrite, bool onlyActive)
         {
-            string layerName = "";
             if (!onlyActive || (onlyActive && (listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.enabled) == 1)))
             {
                 // Layer was active in simulation.
                 string layerRefString = "Layer " + layer;
-                layerName = listOfSettings[layer].getString(EntropyLayerSettings.properties_s.name);
+                string layerName = listOfSettings[layer].getString(EntropyLayerSettings.properties_s.name);
                 if (layerName == "")
                 {
                     layerName = "layer" + layer;
@@ -1986,10 +1978,10 @@ namespace Variance
             {
                 string xOverlayCorrString = "X Overlay correlation: ";
                 string yOverlayCorrString = "Y Overlay correlation: ";
-                string xOverlayRefString = "";
-                string yOverlayRefString = "";
-                string xOverlayRefAvString = "";
-                string yOverlayRefAvString = "";
+                string xOverlayRefString;
+                string yOverlayRefString;
+                string xOverlayRefAvString;
+                string yOverlayRefAvString;
                 if (listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.xOL_av) == 1)
                 {
                     xOverlayRefAvString = "ACTIVE: ";
@@ -2167,7 +2159,7 @@ namespace Variance
             }
             catch (Exception)
             {
-                return new string[] { "" };
+                return new[] { "" };
             }
         }
 
@@ -2226,11 +2218,11 @@ namespace Variance
 
         void pSetHashes()
         {
-            geoCoreHash = Utils.GetMD5Hash(geoCore_Handlers);
-            listOfSettingsHash = Utils.GetMD5Hash(listOfSettings);
-            entropyGeoHash = Utils.GetMD5Hash(simulationSettings);
-            implantHash = Utils.GetMD5Hash(implantSettings);
-            entropyImplantHash = Utils.GetMD5Hash(implantSimulationSettings);
+            geoCoreHash = geoCore_Handlers.GetMD5Hash();
+            listOfSettingsHash = listOfSettings.GetMD5Hash();
+            entropyGeoHash = simulationSettings.GetMD5Hash();
+            implantHash = implantSettings.GetMD5Hash();
+            entropyImplantHash = implantSimulationSettings.GetMD5Hash();
             changed = false;
         }
 
@@ -2242,11 +2234,11 @@ namespace Variance
         string[] pGetHashes()
         {
             string[] hashes = new string[5];
-            hashes[0] = Utils.GetMD5Hash(geoCore_Handlers);
-            hashes[1] = Utils.GetMD5Hash(listOfSettings);
-            hashes[2] = Utils.GetMD5Hash(simulationSettings);
-            hashes[3] = Utils.GetMD5Hash(implantSettings);
-            hashes[4] = Utils.GetMD5Hash(implantSimulationSettings);
+            hashes[0] = geoCore_Handlers.GetMD5Hash();
+            hashes[1] = listOfSettings.GetMD5Hash();
+            hashes[2] = simulationSettings.GetMD5Hash();
+            hashes[3] = implantSettings.GetMD5Hash();
+            hashes[4] = implantSimulationSettings.GetMD5Hash();
 
             return hashes;
         }
@@ -2272,35 +2264,35 @@ namespace Variance
 
         void pCheckChanged()
         {
-            string tmp = Utils.GetMD5Hash(geoCore_Handlers);
+            string tmp = geoCore_Handlers.GetMD5Hash();
             if ((geoCoreHash != null) && (tmp != geoCoreHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = Utils.GetMD5Hash(listOfSettings);
+            tmp = listOfSettings.GetMD5Hash();
             if ((listOfSettingsHash != null) && (tmp != listOfSettingsHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = Utils.GetMD5Hash(simulationSettings);
+            tmp = simulationSettings.GetMD5Hash();
             if ((entropyGeoHash != null) && (tmp != entropyGeoHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = Utils.GetMD5Hash(implantSettings);
+            tmp = implantSettings.GetMD5Hash();
             if ((implantHash != null) && (tmp != implantHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = Utils.GetMD5Hash(implantSimulationSettings);
+            tmp = implantSimulationSettings.GetMD5Hash();
             if ((entropyImplantHash != null) && (tmp != entropyImplantHash))
             {
                 changed = true;

@@ -1,8 +1,9 @@
-using Error;
-using Eto.Forms;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Error;
+using Eto.Forms;
+using geoCoreLib;
 
 namespace Variance
 {
@@ -20,7 +21,7 @@ namespace Variance
                 if (filename == "")
                 {
                     // Need to request output file location and name.
-                    SaveFileDialog sfd = new SaveFileDialog()
+                    SaveFileDialog sfd = new SaveFileDialog
                     {
                         Title = "Enter file to save",
                         Filters =
@@ -85,10 +86,10 @@ namespace Variance
             if (e.Data.ContainsUris)
             {
                 // Check that we have a valid file somewhere in the dropped resources
-                for (int i = 0; i < e.Data.Uris.Length; i++)
+                foreach (var t in e.Data.Uris)
                 {
-                    string[] tokens = e.Data.Uris[i].LocalPath.Split(new char[] { '.' });
-                    if ((tokens[tokens.Length - 1].ToUpper() == "VARIANCE") || (tokens[tokens.Length - 1].ToUpper() == "XML"))
+                    string[] tokens = t.LocalPath.Split(new[] { '.' });
+                    if ((tokens[^1].ToUpper() == "VARIANCE") || (tokens[^1].ToUpper() == "XML"))
                     {
                         e.Effects = DragEffects.Copy;
                         break;
@@ -114,8 +115,8 @@ namespace Variance
                 if (d.Uris[i].IsFile)
                 {
                     // Actually a supported file?
-                    string[] tokens = d.Uris[i].LocalPath.Split(new char[] { '.' });
-                    if ((tokens[tokens.Length - 1].ToUpper() == "VARIANCE") || (tokens[tokens.Length - 1].ToUpper() == "XML"))
+                    string[] tokens = d.Uris[i].LocalPath.Split(new[] { '.' });
+                    if ((tokens[^1].ToUpper() == "VARIANCE") || (tokens[^1].ToUpper() == "XML"))
                     {
                         index = i;
                         break;
@@ -132,7 +133,7 @@ namespace Variance
         void openHandler(object sender, EventArgs e)
         {
             // Need to request input file location and name.
-            OpenFileDialog ofd = new OpenFileDialog()
+            OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Choose file to load",
                 MultiSelect = false,
@@ -234,7 +235,7 @@ namespace Variance
                 commonVars.reset(varianceContext.vc); // use this method to avoid clobbering the observable collections.
                 for (Int32 layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
                 {
-                    setLayerSettings(new EntropyLayerSettings(), layer, gdsOnly: false, resumeUI: true);
+                    setLayerSettings(new EntropyLayerSettings(), layer, gdsOnly: false);
                     commonVars.getGeoCoreHandler(layer).reset();
                 }
                 commonVars.projectFileName = "";
@@ -287,7 +288,7 @@ namespace Variance
 
         void locateDOEResults(object sender, EventArgs e)
         {
-            SelectFolderDialog ofd = new SelectFolderDialog()
+            SelectFolderDialog ofd = new SelectFolderDialog
             {
                 Title = "Please choose location of DOE results to summarize"
             };
@@ -317,7 +318,7 @@ namespace Variance
                 startIndeterminateProgress();
             });
 
-            OpenFileDialog ofd = new OpenFileDialog()
+            OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Select GDSII or OASIS file to Load",
                 MultiSelect = false,
@@ -440,20 +441,20 @@ namespace Variance
 
         bool layoutLoad(int settingsIndex, string filename)
         {
-            string[] tokens = filename.Split(new char[] { '.' });
-            string ext = tokens[tokens.Length - 1].ToUpper();
+            string[] tokens = filename.Split(new[] { '.' });
+            string ext = tokens[^1].ToUpper();
 
             if ((ext == "GDS") || (ext == "GDSII") || (ext == "OAS") || (ext == "OASIS") || (ext == "GZ"))
             {
 
-                if ((ext == "GDS") || (ext == "GDSII") || ((ext == "GZ") && ((tokens[tokens.Length - 2].ToUpper() == "GDS") || (tokens[tokens.Length - 2].ToUpper() == "GDSII"))))
+                if ((ext == "GDS") || (ext == "GDSII") || ((ext == "GZ") && ((tokens[^2].ToUpper() == "GDS") || (tokens[^2].ToUpper() == "GDSII"))))
                 {
-                    commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.gds);
+                    commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, GeoCore.fileType.gds);
                 }
 
-                if ((ext == "OAS") || (ext == "OASIS") || ((ext == "GZ") && ((tokens[tokens.Length - 2].ToUpper() == "OAS") || (tokens[tokens.Length - 2].ToUpper() == "OASIS"))))
+                if ((ext == "OAS") || (ext == "OASIS") || ((ext == "GZ") && ((tokens[^2].ToUpper() == "OAS") || (tokens[^2].ToUpper() == "OASIS"))))
                 {
-                    commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, geoCoreLib.GeoCore.fileType.oasis);
+                    commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, GeoCore.fileType.oasis);
                 }
 
                 return commonVars.getGeoCoreHandler(settingsIndex).isValid();
@@ -464,7 +465,7 @@ namespace Variance
 
         void iDRMFileChooser_Handler(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog()
+            OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Select iDRM CSV file to Load",
                 MultiSelect = false,
@@ -491,7 +492,7 @@ namespace Variance
                 catch (Exception exMsg)
                 {
                     commonVars.getSimulationSettings().getDOESettings().setBool(DOESettings.properties_b.iDRM, false);
-                    if (reading == true)
+                    if (reading)
                     {
                         MessageBox.Show(exMsg.ToString(), "Oops", MessageBoxButtons.OK);
                     }
@@ -518,7 +519,7 @@ namespace Variance
 
         void QuiltFileChooser_Handler(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog()
+            OpenFileDialog ofd = new OpenFileDialog
             {
                 Title = "Select Quilt CSV file to Load",
                 MultiSelect = false,
@@ -546,7 +547,7 @@ namespace Variance
                 catch (Exception exMsg)
                 {
                     commonVars.getSimulationSettings().getDOESettings().setBool(DOESettings.properties_b.iDRM, false);
-                    if (reading == true)
+                    if (reading)
                     {
                         MessageBox.Show(exMsg.ToString(), "Oops", MessageBoxButtons.OK);
                     }
@@ -585,10 +586,9 @@ namespace Variance
             Application.Instance.Invoke(() =>
             {
                 int mainIndex = getMainSelectedIndex();
-                int twoDIndex = -1;
                 if (mainIndex == (int)CommonVars.upperTabNames.twoD)
                 {
-                    twoDIndex = getSubTabSelectedIndex();
+                    int twoDIndex = getSubTabSelectedIndex();
                     switch (twoDIndex)
                     {
                         case (int)CommonVars.twoDTabNames.layer:

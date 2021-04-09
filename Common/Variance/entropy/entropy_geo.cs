@@ -1,8 +1,3 @@
-using ClipperLib; // for tile extraction
-using Error;
-using geoCoreLib;
-using geoLib;
-using geoWrangler;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClipperLib;
+using Error;
+using gds;
+using geoCoreLib;
+using geoLib;
+using geoWrangler;
+using oasis;
 using utility;
+using Timer = System.Timers.Timer; // for tile extraction
 
 namespace Variance
 {
@@ -92,15 +95,15 @@ namespace Variance
             sampler.updateProgressBarFunc = uiProgressBarWrapper;
         }
 
-        void entropyRunCore_singleThread(bool previewMode, Int32 numberOfCases, Int32 row, Int32 col, bool tileHandling, bool doPASearch)
+        void entropyRunCore_singleThread(bool previewMode, Int32 numberOfCases, Int32 row, Int32 col, bool doPASearch)
         {
             if (!doPASearch)
             {
-                setSampler(numberOfCases, previewMode, doPASearch);
+                setSampler(numberOfCases, previewMode, doPASearch:false);
             }
             else
             {
-                setSampler(1, previewMode, doPASearch);
+                setSampler(1, previewMode, doPASearch:false);
             }
             sampler.sample(false);
 
@@ -110,7 +113,7 @@ namespace Variance
             Int32 sampleRate = 100;
 
             // Set up our cleavedResults based on the max number of results we expect:
-            Int32 numberOfResultsFields = 1;
+            Int32 numberOfResultsFields;
             switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
             {
                 case (int)CommonVars.calcModes.chord: // chord
@@ -289,20 +292,14 @@ namespace Variance
 
         void entropyRunCore_multipleThread(bool previewMode, Int32 numberOfCases, Int32 row, Int32 col, bool tileHandling, bool doPASearch)
         {
-            if (!doPASearch)
-            {
-                setSampler(numberOfCases, previewMode, doPASearch);
-            }
-            else
-            {
-                setSampler(1, previewMode, doPASearch);
-            }
+            setSampler(numberOfCases: doPASearch ? 1: numberOfCases, previewMode, doPASearch);
+
             sampler.sample(true);
 
             sw.Start();
 
             // Set up our cleavedResults based on the max number of results we expect:
-            Int32 numberOfResultsFields = 1;
+            Int32 numberOfResultsFields;
             switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
             {
                 case (int)CommonVars.calcModes.chord: // chord
@@ -326,7 +323,7 @@ namespace Variance
             // Set our input state in case of custom RNG mapping.
             resultPackage.nonGaussianInput = nonGaussianInput;
 
-            commonVars.m_timer = new System.Timers.Timer();
+            commonVars.m_timer = new Timer();
             // Set up timers for the UI refresh
             commonVars.m_timer.AutoReset = true;
             commonVars.m_timer.Interval = CentralProperties.timer_interval;
@@ -366,11 +363,10 @@ namespace Variance
             {
                 Parallel.For(0, numberOfCases, po, (i, loopState) =>
                 {
-                    Results currentResult = new Results();
                     try
                     {
                         ChaosSettings cs = sampler.getSample(i);
-                        currentResult = EntropyEval(previewMode, doPASearch, row, col, cs);
+                        Results currentResult = EntropyEval(previewMode, doPASearch, row, col, cs);
 
                         string[] tempString = currentResult.getResult().Split(csvSeparator);
 
@@ -600,7 +596,7 @@ namespace Variance
                     for (Int32 poly = 0; poly < commonVars.getLayerSettings(layer).getFileData().Count(); poly++)
                     {
                         Path polyPath = GeoWrangler.pathFromPointF(commonVars.getLayerSettings(layer).getFileData()[poly], CentralProperties.scaleFactorForOperation);
-                        string polyHash = Utils.GetMD5Hash(polyPath);
+                        string polyHash = polyPath.GetMD5Hash();
                         if (polyHashCodes.IndexOf(polyHash) == -1)
                         {
                             // Hash not found - assuming unique polygon. This is done to avoid impact of copy/paste fails in layout where
@@ -658,24 +654,24 @@ namespace Variance
             }
         }
 
-        public void timeOfFlight(double swTime, bool doPASearch)
+        public void timeOfFlight(double swTime_, bool doPASearch)
         {
-            pTimeOfFlight(swTime, doPASearch);
+            pTimeOfFlight(swTime_, doPASearch);
         }
 
-        void pTimeOfFlight(double swTime, bool doPASearch)
+        void pTimeOfFlight(double swTime_, bool doPASearch)
         {
             // Update status bar with elapsed and predicted time.
             try
             {
-                if (swTime != 0.0)
+                if (swTime_ != 0.0)
                 {
                     Int32 numberOfCases = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases);
                     if (doPASearch)
                     {
                         numberOfCases = commonVars.getPASearch().numberofPassCases;
                     }
-                    TimeSpan eT = TimeSpan.FromSeconds(swTime);
+                    TimeSpan eT = TimeSpan.FromSeconds(swTime_);
                     string statusLineString = eT.Seconds + " s elapsed";
                     if (eT.Minutes >= 1)
                     {
@@ -690,7 +686,7 @@ namespace Variance
 
                     if (currentProgress != numberOfCases)
                     {
-                        double completionTime = ((swTime / currentProgress) * (numberOfCases - currentProgress));
+                        double completionTime = ((swTime_ / currentProgress) * (numberOfCases - currentProgress));
                         TimeSpan cT = TimeSpan.FromSeconds(completionTime);
                         statusLineString += "; ";
 
@@ -735,7 +731,7 @@ namespace Variance
             }
         }
 
-        bool saveResults(Int32 numberOfCases, bool tileHandling, Int32 col, Int32 row)
+        bool saveResults(bool tileHandling, Int32 col, Int32 row)
         {
             string csvFileName = baseFileName;
             if (tileHandling)
@@ -818,8 +814,6 @@ namespace Variance
 
             if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
             {
-                // Set our parallel task options based on user settings.
-                ParallelOptions po = new ParallelOptions();
                 // Attempt at parallelism.
                 CancellationTokenSource cancelSource = new CancellationTokenSource();
                 CancellationToken cancellationToken = cancelSource.Token;
@@ -1054,11 +1048,11 @@ namespace Variance
             switch (type)
             {
                 case (int)CommonVars.external_Type.gds:
-                    gds.gdsWriter gw = new gds.gdsWriter(g, layoutFileName + ".gds");
+                    gdsWriter gw = new gdsWriter(g, layoutFileName + ".gds");
                     gw.save();
                     break;
                 case (int)CommonVars.external_Type.oas:
-                    oasis.oasWriter ow = new oasis.oasWriter(g, layoutFileName + ".oas");
+                    oasWriter ow = new oasWriter(g, layoutFileName + ".oas");
                     ow.save();
                     break;
 
@@ -1084,8 +1078,8 @@ namespace Variance
             // Results first
             // Write the results first.
             linesToWrite.Add(commonVars.titleText);
-            linesToWrite.Add("Results summary for job: " + csvFileName + " run on : " + System.DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " + resultPackage.runTime.ToString("0.##") + " seconds");
-            if (Debugger.IsAttached == true)
+            linesToWrite.Add("Results summary for job: " + csvFileName + " run on : " + DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " + resultPackage.runTime.ToString("0.##") + " seconds");
+            if (Debugger.IsAttached)
             {
                 linesToWrite.Add("Run under debugger : performance was lower");
             }
@@ -1147,10 +1141,10 @@ namespace Variance
             }
         }
 
-        public void EntropyRun(Int32 numberOfCases, string csvFile, bool useThreads, bool doPASearch, bool setJobSettings = false, ChaosSettings loadedJobSettings = null, int replayRow = 0, int replayCol = 0) // event handler will call this with 1 and null as the csvFile
+        public void EntropyRun(Int32 numberOfCases, string csvFile, bool useThreads, bool doPASearch, bool setJobSettings = false, ChaosSettings loadedJobSettings = null, int replayRow_ = 0, int replayCol_ = 0) // event handler will call this with 1 and null as the csvFile
         {
-            this.replayCol = replayCol;
-            this.replayRow = replayRow;
+            replayCol = replayCol_;
+            replayRow = replayRow_;
 
             useLoadedSettings = setJobSettings;
 
@@ -1186,7 +1180,7 @@ namespace Variance
 
             string emailString = "";
             clearAbortFlagFunc?.Invoke();
-            bool simState = true;
+            bool simState;
             bool tileHandling = false;
             bool listOfTiles = false;
             Int32 listOfTilesCount = 0;

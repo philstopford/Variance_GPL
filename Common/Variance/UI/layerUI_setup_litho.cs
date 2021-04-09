@@ -2,7 +2,7 @@
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         // 2D Layer Litho
         NumericStepper num_lithoICRR, num_lithoOCRR, num_lithoCDUSide, num_lithoHorOverlay, num_lithoVerOverlay,
@@ -37,8 +37,8 @@ namespace Variance
 
                 TableLayout t = new TableLayout();
                 t.Rows.Add(new TableRow());
-                t.Rows[t.Rows.Count - 1].Cells.Add(new TableCell() { Control = gB_layer_lithography });
-                t.Rows[t.Rows.Count - 1].Cells.Add(new TableCell() { Control = new Panel(), ScaleWidth = true });
+                t.Rows[^1].Cells.Add(new TableCell { Control = gB_layer_lithography });
+                t.Rows[^1].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
                 Panel p = new Panel();
                 p.Content = t;
@@ -64,21 +64,21 @@ namespace Variance
             TableLayout tl_rightCol = new TableLayout();
             tl_rightCol.Rows.Add(new TableRow());
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = tl_leftCol });
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = tl_rightCol });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = tl_leftCol });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = tl_rightCol });
             outer.Content = outer_tl;
 
             // Outer table, row 1
             lithography_table.Rows.Add(new TableRow());
-            lithography_table.Rows[lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer });
+            lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer });
 
             // Table layout within cell.
             TableCell leftCol_tc = new TableCell();
-            tl_leftCol.Rows[tl_leftCol.Rows.Count - 1].Cells.Add(leftCol_tc);
+            tl_leftCol.Rows[^1].Cells.Add(leftCol_tc);
 
             TableCell rightCol_tc = new TableCell();
-            tl_rightCol.Rows[tl_rightCol.Rows.Count - 1].Cells.Add(rightCol_tc);
+            tl_rightCol.Rows[^1].Cells.Add(rightCol_tc);
 
             GroupBox groupBox_rounding = new GroupBox();
             groupBox_rounding.Text = "Rounding";
@@ -119,110 +119,110 @@ namespace Variance
             lbl_lithoICRR = new Label();
             lbl_lithoICRR.Text = "Inner Radius";
             lbl_lithoICRR.ToolTip = "Inner vertex (concave) corner rounding radius.";
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_lithoICRR;
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoICRR;
 
             num_lithoICRR = new NumericStepper();
             num_lithoICRR.Increment = 0.1;
             num_lithoICRR.DecimalPlaces = 2;
             num_lithoICRR.MinValue = 0;
             num_lithoICRR.ToolTip = "Inner vertex (concave) corner rounding radius.";
-            setSize(num_lithoICRR, 55, (int)(label_Height * uiScaleFactor));
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_lithoICRR);
+            setSize(num_lithoICRR, 55);
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoICRR);
 
             lbl_lithoICV = new Label();
             lbl_lithoICV.Text = "Var";
             lbl_lithoICV.MouseDoubleClick += ICV_RNG;
             lbl_lithoICV.ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation.";
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_lithoICV;
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoICV;
 
             num_lithoICV = new NumericStepper();
             num_lithoICV.Increment = 0.1;
             num_lithoICV.DecimalPlaces = 2;
             num_lithoICV.MinValue = 0;
             num_lithoICV.ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation.";
-            setSize(num_lithoICV, 55, (int)(label_Height * uiScaleFactor));
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_lithoICV);
+            setSize(num_lithoICV, 55);
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoICV);
 
             rounding_table.Rows.Add(new TableRow());
 
             lbl_lithoOCRR = new Label();
             lbl_lithoOCRR.Text = "Outer Radius";
             lbl_lithoOCRR.ToolTip = "Outer vertex (concave) corner rounding radius.";
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_lithoOCRR;
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoOCRR;
 
             num_lithoOCRR = new NumericStepper();
             num_lithoOCRR.Increment = 0.1;
             num_lithoOCRR.DecimalPlaces = 2;
             num_lithoOCRR.MinValue = 0;
             num_lithoOCRR.ToolTip = "Outer vertex (concave) corner rounding radius.";
-            setSize(num_lithoOCRR, 55, (int)(label_Height * uiScaleFactor));
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_lithoOCRR);
+            setSize(num_lithoOCRR, 55);
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoOCRR);
 
             lbl_lithoOCV = new Label();
             lbl_lithoOCV.Text = "Var";
-            lbl_lithoOCV.MouseDoubleClick += ICV_RNG;
+            lbl_lithoOCV.MouseDoubleClick += OCV_RNG;
             lbl_lithoOCV.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = lbl_lithoOCV;
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoOCV;
 
             num_lithoOCV = new NumericStepper();
             num_lithoOCV.Increment = 0.1;
             num_lithoOCV.DecimalPlaces = 2;
             num_lithoOCV.MinValue = 0;
             num_lithoOCV.ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation.";
-            setSize(num_lithoOCV, 55, (int)(label_Height * uiScaleFactor));
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Add(new TableCell());
-            rounding_table.Rows[rounding_table.Rows.Count - 1].Cells[rounding_table.Rows[rounding_table.Rows.Count - 1].Cells.Count - 1].Control = TableLayout.AutoSized(num_lithoOCV);
+            setSize(num_lithoOCV, 55);
+            rounding_table.Rows[^1].Cells.Add(new TableCell());
+            rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoOCV);
 
 
             TableLayout distortion_tl = new TableLayout();
             distortion_tl.Rows.Add(new TableRow());
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(distortion_tl) });
+            litMisc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(distortion_tl) });
 
             lbl_coeff1 = new Label();
             lbl_coeff1.Text = "Lens k1";
             lbl_coeff1.ToolTip = "Lens k1";
-            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_coeff1 });
+            distortion_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_coeff1 });
 
             num_coeff1 = new NumericStepper();
             num_coeff1.Increment = 0.1;
             num_coeff1.DecimalPlaces = 2;
             num_coeff1.Value = 0.0;
             num_coeff1.ToolTip = "Lens k1";
-            setSize(num_coeff1, 55, num_Height);
-            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_coeff1) });
+            setSize(num_coeff1, 55);
+            distortion_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_coeff1) });
 
 
             lbl_coeff2 = new Label();
             lbl_coeff2.Text = "Lens k2";
             lbl_coeff2.ToolTip = "Lens k2";
-            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_coeff2 });
+            distortion_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_coeff2 });
 
             num_coeff2 = new NumericStepper();
             num_coeff2.Increment = 0.1;
             num_coeff2.DecimalPlaces = 2;
             num_coeff2.Value = 0.0;
             num_coeff2.ToolTip = "Lens k2";
-            setSize(num_coeff2, 55, num_Height);
-            distortion_tl.Rows[distortion_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_coeff2) });
+            setSize(num_coeff2, 55);
+            distortion_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_coeff2) });
 
             litMisc_table.Rows.Add(new TableRow());
 
             TableLayout edge_slide_tl = new TableLayout();
             edge_slide_tl.Rows.Add(new TableRow());
-            litMisc_table.Rows[litMisc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(edge_slide_tl) });
+            litMisc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(edge_slide_tl) });
 
             cB_edgeSlide = new CheckBox();
             cB_edgeSlide.Text = "Edge Slide";
             cB_edgeSlide.Width = 90;
             cB_edgeSlide.ToolTip = "If checked, apply tension to each edge for the contour generation";
-            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(cB_edgeSlide) });
+            edge_slide_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(cB_edgeSlide) });
             if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 1)
             {
                 cB_edgeSlide.Checked = true;
@@ -232,16 +232,16 @@ namespace Variance
             lbl_edgeSlideTension.Text = "Tension";
             lbl_edgeSlideTension.Width = 50;
             lbl_edgeSlideTension.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
-            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_edgeSlideTension });
+            edge_slide_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_edgeSlideTension });
 
             num_edgeSlideTension = new NumericStepper();
             num_edgeSlideTension.DecimalPlaces = 2;
             num_edgeSlideTension.Increment = 0.1;
             num_edgeSlideTension.Value = (double)EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal.eTension);
             num_edgeSlideTension.MinValue = 0.01;
-            setSize(num_edgeSlideTension, 55, num_Height);
+            setSize(num_edgeSlideTension, 55);
             num_edgeSlideTension.ToolTip = "Amount of tension to apply, to pull the midpoint towards the longer edge";
-            edge_slide_tl.Rows[edge_slide_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_edgeSlideTension) });
+            edge_slide_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_edgeSlideTension) });
             num_edgeSlideTension.Enabled = true;
 
             if (EntropyLayerSettings.getDefaultInt(EntropyLayerSettings.properties_i.edgeSlide) == 0)
@@ -266,7 +266,7 @@ namespace Variance
 
             outer.Content = tl;
 
-            lit_lwr.Cells.Add(new TableCell() { Control = outer_gb });
+            lit_lwr.Cells.Add(new TableCell { Control = outer_gb });
 
             Panel leftPnl = new Panel();
             TableLayout left_tl = new TableLayout();
@@ -276,32 +276,32 @@ namespace Variance
             gB_LWRCorrelation = new GroupBox();
             rightPnl.Content = gB_LWRCorrelation;
 
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = leftPnl });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rightPnl });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = leftPnl });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = rightPnl });
 
             TableLayout upper_tl = new TableLayout();
             upper_tl.Rows.Add(new TableRow());
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = upper_tl });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = upper_tl });
 
             lbl_lithoLWR = new Label();
             lbl_lithoLWR.Text = "3-sigma";
             lbl_lithoLWR.MouseDoubleClick += lwr_RNG;
             lbl_lithoLWR.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoLWR });
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWR });
 
             num_lithoLWR = new NumericStepper();
             num_lithoLWR.Increment = 0.1;
             num_lithoLWR.DecimalPlaces = 2;
             num_lithoLWR.MinValue = 0;
             num_lithoLWR.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            setSize(num_lithoLWR, 55, (int)(label_Height * uiScaleFactor));
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoLWR) });
+            setSize(num_lithoLWR, 55);
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWR) });
 
             lbl_lithoLWRFreq = new Label();
             lbl_lithoLWRFreq.Text = "Freq";
             lbl_lithoLWRFreq.ToolTip = "Frequency of LWR";
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoLWRFreq });
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWRFreq });
 
             num_lithoLWRFreq = new NumericStepper();
             num_lithoLWRFreq.Increment = 0.1;
@@ -309,8 +309,8 @@ namespace Variance
             num_lithoLWRFreq.Value = 0.1;
             num_lithoLWRFreq.MinValue = 0.01;
             num_lithoLWRFreq.ToolTip = "Frequency of LWR";
-            setSize(num_lithoLWRFreq, 55, num_Height);
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoLWRFreq) });
+            setSize(num_lithoLWRFreq, 55);
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWRFreq) });
 
             comboBox_LWRNoiseType = new DropDown();
             comboBox_LWRNoiseType.DataContext = DataContext;
@@ -318,7 +318,7 @@ namespace Variance
             comboBox_LWRNoiseType.SelectedIndex = 0;
             comboBox_LWRNoiseType.ToolTip = "Noise type for LWR";
             left_tl.Rows.Add(new TableRow());
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_LWRNoiseType) });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_LWRNoiseType) });
 
             TableLayout LWRCorrelation_table = new TableLayout();
             gB_LWRCorrelation.Text = "LWR Seed Correlation";
@@ -329,31 +329,31 @@ namespace Variance
             TableRow clwr_tr1 = new TableRow();
             LWRCorrelation_table.Rows.Add(clwr_tr1);
 
-            this.rB_CLWR[0] = new RadioButton();
-            this.rB_CLWR[0].Text = "0";
-            this.rB_CLWR[0].Checked = true;
+            rB_CLWR[0] = new RadioButton();
+            rB_CLWR[0].Text = "0";
+            rB_CLWR[0].Checked = true;
 
             TableCell rB_CLWR_0tc = new TableCell();
-            rB_CLWR_0tc.Control = this.rB_CLWR[0];
+            rB_CLWR_0tc.Control = rB_CLWR[0];
 
             LWRCorrelation_table.Rows[0].Cells.Add(rB_CLWR_0tc);
 
-            int rB_CLWR = 1;
+            int rB_CLWR_ = 1;
             int clwr_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                this.rB_CLWR[rB_CLWR] = new RadioButton(this.rB_CLWR[0]);
-                this.rB_CLWR[rB_CLWR].Text = rB_CLWR.ToString();
-                this.rB_CLWR[rB_CLWR].Checked = false;
+                rB_CLWR[rB_CLWR_] = new RadioButton(rB_CLWR[0]);
+                rB_CLWR[rB_CLWR_].Text = rB_CLWR.ToString();
+                rB_CLWR[rB_CLWR_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_CLWR[rB_CLWR];
+                tc0.Control = this.rB_CLWR[rB_CLWR_];
                 LWRCorrelation_table.Rows[clwr_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_CLWR + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_CLWR_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     clwr_rowIndex++;
                 }
-                rB_CLWR++;
+                rB_CLWR_++;
             }
         }
 
@@ -373,7 +373,7 @@ namespace Variance
 
             outer.Content = tl;
 
-            lit_lwr.Cells.Add(new TableCell() { Control = outer_gb });
+            lit_lwr.Cells.Add(new TableCell { Control = outer_gb });
 
             Panel leftPnl = new Panel();
             TableLayout left_tl = new TableLayout();
@@ -381,32 +381,32 @@ namespace Variance
             leftPnl.Content = left_tl;
             Panel rightPnl = new Panel();
 
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = leftPnl });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
-            tl.Rows[tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = rightPnl });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = leftPnl });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
+            tl.Rows[^1].Cells.Add(new TableCell { Control = rightPnl });
 
             TableLayout upper_tl = new TableLayout();
             upper_tl.Rows.Add(new TableRow());
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(upper_tl) });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(upper_tl) });
 
             lbl_lithoLWR2 = new Label();
             lbl_lithoLWR2.Text = "3-sigma";
-            lbl_lithoLWR2.MouseDoubleClick += lwr_RNG;
+            lbl_lithoLWR2.MouseDoubleClick += lwr2_RNG;
             lbl_lithoLWR2.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoLWR2 });
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWR2 });
 
             num_lithoLWR2 = new NumericStepper();
             num_lithoLWR2.Increment = 0.1;
             num_lithoLWR2.DecimalPlaces = 2;
             num_lithoLWR2.MinValue = 0;
             num_lithoLWR2.ToolTip = "3-sigma line width roughness. Mapped to edge by setting in simulation settings.";
-            setSize(num_lithoLWR2, 55, (int)(label_Height * uiScaleFactor));
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoLWR2) });
+            setSize(num_lithoLWR2, 55);
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWR2) });
 
             lbl_lithoLWR2Freq = new Label();
             lbl_lithoLWR2Freq.Text = "Freq";
             lbl_lithoLWR2Freq.ToolTip = "Frequency of LWR";
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoLWR2Freq });
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWR2Freq });
 
             num_lithoLWR2Freq = new NumericStepper();
             num_lithoLWR2Freq.Increment = 0.1;
@@ -414,8 +414,8 @@ namespace Variance
             num_lithoLWR2Freq.Value = 0.1;
             num_lithoLWR2Freq.MinValue = 0.01;
             num_lithoLWR2Freq.ToolTip = "Frequency of LWR";
-            setSize(num_lithoLWR2Freq, 55, num_Height);
-            upper_tl.Rows[upper_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoLWR2Freq) });
+            setSize(num_lithoLWR2Freq, 55);
+            upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWR2Freq) });
 
             comboBox_LWR2NoiseType = new DropDown();
             comboBox_LWR2NoiseType.DataContext = DataContext;
@@ -423,7 +423,7 @@ namespace Variance
             comboBox_LWR2NoiseType.SelectedIndex = 0;
             comboBox_LWR2NoiseType.ToolTip = "Noise type for LWR";
             left_tl.Rows.Add(new TableRow());
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(comboBox_LWR2NoiseType) });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_LWR2NoiseType) });
 
             gB_LWR2Correlation = new GroupBox();
             TableLayout LWR2Correlation_table = new TableLayout();
@@ -443,22 +443,22 @@ namespace Variance
 
             LWR2Correlation_table.Rows[0].Cells.Add(rB_CLWR2_0tc);
 
-            int rB_CLWR = 1;
+            int rB_CLWR_ = 1;
             int clwr_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_CLWR2[rB_CLWR] = new RadioButton(rB_CLWR2[0]);
-                rB_CLWR2[rB_CLWR].Text = rB_CLWR.ToString();
-                rB_CLWR2[rB_CLWR].Checked = false;
+                rB_CLWR2[rB_CLWR_] = new RadioButton(rB_CLWR2[0]);
+                rB_CLWR2[rB_CLWR_].Text = rB_CLWR.ToString();
+                rB_CLWR2[rB_CLWR_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = rB_CLWR2[rB_CLWR];
+                tc0.Control = rB_CLWR2[rB_CLWR_];
                 LWR2Correlation_table.Rows[clwr_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_CLWR + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_CLWR_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     clwr_rowIndex++;
                 }
-                rB_CLWR++;
+                rB_CLWR_++;
             }
         }
 
@@ -473,13 +473,13 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout tc_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tc_tl });
+            outer_tl.Rows[0].Cells.Add(new TableCell { Control = tc_tl });
             outer.Content = outer_tl;
             tc_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             lithography_table.Rows.Add(new TableRow());
-            lithography_table.Rows[lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
+            lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
 
             // Table layout within cell.
             TableCell tc_0 = new TableCell();
@@ -494,17 +494,17 @@ namespace Variance
             lbl_lithoCDUSide.Text = "3-sigma";
             lbl_lithoCDUSide.MouseDoubleClick += sCDU_RNG;
             lbl_lithoCDUSide.ToolTip = "3-sigma CD variation applied to non-tip sides.";
-            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoCDUSide, ScaleWidth = true });
+            tc_0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoCDUSide, ScaleWidth = true });
 
             num_lithoCDUSide = new NumericStepper();
             num_lithoCDUSide.Increment = 0.1;
             num_lithoCDUSide.DecimalPlaces = 2;
             num_lithoCDUSide.MinValue = 0;
             num_lithoCDUSide.ToolTip = "3-sigma CD variation applied to non-tip sides.";
-            setSize(num_lithoCDUSide, 55, num_Height);
-            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoCDUSide) });
+            setSize(num_lithoCDUSide, 55);
+            tc_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoCDUSide) });
 
-            tc_tl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
+            tc_tl.Rows[0].Cells.Add(new TableCell { ScaleWidth = true });
 
             TableCell tc_1 = new TableCell();
             tc_tl.Rows[0].Cells.Add(tc_1);
@@ -527,31 +527,31 @@ namespace Variance
             CDUCorrelation_table.Rows.Add(new TableRow());
             CDUCorrelation_table.Rows.Add(new TableRow());
 
-            this.rB_CCDU[0] = new RadioButton();
-            this.rB_CCDU[0].Text = "0";
-            this.rB_CCDU[0].Checked = true;
+            rB_CCDU[0] = new RadioButton();
+            rB_CCDU[0].Text = "0";
+            rB_CCDU[0].Checked = true;
 
             TableCell rB_CCDU_0tc = new TableCell();
-            rB_CCDU_0tc.Control = this.rB_CCDU[0];
+            rB_CCDU_0tc.Control = rB_CCDU[0];
 
             CDUCorrelation_table.Rows[0].Cells.Add(rB_CCDU_0tc);
 
-            int rB_CCDU = 1;
+            int rB_CCDU_ = 1;
             int ccdu_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                this.rB_CCDU[rB_CCDU] = new RadioButton(this.rB_CCDU[0]);
-                this.rB_CCDU[rB_CCDU].Text = rB_CCDU.ToString();
-                this.rB_CCDU[rB_CCDU].Checked = false;
+                rB_CCDU[rB_CCDU_] = new RadioButton(rB_CCDU[0]);
+                rB_CCDU[rB_CCDU_].Text = rB_CCDU.ToString();
+                rB_CCDU[rB_CCDU_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_CCDU[rB_CCDU];
+                tc0.Control = this.rB_CCDU[rB_CCDU_];
                 CDUCorrelation_table.Rows[ccdu_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_CCDU + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_CCDU_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     ccdu_rowIndex++;
                 }
-                rB_CCDU++;
+                rB_CCDU_++;
             }
         }
 
@@ -565,17 +565,17 @@ namespace Variance
             TableLayout outer_tl = new TableLayout();
             TableLayout tc_tl = new TableLayout();
             outer_tl.Rows.Add(new TableRow());
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = tc_tl });
+            outer_tl.Rows[0].Cells.Add(new TableCell { Control = tc_tl });
             outer.Content = outer_tl;
             tc_tl.Rows.Add(new TableRow());
 
             // Outer table, row 1
             lithography_table.Rows.Add(new TableRow());
-            lithography_table.Rows[lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
+            lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
 
             // Table layout within cell.
             TableCell tc_0 = new TableCell();
-            tc_tl.Rows[tc_tl.Rows.Count - 1].Cells.Add(tc_0);
+            tc_tl.Rows[^1].Cells.Add(tc_0);
 
             TableLayout tc_0_tl = new TableLayout();
             tc_0.Control = tc_0_tl;
@@ -586,20 +586,20 @@ namespace Variance
             lbl_lithoCDUTips.Text = "3-sigma";
             lbl_lithoCDUTips.MouseDoubleClick += tCDU_RNG;
             lbl_lithoCDUTips.ToolTip = "3-sigma CD variation applied to tip sides.";
-            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoCDUTips, ScaleWidth = true });
+            tc_0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoCDUTips, ScaleWidth = true });
 
             num_lithoCDUTips = new NumericStepper();
             num_lithoCDUTips.Increment = 0.1;
             num_lithoCDUTips.DecimalPlaces = 2;
             num_lithoCDUTips.MinValue = 0;
             num_lithoCDUTips.ToolTip = "3-sigma CD variation applied to tip sides.";
-            setSize(num_lithoCDUTips, 55, num_Height);
-            tc_0_tl.Rows[tc_0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoCDUTips) });
+            setSize(num_lithoCDUTips, 55);
+            tc_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoCDUTips) });
 
-            tc_tl.Rows[tc_tl.Rows.Count - 1].Cells.Add(new TableCell());
+            tc_tl.Rows[^1].Cells.Add(new TableCell());
 
             TableCell tc_1 = new TableCell();
-            tc_tl.Rows[tc_tl.Rows.Count - 1].Cells.Add(tc_1);
+            tc_tl.Rows[^1].Cells.Add(tc_1);
 
             Panel p = new Panel();
             tc_1.Control = p;
@@ -607,7 +607,7 @@ namespace Variance
             TableLayout ptl = new TableLayout();
             p.Content = ptl;
             ptl.Rows.Add(new TableRow());
-            ptl.Rows[0].Cells.Add(new TableCell() { ScaleWidth = true });
+            ptl.Rows[0].Cells.Add(new TableCell { ScaleWidth = true });
             TableCell ptc = new TableCell();
             ptl.Rows[0].Cells.Add(ptc);
 
@@ -620,31 +620,31 @@ namespace Variance
             tipCDUCorrelation_table.Rows.Add(new TableRow());
             tipCDUCorrelation_table.Rows.Add(new TableRow());
 
-            this.rB_CTCDU[0] = new RadioButton();
-            this.rB_CTCDU[0].Text = "0";
-            this.rB_CTCDU[0].Checked = true;
+            rB_CTCDU[0] = new RadioButton();
+            rB_CTCDU[0].Text = "0";
+            rB_CTCDU[0].Checked = true;
 
             TableCell rB_CTCDU_0tc = new TableCell();
-            rB_CTCDU_0tc.Control = this.rB_CTCDU[0];
+            rB_CTCDU_0tc.Control = rB_CTCDU[0];
 
             tipCDUCorrelation_table.Rows[0].Cells.Add(rB_CTCDU_0tc);
 
-            int rB_CTCDU = 1;
+            int rB_CTCDU_ = 1;
             int ctcdu_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                this.rB_CTCDU[rB_CTCDU] = new RadioButton(this.rB_CTCDU[0]);
-                this.rB_CTCDU[rB_CTCDU].Text = rB_CTCDU.ToString();
-                this.rB_CTCDU[rB_CTCDU].Checked = false;
+                rB_CTCDU[rB_CTCDU_] = new RadioButton(rB_CTCDU[0]);
+                rB_CTCDU[rB_CTCDU_].Text = rB_CTCDU.ToString();
+                rB_CTCDU[rB_CTCDU_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_CTCDU[rB_CTCDU];
+                tc0.Control = rB_CTCDU[rB_CTCDU_];
                 tipCDUCorrelation_table.Rows[ctcdu_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_CTCDU + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_CTCDU_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     ctcdu_rowIndex++;
                 }
-                rB_CTCDU++;
+                rB_CTCDU_++;
             }
         }
 
@@ -672,14 +672,14 @@ namespace Variance
             mid.Content = mid_tl;
             right.Content = right_tl;
 
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = left });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = mid, ScaleWidth = true });
-            outer_tl.Rows[0].Cells.Add(new TableCell() { Control = right });
+            outer_tl.Rows[0].Cells.Add(new TableCell { Control = left });
+            outer_tl.Rows[0].Cells.Add(new TableCell { Control = mid, ScaleWidth = true });
+            outer_tl.Rows[0].Cells.Add(new TableCell { Control = right });
             outer.Content = outer_tl;
 
             // Outer table, row 1
             lithography_table.Rows.Add(new TableRow());
-            lithography_table.Rows[lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
+            lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
 
             // Table layout within cell.
             TableCell sigma_tc = new TableCell();
@@ -694,34 +694,34 @@ namespace Variance
             lbl_lithoHorOverlay.Text = "3-sigma";
             lbl_lithoHorOverlay.MouseDoubleClick += hOverlay_RNG;
             lbl_lithoHorOverlay.ToolTip = "3-sigma horizontal overlay.";
-            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoHorOverlay, ScaleWidth = true });
+            sigma_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoHorOverlay, ScaleWidth = true });
 
             num_lithoHorOverlay = new NumericStepper();
             num_lithoHorOverlay.Increment = 0.1;
             num_lithoHorOverlay.DecimalPlaces = 2;
             num_lithoHorOverlay.MinValue = 0;
             num_lithoHorOverlay.ToolTip = "3-sigma horizontal overlay.";
-            setSize(num_lithoHorOverlay, 55, num_Height);
-            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoHorOverlay) });
+            setSize(num_lithoHorOverlay, 55);
+            sigma_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoHorOverlay) });
 
-            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { ScaleWidth = true });
+            sigma_tl.Rows[^1].Cells.Add(new TableCell { ScaleWidth = true });
 
             TableCell check_tc = new TableCell();
-            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(check_tc);
+            mid_tl.Rows[^1].Cells.Add(check_tc);
 
             TableLayout check_tl = new TableLayout();
             check_tc.Control = check_tl;
 
             check_tl.Rows.Add(new TableRow());
-            check_tl.Rows[check_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            check_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
             cB_overlayXReference_Av = new CheckBox();
             cB_overlayXReference_Av.Text = "Average";
             cB_overlayXReference_Av.ToolTip = "Use the average displaced location of layers as a reference for horizontal overlay";
-            check_tl.Rows[check_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(cB_overlayXReference_Av) });
+            check_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(cB_overlayXReference_Av) });
 
             TableCell right_tc = new TableCell();
-            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc);
+            right_tl.Rows[^1].Cells.Add(right_tc);
 
             gB_overlayXReference = new GroupBox();
             TableLayout overlayXReference_table = new TableLayout();
@@ -733,32 +733,32 @@ namespace Variance
             overlayXReference_table.Rows.Add(new TableRow());
             overlayXReference_table.Rows.Add(new TableRow());
 
-            this.rB_OLRX[0] = new RadioButton();
-            this.rB_OLRX[0].Text = "0";
-            this.rB_OLRX[0].Checked = true;
+            rB_OLRX[0] = new RadioButton();
+            rB_OLRX[0].Text = "0";
+            rB_OLRX[0].Checked = true;
 
             TableCell rB_OLRX_0tc = new TableCell();
             rB_OLRX_0tc.Control = this.rB_OLRX[0];
 
             overlayXReference_table.Rows[0].Cells.Add(rB_OLRX_0tc);
 
-            int rB_OLRX = 1;
+            int rB_OLRX_ = 1;
             int olrx_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
                 // Don't add a button for our current layer
-                this.rB_OLRX[rB_OLRX] = new RadioButton(this.rB_OLRX[0]);
-                this.rB_OLRX[rB_OLRX].Text = rB_OLRX.ToString();
-                this.rB_OLRX[rB_OLRX].Checked = false;
+                rB_OLRX[rB_OLRX_] = new RadioButton(rB_OLRX[0]);
+                rB_OLRX[rB_OLRX_].Text = rB_OLRX.ToString();
+                rB_OLRX[rB_OLRX_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_OLRX[rB_OLRX];
+                tc0.Control = rB_OLRX[rB_OLRX_];
                 overlayXReference_table.Rows[olrx_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_OLRX + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_OLRX_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     olrx_rowIndex++;
                 }
-                rB_OLRX++;
+                rB_OLRX_++;
             }
 
             gB_overlayXReference_Av = new GroupBox();
@@ -791,11 +791,11 @@ namespace Variance
             mid_tl.Rows.Add(new TableRow());
             right_tl.Rows.Add(new TableRow());
 
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
-            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
+            mid_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
             TableCell right_tc2 = new TableCell();
-            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc2);
+            right_tl.Rows[^1].Cells.Add(right_tc2);
 
             gB_overlayXCorrelation = new GroupBox();
             TableLayout overlayXCorrelation_table = new TableLayout();
@@ -806,31 +806,31 @@ namespace Variance
             overlayXCorrelation_table.Rows.Add(new TableRow());
             overlayXCorrelation_table.Rows.Add(new TableRow());
 
-            this.rB_COLX[0] = new RadioButton();
-            this.rB_COLX[0].Text = "0";
-            this.rB_COLX[0].Checked = true;
+            rB_COLX[0] = new RadioButton();
+            rB_COLX[0].Text = "0";
+            rB_COLX[0].Checked = true;
 
             TableCell rB_COLX_0tc = new TableCell();
             rB_COLX_0tc.Control = this.rB_COLX[0];
 
             overlayXCorrelation_table.Rows[0].Cells.Add(rB_COLX_0tc);
 
-            int rB_COLX = 1;
+            int rB_COLX_ = 1;
             int colx_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                this.rB_COLX[rB_COLX] = new RadioButton(this.rB_COLX[0]);
-                this.rB_COLX[rB_COLX].Text = rB_COLX.ToString();
-                this.rB_COLX[rB_COLX].Checked = false;
+                rB_COLX[rB_COLX_] = new RadioButton(rB_COLX[0]);
+                rB_COLX[rB_COLX_].Text = rB_COLX.ToString();
+                rB_COLX[rB_COLX_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_COLX[rB_COLX];
+                tc0.Control = rB_COLX[rB_COLX_];
                 overlayXCorrelation_table.Rows[colx_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_COLX + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_COLX_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     colx_rowIndex++;
                 }
-                rB_COLX++;
+                rB_COLX_++;
             }
         }
 
@@ -858,14 +858,14 @@ namespace Variance
             mid.Content = mid_tl;
             right.Content = right_tl;
 
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = left });
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = mid, ScaleWidth = true });
-            outer_tl.Rows[outer_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = right });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = left });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = mid, ScaleWidth = true });
+            outer_tl.Rows[^1].Cells.Add(new TableCell { Control = right });
             outer.Content = outer_tl;
 
             // Outer table, row 1
             lithography_table.Rows.Add(new TableRow());
-            lithography_table.Rows[lithography_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = outer_gb });
+            lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
 
             // Table layout within cell.
             TableCell sigma_tc = new TableCell();
@@ -880,32 +880,32 @@ namespace Variance
             lbl_lithoVerOverlay.Text = "3-sigma";
             lbl_lithoVerOverlay.MouseDoubleClick += vOverlay_RNG;
             lbl_lithoVerOverlay.ToolTip = "3-sigma verizontal overlay.";
-            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_lithoVerOverlay, ScaleWidth = true});
+            sigma_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoVerOverlay, ScaleWidth = true});
 
             num_lithoVerOverlay = new NumericStepper();
             num_lithoVerOverlay.Increment = 0.1;
             num_lithoVerOverlay.DecimalPlaces = 2;
             num_lithoVerOverlay.MinValue = 0;
             num_lithoVerOverlay.ToolTip = "3-sigma vertical overlay.";
-            setSize(num_lithoVerOverlay, 55, num_Height);
-            sigma_tl.Rows[sigma_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_lithoVerOverlay), ScaleWidth = true });
+            setSize(num_lithoVerOverlay, 55);
+            sigma_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoVerOverlay), ScaleWidth = true });
 
             TableCell check_tc = new TableCell();
-            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(check_tc);
+            mid_tl.Rows[^1].Cells.Add(check_tc);
 
             TableLayout check_tl = new TableLayout();
             check_tc.Control = check_tl;
 
             check_tl.Rows.Add(new TableRow());
-            check_tl.Rows[check_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            check_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
             cB_overlayYReference_Av = new CheckBox();
             cB_overlayYReference_Av.Text = "Average";
             cB_overlayYReference_Av.ToolTip = "Use the average displaced location of layers as a reference for vertical overlay";
-            check_tl.Rows[check_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(cB_overlayYReference_Av) });
+            check_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(cB_overlayYReference_Av) });
 
             TableCell right_tc = new TableCell();
-            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc);
+            right_tl.Rows[^1].Cells.Add(right_tc);
 
             gB_overlayYReference = new GroupBox();
             TableLayout overlayYReference_table = new TableLayout();
@@ -975,11 +975,11 @@ namespace Variance
             mid_tl.Rows.Add(new TableRow());
             right_tl.Rows.Add(new TableRow());
 
-            left_tl.Rows[left_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
-            mid_tl.Rows[mid_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null, ScaleWidth = true });
+            left_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
+            mid_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
             TableCell right_tc2 = new TableCell();
-            right_tl.Rows[right_tl.Rows.Count - 1].Cells.Add(right_tc2);
+            right_tl.Rows[^1].Cells.Add(right_tc2);
 
             gB_overlayYCorrelation = new GroupBox();
             TableLayout overlayYCorrelation_table = new TableLayout();
@@ -990,31 +990,31 @@ namespace Variance
             overlayYCorrelation_table.Rows.Add(new TableRow());
             overlayYCorrelation_table.Rows.Add(new TableRow());
 
-            this.rB_COLY[0] = new RadioButton();
-            this.rB_COLY[0].Text = "0";
-            this.rB_COLY[0].Checked = true;
+            rB_COLY[0] = new RadioButton();
+            rB_COLY[0].Text = "0";
+            rB_COLY[0].Checked = true;
 
             TableCell rB_COLY_0tc = new TableCell();
-            rB_COLY_0tc.Control = this.rB_COLY[0];
+            rB_COLY_0tc.Control = rB_COLY[0];
 
             overlayYCorrelation_table.Rows[0].Cells.Add(rB_COLY_0tc);
 
-            int rB_COLY = 1;
+            int rB_COLY_ = 1;
             int coly_rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                this.rB_COLY[rB_COLY] = new RadioButton(this.rB_COLY[0]);
-                this.rB_COLY[rB_COLY].Text = rB_COLY.ToString();
-                this.rB_COLY[rB_COLY].Checked = false;
+                rB_COLY[rB_COLY_] = new RadioButton(rB_COLY[0]);
+                rB_COLY[rB_COLY_].Text = rB_COLY.ToString();
+                rB_COLY[rB_COLY_].Checked = false;
                 TableCell tc0 = new TableCell();
-                tc0.Control = this.rB_COLY[rB_COLY];
+                tc0.Control = rB_COLY[rB_COLY_];
                 overlayYCorrelation_table.Rows[coly_rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
-                if (rB_COLY + 1 == CentralProperties.maxLayersForMC / 2)
+                if (rB_COLY_ + 1 == CentralProperties.maxLayersForMC / 2)
                 {
                     coly_rowIndex++;
                 }
-                rB_COLY++;
+                rB_COLY_++;
             }
         }
     }

@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using color;
 using Eto.Drawing;
 using Eto.Forms;
 using geoLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         int getMainSelectedIndex()
         {
@@ -523,7 +523,7 @@ namespace Variance
                     // We do this to avoid any misfires later. Might not be needed, but seems safer.
                     GeoLibPointF[] defaultPointArray = new GeoLibPointF[1];
                     defaultPointArray[0] = new GeoLibPointF(0, 0);
-                    commonVars.getLayerSettings(settingsIndex).setFileData(new List<GeoLibPointF[]>() { defaultPointArray });
+                    commonVars.getLayerSettings(settingsIndex).setFileData(new List<GeoLibPointF[]> { defaultPointArray });
                 }
 
                 if ((bool)cB_geoCore_shapeEngine.Checked)
@@ -565,7 +565,7 @@ namespace Variance
 
                 layer_clampSubShape(minHLength: 0, maxHLength: 1000000, minVLength: 0, maxVLength: 1000000, minHOffset: -1000000, maxHOffset: 1000000, minVOffset: -1000000, maxVOffset: 1000000);
 
-                bool[] warnArray = new bool[] { false, false, false };
+                bool[] warnArray = { false, false, false };
 
                 if ((commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.none) || (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.rect))
                 {
@@ -1448,8 +1448,6 @@ namespace Variance
             int CLWR2Index = 0;
             int CCDUIndex = 0;
             int CTCDUIndex = 0;
-            bool[] avXIndices = new bool[CentralProperties.maxLayersForMC];
-            bool[] avYIndices = new bool[CentralProperties.maxLayersForMC];
 
             commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, settingsIndex, 0); // can never have a self-reference for this, so reset it to avoid trouble.
             commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, settingsIndex, 0); // can never have a self-reference for this, so reset it to avoid trouble.
@@ -1667,7 +1665,6 @@ namespace Variance
             globalUIFrozen = true;
             Application.Instance.Invoke(() =>
             {
-                int rowIndex = 0;
                 int colIndex = 0;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
@@ -1692,7 +1689,6 @@ namespace Variance
                     if (colIndex == CentralProperties.maxLayersForMC / 2)
                     {
                         colIndex = 0;
-                        rowIndex++;
                     }
                 }
             });

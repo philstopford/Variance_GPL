@@ -1,5 +1,5 @@
-using geoLib;
 using System.Collections.Generic;
+using geoLib;
 
 namespace Variance
 {

@@ -1,9 +1,10 @@
-﻿using Error;
-using geoLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Error;
+using geoLib;
+using utility;
 
 namespace Variance
 {
@@ -11,7 +12,7 @@ namespace Variance
     {
         public delegate void PrepUI();
         public PrepUI prepUI { get; set; }
-        public delegate void StorageSetSettingsCallback(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool resumeUI, bool updateGeoCoreGeometryFromFile = false);
+        public delegate void StorageSetSettingsCallback(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false);
         public StorageSetSettingsCallback setLayerSettings { get; set; }
         public delegate void StorageSuspendSettingsUICallback();
         public StorageSuspendSettingsUICallback suspendSettingsUI { get; set; }
@@ -153,8 +154,8 @@ namespace Variance
         {
             List<GeoLibPointF[]> returnList = new List<GeoLibPointF[]>();
 
-            char[] polySep = new char[] { ';' };
-            char[] coordSep = new char[] { ',' };
+            char[] polySep = { ';' };
+            char[] coordSep = { ',' };
 
             if (fileDataString.Length > 0)
             {
@@ -173,7 +174,7 @@ namespace Variance
                     }
 
                     // Avoid duplicated geometry - this is insurance against older projects files that may have doubled-up polygons included.
-                    string p_Hash = utility.Utils.GetMD5Hash(polyData);
+                    string p_Hash = Utils.GetMD5Hash(polyData);
                     if (hashList.IndexOf(p_Hash) == -1)
                     {
                         hashList.Add(p_Hash);
@@ -183,9 +184,9 @@ namespace Variance
             }
             else
             {
-                returnList.Add(new GeoLibPointF[] { new GeoLibPointF(0, 0) });
-                returnList.Add(new GeoLibPointF[] { new GeoLibPointF(0, 0) });
-                returnList.Add(new GeoLibPointF[] { new GeoLibPointF(0, 0) });
+                returnList.Add(new[] { new GeoLibPointF(0, 0) });
+                returnList.Add(new[] { new GeoLibPointF(0, 0) });
+                returnList.Add(new[] { new GeoLibPointF(0, 0) });
             }
             return returnList;
         }
@@ -219,9 +220,7 @@ namespace Variance
                     poly++;
                 }
             }
-            else
-            {
-            }
+
             return returnString;
         }
 
@@ -574,7 +573,7 @@ namespace Variance
             EntropyLayerSettings readSettings = new EntropyLayerSettings();
 
             string version = simulationFromFile.Descendants("version").First().Value;
-            string[] tokenVersion = version.Split(new char[] { '.' });
+            string[] tokenVersion = version.Split(new[] { '.' });
 
             if (version != currentVersion)
             {
@@ -1584,7 +1583,7 @@ namespace Variance
                 catch (Exception)
                 {
                 }
-                viewportLoad?.Invoke(layer, new double[] { x, y, zoom });
+                viewportLoad?.Invoke(layer, new[] { x, y, zoom });
 
                 try
                 {
@@ -1817,7 +1816,7 @@ namespace Variance
                         readSettings = new EntropyLayerSettings();
                     }
                 }
-                setLayerSettings?.Invoke(readSettings, layer, false, false, updateGeoCoreGeometryFromFile); // avoid resuming the UI
+                setLayerSettings?.Invoke(readSettings, layer, false, updateGeoCoreGeometryFromFile); // avoid resuming the UI
                 loadedLayers[layer] = true;
             }
 
@@ -1891,7 +1890,7 @@ namespace Variance
                 catch (Exception)
                 {
                 }
-                viewportLoad?.Invoke(CentralProperties.maxLayersForMC, new double[] { x, y, zoom });
+                viewportLoad?.Invoke(CentralProperties.maxLayersForMC, new[] { x, y, zoom });
 
                 int svgCompat = 0;
                 try
@@ -2384,7 +2383,7 @@ namespace Variance
                 catch (Exception)
                 {
                 }
-                viewportLoad?.Invoke(CentralProperties.maxLayersForMC + 1, new double[] { x, y, zoom });
+                viewportLoad?.Invoke(CentralProperties.maxLayersForMC + 1, new[] { x, y, zoom });
 
                 updateDOESettingsUIFromSettings?.Invoke();
             }
@@ -2567,7 +2566,7 @@ namespace Variance
                 catch (Exception)
                 {
                 }
-                implantViewportLoad?.Invoke(new double[] { x, y, zoom });
+                implantViewportLoad?.Invoke(new[] { x, y, zoom });
 
                 updateImplantUIFromSettings?.Invoke();
             }

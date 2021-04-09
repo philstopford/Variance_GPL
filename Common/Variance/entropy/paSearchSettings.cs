@@ -13,7 +13,7 @@ namespace Variance
             tipBias : need support for positive/negative limits and variation.
             proxBias : deep shape engine support, like others.
         */
-        public static string[] paNames = new string[] { "xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble" };
+        public static string[] paNames = { "xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble" };
         public enum paEnum { XOL, YOL, SCDU, TCDU, LWR, LWR2, HTIPNVAR, HTIPPVAR, VTIPNVAR, VTIPPVAR, ICR, OCR, WOB }
 
         bool[,] searchablePAs;
@@ -164,10 +164,8 @@ namespace Variance
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         public bool[] getEnabledState(EntropyLayerSettings layerSettings)
@@ -486,7 +484,7 @@ namespace Variance
                     rawValues.Add(Math.Abs(factor) * Convert.ToDouble(upperLimit[layer, pa]));
                 }
                 double meanVal = mean(rawValues);
-                if (meanVal != -1)
+                if (Math.Abs(meanVal - (-1)) > Double.Epsilon)
                 {
                     meanValues[layer, pa] = meanVal.ToString("0.##");
                     if (!resultPackage.nonGaussianInput)
@@ -517,10 +515,8 @@ namespace Variance
             {
                 return -1;
             }
-            else
-            {
-                return rawValues.Average();
-            }
+
+            return rawValues.Average();
         }
 
         double stdDev(List<double> rawValues)
@@ -628,8 +624,6 @@ namespace Variance
                                 {
                                     jobSettings.setValue(ChaosSettings.properties.wobbleVar, layer, jobSettings.getValue(ChaosSettings.properties.wobbleVar, layer) * 3);
                                 }
-                                break;
-                            default:
                                 break;
                         }
                     }

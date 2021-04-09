@@ -1,16 +1,19 @@
-﻿using Eto.Forms;
-using geoCoreLib;
-using geoLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Eto.Forms;
+using gds;
+using geoCoreLib;
+using geoLib;
+using geoWrangler;
+using oasis;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         void exportActiveLayerToLayout(object sender, EventArgs e)
         {
@@ -20,7 +23,7 @@ namespace Variance
         async void exportActiveLayerToLayout()
         {
             // Need to request output file location and name.
-            SaveFileDialog sfd = new SaveFileDialog()
+            SaveFileDialog sfd = new SaveFileDialog
             {
                 Title = "Enter file to save",
                 Filters =
@@ -34,17 +37,17 @@ namespace Variance
             if (sfd.ShowDialog(ParentWindow) == DialogResult.Ok)
             {
                 string filename = sfd.FileName;
-                string[] tokens = filename.Split(new char[] { '.' });
-                string ext = tokens[tokens.Length - 1].ToUpper();
+                string[] tokens = filename.Split(new[] { '.' });
+                string ext = tokens[^1].ToUpper();
 
                 int type = -1;
-                if (((ext == "GDS") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "GDS"))) ||
-                    ((ext == "GDSII") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "GDSII"))))
+                if (((ext == "GDS") || ((ext == "GZ") && (tokens[^2].ToUpper() == "GDS"))) ||
+                    ((ext == "GDSII") || ((ext == "GZ") && (tokens[^2].ToUpper() == "GDSII"))))
                 {
                     type = (int)GeoCore.fileType.gds;
                 }
-                else if (((ext == "OAS") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "OAS"))) ||
-                    ((ext == "OASIS") || ((ext == "GZ") && (tokens[tokens.Length - 2].ToUpper() == "OASIS"))))
+                else if (((ext == "OAS") || ((ext == "GZ") && (tokens[^2].ToUpper() == "OAS"))) ||
+                    ((ext == "OASIS") || ((ext == "GZ") && (tokens[^2].ToUpper() == "OASIS"))))
                 {
                     type = (int)GeoCore.fileType.oasis;
                 }
@@ -134,8 +137,6 @@ namespace Variance
                 // We can't use the viewport data here because it might be tessellated, so we need to evaluate the contours for the layer.
                 List<PreviewShape> previewShapes = generate_shapes(layerIndex);
 
-                // Set to 1 to avoid problems if there are fewer than 100 patterns.
-                int updateInterval = Math.Max(1, previewShapes.Count);
                 double progress = 0;
                 Application.Instance.Invoke(() =>
                 {
@@ -150,7 +151,7 @@ namespace Variance
                         // No drawn polygons desired.
                         if (!previewShapes[i].getDrawnPoly(poly))
                         {
-                            GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(polys[poly], scale);
+                            GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
 
                             gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                         }
@@ -163,13 +164,13 @@ namespace Variance
                 switch (type)
                 {
                     case (int)GeoCore.fileType.gds:
-                        gds.gdsWriter gw = new gds.gdsWriter(g, file);
+                        gdsWriter gw = new gdsWriter(g, file);
                         gw.statusUpdateUI = updateStatusLine;
                         gw.progressUpdateUI = updateProgressBar;
                         gw.save();
                         break;
                     case (int)GeoCore.fileType.oasis:
-                        oasis.oasWriter ow = new oasis.oasWriter(g, file);
+                        oasWriter ow = new oasWriter(g, file);
                         ow.statusUpdateUI = updateStatusLine;
                         ow.progressUpdateUI = updateProgressBar;
                         ow.save();

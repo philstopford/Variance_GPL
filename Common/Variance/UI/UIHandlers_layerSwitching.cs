@@ -1,5 +1,5 @@
-using geoCoreLib;
 using System;
+using geoCoreLib;
 
 namespace Variance
 {
@@ -92,7 +92,7 @@ namespace Variance
 
             // Copy from back-up a Settings to b
             commonVars.setCopy(aIndex);
-            commonVars.setLayerSettings(aSettings, bIndex, false, false);
+            commonVars.setLayerSettings(aSettings, bIndex, false);
             commonVars.getSimulationSettings().getDOESettings().setLayerAffected(layer: bIndex, a_useForDOE);
             commonVars.getGeoCoreHandler(bIndex).readValues(ach);
 
@@ -306,12 +306,6 @@ namespace Variance
             entropySettingsChanged(sender, e);
         }
 
-        void switchSimulationLayers1213Over(object sender, EventArgs e)
-        {
-            switchSimulationLayersOver(11, 12);
-            entropySettingsChanged(sender, e);
-        }
-
         void switchSimulationLayers1314Over(object sender, EventArgs e)
         {
             switchSimulationLayersOver(12, 13);
@@ -357,12 +351,6 @@ namespace Variance
         void switchSimulationLayers913Over(object sender, EventArgs e)
         {
             switchSimulationLayersOver(8, 12);
-            entropySettingsChanged(sender, e);
-        }
-
-        void switchSimulationLayers1014Over(object sender, EventArgs e)
-        {
-            switchSimulationLayersOver(9, 13);
             entropySettingsChanged(sender, e);
         }
 

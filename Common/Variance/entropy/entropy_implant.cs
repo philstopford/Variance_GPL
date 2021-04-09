@@ -1,6 +1,3 @@
-using Error;
-using geoCoreLib;
-using geoLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Error;
+using gds;
+using geoCoreLib;
+using geoLib;
+using geoWrangler;
+using oasis;
 using utility;
+using Timer = System.Timers.Timer;
 
 namespace Variance
 {
@@ -76,7 +80,7 @@ namespace Variance
                 {
                     // Get the results from the implant calc engine.
                     ChaosSettings_implant cs = sampler_implant.getSample(i);
-                    implantResultPackage.Add(entropyEval_implant(previewMode, cs));
+                    implantResultPackage.Add(entropyEval_implant(cs));
 
                     if ((numberOfCases == 1) || (currentProgress % sampleRate == 0))
                     {
@@ -154,7 +158,7 @@ namespace Variance
 
             multithreadWarningFunc?.Invoke();
 
-            commonVars.m_timer = new System.Timers.Timer();
+            commonVars.m_timer = new Timer();
             // Set up timers for the UI refresh
             commonVars.m_timer.AutoReset = true;
             commonVars.m_timer.Interval = CentralProperties.timer_interval;
@@ -187,11 +191,10 @@ namespace Variance
             {
                 Parallel.For(0, numberOfCases, po, (i, loopState) =>
                 {
-                    Results_implant currentResult = new Results_implant();
                     try
                     {
                         ChaosSettings_implant cs = sampler_implant.getSample(i);
-                        currentResult = entropyEval_implant(previewMode, cs);
+                        Results_implant currentResult = entropyEval_implant(cs);
 
                         if (currentResult.isValid()) // only update if result is valid.
                         {
@@ -258,7 +261,7 @@ namespace Variance
             sw.Reset();
         }
 
-        Results_implant entropyEval_implant(bool previewMode, ChaosSettings_implant currentJobSettings)
+        Results_implant entropyEval_implant(ChaosSettings_implant currentJobSettings)
         {
             // UI handler has already applied 'accuracy' to the resolution and angular resolution values.
 
@@ -291,8 +294,8 @@ namespace Variance
         {
             reset();
             clearAbortFlagFunc?.Invoke();
-            bool simState = true;
-            string emailString = "";
+            bool simState;
+            string emailString;
 
             simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
             if (!simState)
@@ -319,21 +322,21 @@ namespace Variance
             postSimUIFunc?.Invoke();
         }
 
-        public void timeOfFlight_implant(double swTime)
+        public void timeOfFlight_implant(double swTime_)
         {
-            pTimeOfFlight_implant(swTime);
+            pTimeOfFlight_implant(swTime_);
         }
 
-        void pTimeOfFlight_implant(double swTime)
+        void pTimeOfFlight_implant(double swTime_)
         {
             // Update status bar with elapsed and predicted time.
             try
             {
-                if (swTime != 0.0)
+                if (swTime_ != 0.0)
                 {
                     int numberOfCases = commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases);
 
-                    TimeSpan eT = TimeSpan.FromSeconds(swTime);
+                    TimeSpan eT = TimeSpan.FromSeconds(swTime_);
                     string statusLineString = eT.Seconds + " s elapsed";
                     if (eT.Minutes >= 1)
                     {
@@ -348,7 +351,7 @@ namespace Variance
 
                     if (currentProgress != numberOfCases)
                     {
-                        double completionTime = ((swTime / currentProgress) * numberOfCases - currentProgress);
+                        double completionTime = ((swTime_ / currentProgress) * numberOfCases - currentProgress);
                         TimeSpan cT = TimeSpan.FromSeconds(completionTime);
                         statusLineString += "; ";
 
@@ -393,7 +396,7 @@ namespace Variance
             }
         }
 
-        bool saveResults_implant(Int32 numberOfCases)
+        bool saveResults_implant()
         {
             string csvFileName = baseFileName;
             csvFileName += ".csv";
@@ -430,7 +433,6 @@ namespace Variance
             if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
             {
                 // Set our parallel task options based on user settings.
-                ParallelOptions po = new ParallelOptions();
                 // Attempt at parallelism.
                 CancellationTokenSource cancelSource = new CancellationTokenSource();
                 CancellationToken cancellationToken = cancelSource.Token;
@@ -569,7 +571,7 @@ namespace Variance
 
                 for (int poly = 0; poly < resistPolys.Count; poly++)
                 {
-                    GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(resistPolys[poly], scale);
+                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(resistPolys[poly], scale);
 
                     gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
                 }
@@ -580,7 +582,7 @@ namespace Variance
             g.addLayerName("L2D0", "shadowLine");
             for (int poly = 0; poly < shadowLine.Count; poly++)
             {
-                GeoLibPoint[] ePoly = geoWrangler.GeoWrangler.resize_to_int(shadowLine[poly], scale);
+                GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(shadowLine[poly], scale);
 
                 gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
             }
@@ -591,11 +593,11 @@ namespace Variance
             switch (type)
             {
                 case (int)CommonVars.external_Type.gds:
-                    gds.gdsWriter gw = new gds.gdsWriter(g, layoutFileName + ".gds");
+                    gdsWriter gw = new gdsWriter(g, layoutFileName + ".gds");
                     gw.save();
                     break;
                 case (int)CommonVars.external_Type.oas:
-                    oasis.oasWriter ow = new oasis.oasWriter(g, layoutFileName + ".oas");
+                    oasWriter ow = new oasWriter(g, layoutFileName + ".oas");
                     ow.save();
                     break;
 
@@ -618,8 +620,8 @@ namespace Variance
 
             // Results first
             // Write the results first.
-            linesToWrite.Add("Results summary for job: " + csvFileName + " run on : " + System.DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " + implantResultPackage.runTime.ToString("0.##") + " seconds");
-            if (Debugger.IsAttached == true)
+            linesToWrite.Add("Results summary for job: " + csvFileName + " run on : " + DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " + implantResultPackage.runTime.ToString("0.##") + " seconds");
+            if (Debugger.IsAttached)
             {
                 linesToWrite.Add("Run under debugger : performance was lower");
             }

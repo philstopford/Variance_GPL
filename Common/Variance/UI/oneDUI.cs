@@ -1,5 +1,6 @@
-﻿using Eto.Forms;
-using System;
+﻿using System;
+using Eto.Forms;
+using resources;
 
 namespace Variance
 {
@@ -77,23 +78,23 @@ namespace Variance
             // 1D tab
             tab_1DCalc_table = new TableLayout();
 
-            tab_1DCalc.Content = new Scrollable() { Content = TableLayout.AutoSized(tab_1DCalc_table, centered: true) };
+            tab_1DCalc.Content = new Scrollable { Content = TableLayout.AutoSized(tab_1DCalc_table, centered: true) };
 
             tab_1DCalc_table.Rows.Add(new TableRow());
             lbl_1D_Guidance = new Label();
             lbl_1D_Guidance.Text = "All inputs should be 3-sigma values";
             lbl_1D_Guidance.Width = oneDGuidanceWidth;
-            tab_1DCalc_table.Rows[tab_1DCalc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(lbl_1D_Guidance, centered: true) });
+            tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_1D_Guidance, centered: true) });
 
             Panel oneDLayers_pnl = new Panel();
             tab_1DCalc_table.Rows.Add(new TableRow());
-            tab_1DCalc_table.Rows[tab_1DCalc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(oneDLayers_pnl, centered: true) });
+            tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(oneDLayers_pnl, centered: true) });
 
             oneDLayers_setup(ref oneDLayers_pnl);
 
             Panel minIns_pnl = new Panel();
             tab_1DCalc_table.Rows.Add(new TableRow());
-            tab_1DCalc_table.Rows[tab_1DCalc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = minIns_pnl });
+            tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = minIns_pnl });
 
             TableLayout minIns_table = new TableLayout();
             minIns_pnl.Content = TableLayout.AutoSized(minIns_table, centered: true);
@@ -102,22 +103,22 @@ namespace Variance
             lbl_minins = new Label();
             lbl_minins.Width = oneDMinInsLblWidth;
             lbl_minins.Text = "Minimum Insulator";
-            minIns_table.Rows[minIns_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_minins });
+            minIns_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_minins });
 
             text_minins = new TextBox();
             text_minins.Width = oneDMinInsWidth;
-            minIns_table.Rows[minIns_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_minins });
+            minIns_table.Rows[^1].Cells.Add(new TableCell { Control = text_minins });
             text_minins.LostFocus += oneDEventHandler;
-            minIns_table.Rows[minIns_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding.
+            minIns_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding.
 
             // Image
             Panel oneDImagePanel = new Panel();
             ImageView oneDImage = new ImageView();
-            oneDImage.Image = resources.images.oneDImage();
+            oneDImage.Image = images.oneDImage();
             oneDImagePanel.Size = oneDImage.Image.Size;
             oneDImagePanel.Content = oneDImage;
             tab_1DCalc_table.Rows.Add(new TableRow());
-            tab_1DCalc_table.Rows[tab_1DCalc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(oneDImagePanel, centered: true) });
+            tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(oneDImagePanel, centered: true) });
 
             tab_1DCalc_table.Rows.Add(new TableRow());
 
@@ -127,10 +128,10 @@ namespace Variance
             results_tl.Rows.Add(new TableRow());
 
             groupBox_results_1D = new GroupBox();
-            results_tl.Rows[0].Cells.Add(new TableCell() { Control = groupBox_results_1D });
-            results_tl.Rows[0].Cells.Add(new TableCell() { Control = null });
+            results_tl.Rows[0].Cells.Add(new TableCell { Control = groupBox_results_1D });
+            results_tl.Rows[0].Cells.Add(new TableCell { Control = null });
 
-            tab_1DCalc_table.Rows[tab_1DCalc_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(results_panel, centered: true) });
+            tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(results_panel, centered: true) });
 
             groupBox_results_1D.Text = "RESULTS";
 
@@ -141,8 +142,8 @@ namespace Variance
 
             Panel left0 = new Panel();
             Panel right0 = new Panel();
-            groupBox_results_1D_table.Rows[groupBox_results_1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = left0 });
-            groupBox_results_1D_table.Rows[groupBox_results_1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = right0 });
+            groupBox_results_1D_table.Rows[^1].Cells.Add(new TableCell { Control = left0 });
+            groupBox_results_1D_table.Rows[^1].Cells.Add(new TableCell { Control = right0 });
 
             TableLayout l0_tl = new TableLayout();
             left0.Content = l0_tl;
@@ -152,34 +153,34 @@ namespace Variance
             Label lbl_threeSigmaEdgeTol1D_prefix = new Label();
             lbl_threeSigmaEdgeTol1D_prefix.Text = "3";
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_threeSigmaEdgeTol1D_prefix });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_threeSigmaEdgeTol1D_prefix });
 
             lbl_threeSigmaEdgeTol1D = new Label();
             lbl_threeSigmaEdgeTol1D.Text = "Sigma Edge Tolerance";
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_threeSigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_threeSigmaEdgeTol1D });
 
             text_threeSigmaEdgeTol1D = new TextBox();
             text_threeSigmaEdgeTol1D.Width = 100;
             text_threeSigmaEdgeTol1D.ReadOnly = true;
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_threeSigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_threeSigmaEdgeTol1D });
 
             l0_tl.Rows.Add(new TableRow());
 
             Label lbl_fourSigmaEdgeTol1D_prefix = new Label();
             lbl_fourSigmaEdgeTol1D_prefix.Text = "4";
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_fourSigmaEdgeTol1D_prefix });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_fourSigmaEdgeTol1D_prefix });
 
             lbl_fourSigmaEdgeTol1D = new Label();
             lbl_fourSigmaEdgeTol1D.Text = "Sigma Edge Tolerance";
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_fourSigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_fourSigmaEdgeTol1D });
 
             text_fourSigmaEdgeTol1D = new TextBox();
             text_fourSigmaEdgeTol1D.Width = 100;
             text_fourSigmaEdgeTol1D.ReadOnly = true;
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_fourSigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_fourSigmaEdgeTol1D });
 
             l0_tl.Rows.Add(new TableRow());
 
@@ -188,17 +189,17 @@ namespace Variance
             input_nsigma1D.Width = 20;
             input_nsigma1D.TextChanged += oneDEventHandler;
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = input_nsigma1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = input_nsigma1D });
 
             lbl_sigmaEdgeTol1D = new Label();
             lbl_sigmaEdgeTol1D.Text = "Sigma Edge Tolerance";
 
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_sigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_sigmaEdgeTol1D });
 
             text_nSigmaEdgeTol1D = new TextBox();
             text_nSigmaEdgeTol1D.Width = 100;
             text_nSigmaEdgeTol1D.ReadOnly = true;
-            l0_tl.Rows[l0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_nSigmaEdgeTol1D });
+            l0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_nSigmaEdgeTol1D });
 
 
             TableLayout r0_tl = new TableLayout();
@@ -208,52 +209,52 @@ namespace Variance
 
             Label lbl_threeSigmaRule1D_prefix = new Label();
             lbl_threeSigmaRule1D_prefix.Text = "3";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_threeSigmaRule1D_prefix });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_threeSigmaRule1D_prefix });
 
             lbl_threeSigmaRule1D = new Label();
             lbl_threeSigmaRule1D.Text = "Sigma Rule";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_threeSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_threeSigmaRule1D });
 
             text_threeSigmaRule1D = new TextBox();
             text_threeSigmaRule1D.Width = 100;
             text_threeSigmaRule1D.ReadOnly = true;
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_threeSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_threeSigmaRule1D });
 
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             r0_tl.Rows.Add(new TableRow());
 
             Label lbl_fourSigmaRule1D_prefix = new Label();
             lbl_fourSigmaRule1D_prefix.Text = "3";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_fourSigmaRule1D_prefix });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_fourSigmaRule1D_prefix });
 
             lbl_fourSigmaRule1D = new Label();
             lbl_fourSigmaRule1D.Text = "Sigma Rule";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_fourSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_fourSigmaRule1D });
 
             text_fourSigmaRule1D = new TextBox();
             text_fourSigmaRule1D.Width = 100;
             text_fourSigmaRule1D.ReadOnly = true;
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_fourSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_fourSigmaRule1D });
 
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             r0_tl.Rows.Add(new TableRow());
 
             Label lbl_nSigmaRule1D_prefix = new Label();
             lbl_nSigmaRule1D_prefix.Text = "n";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_nSigmaRule1D_prefix });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_nSigmaRule1D_prefix });
 
             lbl_nSigmaRule1D = new Label();
             lbl_nSigmaRule1D.Text = "Sigma Rule";
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_nSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_nSigmaRule1D });
 
             text_nSigmaRule1D = new TextBox();
             text_nSigmaRule1D.Width = 100;
             text_nSigmaRule1D.ReadOnly = true;
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_nSigmaRule1D });
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_nSigmaRule1D });
 
-            r0_tl.Rows[r0_tl.Rows.Count - 1].Cells.Add(new TableCell() { Control = null }); // padding
+            r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
             InitializeTooltips_1D();
         }
@@ -269,20 +270,20 @@ namespace Variance
             groupBox_layerOne1D.Text = "LAYER #1";
             TableLayout groupBox_layerOne1D_table = new TableLayout();
             groupBox_layerOne1D.Content = groupBox_layerOne1D_table;
-            oneDLayers_table.Rows[0].Cells.Add(new TableCell() { Control = groupBox_layerOne1D });
+            oneDLayers_table.Rows[0].Cells.Add(new TableCell { Control = groupBox_layerOne1D });
 
             // Layer 2 group box for 1D.
             groupBox_layerTwo1D = new GroupBox();
             groupBox_layerTwo1D.Text = "LAYER #2";
             TableLayout groupBox_layerTwo1D_table = new TableLayout();
             groupBox_layerTwo1D.Content = groupBox_layerTwo1D_table;
-            oneDLayers_table.Rows[0].Cells.Add(new TableCell() { Control = groupBox_layerTwo1D });
+            oneDLayers_table.Rows[0].Cells.Add(new TableCell { Control = groupBox_layerTwo1D });
 
             oneDLayer1_setup(groupBox_layerOne1D_table);
 
             oneDLayer2_setup(groupBox_layerTwo1D_table);
 
-            oneDLayers_table.Rows[0].Cells.Add(new TableCell() { Control = null }); // Padding
+            oneDLayers_table.Rows[0].Cells.Add(new TableCell { Control = null }); // Padding
 
         }
 
@@ -293,22 +294,22 @@ namespace Variance
             lbl_layerOneName = new Label();
             lbl_layerOneName.Width = oneDLabelWidth;
             lbl_layerOneName.Text = "Name";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneName, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneName, ScaleWidth = true });
 
             text_layerOneName = new TextBox();
             text_layerOneName.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneName });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneName });
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
 
             lbl_layerOneOverlayX = new Label();
             lbl_layerOneOverlayX.Width = oneDLabelWidth;
             lbl_layerOneOverlayX.Text = "Overlay X";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneOverlayX, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneOverlayX, ScaleWidth = true });
 
             text_layerOneOverlayX = new TextBox();
             text_layerOneOverlayX.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneOverlayX });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneOverlayX });
             text_layerOneOverlayX.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -317,11 +318,11 @@ namespace Variance
             lbl_layerOneOverlayY.Width = oneDLabelWidth;
             lbl_layerOneOverlayY.Text = "Overlay Y";
 
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneOverlayY, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneOverlayY, ScaleWidth = true });
 
             text_layerOneOverlayY = new TextBox();
             text_layerOneOverlayY.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneOverlayY });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneOverlayY });
             text_layerOneOverlayY.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -329,11 +330,11 @@ namespace Variance
             lbl_layerOneCDU = new Label();
             lbl_layerOneCDU.Width = oneDLabelWidth;
             lbl_layerOneCDU.Text = "CDU";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneCDU, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneCDU, ScaleWidth = true });
 
             text_layerOneCDU = new TextBox();
             text_layerOneCDU.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneCDU });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneCDU });
             text_layerOneCDU.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -341,11 +342,11 @@ namespace Variance
             lbl_layerOneLWR = new Label();
             lbl_layerOneLWR.Width = oneDLabelWidth;
             lbl_layerOneLWR.Text = "LWR";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneLWR, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneLWR, ScaleWidth = true });
 
             text_layerOneLWR = new TextBox();
             text_layerOneLWR.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneLWR });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneLWR });
             text_layerOneLWR.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -353,11 +354,11 @@ namespace Variance
             lbl_layerOneAddVar = new Label();
             lbl_layerOneAddVar.Width = oneDLabelWidth;
             lbl_layerOneAddVar.Text = "Other variation";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneAddVar, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneAddVar, ScaleWidth = true });
 
             text_layerOneAddVar = new TextBox();
             text_layerOneAddVar.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneAddVar });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneAddVar });
             text_layerOneAddVar.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -365,11 +366,11 @@ namespace Variance
             lbl_layerOneBias = new Label();
             lbl_layerOneBias.Width = oneDLabelWidth;
             lbl_layerOneBias.Text = "Bias";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneBias, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneBias, ScaleWidth = true });
 
             text_layerOneBias = new TextBox();
             text_layerOneBias.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneBias });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneBias });
             text_layerOneBias.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -377,11 +378,11 @@ namespace Variance
             lbl_layerOneDrawn = new Label();
             lbl_layerOneDrawn.Width = oneDLabelWidth;
             lbl_layerOneDrawn.Text = "Drawn";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOneDrawn, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOneDrawn, ScaleWidth = true });
 
             text_layerOneDrawn = new TextBox();
             text_layerOneDrawn.Width = 100;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOneDrawn });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOneDrawn });
             text_layerOneDrawn.LostFocus += oneDEventHandler;
 
             groupBox_layerOne1D_table.Rows.Add(new TableRow());
@@ -389,12 +390,12 @@ namespace Variance
             lbl_layerOnePhys = new Label();
             lbl_layerOnePhys.Width = oneDLabelWidth;
             lbl_layerOnePhys.Text = "Physical";
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerOnePhys, ScaleWidth = true });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerOnePhys, ScaleWidth = true });
 
             text_layerOnePhys = new TextBox();
             text_layerOnePhys.Width = 100;
             text_layerOnePhys.ReadOnly = true;
-            groupBox_layerOne1D_table.Rows[groupBox_layerOne1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerOnePhys });
+            groupBox_layerOne1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerOnePhys });
         }
 
         void oneDLayer2_setup(TableLayout groupBox_layerTwo1D_table)
@@ -404,11 +405,11 @@ namespace Variance
             lbl_layerTwoName = new Label();
             lbl_layerTwoName.Width = oneDLabelWidth;
             lbl_layerTwoName.Text = "Name";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoName, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoName, ScaleWidth = true });
 
             text_layerTwoName = new TextBox();
             text_layerTwoName.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoName });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoName });
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
 
@@ -416,11 +417,11 @@ namespace Variance
             lbl_layerTwoOverlayX.Width = oneDLabelWidth;
             lbl_layerTwoOverlayX.Text = "Overlay X";
 
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoOverlayX, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoOverlayX, ScaleWidth = true });
 
             text_layerTwoOverlayX = new TextBox();
             text_layerTwoOverlayX.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoOverlayX });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoOverlayX });
             text_layerTwoOverlayX.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -429,11 +430,11 @@ namespace Variance
             lbl_layerTwoOverlayY.Width = oneDLabelWidth;
             lbl_layerTwoOverlayY.Text = "Overlay Y";
 
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoOverlayY, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoOverlayY, ScaleWidth = true });
 
             text_layerTwoOverlayY = new TextBox();
             text_layerTwoOverlayY.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoOverlayY });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoOverlayY });
             text_layerTwoOverlayY.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -441,11 +442,11 @@ namespace Variance
             lbl_layerTwoCDU = new Label();
             lbl_layerTwoCDU.Width = oneDLabelWidth;
             lbl_layerTwoCDU.Text = "CDU";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoCDU, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoCDU, ScaleWidth = true });
 
             text_layerTwoCDU = new TextBox();
             text_layerTwoCDU.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoCDU });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoCDU });
             text_layerTwoCDU.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -453,11 +454,11 @@ namespace Variance
             lbl_layerTwoLWR = new Label();
             lbl_layerTwoLWR.Width = oneDLabelWidth;
             lbl_layerTwoLWR.Text = "LWR";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoLWR, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoLWR, ScaleWidth = true });
 
             text_layerTwoLWR = new TextBox();
             text_layerTwoLWR.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoLWR });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoLWR });
             text_layerTwoLWR.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -465,11 +466,11 @@ namespace Variance
             lbl_layerTwoAddVar = new Label();
             lbl_layerTwoAddVar.Width = oneDLabelWidth;
             lbl_layerTwoAddVar.Text = "Other variation";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoAddVar, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoAddVar, ScaleWidth = true });
 
             text_layerTwoAddVar = new TextBox();
             text_layerTwoAddVar.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoAddVar });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoAddVar });
             text_layerTwoAddVar.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -477,11 +478,11 @@ namespace Variance
             lbl_layerTwoBias = new Label();
             lbl_layerTwoBias.Width = oneDLabelWidth;
             lbl_layerTwoBias.Text = "Bias";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoBias, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoBias, ScaleWidth = true });
 
             text_layerTwoBias = new TextBox();
             text_layerTwoBias.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoBias });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoBias });
             text_layerTwoBias.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -489,11 +490,11 @@ namespace Variance
             lbl_layerTwoDrawn = new Label();
             lbl_layerTwoDrawn.Width = oneDLabelWidth;
             lbl_layerTwoDrawn.Text = "Drawn";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoDrawn, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoDrawn, ScaleWidth = true });
 
             text_layerTwoDrawn = new TextBox();
             text_layerTwoDrawn.Width = 100;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoDrawn });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoDrawn });
             text_layerTwoDrawn.LostFocus += oneDEventHandler;
 
             groupBox_layerTwo1D_table.Rows.Add(new TableRow());
@@ -501,12 +502,12 @@ namespace Variance
             lbl_layerTwoPhys = new Label();
             lbl_layerTwoPhys.Width = oneDLabelWidth;
             lbl_layerTwoPhys.Text = "Physical";
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = lbl_layerTwoPhys, ScaleWidth = true });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_layerTwoPhys, ScaleWidth = true });
 
             text_layerTwoPhys = new TextBox();
             text_layerTwoPhys.Width = 100;
             text_layerTwoPhys.ReadOnly = true;
-            groupBox_layerTwo1D_table.Rows[groupBox_layerTwo1D_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = text_layerTwoPhys });
+            groupBox_layerTwo1D_table.Rows[^1].Cells.Add(new TableCell { Control = text_layerTwoPhys });
         }
 
         void oneDEventHandler(object sender, EventArgs e)
@@ -601,7 +602,7 @@ namespace Variance
         void do1DCalculation()
         {
             Boolean inputValid = true;
-            Boolean nSigmaReq = false;
+            Boolean nSigmaReq;
 
             // Take our inputs and validate the conversion to double in each case.
             // No magic here.\
@@ -870,7 +871,7 @@ namespace Variance
 
 
             // OK - if we have invalid input, let's blank our output targets.
-            if (inputValid == true)
+            if (inputValid)
             {
                 double threeSigma = UtilityFuncs.do1DCalculation_3sig(
                     layer1OverlayX, layer1OverlayY, layer1CDU, layer1LWR, layer1Bias, layer1AddVar,
@@ -888,7 +889,7 @@ namespace Variance
 
                 text_fourSigmaRule1D.Text = fourSigma.ToString("0.##");
                 text_fourSigmaEdgeTol1D.Text = fourSigmaEdge.ToString("0.##");
-                if (nSigmaReq == true)
+                if (nSigmaReq)
                 {
                     double nSigma = UtilityFuncs.do1DCalculation_nsig(nSigmaValue,
                     layer1OverlayX, layer1OverlayY, layer1CDU, layer1LWR, layer1Bias, layer1AddVar,

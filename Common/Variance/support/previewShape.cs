@@ -1,13 +1,13 @@
-using ClipperLib; // tiled layout handling, Layout biasing/CDU.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ClipperLib;
 using color;
 using Error;
 using geoLib;
 using geoWrangler;
 using Noise;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using utility;
+using utility; // tiled layout handling, Layout biasing/CDU.
 
 namespace Variance
 {
@@ -17,7 +17,6 @@ namespace Variance
     public class PreviewShape
     {
         bool DOEDependency; // due to the DOE grid, we need this to sort out offsets. This includes buried references in Booleans. The min X/Y values for this case need to be at least the col/row offset.
-        double doeMinX, doeMinY;
 
         Fragmenter fragment;
         // Class for our preview shapes.
@@ -679,119 +678,6 @@ namespace Variance
             xOffset += tmp_xOffset;
         }
 
-        void customShape_offset(EntropyLayerSettings entropyLayerSettings)
-        {
-            return; // disabling this because it affects geometry in annoying ways.
-            /*
-            string posInSubShapeString = ((CommonVars.subShapeLocations)entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.posIndex)).ToString();
-
-            // Get the bounding box.
-            Clipper c = new Clipper();
-            c.PreserveCollinear = true;
-            Paths sourcePolyData = new Paths();
-            Paths resizedPolyData = new Paths();
-            for (int poly = 0; poly < previewPoints.Count; poly++)
-            {
-                if (!drawnPoly[poly])
-                {
-                    Path path_ = new Path();
-                    for (int pt = 0; pt < previewPoints[poly].Count(); pt++)
-                    {
-                        path_.Add(new IntPoint(Convert.ToInt64(previewPoints[poly][pt].X * CentralProperties.scaleFactorForOperation),
-                                               Convert.ToInt64(previewPoints[poly][pt].Y * CentralProperties.scaleFactorForOperation)));
-                    }
-                    sourcePolyData.Add(path_);
-                }
-            }
-
-            IntRect bounds = Clipper.GetBounds(sourcePolyData);
-            double minY = Math.Min(bounds.top, bounds.bottom) / CentralProperties.scaleFactorForOperation;
-            double maxY = Math.Max(bounds.top, bounds.bottom) / CentralProperties.scaleFactorForOperation;
-
-            double minX = Math.Min(bounds.left, bounds.right) / CentralProperties.scaleFactorForOperation;
-            double maxX = Math.Max(bounds.left, bounds.right) / CentralProperties.scaleFactorForOperation;
-
-            if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE)
-            {
-                minX = Math.Min(0, minX);
-                minY = Math.Min(0, minY);
-            }
-            else if (DOEDependency)
-            {
-                minX = Math.Min(doeMinX, minX);
-                minY = Math.Min(doeMinY, minY);
-            }
-
-            double tmp_xOffset = 0;
-            double tmp_yOffset = 0;
-
-            if ((posInSubShapeString == "TL") ||
-                (posInSubShapeString == "TR") ||
-                (posInSubShapeString == "TS"))
-            {
-                // Vertical offset needed to put reference corner at world center
-                tmp_yOffset = -maxY;
-            }
-
-            if ((posInSubShapeString == "BL") ||
-                (posInSubShapeString == "BR") ||
-                (posInSubShapeString == "BS"))
-            {
-                // Vertical offset needed to put reference corner at world center
-                tmp_yOffset = -minY;
-            }
-
-            // Half the value for a vertical centering requirement
-            if ((posInSubShapeString == "RS") ||
-                (posInSubShapeString == "LS") ||
-                (posInSubShapeString == "C"))
-            {
-                tmp_yOffset = -(minY + (maxY - minY) / 2.0f);
-            }
-            yOffset -= tmp_yOffset;
-
-            if ((posInSubShapeString == "TR") ||
-                (posInSubShapeString == "BR") ||
-                (posInSubShapeString == "RS"))
-            {
-                tmp_xOffset = -maxX;
-            }
-
-            if ((posInSubShapeString == "TL") ||
-                (posInSubShapeString == "BL") ||
-                (posInSubShapeString == "LS"))
-            {
-                tmp_xOffset = -minX;
-            }
-
-            // Half the value for horizontal centering conditions
-            if ((posInSubShapeString == "TS") ||
-                (posInSubShapeString == "BS") ||
-                (posInSubShapeString == "C"))
-            {
-                tmp_xOffset = -(minX + (maxX - minX) / 2.0f);
-            }
-
-            xOffset += tmp_xOffset;
-
-            for (Int32 poly = 0; poly < previewPoints.Count(); poly++)
-            {
-                for (Int32 point = 0; point < previewPoints[poly].Count(); point++)
-                {
-                    double px = previewPoints[poly][point].X + xOffset;
-                    double py = previewPoints[poly][point].Y - yOffset;
-
-                    previewPoints[poly][point] = new GeoLibPointF(px, py);
-                }
-                if ((previewPoints[poly][0].X != previewPoints[poly][previewPoints[poly].Count() - 1].X) ||
-                    (previewPoints[poly][0].Y != previewPoints[poly][previewPoints[poly].Count() - 1].Y))
-                {
-                    ErrorReporter.showMessage_OK("Start and end not the same - previewShape", "Oops");
-                }
-            }
-            */
-        }
-
         void doOffsets(EntropyLayerSettings entropyLayerSettings)
         {
             // Use our shape-specific offset calculation methods :
@@ -821,8 +707,6 @@ namespace Variance
                 case (Int32)CentralProperties.typeShapes.BOOLEAN:
                 case (Int32)CentralProperties.typeShapes.GEOCORE:
                     // customShape_offset(entropyLayerSettings);
-                    break;
-                default:
                     break;
             }
 
@@ -873,7 +757,7 @@ namespace Variance
             init(commonVars, jobSettings_, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol);
         }
 
-        bool exitEarly = false;
+        bool exitEarly;
 
         void distortion(CommonVars commonVars, Int32 settingsIndex)
         {
@@ -923,7 +807,7 @@ namespace Variance
             }
         }
 
-        void doNoise(int noiseType, int seed, double freq, double amount, double jitterScale)
+        void doNoise(int noiseType, int seed, double freq, double jitterScale)
         {
             // Gets a -1 to +1 noise field. We get a seed from our RNG of choice unless the layer preview mode is set, where a fixed seed is used.
             // Random constants to mitigate continuity effects in noise that cause nodes in the noise across multiple layers, due to periodicity.
@@ -956,14 +840,13 @@ namespace Variance
                 int ptCount = mcPoints.Count();
 
                 // Create our jittered polygon in a new list to avoid breaking normal computation, etc. by modifying the source.
-                object jitterLock = new object();
                 GeoLibPointF[] jitteredPoints = new GeoLibPointF[ptCount];
 
                 // We could probably simply cast rays in the raycaster and use those, but for now reinvent the wheel here...
                 GeoLibPointF[] normals = new GeoLibPointF[ptCount];
                 GeoLibPointF[] previousNormals = new GeoLibPointF[ptCount];
-                double dx = 0;
-                double dy = 0;
+                double dx;
+                double dy;
                 // Pre-calculate these for the threading to be an option.
                 // This is a serial evaluation as we need both the previous and the current normal for each point.
 #if VARIANCETHREADED
@@ -988,7 +871,7 @@ namespace Variance
 #if VARIANCETHREADED
                 );
 #endif
-                normals[normals.Length - 1] = new GeoLibPointF(normals[0]);
+                normals[^1] = new GeoLibPointF(normals[0]);
 
                 int nLength = normals.Length;
 #if VARIANCETHREADED
@@ -1003,7 +886,7 @@ namespace Variance
                 );
 #endif
 
-                previousNormals[0] = new GeoLibPointF(normals[normals.Length - 2]);
+                previousNormals[0] = new GeoLibPointF(normals[^2]);
 
 #if VARIANCETHREADED
                 Parallel.For(0, ptCount - 1, pt =>
@@ -1033,7 +916,7 @@ namespace Variance
                     */
 
                     // We can now modify the position of our point and stuff it into our jittered list.
-                    double jitterAmount = 0;
+                    double jitterAmount;
 
                     switch (noiseType)
                     {
@@ -1098,7 +981,6 @@ namespace Variance
                     noiseType: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwrType),
                     seed: jobSettings.getInt(ChaosSettings.ints.lwrSeed, settingsIndex),
                     freq: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq)),
-                    amount: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwr)),
                     jitterScale: jitterScale
                 );
             }
@@ -1117,13 +999,12 @@ namespace Variance
                     noiseType: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwr2Type),
                     seed: jobSettings.getInt(ChaosSettings.ints.lwr2Seed, settingsIndex),
                     freq: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq)),
-                    amount: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwr2)),
                     jitterScale: jitterScale
                 );
             }
         }
 
-        void proximityBias(CommonVars commonVars, ChaosSettings jobSettings, int settingsIndex)
+        void proximityBias(CommonVars commonVars, int settingsIndex)
         {
             // Proximity biasing - where isolated edges get bias based on distance to nearest supporting edge.
 
@@ -1143,7 +1024,6 @@ namespace Variance
             List<GeoLibPointF[]> preOverlapMergePolys = new List<GeoLibPointF[]>();
             List<bool> updatedDrawn = new List<bool>();
 
-            Paths clippedLines = new Paths();
             Paths dRays = new Paths();
 
             // Scale up our geometry for processing. Force a clockwise point order here due to potential upstream point order changes (e.g. polygon merging)
@@ -1201,7 +1081,7 @@ namespace Variance
 
                 RayCast rc = new RayCast(sourcePoly, collisionGeometry, Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread, sideRayFallOff: (RayCast.falloff)entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff), sideRayFallOffMultiplier: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)));
 
-                clippedLines = rc.getClippedRays().ToList();
+                Paths clippedLines = rc.getClippedRays().ToList();
                 if (debug)
                 {
                     dRays.AddRange(clippedLines);
@@ -1236,7 +1116,7 @@ namespace Variance
                     }
 
                     // Probably should be a sigmoid, but using this for now.
-                    double displacedAmount = 0;
+                    double displacedAmount;
 
                     if (linear)
                     {
@@ -1265,7 +1145,7 @@ namespace Variance
             }
 
             // Check for overlaps and process as needed post-biasing.
-            processOverlaps(commonVars, settingsIndex, preOverlapMergePolys, forceOverride: false, PolyFillType.pftNonZero);
+            processOverlaps(commonVars, settingsIndex, preOverlapMergePolys, forceOverride: false);
 
             if (debug)
             {
@@ -1306,8 +1186,8 @@ namespace Variance
                     if (commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1)
                     {
                         DOEDependency = true;
-                        doeMinX = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset);
-                        doeMinY = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
+                        commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset);
+                        commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
                     }
                     doOffsets(entropyLayerSettings);
                 }
@@ -1345,8 +1225,8 @@ namespace Variance
                             }
                             if (DOEDependency)
                             {
-                                doeMinX = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset);
-                                doeMinY = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
+                                commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset);
+                                commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
                             }
 
                             doOffsets(entropyLayerSettings);
@@ -1471,8 +1351,8 @@ namespace Variance
 #if VARIANCETHREADED
                             );
 #endif
-                            if ((previewPoints[poly][0].X != previewPoints[poly][previewPoints[poly].Count() - 1].X) ||
-                                (previewPoints[poly][0].Y != previewPoints[poly][previewPoints[poly].Count() - 1].Y))
+                            if ((Math.Abs(previewPoints[poly][0].X - previewPoints[poly][previewPoints[poly].Count() - 1].X) > Double.Epsilon) ||
+                                (Math.Abs(previewPoints[poly][0].Y - previewPoints[poly][previewPoints[poly].Count() - 1].Y) > Double.Epsilon))
                             {
                                 ErrorReporter.showMessage_OK("Start and end not the same - previewShape", "Oops");
                             }
@@ -1486,7 +1366,7 @@ namespace Variance
                     distortion(commonVars, settingsIndex);
                     // Noise and proximity biasing.
                     applyNoise(previewMode, commonVars, chaosSettings, settingsIndex);
-                    proximityBias(commonVars, chaosSettings, settingsIndex);
+                    proximityBias(commonVars, settingsIndex);
                 }
             }
             catch (Exception)
@@ -1586,7 +1466,7 @@ namespace Variance
                 }
 
                 // Decouple the geometry here to avoid manipulation going back to original source.
-                List<GeoLibPointF[]> tempPolyList = new List<GeoLibPointF[]>();
+                List<GeoLibPointF[]> tempPolyList;
                 if (tileHandlingNeeded)
                 {
                     tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
@@ -1647,7 +1527,7 @@ namespace Variance
 
                             if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
                             {
-                                if ((tempPolyList[poly][0].X == tempPolyList[poly][tempPolyList[poly].Length - 1].X) && (tempPolyList[poly][0].Y == tempPolyList[poly][tempPolyList[poly].Length - 1].Y))
+                                if ((Math.Abs(tempPolyList[poly][0].X - tempPolyList[poly][tempPolyList[poly].Length - 1].X) < Double.Epsilon) && (Math.Abs(tempPolyList[poly][0].Y - tempPolyList[poly][tempPolyList[poly].Length - 1].Y) < Double.Epsilon))
                                 {
                                     arraySize--;
                                 }
@@ -1883,7 +1763,6 @@ namespace Variance
             );
 
             // This is set later, if needed, to force an early return from the overlap processing path.
-            bool forceOverride = false;
             int bpCount = booleanPaths.Count;
 #if VARIANCETHREADED
             Parallel.For(0, bpCount, (i) => 
@@ -1918,7 +1797,7 @@ namespace Variance
             previewPoints.Clear();
             init(commonVars, chaosSettings, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol, tempSettings, doClockwiseGeoFix: true, process_overlaps: false); // Avoid the baked-in point order reprocessing which breaks our representation.
 
-            processOverlaps(commonVars, settingsIndex, previewPoints, forceOverride, (PolyFillType)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
+            processOverlaps(commonVars, settingsIndex, previewPoints, forceOverride:false, (PolyFillType)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
         }
 
         void processOverlaps(CommonVars commonVars, Int32 settingsIndex, List<GeoLibPointF[]> sourceData, bool forceOverride = false, PolyFillType pft = PolyFillType.pftNonZero)
@@ -1975,7 +1854,7 @@ namespace Variance
                 Paths resizedPolyData = new Paths();
 
                 // Union isn't always robust, so get a bounding box and run an intersection boolean to rationalize the geometry.
-                IntRect bounds = Clipper.GetBounds(sourcePolyData);
+                IntRect bounds = ClipperBase.GetBounds(sourcePolyData);
                 Path bounding = new Path();
                 bounding.Add(new IntPoint(bounds.left, bounds.bottom));
                 bounding.Add(new IntPoint(bounds.left, bounds.top));

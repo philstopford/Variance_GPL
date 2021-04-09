@@ -153,10 +153,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\info.lundin.math\info.lundin.math.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\KDTree\KDTree.csproj" />
-    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Noise\noise.csproj">
-      <Project>{ff8ede08-8236-49a0-a82e-3b6208b81431}</Project>
-      <Name>Noise</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Noise\noise.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\utility\utility.csproj">
       <Project>{c3255560-6437-4eff-8948-971a76c6e9ab}</Project>
       <Name>utility</Name>

@@ -1,12 +1,14 @@
-using Eto.Drawing;
-using Eto.Forms;
-using VeldridEto;
-using geoCoreLib;
-using geoLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Eto.Drawing;
+using Eto.Forms;
+using gds;
+using geoCoreLib;
+using geoLib;
+using oasis;
+using VeldridEto;
 
 namespace Variance
 {
@@ -35,12 +37,12 @@ namespace Variance
             double x = mcVPSettings[index].getCameraX();
             double y = mcVPSettings[index].getCameraY();
             double zoom = mcVPSettings[index].getZoomFactor();
-            return new double[] { x, y, zoom };
+            return new[] { x, y, zoom };
         }
 
         void saveViewportSVG_File()
         {
-            SaveFileDialog sfd = new SaveFileDialog()
+            SaveFileDialog sfd = new SaveFileDialog
             {
                 Title = "Enter file to save",
                 Filters =
@@ -127,7 +129,7 @@ namespace Variance
 
         async void saveViewportLayout_File()
         {
-            SaveFileDialog sfd = new SaveFileDialog()
+            SaveFileDialog sfd = new SaveFileDialog
             {
                 Title = "Enter file to save",
                 Filters =
@@ -139,8 +141,8 @@ namespace Variance
             if (sfd.ShowDialog(ParentWindow) == DialogResult.Ok)
             {
                 string filename = sfd.FileName;
-                string[] tokens = filename.Split(new char[] { '.' });
-                string ext = tokens[tokens.Length - 1].ToUpper();
+                string[] tokens = filename.Split(new[] { '.' });
+                string ext = tokens[^1].ToUpper();
 
                 int type = (int)GeoCore.fileType.gds;
 
@@ -387,11 +389,11 @@ namespace Variance
             switch (type)
             {
                 case (int)GeoCore.fileType.gds:
-                    gds.gdsWriter gw = new gds.gdsWriter(g, layoutFileName);
+                    gdsWriter gw = new gdsWriter(g, layoutFileName);
                     gw.save();
                     break;
                 case (int)GeoCore.fileType.oasis:
-                    oasis.oasWriter ow = new oasis.oasWriter(g, layoutFileName);
+                    oasWriter ow = new oasWriter(g, layoutFileName);
                     ow.save();
                     break;
 

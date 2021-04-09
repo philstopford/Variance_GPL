@@ -1,7 +1,7 @@
+using System;
 using color;
 using Eto.Drawing;
 using Eto.Forms;
-using System;
 
 namespace Variance
 {
@@ -236,7 +236,7 @@ namespace Variance
             {
                 if (index != orig)
                 {
-                    commonVars.paste(index, true, false);
+                    commonVars.paste(index, true);
                 }
                 index++;
             }

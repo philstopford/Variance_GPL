@@ -1,8 +1,8 @@
-using ClipperLib;
-using geoWrangler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ClipperLib;
+using geoWrangler;
 using utility;
 
 namespace Variance
@@ -36,7 +36,6 @@ namespace Variance
             Path resultPath = new Path();
             Clipper c = new Clipper();
             c.ZFillFunction = ZFillCallback;
-            List<string> stringList = new List<string>();
             c.AddPaths(layerAPath, PolyType.ptSubject, true);
             c.AddPaths(layerBPath, PolyType.ptClip, true);
 

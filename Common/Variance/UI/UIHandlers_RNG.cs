@@ -1,5 +1,5 @@
-﻿using Eto.Forms;
-using System;
+﻿using System;
+using Eto.Forms;
 
 namespace Variance
 {

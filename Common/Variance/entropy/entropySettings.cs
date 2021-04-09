@@ -1,6 +1,6 @@
-﻿using Error;
-using System;
+﻿using System;
 using System.Linq;
+using Error;
 
 namespace Variance
 {
@@ -231,7 +231,7 @@ namespace Variance
 
         Int32[] pGetOperator(properties_o p)
         {
-            Int32[] ret = new Int32[] { };
+            Int32[] ret = { };
             switch (p)
             {
                 case properties_o.layer:
@@ -404,15 +404,15 @@ namespace Variance
 
             // We need to parse our tile list
             bool entryOK = false;
-            int colValue = 0;
-            int rowValue = 0;
-            char[] tileSep = new char[] { ';' };
-            char[] coordSep = new char[] { ',' };
+            char[] tileSep = { ';' };
+            char[] coordSep = { ',' };
 
             if (tmpString.Length > 0)
             {
                 // We have some user entries. Perform some more validation
                 string[] tmpStringArray = tmpString.Split(coordSep);
+                int colValue;
+                int rowValue;
                 switch (tmpStringArray.Count())
                 {
                     case 0:
@@ -428,7 +428,7 @@ namespace Variance
                             colValue = Convert.ToInt32(tmpStringArray[0]);
                             rowValue = Convert.ToInt32(tmpStringArray[1]);
                             DOESettings.resetTileList_ColRow();
-                            DOESettings.addTileList_Value(new Int32[] { colValue + offset, rowValue + offset });
+                            DOESettings.addTileList_Value(new [] { colValue + offset, rowValue + offset });
                             entryOK = true;
                         }
                         catch (Exception)
@@ -456,7 +456,7 @@ namespace Variance
                                 {
                                     colValue = Convert.ToInt32(tmpStringArray[0]);
                                     rowValue = Convert.ToInt32(tmpStringArray[1]);
-                                    DOESettings.addTileList_Value(new Int32[] { colValue + offset, rowValue + offset });
+                                    DOESettings.addTileList_Value(new [] { colValue + offset, rowValue + offset });
                                 }
                                 catch (Exception)
                                 {
@@ -464,7 +464,7 @@ namespace Variance
                                 }
                             }
                         }
-                        if (DOESettings.getTileList_ColRow().Count() == 0)
+                        if (!DOESettings.getTileList_ColRow().Any())
                         {
                             entryOK = false;
                         }

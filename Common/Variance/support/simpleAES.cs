@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Variance
 {
@@ -11,7 +12,7 @@ namespace Variance
         private byte[] Vector;// = { 146, 64, 191, 111, 23, 3, 113, 119, 231, 121, 252, 112, 79, 32, 114, 156 };
 
         private ICryptoTransform EncryptorTransform, DecryptorTransform;
-        private System.Text.UTF8Encoding UTFEncoder;
+        private UTF8Encoding UTFEncoder;
 
         public SimpleAES()
         {
@@ -27,8 +28,8 @@ namespace Variance
 
         public SimpleAES(byte[] key, byte[] vector)
         {
-            this.Key = key;
-            this.Vector = vector;
+            Key = key;
+            Vector = vector;
             init();
         }
 
@@ -38,11 +39,11 @@ namespace Variance
             RijndaelManaged rm = new RijndaelManaged();
 
             //Create an encryptor and a decryptor using our encryption method, key, and vector.
-            EncryptorTransform = rm.CreateEncryptor(this.Key, this.Vector);
-            DecryptorTransform = rm.CreateDecryptor(this.Key, this.Vector);
+            EncryptorTransform = rm.CreateEncryptor(Key, Vector);
+            DecryptorTransform = rm.CreateDecryptor(Key, Vector);
 
             //Used to translate bytes to text and vice versa
-            UTFEncoder = new System.Text.UTF8Encoding();
+            UTFEncoder = new UTF8Encoding();
         }
 
         /// -------------- Two Utility Methods (not used but may be useful) -----------

@@ -1,7 +1,7 @@
-using Eto.Drawing;
-using Eto.Forms;
 using System;
 using System.Linq;
+using Eto.Drawing;
+using Eto.Forms;
 
 namespace Variance
 {
@@ -48,8 +48,6 @@ namespace Variance
 
             Application.Instance.Invoke(() =>
             {
-                int layer = getSelectedLayerIndex();
-
                 mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].clear();
 
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
@@ -120,7 +118,7 @@ namespace Variance
                         if (!entryOK) // failsafe.
                         {
                             commonVars.getSimulationSettings().getDOESettings().resetTileList_ColRow();
-                            commonVars.getSimulationSettings().getDOESettings().addTileList_Value(new Int32[2] { 0, 0 });
+                            commonVars.getSimulationSettings().getDOESettings().addTileList_Value(new [] { 0, 0 });
                         }
 
                     }

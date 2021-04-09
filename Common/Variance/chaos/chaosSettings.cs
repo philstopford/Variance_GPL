@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -194,7 +193,7 @@ namespace Variance
 
         double[] pGetValues(int p)
         {
-            double[] retVal = new double[] { };
+            double[] retVal = { };
             switch (p)
             {
                 case (int)properties.overlayX:
@@ -337,7 +336,7 @@ namespace Variance
 
         int[] pGetInts(int i)
         {
-            int[] retVal = new int[] { };
+            int[] retVal = { };
             switch (i)
             {
                 case (int)ints.lwrSeed:
@@ -395,7 +394,7 @@ namespace Variance
 
         bool[] pGetBools(int b)
         {
-            bool[] retVal = new bool[] { };
+            bool[] retVal = { };
             switch (b)
             {
                 case (int)bools.icPA:
@@ -408,15 +407,15 @@ namespace Variance
             return retVal;
         }
 
-        public ChaosSettings(bool previewMode, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
+        public ChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
         {
-            pChaosSettings(previewMode, listOfSettings, simSettings);
+            pChaosSettings(previewMode_, listOfSettings, simSettings);
         }
 
-        void pChaosSettings(bool previewMode, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
+        void pChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
         {
             customRNGMapping = false;
-            this.previewMode = previewMode;
+            previewMode = previewMode_;
             int count = listOfSettings.Count;
             overlayX = new double[count];
             overlayY = new double[count];

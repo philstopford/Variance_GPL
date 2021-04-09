@@ -1,9 +1,9 @@
-using Error;
-using geoLib;
-using geoWrangler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Error;
+using geoLib;
+using geoWrangler;
 using utility;
 
 namespace Variance
@@ -34,17 +34,6 @@ namespace Variance
 
         class BoundingBox
         {
-            List<GeoLibPointF> points;
-            public List<GeoLibPointF> getPoints()
-            {
-                return pGetPoints();
-            }
-
-            List<GeoLibPointF> pGetPoints()
-            {
-                return points;
-            }
-
             GeoLibPointF midPoint;
             public GeoLibPointF getMidPoint()
             {
@@ -63,10 +52,8 @@ namespace Variance
 
             void pBoundingBox(List<GeoLibPointF> incomingPoints)
             {
-                points = new List<GeoLibPointF>();
                 if (incomingPoints == null)
                 {
-                    points.Add(new GeoLibPointF(0.0f, 0.0f));
                     midPoint = new GeoLibPointF(0.0f, 0.0f);
                 }
                 else
@@ -75,72 +62,12 @@ namespace Variance
                     var minY = incomingPoints.Min(p => p.Y);
                     var maxX = incomingPoints.Max(p => p.X);
                     var maxY = incomingPoints.Max(p => p.Y);
-                    points.Add(new GeoLibPointF(minX, minY));
-                    points.Add(new GeoLibPointF(minX, maxY));
-                    points.Add(new GeoLibPointF(maxX, maxY));
-                    points.Add(new GeoLibPointF(maxX, minY));
-                    midPoint = new GeoLibPointF(minX + ((maxX - minX) / 2.0f), minY + ((maxY - minY) / 2.0f));
-                }
-            }
-
-            void pBoundingBox(GeoLibPointF[] incomingPoints)
-            {
-                points = new List<GeoLibPointF>();
-                if (incomingPoints == null)
-                {
-                    points.Add(new GeoLibPointF(0.0f, 0.0f));
-                    midPoint = new GeoLibPointF(0.0f, 0.0f);
-                }
-                else
-                {
-                    // Compile a list of our points.
-                    List<GeoLibPointF> iPoints = new List<GeoLibPointF>();
-                    for (int i = 0; i < incomingPoints.Count(); i++)
-                    {
-                        iPoints.Add(incomingPoints[i]);
-                    }
-                    var minX = iPoints.Min(p => p.X);
-                    var minY = iPoints.Min(p => p.Y);
-                    var maxX = iPoints.Max(p => p.X);
-                    var maxY = iPoints.Max(p => p.Y);
-                    points.Add(new GeoLibPointF(minX, minY));
-                    points.Add(new GeoLibPointF(minX, maxY));
-                    points.Add(new GeoLibPointF(maxX, maxY));
-                    points.Add(new GeoLibPointF(maxX, minY));
-                    midPoint = new GeoLibPointF(minX + ((maxX - minX) / 2.0f), minY + ((maxY - minY) / 2.0f));
-                }
-            }
-
-            void pBoundingBox(MyVertex[] incomingPoints)
-            {
-                points = new List<GeoLibPointF>();
-                if (incomingPoints == null)
-                {
-                    points.Add(new GeoLibPointF(0.0f, 0.0f));
-                    midPoint = new GeoLibPointF(0.0f, 0.0f);
-                }
-                else
-                {
-                    // Compile a list of our points.
-                    List<GeoLibPointF> iPoints = new List<GeoLibPointF>();
-                    for (int i = 0; i < incomingPoints.Count(); i++)
-                    {
-                        iPoints.Add(new GeoLibPointF(incomingPoints[i].X, incomingPoints[i].Y));
-                    }
-                    var minX = iPoints.Min(p => p.X);
-                    var minY = iPoints.Min(p => p.Y);
-                    var maxX = iPoints.Max(p => p.X);
-                    var maxY = iPoints.Max(p => p.Y);
-                    points.Add(new GeoLibPointF(minX, minY));
-                    points.Add(new GeoLibPointF(minX, maxY));
-                    points.Add(new GeoLibPointF(maxX, maxY));
-                    points.Add(new GeoLibPointF(maxX, minY));
                     midPoint = new GeoLibPointF(minX + ((maxX - minX) / 2.0f), minY + ((maxY - minY) / 2.0f));
                 }
             }
         }
 
-        List<GeoLibPointF> preFlight(List<GeoLibPointF> mcPoints, EntropyLayerSettings entropyLayerSettings, EntropySettings entropySettings)
+        List<GeoLibPointF> preFlight(List<GeoLibPointF> mcPoints, EntropyLayerSettings entropyLayerSettings)
         {
             // Fragment by resolution
             List<GeoLibPointF> newMCPoints = fragment.fragmentPath(mcPoints);
@@ -154,16 +81,16 @@ namespace Variance
 
             List<GeoLibPointF> tempList = new List<GeoLibPointF>();
             // Now to start the re-indexing.
-            bool addPoint = true;
             for (Int32 pt = 0; pt < newMCPoints.Count; pt++)
             {
+                bool addPoint;
                 if (pt == 0)
                 {
                     addPoint = true;
                 }
                 else
                 {
-                    addPoint = !((tempList[tempList.Count - 1].X == newMCPoints[pt].X) && (tempList[tempList.Count - 1].Y == newMCPoints[pt].Y));
+                    addPoint = !((Math.Abs(tempList[^1].X - newMCPoints[pt].X) < Double.Epsilon) && (Math.Abs(tempList[^1].Y - newMCPoints[pt].Y) < Double.Epsilon));
                 }
 
                 // Avoid adding duplicate vertices
@@ -301,9 +228,9 @@ namespace Variance
             // Set the midpoints of the edges to the average between the two corners
             for (Int32 corner = 0; corner < round1.Count(); corner++)
             {
-                double previousEdgeLength = 0.0f;
-                double nextEdgeLength = 0.0f;
-                double currentEdgeLength = 0.0f;
+                double previousEdgeLength;
+                double nextEdgeLength;
+                double currentEdgeLength;
 
                 if (corner == 0)
                 {
@@ -369,7 +296,7 @@ namespace Variance
                 if (corner % 2 == 0)
                 {
                     // Get our associated vertical edge Y position
-                    double yPoint1 = 0.0;
+                    double yPoint1;
                     double yPoint2 = Vertex[round1[(corner + 1) % (round1.Count() - 1)].horFace].Y;
                     if (corner == 0)
                     {
@@ -408,7 +335,7 @@ namespace Variance
                 {
                     // Tweak horizontal edge
                     double xPoint1 = Vertex[round1[corner].verFace].X;
-                    double xPoint2 = 0.0;
+                    double xPoint2;
                     xPoint2 = Vertex[round1[(corner + 1) % (round1.Count() - 1)].verFace].X;
 
                     if (xPoint1 < xPoint2)
@@ -450,10 +377,7 @@ namespace Variance
             List<GeoLibPointF> mcVerEdgePoints = new List<GeoLibPointF>(); // edge coordinates list, used as a temporary container for each iteration
             List<List<GeoLibPointF>> mcHorEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each corner in the shape, in order. We cast these to Ints in the mcPoints list.
             List<List<GeoLibPointF>> mcVerEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each edge in the shape, in order. We cast these to Ints in the mcPoints list.
-
-            // OK. We need to walk the corner and associated edge for each case.
-            double increment = entropySettings.getResolution();
-
+            
             for (Int32 round = 0; round < round1.Count() - 1; round++)
             {
                 // Derive our basic coordinates for the three vertices on the edge.
@@ -466,9 +390,9 @@ namespace Variance
                 double nextVerEdge_mid_y = Vertex[round1[round + 1].verFace].Y;
 
                 // Test whether we have a vertical edge or not. We only process horizontal edges to avoid doubling up
-                if (start_y == end_y)
+                if (Math.Abs(start_y - end_y) < Double.Epsilon)
                 {
-                    double mcPX = 0.0f;
+                    double mcPX;
                     double mcPY = 0.0f;
                     // Establish corner rounding sign at start and end points of edge. Default is to move outwards (inner CRR)
                     bool startInnerRounding = true;
@@ -678,7 +602,7 @@ namespace Variance
                         }
 
                         GeoLibPointF cPt = new GeoLibPointF(mcPX, mcPY);
-                        if ((angle == 0) || (angle == 90) || (entropySettings.getValue(EntropySettings.properties_i.optC) == 0) ||
+                        if ((angle == 0) || (Math.Abs(angle - 90) < Double.Epsilon) || (entropySettings.getValue(EntropySettings.properties_i.optC) == 0) ||
                             ((entropySettings.getValue(EntropySettings.properties_i.optC) == 1) &&
                              (Math.Abs(
                                GeoWrangler.distanceBetweenPoints(mcHorEdgePoints[mcHorEdgePoints.Count() - 1], cPt)
@@ -699,7 +623,7 @@ namespace Variance
                     double bridgeX = mcHorEdgePoints[mcHorEdgePoints.Count() - 1].X;
 
                     // Fragmenter returns first and last points in the point array.
-                    GeoLibPointF[] fragments = fragment.fragmentPath(new GeoLibPointF[] { new GeoLibPointF(bridgeX, mcPY), new GeoLibPointF(currentHorEdge_mid_x, mcPY) });
+                    GeoLibPointF[] fragments = fragment.fragmentPath(new [] { new GeoLibPointF(bridgeX, mcPY), new GeoLibPointF(currentHorEdge_mid_x, mcPY) });
 
                     for (int i = 1; i < fragments.Length - 1; i++)
                     {
@@ -895,12 +819,12 @@ namespace Variance
                         }
 
                         // If this is the first pass, we need to add points to the start of the rounding, from the midpoint.
-                        if (firstPass == true)
+                        if (firstPass)
                         {
                             bridgeX = currentHorEdge_mid_x;
 
                             // Fragmenter returns first and last points in the point array.
-                            fragments = fragment.fragmentPath(new GeoLibPointF[] { new GeoLibPointF(bridgeX, mcPY), new GeoLibPointF(mcPX, mcPY) });
+                            fragments = fragment.fragmentPath(new [] { new GeoLibPointF(bridgeX, mcPY), new GeoLibPointF(mcPX, mcPY) });
 
                             for (int i = 1; i < fragments.Length - 1; i++)
                             {
@@ -911,7 +835,7 @@ namespace Variance
                         }
 
                         GeoLibPointF cPt = new GeoLibPointF(mcPX, mcPY);
-                        if ((angle == 0) || (angle == 90) || (entropySettings.getValue(EntropySettings.properties_i.optC) == 0) ||
+                        if ((angle == 0) || (Math.Abs(angle - 90) < Double.Epsilon) || (entropySettings.getValue(EntropySettings.properties_i.optC) == 0) ||
                             ((entropySettings.getValue(EntropySettings.properties_i.optC) == 1) &&
                              (Math.Abs(
                                GeoWrangler.distanceBetweenPoints(mcHorEdgePoints[mcHorEdgePoints.Count() - 1], cPt)
@@ -967,7 +891,7 @@ namespace Variance
                 Double endPoint_y = startHorEdgePointList[0].Y;
 
                 // We get the start and end points here.
-                GeoLibPointF[] fragments = fragment.fragmentPath(new GeoLibPointF[] { new GeoLibPointF(vert_x, startPoint_y), new GeoLibPointF(vert_x, endPoint_y) });
+                GeoLibPointF[] fragments = fragment.fragmentPath(new [] { new GeoLibPointF(vert_x, startPoint_y), new GeoLibPointF(vert_x, endPoint_y) });
 
                 mcVerEdgePointsList.Add(fragments.ToList()); // make a deep copy of the points.
                 mcVerEdgePoints.Clear();
@@ -996,7 +920,7 @@ namespace Variance
             return mcPoints;
         }
 
-        void makeEntropyShape(EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, Int32 settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape = null, GeoLibPointF pivot = null)
+        void makeEntropyShape(EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, Int32 settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape = null, GeoLibPointF pivot_ = null)
         {
             bool geoCoreShapeDefined = (shape != null);
             bool cornerCheck = false;
@@ -1005,9 +929,9 @@ namespace Variance
             double xOverlayVal = 0.0f;
             double yOverlayVal = 0.0f;
 
-            if (pivot != null)
+            if (pivot_ != null)
             {
-                this.pivot = new GeoLibPointF(pivot.X, pivot.Y);
+                pivot = new GeoLibPointF(pivot_.X, pivot_.Y);
             }
 
             fragment = new Fragmenter(entropySettings.getResolution(), CentralProperties.scaleFactorForOperation);
@@ -1016,9 +940,7 @@ namespace Variance
             globalBias_Sides = Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sBias));
             globalBias_Sides += (chaosSettings.getValue(ChaosSettings.properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2);
             globalBias_Tips = (chaosSettings.getValue(ChaosSettings.properties.CDUTVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.tCDU)) / 2);
-
-            bool failSafe = false; // setting to true will cause a single point to be created at 0,0 and returned.
-
+            
             if (shape == null)
             {
                 shape = new ShapeLibrary(entropyLayerSettingsList[settingsIndex]);
@@ -1026,7 +948,7 @@ namespace Variance
             }
 
             // Tip wrangling and shape closure will happen next
-            failSafe = !shape.shapeValid; // Set failsafe if shape is invalid.
+            bool failSafe = !shape.shapeValid; // Set failsafe if shape is invalid.
 
             if (entropyLayerSettingsList[settingsIndex].getInt(EntropyLayerSettings.properties_i.enabled) == 0)
             {
@@ -1170,28 +1092,26 @@ namespace Variance
                 // Get our bounding box.
                 BoundingBox bb = new BoundingBox(mcPoints);
 
-                if (this.pivot == null)
+                if (pivot == null)
                 {
-                    this.pivot = new GeoLibPointF(bb.getMidPoint());
+                    pivot = new GeoLibPointF(bb.getMidPoint());
                 }
 
                 // OK. Let's try some rotation and wobble.
                 // Temporary separate container for our rotated points, just for now.
-                List<GeoLibPointF> rotatedPoints = new List<GeoLibPointF>();
-
-                rotatedPoints = GeoWrangler.Rotate(this.pivot, mcPoints, rotationAngle);
+                List<GeoLibPointF> rotatedPoints = GeoWrangler.Rotate(pivot, mcPoints, rotationAngle);
                 mcPoints.Clear();
                 mcPoints = rotatedPoints.ToList();
             }
 
             // Error handling (failSafe) for no points or no subshape  - safety measure.
-            if (mcPoints.Count() == 0)
+            if (!mcPoints.Any())
             {
                 mcPoints.Add(new GeoLibPointF(0.0f, 0.0f));
             }
 
             // Path direction, point order and re-fragmentation (as needed)
-            mcPoints = preFlight(mcPoints, entropyLayerSettingsList[settingsIndex], entropySettings);
+            mcPoints = preFlight(mcPoints, entropyLayerSettingsList[settingsIndex]);
 
             points = new GeoLibPointF[mcPoints.Count()];
             for (Int32 i = 0; i < mcPoints.Count(); i++)
@@ -1199,7 +1119,7 @@ namespace Variance
                 points[i] = mcPoints[i];
             }
 
-            if ((points[0].X != points[points.Count() - 1].X) || (points[0].Y != points[points.Count() - 1].Y))
+            if ((Math.Abs(points[0].X - points[points.Count() - 1].X) > Double.Epsilon) || (Math.Abs(points[0].Y - points[points.Count() - 1].Y) > Double.Epsilon))
             {
                 ErrorReporter.showMessage_OK("Start and end not the same - entropyShape", "Oops");
             }

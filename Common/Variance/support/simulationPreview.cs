@@ -1,8 +1,8 @@
-using geoLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using geoLib;
 
 namespace Variance
 {
@@ -87,9 +87,6 @@ namespace Variance
             return resultText;
         }
 
-        Int32 xOffset = 0;
-        Int32 yOffset = 0;
-
         void doOffsets(EntropyLayerSettings entropyLayerSettings)
         {
             // OK. Now we need to pay attention to the subshape reference settings.
@@ -131,7 +128,6 @@ namespace Variance
                 {
                     tmp_yOffset = Convert.ToInt32(tmp_yOffset / 2);
                 }
-                yOffset += tmp_yOffset;
             }
 
             // Coordinates placed bottom left at 0,0.
@@ -164,11 +160,10 @@ namespace Variance
                     tmp_xOffset = Convert.ToInt32(tmp_xOffset / 2);
                 }
             }
-            xOffset += tmp_xOffset;
 
             // Now for global offset.
-            xOffset += Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
-            yOffset -= Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset));
+            Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
+            Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset));
         }
 
         public SimulationPreview(ref VarianceContext varianceContext)
@@ -184,25 +179,12 @@ namespace Variance
             points = new List<GeoLibPointF[]>();
             points.Add(new GeoLibPointF[1]);
         }
-
-        public SimulationPreview(ref VarianceContext _varianceContext, List<PreviewShape> simShapes, List<List<GeoLibPointF[]>> previewShapes, List<GeoLibPointF[]> points)
-        {
-            pSimulationPreview(ref _varianceContext, simShapes, previewShapes, points);
-        }
-
-        void pSimulationPreview(ref VarianceContext _varianceContext, List<PreviewShape> simShapes, List<List<GeoLibPointF[]>> previewShapes, List<GeoLibPointF[]> points)
-        {
-            varianceContext = _varianceContext;
-            this.points = points.ToList();
-            this.simShapes = simShapes.ToList();
-            this.previewShapes = previewShapes.ToList();
-        }
-
-        void updatePreview(List<PreviewShape> simShapes)
+        
+        void updatePreview(List<PreviewShape> simShapes_)
         {
             try
             {
-                this.simShapes = simShapes.ToList();
+                simShapes = simShapes_.ToList();
             }
             catch (Exception)
             {
@@ -210,14 +192,14 @@ namespace Variance
             }
         }
 
-        public void updatePreview(string resultText)
+        public void updatePreview(string resultText_)
         {
-            pUpdatePreview(resultText);
+            pUpdatePreview(resultText_);
         }
 
-        void pUpdatePreview(string resultText)
+        void pUpdatePreview(string resultText_)
         {
-            this.resultText = resultText;
+            resultText = resultText_;
         }
 
         public void updatePreview(SimResultPackage resultPackage)
@@ -234,16 +216,16 @@ namespace Variance
             }
         }
 
-        public void updatePreview(List<PreviewShape> simShapes, List<List<GeoLibPointF[]>> previewShapes, List<GeoLibPointF[]> points, string resultText)
+        public void updatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_, string resultText_)
         {
-            pUpdatePreview(simShapes, previewShapes, points, resultText);
+            pUpdatePreview(simShapes_, previewShapes_, points_, resultText_);
         }
 
-        void pUpdatePreview(List<PreviewShape> simShapes, List<List<GeoLibPointF[]>> previewShapes, List<GeoLibPointF[]> points, string resultText)
+        void pUpdatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_, string resultText_)
         {
             try
             {
-                updatePreview(simShapes, previewShapes, points);
+                updatePreview(simShapes_, previewShapes_, points_);
             }
             catch (Exception)
             {
@@ -251,7 +233,7 @@ namespace Variance
             }
             try
             {
-                updatePreview(resultText);
+                updatePreview(resultText_);
             }
             catch (Exception)
             {
@@ -259,12 +241,12 @@ namespace Variance
             }
         }
 
-        void updatePreview(List<PreviewShape> simShapes, List<List<GeoLibPointF[]>> previewShapes, List<GeoLibPointF[]> points)
+        void updatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_)
         {
-            updatePreview(simShapes);
+            updatePreview(simShapes_);
             try
             {
-                this.previewShapes = previewShapes.ToList();
+                previewShapes = previewShapes_.ToList();
             }
             catch (Exception)
             {
@@ -272,7 +254,7 @@ namespace Variance
             }
             try
             {
-                this.points = points.ToList();
+                points = points_.ToList();
             }
             catch (Exception)
             {

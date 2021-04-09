@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Timer = System.Timers.Timer;
 
 namespace Variance
 {
@@ -86,7 +87,7 @@ namespace Variance
         void threaded()
         {
             samples_par = 0;
-            System.Timers.Timer m_timer = new System.Timers.Timer();
+            Timer m_timer = new Timer();
             // Set up timers for the UI refresh
             m_timer.AutoReset = true;
             m_timer.Interval = CentralProperties.timer_interval;

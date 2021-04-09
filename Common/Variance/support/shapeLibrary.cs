@@ -1,7 +1,6 @@
+using System;
 using geoLib;
 using geoWrangler;
-using System;
-using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -26,29 +25,29 @@ namespace Variance
             layerSettings = mcLayerSettings;
         }
 
-        public ShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings)
+        public ShapeLibrary(Int32 shapeIndex_, EntropyLayerSettings mcLayerSettings)
         {
-            pShapeLibrary(shapeIndex, mcLayerSettings);
+            pShapeLibrary(shapeIndex_, mcLayerSettings);
         }
 
-        void pShapeLibrary(Int32 shapeIndex, EntropyLayerSettings mcLayerSettings)
+        void pShapeLibrary(Int32 shapeIndex_, EntropyLayerSettings mcLayerSettings)
         {
-            this.shapeIndex = shapeIndex;
+            shapeIndex = shapeIndex_;
             shapeValid = false;
             layerSettings = mcLayerSettings;
             pSetShape(shapeIndex);
         }
 
-        public void setShape(Int32 shapeIndex, GeoLibPointF[] sourcePoly = null)
+        public void setShape(Int32 shapeIndex_, GeoLibPointF[] sourcePoly = null)
         {
-            pSetShape(shapeIndex, sourcePoly);
+            pSetShape(shapeIndex_, sourcePoly);
         }
 
-        void pSetShape(Int32 shapeIndex, GeoLibPointF[] sourcePoly = null)
+        void pSetShape(Int32 shapeIndex_, GeoLibPointF[] sourcePoly = null)
         {
             try
             {
-                this.shapeIndex = shapeIndex;
+                shapeIndex = shapeIndex_;
                 switch (shapeIndex)
                 {
                     case (Int32)CommonVars.shapeNames.rect:
@@ -74,8 +73,6 @@ namespace Variance
                         {
                             customShape(sourcePoly);
                         }
-                        break;
-                    default:
                         break;
                 }
             }
@@ -107,8 +104,6 @@ namespace Variance
                     break;
                 case (Int32)CommonVars.shapeNames.Sshape: // S
                     vertexCount = 25;
-                    break;
-                default:
                     break;
             }
             int arrayLength = (Int32)vertexCount;
@@ -1439,10 +1434,10 @@ namespace Variance
                 {
                     string t = e.ToString();
                 }
-            };
+            }
 
             // First and last are the same.
-            round1[round1.Length - 1] = round1[0];
+            round1[^1] = round1[0];
         }
 
         // Intended to take geometry from an external source and map it into our shape engine.
@@ -1495,7 +1490,7 @@ namespace Variance
             );
 #endif
             // Close the shape.
-            Vertex[Vertex.Length - 1] = new MyVertex(Vertex[0]);
+            Vertex[^1] = new MyVertex(Vertex[0]);
         }
 
         void customShape_orthogonal(GeoLibPointF[] sourcePoly)
@@ -1536,7 +1531,7 @@ namespace Variance
             round1[0].MaxRadius = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.oCR));
             round1[0].verFace = 1;
             round1[0].horFace = vertexCount - 2;
-            round1[round1.Length - 1] = round1[0]; // close the loop
+            round1[^1] = round1[0]; // close the loop
 
             // Set up first vertex.
             Vertex[0] = new MyVertex(sourcePoly[0].X, sourcePoly[0].Y, typeDirection.tilt1, false, false, typeVertex.corner);
@@ -1557,13 +1552,12 @@ namespace Variance
             vertexCounter++;
 
             // Also set our end points
-            Vertex[vertexCount - 2] = new MyVertex((sourcePoly[0].X + sourcePoly[sourcePoly.Length - 1].X) / 2.0f,
-                                                  (sourcePoly[0].Y + sourcePoly[sourcePoly.Length - 1].Y) / 2.0f, typeDirection.down1, false, false, typeVertex.center);
+            Vertex[vertexCount - 2] = new MyVertex((sourcePoly[0].X + sourcePoly[^1].X) / 2.0f,
+                                                  (sourcePoly[0].Y + sourcePoly[^1].Y) / 2.0f, typeDirection.down1, false, false, typeVertex.center);
 
             // Figure out our rounding characteristics.
 
             // First edge is always vertical, left facing.
-            bool vertical = true;
             bool left = true;
             bool up = false;
 
@@ -1605,6 +1599,7 @@ namespace Variance
                 GeoLibPointF normalPt = new GeoLibPointF(-dy, dx);
 
                 // Vertical edge has a normal with an X value non-zero and Y value ~0.
+                bool vertical;
                 if (Math.Abs(normalPt.X) > 0.01) // treating a 0.01 difference as being ~0
                 {
                     vertical = true;

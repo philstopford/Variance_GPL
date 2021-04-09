@@ -1,7 +1,7 @@
-using Error;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Error;
 using utility;
 
 namespace Variance
@@ -95,10 +95,10 @@ namespace Variance
             try
             {
                 // Carve up the filename to see whether we have col and row specified.
-                string[] tokens = filename.Split(new char[] { '_' });
+                string[] tokens = filename.Split(new[] { '_' });
                 // Format is of the form _col0_row0.csv
-                string rowString = tokens[tokens.Length - 1].Split(new char[] { '.' })[0];
-                string colString = tokens[tokens.Length - 2].Split(new char[] { '_' })[0];
+                string rowString = tokens[^1].Split(new[] { '.' })[0];
+                string colString = tokens[^2].Split(new[] { '_' })[0];
 
                 // Attempting to bullet-proof things against random user naming.
                 if ((rowString.Substring(0, 3) == "row") && (rowString.Substring(0, 3) == "col"))
@@ -146,7 +146,7 @@ namespace Variance
                         // Validate that we got the expected strings and extract the checksum data.
                         try
                         {
-                            listOfSettingsHash = lines[i].Split(new char[] { ',' })[1];
+                            listOfSettingsHash = lines[i].Split(new[] { ',' })[1];
                         }
                         catch (Exception)
                         {
@@ -160,7 +160,7 @@ namespace Variance
                         // Validate that we got the expected strings and extract the checksum data.
                         try
                         {
-                            entropyGeoHash = lines[i].Split(new char[] { ',' })[1];
+                            entropyGeoHash = lines[i].Split(new[] { ',' })[1];
                         }
                         catch (Exception)
                         {
@@ -174,7 +174,7 @@ namespace Variance
                         // Validate that we got the expected strings and extract the checksum data.
                         try
                         {
-                            geoCoreHash = lines[i].Split(new char[] { ',' })[1];
+                            geoCoreHash = lines[i].Split(new[] { ',' })[1];
                         }
                         catch (Exception)
                         {
@@ -201,7 +201,7 @@ namespace Variance
                 // Avoid the hash lines.
                 for (int line = 0; line < lines.Length - terminatingRow; line++)
                 {
-                    parsed.Add(lines[line].Split(new char[] { ',' }));
+                    parsed.Add(lines[line].Split(new[] { ',' }));
                 }
 
                 chaosSettings = new ChaosSettings(true, commonVars_.getListOfSettings(), commonVars_.getSimulationSettings());
@@ -246,7 +246,7 @@ namespace Variance
             }
 
             string searchString = "";
-            int colIndex = 0;
+            int colIndex;
             // Find out which layers we have active.
             bool[] activeLayers = new bool[CentralProperties.maxLayersForMC];
 #if VARIANCETHREADED
@@ -368,7 +368,7 @@ namespace Variance
                     break;
 
                 case (int)CommonVars.calcModes.chord: // chord output
-                    string[] searchStrings = new string[] { "AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord" };
+                    string[] searchStrings = { "AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord" };
                     string[] resultValues = new string[searchStrings.Length];
                     for (int i = 0; i < searchStrings.Length; i++)
                     {
@@ -422,9 +422,9 @@ namespace Variance
 
             // Ensure our hash is current.
             commonVars_.setHashes();
-            string losh = Utils.GetMD5Hash(commonVars_.getListOfSettings());
-            string ssth = Utils.GetMD5Hash(commonVars_.getSimulationSettings());
-            string geoch = Utils.GetMD5Hash(commonVars_.getGeoCoreHandlers());
+            string losh = commonVars_.getListOfSettings().GetMD5Hash();
+            string ssth = commonVars_.getSimulationSettings().GetMD5Hash();
+            string geoch = commonVars_.getGeoCoreHandlers().GetMD5Hash();
 
             // restore the values to avoid trouble.
             commonVars_.setHashes(oldHashes);

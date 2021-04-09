@@ -1,7 +1,7 @@
-using geoLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using geoLib;
 
 namespace Variance
 {
@@ -154,7 +154,7 @@ namespace Variance
 
         double[] pGetFields(fields_d f)
         {
-            double[] ret = new double[] { };
+            double[] ret = { };
             switch (f)
             {
                 case fields_d.svar:
@@ -274,7 +274,7 @@ namespace Variance
 
         int[] pGetSeeds(fields_i f)
         {
-            int[] ret = new int[] { };
+            int[] ret = { };
             switch (f)
             {
                 case fields_i.lwrs:

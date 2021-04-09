@@ -1,11 +1,11 @@
-using entropyRNG;
-using Error;
-using info.lundin.math; // string to equation mapping.
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using utility;
+using entropyRNG;
+using Error;
+using info.lundin.math;
+using utility; // string to equation mapping.
 
 namespace Variance
 {
@@ -65,7 +65,7 @@ namespace Variance
 
         static double pGetGaussianRandomNumber3(EntropySettings settings)
         {
-            double value = 1.0f;
+            double value;
             switch (settings.getValue(EntropySettings.properties_i.rngType))
             {
                 case (Int32)commonRNG.rngIndex.crypto:
@@ -88,7 +88,7 @@ namespace Variance
 
         static double pGetGaussianRandomNumber(EntropySettings settings)
         {
-            double value = 1.0f;
+            double value;
             switch (settings.getValue(EntropySettings.properties_i.rngType))
             {
                 case (Int32)commonRNG.rngIndex.crypto:
@@ -111,7 +111,7 @@ namespace Variance
 
         static Int32 pGetRandomInt(EntropySettings settings)
         {
-            Int32 value = 1;
+            Int32 value;
             switch (settings.getValue(EntropySettings.properties_i.rngType))
             {
                 case (Int32)commonRNG.rngIndex.crypto:
@@ -134,7 +134,7 @@ namespace Variance
 
         static double pGetRandomDouble(EntropySettings settings)
         {
-            double value = 1.0f;
+            double value;
             switch (settings.getValue(EntropySettings.properties_i.rngType))
             {
                 case (Int32)commonRNG.rngIndex.crypto:
@@ -245,8 +245,8 @@ namespace Variance
             {
                 using (StreamReader sr = new StreamReader(fileName))
                 {
-                    char[] csvSeparators = new char[] { ',' };
-                    char[] equalSeparators = new char[] { '=' };
+                    char[] csvSeparators = { ',' };
+                    char[] equalSeparators = { '=' };
                     string[] parsedString;
 
                     reading = true;
@@ -287,13 +287,11 @@ namespace Variance
                         {
                             break;
                         }
-                        else
+
+                        if (Convert.ToInt32(parsedString[0]) == 1)
                         {
-                            if (Convert.ToInt32(parsedString[0]) == 1)
-                            {
-                                // Pass case - need to add to list.
-                                tilesToRun.Add(new Int32[2] { Convert.ToInt32(parsedString[1]), Convert.ToInt32(parsedString[2]) });
-                            }
+                            // Pass case - need to add to list.
+                            tilesToRun.Add(new [] { Convert.ToInt32(parsedString[1]), Convert.ToInt32(parsedString[2]) });
                         }
                     }
                 }
@@ -324,15 +322,12 @@ namespace Variance
         static bool pReadQuiltCSVFile(ref CommonVars commonVars, string fileName)
         {
             bool reading = false;
-            List<Int32[]> tilesToRun = new List<Int32[]>(); // will be col,row
             try
             {
                 using (StreamReader sr = new StreamReader(fileName))
                 {
                     reading = true;
-                    char[] csvSeparators = new char[] { ',' };
-                    char[] equalSeparators = new char[] { '=' };
-                    string[] parsedString;
+                    char[] csvSeparators = { ',' };
 
                     // Read in non-CSV data first
                     // Pattern line
@@ -343,7 +338,7 @@ namespace Variance
                     }
                     // Now we have the meat of the data we need.
                     string tempString = sr.ReadLine();
-                    parsedString = tempString.Split(csvSeparators);
+                    string[] parsedString = tempString.Split(csvSeparators);
                     if (parsedString.Count() >= 6)
                     {
                         // We have 6 values to extract from this line.
@@ -546,10 +541,8 @@ namespace Variance
             {
                 return "Summary written to: " + summaryFile;
             }
-            else
-            {
-                return "";
-            }
+
+            return "";
         }
 
         public static string summarizeDOEResults(string path, string[] summaryFilesFound)
@@ -572,7 +565,7 @@ namespace Variance
 
             string fileToRead = Path.Combine(path, summaryFilesFound[index]);
 
-            char[] tokens = new char[] { '_' };
+            char[] tokens = { '_' };
             string[] DOETokens = summaryFilesFound[index].Split(tokens);
             // Create our DOE results instance. This will contain all of DOEs and collect all of their results as well.
             DOEResults doeResults = new DOEResults(DOETokens[0]);

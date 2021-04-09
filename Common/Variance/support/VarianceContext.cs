@@ -1,7 +1,7 @@
-using color;
-using keys;
 using System;
 using System.Collections.Generic;
+using color;
+using keys;
 
 namespace Variance
 {
@@ -51,7 +51,7 @@ namespace Variance
         }
 
         void makeContext(bool implantMode_, string xmlFileArg_, int numberOfThreads_,
-                             Int32 HTCount, string refName)
+                             Int32 HTCount_, string refName)
         {
             previewLock = new object();
             implantPreviewLock = new object();
@@ -74,7 +74,7 @@ namespace Variance
             colors = new Colors();
             layerPreviewDOETile = false;
             geoCoreCDVariation = false;
-            this.HTCount = HTCount;
+            HTCount = HTCount_;
             rngMappingEquations = new List<string>();
             friendlyNumber = false;
 

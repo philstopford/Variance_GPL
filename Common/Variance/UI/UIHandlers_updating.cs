@@ -1,11 +1,12 @@
-using Eto.Drawing;
-using Eto.Forms;
-using VeldridEto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
+using Eto.Drawing;
+using Eto.Forms;
+using VeldridEto;
 
 namespace Variance
 {
@@ -111,7 +112,7 @@ namespace Variance
 
         void updateImplantSimUIST(bool doPASearch, SimResultPackage resultPackage, string resultString)
         {
-            string[] resultTokens = resultString.Split(new char[] { ',' });
+            string[] resultTokens = resultString.Split(new[] { ',' });
             updateImplantPreview();
             Application.Instance.Invoke(() =>
             {
@@ -136,7 +137,7 @@ namespace Variance
 
         void updateImplantSimUIMT()
         {
-            commonVars.m_timer.Elapsed += new System.Timers.ElapsedEventHandler(updateImplantPreview);
+            commonVars.m_timer.Elapsed += updateImplantPreview;
         }
 
         void updateSimUIST(bool doPASearch, SimResultPackage resultPackage, string resultString)
@@ -151,7 +152,7 @@ namespace Variance
 
         void updateSimUIMT()
         {
-            commonVars.m_timer.Elapsed += new System.Timers.ElapsedEventHandler(updatePreview);
+            commonVars.m_timer.Elapsed += updatePreview;
         }
 
         void updateSettingsUIFromSettings()
@@ -794,7 +795,7 @@ namespace Variance
             });
         }
 
-        void updatePreview(object sender, System.Timers.ElapsedEventArgs e)
+        void updatePreview(object sender, ElapsedEventArgs e)
         {
             if (Monitor.TryEnter(commonVars.drawingLock))
             {
@@ -1009,7 +1010,7 @@ namespace Variance
             });
         }
 
-        void updateImplantPreview(object sender, System.Timers.ElapsedEventArgs e)
+        void updateImplantPreview(object sender, ElapsedEventArgs e)
         {
             if (Monitor.TryEnter(commonVars.implantDrawingLock))
             {
@@ -1019,7 +1020,7 @@ namespace Variance
                     {
                         try
                         {
-                            if (System.Threading.Thread.CurrentThread == commonVars.mainThreadIndex)
+                            if (Thread.CurrentThread == commonVars.mainThreadIndex)
                             {
                                 // also sets commonVars.drawing to 'false'
                                 implantPreviewUpdate();
@@ -1097,9 +1098,7 @@ namespace Variance
         void showBG(int settingsIndex)
         {
             viewPort.ovpSettings.bgPolyList.Clear();
-
-            bool useVPGeometry = false;
-
+            
             // Now we need to deal with the background setting.
             // This is only a viewport construct, to avoid impacting the simulation system.
             for (Int32 bgLayer = 0; bgLayer < CentralProperties.maxLayersForMC; bgLayer++)
@@ -1111,48 +1110,19 @@ namespace Variance
                     {
                         Color tempColor = Color.FromArgb(varianceContext.vc.colors.simPreviewColors[bgLayer].toArgb());
 
-                        if (useVPGeometry)
+                        List<PreviewShape> tmp = generate_shapes(bgLayer);
+                        foreach (var t in tmp)
                         {
-                            // Make a list to contain our background polys.
-                            List<ovp_Poly> bgPolyList = new List<ovp_Poly>();
-
-                            // We filter out any drawn or background polys in the referenced layer's viewport to retrieve legitimate shapes.
-                            for (int poly = 0; poly < mcVPSettings[bgLayer].polyList.Count; poly++)
+                            for (int poly = 0; poly < t.getPoints().Count; poly++)
                             {
-                                if (!mcVPSettings[bgLayer].drawnPoly[poly])
+                                if (!t.getDrawnPoly(poly))
                                 {
-                                    bgPolyList.Add(mcVPSettings[bgLayer].polyList[poly]);
-                                }
-                            }
-
-                            // Now we need to go through the polygons in the bgLayer.
-                            for (int poly = 0; poly < bgPolyList.Count; poly++)
-                            {
-                                // Push the polygons to the right viewport, with our layer color to show the origin.
-                                viewPort.ovpSettings.addBGPolygon(
-                                    poly: bgPolyList[poly].poly, 
-                                    polyColor: tempColor,
-                                    alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.bg),
-                                    layerIndex: bgLayer
-                                );
-                            }
-                        }
-                        else
-                        {
-                            List<PreviewShape> tmp = generate_shapes(bgLayer);
-                            for (int shape = 0; shape < tmp.Count; shape++)
-                            {
-                                for (int poly = 0; poly < tmp[shape].getPoints().Count; poly++)
-                                {
-                                    if (!tmp[shape].getDrawnPoly(poly))
-                                    {
-                                        viewPort.ovpSettings.addBGPolygon(
-                                            poly: UIHelper.myPointFArrayToPointFArray(tmp[shape].getPoints(poly)),
-                                            polyColor: tempColor,
-                                            alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.bg),
-                                            layerIndex: bgLayer
-                                        );
-                                    }
+                                    viewPort.ovpSettings.addBGPolygon(
+                                        poly: UIHelper.myPointFArrayToPointFArray(t.getPoints(poly)),
+                                        polyColor: tempColor,
+                                        alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.bg),
+                                        layerIndex: bgLayer
+                                    );
                                 }
                             }
                         }
@@ -1312,10 +1282,7 @@ namespace Variance
                     previewShapes.Add(pShape3);
                 }
             }
-            else
-            {
-                // No preview - no shape chosen.
-            }
+
             return previewShapes;
         }
     }

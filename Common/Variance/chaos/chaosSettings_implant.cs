@@ -65,14 +65,14 @@ namespace Variance
             return previewMode;
         }
 
-        public ChaosSettings_implant(bool previewMode, EntropySettings entropySettings)
+        public ChaosSettings_implant(bool previewMode_, EntropySettings entropySettings)
         {
-            pChaosSettings_implant(previewMode, entropySettings);
+            pChaosSettings_implant(previewMode_, entropySettings);
         }
 
-        void pChaosSettings_implant(bool previewMode, EntropySettings entropySettings)
+        void pChaosSettings_implant(bool previewMode_, EntropySettings entropySettings)
         {
-            this.previewMode = previewMode;
+            previewMode = previewMode_;
             if (previewMode)
             {
                 implant_resistCDVar = 0;

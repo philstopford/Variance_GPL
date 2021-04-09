@@ -10,7 +10,7 @@ namespace Variance
         public static string default_comment = "";
         public static double default_colOffset = 0;
         public static double default_rowOffset = 0;
-        public static Int32[] default_layersAffected = new Int32[CentralProperties.maxLayersForMC] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static Int32[] default_layersAffected = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static double default_colPitch = 0;
         public static double default_rowPitch = 0;
         public static Int32 default_cols = 1;
@@ -19,7 +19,7 @@ namespace Variance
         public static Int32 default_specificTile_Row = 0;
         public static Int32 default_specificTile_Col = 0;
         public static Int32 default_listOfTiles = 0;
-        public static List<Int32[]> default_tileList_ColRow = new List<Int32[]> { new Int32[2] { 0, 0 } };
+        public static List<Int32[]> default_tileList_ColRow = new List<Int32[]> { new [] { 0, 0 } };
         public static string default_trList = "";
 
         public enum properties_d { colOffset, rowOffset, colPitch, rowPitch }

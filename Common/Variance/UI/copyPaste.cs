@@ -1,5 +1,5 @@
-﻿using Eto.Forms;
-using System;
+﻿using System;
+using Eto.Forms;
 
 namespace Variance
 {
@@ -72,18 +72,18 @@ namespace Variance
                 Int32 index = getSelectedLayerIndex();
                 if ((index >= 0) && (index < CentralProperties.maxLayersForMC)) // we have valid data and are on a valid page.
                 {
-                    setLayerSettings(new EntropyLayerSettings(), settingsIndex: index, gdsOnly: false, resumeUI: true);
+                    setLayerSettings(new EntropyLayerSettings(), settingsIndex: index, gdsOnly: false);
                 }
                 commonVars.getGeoCoreHandler(index).reset();
             }
         }
 
-        public void setLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool resumeUI, bool updateGeoCoreGeometryFromFile = false)
+        public void setLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false)
         {
-            pSetLayerSettings(entropyLayerSettings, settingsIndex, gdsOnly, resumeUI, updateGeoCoreGeometryFromFile);
+            pSetLayerSettings(entropyLayerSettings, settingsIndex, gdsOnly, updateGeoCoreGeometryFromFile);
         }
 
-        void pSetLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool resumeUI, bool updateGeoCoreGeometryFromFile = false)
+        void pSetLayerSettings(EntropyLayerSettings entropyLayerSettings, int settingsIndex, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false)
         {
             commonVars.setLayerSettings(entropyLayerSettings, settingsIndex, gdsOnly, updateGeoCoreGeometryFromFile);
             // Ensure the simulation settings labels are consistent.

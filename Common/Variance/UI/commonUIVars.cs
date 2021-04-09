@@ -1,9 +1,9 @@
-﻿using Eto.Forms;
-using VeldridEto;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Eto.Forms;
 using Eto.Veldrid;
+using VeldridEto;
 
 namespace Variance
 {

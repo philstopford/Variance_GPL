@@ -54,7 +54,7 @@ namespace Variance
         public delegate void simRunningUI();
         public simRunningUI simRunningUIFunc { get; set; }
 
-        char[] csvSeparator = new char[] { ',' }; // to cleave the results apart.
+        char[] csvSeparator = { ',' }; // to cleave the results apart.
         public Stopwatch sw { get; set; }
         public Stopwatch sw_Preview { get; set; }
         public Int32 currentProgress;
@@ -71,15 +71,15 @@ namespace Variance
         public string lastSimResultsOverview { get; set; }
         string resultString;
 
-        public Entropy(ref VarianceContext varianceContext, CommonVars commonVars)
+        public Entropy(ref VarianceContext varianceContext_, CommonVars commonVars_)
         {
-            this.varianceContext = varianceContext;
-            this.commonVars = commonVars;
+            varianceContext = varianceContext_;
+            commonVars = commonVars_;
         }
 
-        public void update(CommonVars commonVars)
+        public void update(CommonVars commonVars_)
         {
-            this.commonVars = commonVars;
+            commonVars = commonVars_;
         }
 
         void reset()
@@ -102,13 +102,13 @@ namespace Variance
 
             if (fileName != null)
             {
-                string[] tokens = fileName.Split(new char[] { '.' });
+                string[] tokens = fileName.Split(new [] { '.' });
 
                 for (int i = 0; i < tokens.Length - 2; i++)
                 {
                     baseFileName += tokens[i] + ".";
                 }
-                baseFileName += tokens[tokens.Length - 2];
+                baseFileName += tokens[^2];
             }
 
             if (!implantMode)
@@ -136,7 +136,7 @@ namespace Variance
 
                 if (!useThreads)
                 {
-                    entropyRunCore_singleThread(previewMode, numberOfCases, row, col, tileHandling, doPASearch);
+                    entropyRunCore_singleThread(previewMode, numberOfCases, row, col, doPASearch);
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace Variance
                     {
                         try
                         {
-                            saveResults(numberOfCases, tileHandling, col, row);
+                            saveResults(tileHandling, col, row);
                         }
                         catch (Exception)
                         {
@@ -221,7 +221,7 @@ namespace Variance
                     {
                         try
                         {
-                            saveResults_implant(numberOfCases);
+                            saveResults_implant();
                         }
                         catch (Exception)
                         {

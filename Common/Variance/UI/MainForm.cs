@@ -1,18 +1,19 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using entropyRNG;
 using Error;
 using Eto;
 using Eto.Drawing;
 using Eto.Forms;
-using VeldridEto;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Diagnostics;
 using Eto.Veldrid;
-using Veldrid;
 using geoWrangler;
+using Veldrid;
+using VeldridEto;
+using PixelFormat = Veldrid.PixelFormat;
 
 namespace Variance
 {
@@ -68,7 +69,7 @@ namespace Variance
         {
             // We have to do this by hand, reading and parsing an XML file. Yay.
             string filename = EtoEnvironment.GetFolderPath(EtoSpecialFolder.ApplicationSettings);
-            filename += System.IO.Path.DirectorySeparatorChar + "variance_prefs.xml";
+            filename += Path.DirectorySeparatorChar + "variance_prefs.xml";
 
             XElement prefs;
             try
@@ -77,7 +78,7 @@ namespace Variance
             }
             catch (Exception)
             {
-                if (System.IO.File.Exists(filename))
+                if (File.Exists(filename))
                 {
                     ErrorReporter.showMessage_OK("Prefs file exists, but can't be read. Using defaults.", "Preferences Error");
                 }
@@ -201,7 +202,7 @@ namespace Variance
             try
             {
                 string tempString = prefs.Descendants("rngMappingEquations").First().Value;
-                string[] equations = tempString.Split(new char[] { ';' });
+                string[] equations = tempString.Split(new[] { ';' });
                 for (int i = 0; i < equations.Length; i++)
                 {
                     if (equations[i] != "Box-Muller")
@@ -573,7 +574,7 @@ namespace Variance
         void savePrefs()
         {
             string filename = EtoEnvironment.GetFolderPath(EtoSpecialFolder.ApplicationSettings);
-            filename += System.IO.Path.DirectorySeparatorChar + "variance_prefs.xml";
+            filename += Path.DirectorySeparatorChar + "variance_prefs.xml";
 
             try
             {
@@ -862,34 +863,34 @@ namespace Variance
         {
             listbox_menu = new ContextMenu();
             int itemIndex = 0;
-            lb_copy = new ButtonMenuItem() { Text = "Copy" };
+            lb_copy = new ButtonMenuItem { Text = "Copy" };
             listbox_menu.Items.Add(lb_copy);
             listbox_menu.Items[itemIndex].Click += delegate
             {
                 copy();
             };
             itemIndex++;
-            lb_paste = new ButtonMenuItem() { Text = "Paste" };
+            lb_paste = new ButtonMenuItem { Text = "Paste" };
             listbox_menu.Items.Add(lb_paste);
             listbox_menu.Items[itemIndex].Click += delegate
             {
                 paste();
             };
             itemIndex++;
-            lb_clear = new ButtonMenuItem() { Text = "Clear" };
+            lb_clear = new ButtonMenuItem { Text = "Clear" };
             listbox_menu.Items.Add(lb_clear);
             listbox_menu.Items[itemIndex].Click += delegate
             {
                 clear();
             };
             itemIndex++;
-            lb_enableDisable = new ButtonMenuItem() { Text = "Enable" };
+            lb_enableDisable = new ButtonMenuItem { Text = "Enable" };
             listbox_menu.Items.Add(lb_enableDisable);
             listbox_menu.Items[itemIndex].Click += delegate
             {
                 enableDisable();
             };
-            itemIndex++;
+            // itemIndex++;
         }
 
         void updateLBContextMenu()
@@ -946,12 +947,7 @@ namespace Variance
             UI(_varianceContext);
         }
 
-        void q()
-        {
-            Application.Instance.Quit();
-        }
-
-        private bool _veldridReady = false;
+        private bool _veldridReady;
         public bool VeldridReady
         {
             get { return _veldridReady; }
@@ -963,7 +959,7 @@ namespace Variance
             }
         }
 
-        private bool _formReady = false;
+        private bool _formReady;
         public bool FormReady
         {
             get { return _formReady; }
@@ -1020,8 +1016,8 @@ namespace Variance
 
             viewport_settings();
 
-            notList = new List<string>() { "", "!" };
-            booleanList = new List<string>() { "&", "|" };
+            notList = new List<string> { "", "!" };
+            booleanList = new List<string> { "&", "|" };
 
             mainTable = new TableLayout();
 
@@ -1029,7 +1025,7 @@ namespace Variance
 
             GraphicsDeviceOptions options = new GraphicsDeviceOptions(
                                                 false,
-                                                Veldrid.PixelFormat.R32_Float,
+                                                PixelFormat.R32_Float,
                                                 false,
                                                 ResourceBindingModel.Improved);
 
@@ -1040,8 +1036,8 @@ namespace Variance
 
             Title = commonVars.titleText;
 
-            string exeDirectory = "";
-            string shaders = "";
+            string exeDirectory;
+            string shaders;
             if (Platform.IsMac)
             {
                 // AppContext.BaseDirectory is too simple for the case of the Mac
@@ -1074,11 +1070,11 @@ namespace Variance
             vp = new Panel();
             if (!Platform.IsMac) // This color setting causes issues on Mac where the viewport doesn't show until the mouse passes over.
             {
-                vp.BackgroundColor = Eto.Drawing.Colors.Black;
+                vp.BackgroundColor = Colors.Black;
             }
             TableLayout vp_content = new TableLayout();
             vp_content.Rows.Add(new TableRow());
-            vp_content.Rows[0].Cells.Add(new TableCell() { Control = vSurface });
+            vp_content.Rows[0].Cells.Add(new TableCell { Control = vSurface });
             vp.Content = vp_content;
             vp.ToolTip = viewportToolTipText;
 
@@ -1126,37 +1122,37 @@ namespace Variance
 
             upperGadgets_table.Rows[0].Cells.Add(u_gtc0);
             setupOmitLayerCheckboxes(u_gtc0);
-            upperGadgets_table.Rows[0].Cells.Add(new TableCell() { Control = null });
+            upperGadgets_table.Rows[0].Cells.Add(new TableCell { Control = null });
 
             upperGadgets_table.Rows.Add(new TableRow());
             TableCell u_gtc1 = new TableCell();
             upperGadgets_table.Rows[1].Cells.Add(u_gtc1);
             setupBGLayerCheckboxes(u_gtc1);
-            upperGadgets_table.Rows[1].Cells.Add(new TableCell() { Control = null });
+            upperGadgets_table.Rows[1].Cells.Add(new TableCell { Control = null });
 
             // Lower section
 
             gadgets_tableLayout.Rows.Add(new TableRow());
             TableCell gtc2 = new TableCell();
             setupComment(gtc2);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(gtc2);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            gadgets_tableLayout.Rows[^1].Cells.Add(gtc2);
+            gadgets_tableLayout.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             // Buttons
             gadgets_tableLayout.Rows.Add(new TableRow());
             TableCell gtc3 = new TableCell();
             setup_buttons(gtc3);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(gtc3);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            gadgets_tableLayout.Rows[^1].Cells.Add(gtc3);
+            gadgets_tableLayout.Rows[^1].Cells.Add(new TableCell { Control = null });
 
             // Configure checkboxes and zoom gadgets.
             gadgets_tableLayout.Rows.Add(new TableRow());
             TableCell gtc4 = new TableCell();
             viewport_gadgets(gtc4);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(gtc4);
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].Cells.Add(new TableCell() { Control = null });
+            gadgets_tableLayout.Rows[^1].Cells.Add(gtc4);
+            gadgets_tableLayout.Rows[^1].Cells.Add(new TableCell { Control = null });
 
-            gadgets_tableLayout.Rows[gadgets_tableLayout.Rows.Count - 1].ScaleHeight = true;
+            gadgets_tableLayout.Rows[^1].ScaleHeight = true;
 
             setupGUI();
 
@@ -1263,8 +1259,7 @@ namespace Variance
                 return;
             }
 
-            double zoomValue = 1.0f;
-            zoomValue = Convert.ToDouble(num_viewportZoom.Value);
+            double zoomValue = Convert.ToDouble(num_viewportZoom.Value);
             if (zoomValue < 0.0001)
             {
                 zoomValue = 0.0001;
@@ -1329,11 +1324,8 @@ namespace Variance
 
             int mainIndex = getMainSelectedIndex();
             int subIndex = getSubTabSelectedIndex();
-            int layerIndex = getSelectedLayerIndex();
 
             int itemIndex = 0;
-            int svgIndex = 1;
-            int layoutIndex = 2;
             vp_menu.Items.Add(new ButtonMenuItem { Text = "Reset (r)" });
             vp_menu.Items[itemIndex].Click += delegate
             {
@@ -1554,18 +1546,17 @@ namespace Variance
                 }
             }
 
-            svgIndex = itemIndex + 1;
+            int svgIndex = itemIndex + 1;
 
             vp_menu.Items.AddSeparator();
 
-            svgIndex = itemIndex + 1;
             vp_menu.Items.Add(new ButtonMenuItem { Text = "Save SVG" });
             vp_menu.Items[svgIndex].Click += delegate
             {
                 saveViewportSVG_File();
             };
 
-            layoutIndex = svgIndex + 1;
+            int layoutIndex = svgIndex + 1;
             vp_menu.Items.Add(new ButtonMenuItem { Text = "Save Layout" });
             vp_menu.Items[layoutIndex].Click += delegate
             {
@@ -1620,7 +1611,7 @@ namespace Variance
             tabPage2_table.Rows.Add(new TableRow());
 
             tabControl_2D_simsettings = new TabControl();
-            tabPage2_table.Rows[tabPage2_table.Rows.Count - 1].Cells.Add(new TableCell() { Control = tabControl_2D_simsettings });
+            tabPage2_table.Rows[^1].Cells.Add(new TableCell { Control = tabControl_2D_simsettings });
 
             Scrollable tabPage_2D_Settings_scrollable = new Scrollable();
             tabPage_2D_Settings_table = new TableLayout();
@@ -1708,18 +1699,18 @@ namespace Variance
             mainTable.Rows.Add(new TableRow());
 
             tabControl_main = new TabControl();
-            mainTable.Rows[0].Cells.Add(new TableCell() { Control = tabControl_main });
+            mainTable.Rows[0].Cells.Add(new TableCell { Control = tabControl_main });
 
             // Stick our progress indicator and status label in here.
             statusReadout = new Label();
             statusReadout.Text = "Welcome";
             statusReadout.TextAlignment = TextAlignment.Center;
-            oplc_row0.Cells.Add(new TableCell() { Control = statusReadout, ScaleWidth = true });
+            oplc_row0.Cells.Add(new TableCell { Control = statusReadout, ScaleWidth = true });
 
             statusProgressBar = new ProgressBar();
             statusProgressBar.Value = 0;
             statusProgressBar.Size = new Size(100, label_Height);
-            oplc_row0.Cells.Add(new TableCell() { Control = statusProgressBar, ScaleWidth = false });
+            oplc_row0.Cells.Add(new TableCell { Control = statusProgressBar, ScaleWidth = false });
         }
 
         void setupComment(TableCell tc)
@@ -1740,7 +1731,7 @@ namespace Variance
             {
                 new Process
                 {
-                    StartInfo = new ProcessStartInfo(@helpPath)
+                    StartInfo = new ProcessStartInfo(helpPath)
                     {
                         UseShellExecute = true
                     }
@@ -1824,19 +1815,19 @@ namespace Variance
             btn_multiCPU.Text = "Multi\r\nCPU";
             setSize(btn_multiCPU, simButtonWidth, simButtonHeight);
             btn_multiCPU.Click += monteCarloMultipleThreadEventHandler;
-            buttons_table.Rows[0].Cells.Add(new TableCell() { Control = btn_multiCPU });
+            buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_multiCPU });
 
             btn_Cancel = new Button();
             btn_Cancel.Text = "Cancel";
             setSize(btn_Cancel, simButtonWidth, simButtonHeight);
             btn_Cancel.Click += btnCancel;
-            buttons_table.Rows[0].Cells.Add(new TableCell() { Control = btn_Cancel });
+            buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Cancel });
 
             btn_STOP = new Button();
             btn_STOP.Text = "STOP";
             setSize(btn_STOP, simButtonWidth, simButtonHeight);
             btn_STOP.Click += btnSTOP;
-            buttons_table.Rows[0].Cells.Add(new TableCell() { Control = btn_STOP });
+            buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_STOP });
         }
 
         void viewport_gadgets(TableCell tc)
@@ -1850,38 +1841,38 @@ namespace Variance
 
             lbl_simPreviewZoom = new Label();
             lbl_simPreviewZoom.Text = "Zoom";
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_simPreviewZoom });
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_simPreviewZoom });
 
             num_viewportZoom = new NumericStepper();
             num_viewportZoom.DecimalPlaces = 2;
             num_viewportZoom.Increment = 0.01;
             num_viewportZoom.Value = 1.0;
             num_viewportZoom.MinValue = 0.001;
-            setSize(num_viewportZoom, 55, num_Height);
+            setSize(num_viewportZoom, 55);
             num_viewportZoom.LostFocus += zoomChanged;
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_viewportZoom) });
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportZoom) });
 
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = null, ScaleWidth = true }); // padding
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding
 
             lbl_viewportPos = new Label();
             lbl_viewportPos.Text = "Position";
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = lbl_viewportPos });
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_viewportPos });
 
             num_viewportX = new NumericStepper();
             num_viewportX.DecimalPlaces = 2;
             num_viewportX.Increment = 0.01;
             num_viewportX.Value = 0;
-            setSize(num_viewportX, 75, num_Height);
+            setSize(num_viewportX, 75);
             num_viewportX.LostFocus += posChanged;
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_viewportX) });
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportX) });
 
             num_viewportY = new NumericStepper();
             num_viewportY.DecimalPlaces = 2;
             num_viewportY.Increment = 0.01;
             num_viewportY.Value = 0;
-            setSize(num_viewportY, 75, num_Height);
+            setSize(num_viewportY, 75);
             num_viewportY.LostFocus += posChanged;
-            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(num_viewportY) });
+            viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportY) });
         }
 
         void viewport_settings()
@@ -1898,8 +1889,8 @@ namespace Variance
                 mcVPSettings[i].axisColor = Color.FromArgb(commonVars.getColors().axis_Color.toArgb());
                 mcVPSettings[i].backColor = Color.FromArgb(commonVars.getColors().background_Color.toArgb());
             }
-            mcVPSettings[mcVPSettings.Length - 2].drawDrawn(true);
-            mcVPSettings[mcVPSettings.Length - 1].drawDrawn(true);
+            mcVPSettings[^2].drawDrawn(true);
+            mcVPSettings[^1].drawDrawn(true);
 
             otkVPSettings_implant = new OVPSettings(45.0f, 45.0f);
             otkVPSettings_implant.setBaseZoom(0.25f);
@@ -2003,14 +1994,14 @@ namespace Variance
 
             cB_displayShapes = new CheckBox();
             cB_displayShapes.Text = "Display input shapes for each case";
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = cB_displayShapes });
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = cB_displayShapes });
             cB_displayShapes.Checked = true;
 
             cB_displayResults = new CheckBox();
             cB_displayResults.Text = "Display results for each case";
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = cB_displayResults });
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = cB_displayResults });
 
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell() { Control = null });
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = null });
 
             cB_displayResults.Checked = true;
         }
@@ -2033,15 +2024,9 @@ namespace Variance
             _control.Height = height;
         }
 
-        void setSize(CommonControl _control, int width, int height)
+        void setSize(CommonControl _control, int width)
         {
             _control.Width = width;
-        }
-
-        void setSize(GroupBox _control, int width, int height)
-        {
-            _control.Width = width;
-            _control.Height = height;
         }
     }
 }

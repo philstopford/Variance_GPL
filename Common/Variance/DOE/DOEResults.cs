@@ -80,14 +80,14 @@ namespace Variance
             return DOEName;
         }
 
-        public DOEResult(string DOEName)
+        public DOEResult(string DOEName_)
         {
-            pDOEResult(DOEName);
+            pDOEResult(DOEName_);
         }
 
-        void pDOEResult(string DOEName)
+        void pDOEResult(string DOEName_)
         {
-            this.DOEName = DOEName;
+            DOEName = DOEName_;
             headerSet = false;
             cells = new List<DOECell>();
             doeHeaderInformation = new List<string>();

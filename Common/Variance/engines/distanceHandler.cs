@@ -1,10 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using ClipperLib;
 using Error;
 using geoLib;
 using geoWrangler;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using KDTree;
 using utility;
 
 namespace Variance
@@ -82,7 +83,6 @@ namespace Variance
         {
             Int32 numberOfPoints = 0;
             double currentMinimum = 0;
-            double currentDistance = 0;
             Path minimumDistancePath = new Path();
             bool resultNeedsInversion = false;
 
@@ -94,7 +94,7 @@ namespace Variance
                 refArea += Clipper.Area(bPaths[shapeB]);
             }
             // KDTree to store the points from our target shape(s)
-            KDTree.KDTree<GeoLibPointF> pTree = new KDTree.KDTree<GeoLibPointF>(2, numberOfPoints);
+            KDTree<GeoLibPointF> pTree = new KDTree<GeoLibPointF>(2, numberOfPoints);
 
             for (Int32 shapeA = 0; shapeA < aPaths.Count(); shapeA++)
             {
@@ -129,7 +129,7 @@ namespace Variance
 
                 if ((simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosure) || (simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosureOld)) // negative value since we're fully inside a containing polygon.
                 {
-                    if (Math.Abs(oCheckArea) != Math.Abs(refArea))
+                    if (Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) > Double.Epsilon)
                     {
                         resultNeedsInversion = true;
                     }
@@ -140,7 +140,7 @@ namespace Variance
                 }
                 if ((simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacing) || (simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacingOld)) // negative value since we're fully outside a containing polygon.
                 {
-                    if (Math.Abs(oCheckArea) == Math.Abs(refArea))
+                    if (Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) < Double.Epsilon)
                     {
                         resultNeedsInversion = true;
                     }
@@ -157,7 +157,7 @@ namespace Variance
                     var pIter = pTree.NearestNeighbors(new double[] { aPaths[shapeA][pointA].X, aPaths[shapeA][pointA].Y }, 1);
                     while (pIter.MoveNext())
                     {
-                        currentDistance = pIter.CurrentDistance;
+                        double currentDistance = pIter.CurrentDistance;
 
                         if (((shapeA == 0) && (pointA == 0)) || (currentDistance < currentMinimum))
                         {
@@ -190,17 +190,12 @@ namespace Variance
             bool completeOverlap = false;
             for (Int32 layerAPoly = 0; layerAPoly < aPaths.Count(); layerAPoly++)
             {
-                Path layerAPath = new Path();
-                layerAPath = aPaths[layerAPoly];
+                Path layerAPath = aPaths[layerAPoly];
                 for (Int32 layerBPoly = 0; layerBPoly < bPaths.Count(); layerBPoly++)
                 {
-                    Path layerBPath = new Path();
-                    layerBPath = bPaths[layerBPoly];
+                    Path layerBPath = bPaths[layerBPoly];
 
                     Paths overlapShape = new Paths();
-
-                    IntRect rectA = Clipper.GetBounds(new Paths() { layerAPath });
-                    IntRect rectB = Clipper.GetBounds(new Paths { layerBPath });
 
                     // Check for complete overlap
                     Clipper c = new Clipper();
@@ -213,14 +208,14 @@ namespace Variance
                     double aArea = Math.Abs(Clipper.Area(layerAPath));
                     double bArea = Math.Abs(Clipper.Area(layerBPath));
                     double uArea = 0;
-                    for (int r = 0; r < fullOverlapCheck.Count; r++)
+                    foreach (var t in fullOverlapCheck)
                     {
-                        uArea += Clipper.Area(fullOverlapCheck[r]);
+                        uArea += Clipper.Area(t);
                     }
                     uArea = Math.Abs(uArea);
 
                     // If overlap area matches either of the input areas, we have a full overlap
-                    if ((aArea == uArea) || (bArea == uArea))
+                    if ((Math.Abs(aArea - uArea) < Double.Epsilon) || (Math.Abs(bArea - uArea) < Double.Epsilon))
                     {
                         completeOverlap = true;
                     }
@@ -229,7 +224,7 @@ namespace Variance
                     {
                         // Perform an area check in case of overlap.
                         // Overlap means X/Y negative space needs to be reported.
-                        AreaHandler aH = new AreaHandler(new Paths() { layerAPath }, new Paths() { layerBPath }, maySimplify: false, perPoly: false, scaleFactorForPointF: 1.0);
+                        AreaHandler aH = new AreaHandler(new Paths { layerAPath }, new Paths { layerBPath }, maySimplify: false, perPoly: false, scaleFactorForPointF: 1.0);
                         overlapShape = aH.listOfOutputPoints;//.ToList();
                     }
 
@@ -269,8 +264,8 @@ namespace Variance
             // KDTree to store the points from our input shape(s)
             int aPathCount = aPath.Count;
             int bPathCount = bPath.Count;
-            KDTree.KDTree<GeoLibPointF> aTree = new KDTree.KDTree<GeoLibPointF>(2, aPathCount);
-            KDTree.KDTree<GeoLibPointF> bTree = new KDTree.KDTree<GeoLibPointF>(2, bPathCount);
+            KDTree<GeoLibPointF> aTree = new KDTree<GeoLibPointF>(2, aPathCount);
+            KDTree<GeoLibPointF> bTree = new KDTree<GeoLibPointF>(2, bPathCount);
             for (int pt = 0; pt < aPathCount; pt++)
             {
                 aTree.AddPoint(new double[] { aPath[pt].X, aPath[pt].Y }, new GeoLibPointF(aPath[pt].X, aPath[pt].Y));
@@ -280,19 +275,12 @@ namespace Variance
                 bTree.AddPoint(new double[] { bPath[pt].X, bPath[pt].Y }, new GeoLibPointF(bPath[pt].X, bPath[pt].Y));
             }
 
-            double minLength = 0;
-
-            IntRect overlapRect = Clipper.GetBounds(overlapShape);
-            minLength = Math.Abs(overlapRect.right - overlapRect.left);
-            if (Math.Abs(overlapRect.top - overlapRect.bottom) > minLength)
-            {
-                minLength = Math.Abs(overlapRect.top - overlapRect.bottom);
-            }
-
+            int oCount = overlapShape.Count();
+            
             try
             {
                 // Process the overlap shape polygon(s) to evaluate the overlap.
-                for (Int32 poly = 0; poly < overlapShape.Count(); poly++)
+                for (Int32 poly = 0; poly < oCount; poly++)
                 {
                     // Brute force decomposition of the overlap shape into A and B edge contributions.
                     // ClipperLib isn't robust for this, so we have to brute force it : line clipping fails and PointInPolygon is unreliable.
@@ -480,7 +468,7 @@ namespace Variance
                         }
                     }
 
-                    int endIndex = aPath.FindIndex(p => p.Equals(extractedPath[extractedPath.Count - 1]));
+                    int endIndex = aPath.FindIndex(p => p.Equals(extractedPath[^1]));
                     if (endIndex == aPath.Count - 1)
                     {
                         endIndex = 0;
@@ -488,11 +476,11 @@ namespace Variance
                     if (endIndex == -1)
                     {
                         // Failed to find it cheaply. Let's try a different approach.
-                        double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], aPath[0]);
+                        double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], aPath[0]);
                         endIndex = 0;
                         for (int pt = 1; pt < aPath.Count; pt++)
                         {
-                            double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], aPath[pt]);
+                            double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], aPath[pt]);
                             if (distanceCheck < endDistanceCheck)
                             {
                                 endDistanceCheck = distanceCheck;
@@ -528,7 +516,7 @@ namespace Variance
                         }
                     }
 
-                    int endIndex = bPath.FindIndex(p => p.Equals(extractedPath[extractedPath.Count - 1]));
+                    int endIndex = bPath.FindIndex(p => p.Equals(extractedPath[^1]));
                     if (endIndex == bPath.Count - 1)
                     {
                         endIndex = 0;
@@ -536,11 +524,11 @@ namespace Variance
                     if (endIndex == -1)
                     {
                         // Failed to find it cheaply. Let's try a different approach.
-                        double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], bPath[0]);
+                        double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], bPath[0]);
                         endIndex = 0;
                         for (int pt = 1; pt < bPath.Count; pt++)
                         {
-                            double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], bPath[pt]);
+                            double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], bPath[pt]);
                             if (distanceCheck < endDistanceCheck)
                             {
                                 endDistanceCheck = distanceCheck;
@@ -565,8 +553,7 @@ namespace Variance
                     return result;
                 }
 
-                int startIndex = -1;
-                startIndex = bPath.FindIndex(p => p.Equals(extractedPath[0]));
+                int startIndex = bPath.FindIndex(p => p.Equals(extractedPath[0]));
                 if (startIndex == 0)
                 {
                     startIndex = bPath.Count - 1;
@@ -587,7 +574,7 @@ namespace Variance
                     }
                 }
 
-                int endIndex = bPath.FindIndex(p => p.Equals(extractedPath[extractedPath.Count - 1]));
+                int endIndex = bPath.FindIndex(p => p.Equals(extractedPath[^1]));
                 if (endIndex == bPath.Count - 1)
                 {
                     endIndex = 0;
@@ -595,10 +582,10 @@ namespace Variance
                 if (endIndex == -1)
                 {
                     // Failed to find it cheaply. Let's try a different approach.
-                    double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], bPath[0]);
+                    double endDistanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], bPath[0]);
                     for (int pt = 1; pt < bPath.Count; pt++)
                     {
-                        double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[extractedPath.Count - 1], bPath[pt]);
+                        double distanceCheck = GeoWrangler.distanceBetweenPoints(extractedPath[^1], bPath[pt]);
                         endIndex = 0;
                         if (distanceCheck < endDistanceCheck)
                         {
@@ -682,17 +669,13 @@ namespace Variance
                     }
                 }
 
-                bool ortho = false;
-                if ((clippedLines[line][0].X == clippedLines[line][1].X) || (clippedLines[line][0].Y == clippedLines[line][1].Y))
-                {
-                    ortho = true;
-                }
+                bool ortho = (clippedLines[line][0].X == clippedLines[line][1].X) || (clippedLines[line][0].Y == clippedLines[line][1].Y);
 
                 double threshold = 1500; // arbitrary, dialed in by hand.
 
                 if ((ortho) || ((usingAEdge && ((startPointCheck_A_dist < threshold) && (endPointCheck_A_dist < threshold))) ||
                                 (!usingAEdge && ((startPointCheck_B_dist < threshold) && (endPointCheck_B_dist < threshold))))
-                    )
+                )
                 {
                     // This is a special situation, it turns out.
                     // There is one specific scenario where this overlap case (start and end on the same geometry) is valid - orthogonal shapes with a bisection.
@@ -707,7 +690,7 @@ namespace Variance
                 else
                 {
                     if ((usingAEdge && ((startPointCheck_A_dist < threshold) && (endPointCheck_B_dist > threshold))) ||
-                    (!usingAEdge && ((startPointCheck_B_dist < threshold) && (endPointCheck_A_dist > threshold))))
+                        (!usingAEdge && ((startPointCheck_B_dist < threshold) && (endPointCheck_A_dist > threshold))))
                     {
                         validOverlap = false;
                     }
@@ -716,10 +699,12 @@ namespace Variance
                     {
                         validOverlapFound = true;
                         maxDistance = lineLength;
-                        Path tempPath = new Path();
-                        tempPath.Add(new IntPoint(clippedLines[line][0]));
-                        tempPath.Add(new IntPoint(clippedLines[line][0]));
-                        tempPath.Add(new IntPoint(clippedLines[line][clippedLines[line].Count() - 1]));
+                        Path tempPath = new Path
+                        {
+                            new IntPoint(clippedLines[line][0]),
+                            new IntPoint(clippedLines[line][0]),
+                            new IntPoint(clippedLines[line][clippedLines[line].Count() - 1])
+                        };
                         result.resultPaths.Clear();
                         result.resultPaths.Add(tempPath);
                     }
@@ -728,14 +713,18 @@ namespace Variance
 
             try
             {
-                if (((clippedLines.Count() > 0) && (!validOverlapFound)) || (maxDistance_orthogonalFallback > maxDistance))
+                if (((clippedLines.Any()) && (!validOverlapFound)) || (maxDistance_orthogonalFallback > maxDistance))
                 {
                     // Couldn't find a valid overlap so assume the orthogonal fallback is needed.
                     maxDistance = maxDistance_orthogonalFallback;
-                    Path tempPath = new Path();
-                    tempPath.Add(new IntPoint(clippedLines[maxDistance_fallbackIndex][0]));
-                    tempPath.Add(new IntPoint(clippedLines[maxDistance_fallbackIndex][0]));
-                    tempPath.Add(new IntPoint(clippedLines[maxDistance_fallbackIndex][clippedLines[maxDistance_fallbackIndex].Count() - 1]));
+                    Path tempPath = new Path
+                    {
+                        new IntPoint(clippedLines[maxDistance_fallbackIndex][0]),
+                        new IntPoint(clippedLines[maxDistance_fallbackIndex][0]),
+                        new IntPoint(
+                            clippedLines[maxDistance_fallbackIndex]
+                                [clippedLines[maxDistance_fallbackIndex].Count() - 1])
+                    };
                     result.resultPaths.Clear();
                     result.resultPaths.Add(tempPath);
                 }

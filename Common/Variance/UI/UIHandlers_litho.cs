@@ -1,5 +1,5 @@
-﻿using Eto.Forms;
-using System;
+﻿using System;
+using Eto.Forms;
 
 namespace Variance
 {
@@ -121,7 +121,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -163,7 +162,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -205,7 +203,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -247,7 +244,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -289,7 +285,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -331,7 +326,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -373,7 +367,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -415,7 +408,6 @@ namespace Variance
                     if (i == layer)
                     {
                         // No button for current layer, so skip this pass through the loop.
-                        continue;
                     }
                     else
                     {
@@ -458,7 +450,6 @@ namespace Variance
                 {
                     if (i == layer)
                     {
-                        continue;
                     }
                     else
                     {
@@ -500,7 +491,6 @@ namespace Variance
             globalUIFrozen = true;
             Application.Instance.Invoke(() =>
             {
-                int rowIndex = 0;
                 int colIndex = 0;
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
                 {
@@ -533,7 +523,6 @@ namespace Variance
                     if (colIndex == CentralProperties.maxLayersForMC / 2)
                     {
                         colIndex = 0;
-                        rowIndex++;
                     }
                 }
             });

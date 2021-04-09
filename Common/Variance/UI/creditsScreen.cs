@@ -1,11 +1,12 @@
-﻿using Eto.Drawing;
-using Eto.Forms;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Eto.Drawing;
+using Eto.Forms;
+using resources;
 
 namespace Variance
 {
-    public partial class CreditsScreen : Form
+    public class CreditsScreen : Form
     {
         // public System.Diagnostics.Process p = new System.Diagnostics.Process();
 
@@ -21,11 +22,11 @@ namespace Variance
 
             Panel imageHolder = new Panel();
             ImageView image = new ImageView();
-            image.Image = resources.images.mcImage();
+            image.Image = images.mcImage();
             imageHolder.Size = image.Image.Size;
             imageHolder.Content = image;
             content.Rows.Add(new TableRow());
-            content.Rows[0].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(imageHolder, centered: true) });
+            content.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(imageHolder, centered: true) });
 
             content.Rows.Add(new TableRow());
             textBox_credits = new RichTextArea();
@@ -43,7 +44,7 @@ namespace Variance
             textBox_credits.Text = textToDisplay;
             textBox_credits.CaretIndex = 0;
 
-            content.Rows[1].Cells.Add(new TableCell() { Control = TableLayout.AutoSized(textBox_credits, centered: true) });
+            content.Rows[1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(textBox_credits, centered: true) });
 
             Resizable = false;
             Maximizable = false;
@@ -51,13 +52,13 @@ namespace Variance
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            this.Visible = false;
+            Visible = false;
             e.Cancel = true;
         }
 
         public override void Close()
         {
-            this.Visible = false;
+            Visible = false;
         }
 
         /*

@@ -1,9 +1,8 @@
-using ClipperLib;
-using geoWrangler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using ClipperLib;
+using geoWrangler;
 
 namespace Variance
 {
@@ -86,27 +85,24 @@ namespace Variance
 
         Path reOrderPath(string shapeRef, Int32 pathIndex)
         {
-            Path sourcePath = new Path();
-            Path returnPath = new Path();
+            Path sourcePath;
+            Path returnPath;
             if ((shapeRef.ToUpper() != "A") && (shapeRef.ToUpper() != "B"))
             {
                 // Bad callsite. Throw exception.
                 throw (new Exception("reOrderPath: No shapeRef supplied!"));
             }
+
+            if (shapeRef.ToUpper() == "A")
+            {
+                sourcePath = booleanPaths[0][pathIndex].ToList();
+            }
             else
             {
-                if (shapeRef.ToUpper() == "A")
-                {
-                    sourcePath = booleanPaths[0][pathIndex].ToList();
-                }
-                else
-                {
-                    sourcePath = booleanPaths[1][pathIndex].ToList();
-                }
-
-                returnPath = GeoWrangler.clockwiseAndReorder(sourcePath);
-
+                sourcePath = booleanPaths[1][pathIndex].ToList();
             }
+
+            returnPath = GeoWrangler.clockwiseAndReorder(sourcePath);
             return returnPath;
         }
 
@@ -149,7 +145,7 @@ namespace Variance
             ret = GeoWrangler.gapRemoval(ret, extension: extension).ToList();
 
             bool holes = false;
-            bool gwHoles = false;
+            bool gwHoles;
 
             for (int i = 0; i < ret.Count; i++)
             {
@@ -167,7 +163,7 @@ namespace Variance
             // Apply the keyholing and rationalize.
             if (holes)
             {
-                Paths merged = new Paths();
+                Paths merged;
                 Fragmenter f = new Fragmenter(resolution * CentralProperties.scaleFactorForOperation);
                 ret = f.fragmentPaths(ret);
                 merged = GeoWrangler.makeKeyHole(ret, extension:extension);
@@ -213,7 +209,7 @@ namespace Variance
                 return GeoWrangler.stripColinear(ret, 1.0);
             }
 
-            IntRect bounds = Clipper.GetBounds(ret);
+            IntRect bounds = ClipperBase.GetBounds(ret);
 
             Path bound = new Path();
             bound.Add(new IntPoint(bounds.left, bounds.bottom));
@@ -249,7 +245,7 @@ namespace Variance
             {
                 try
                 {
-                    firstLayerPaths = GeoWrangler.invertTone(firstLayerPaths, false).ToList();
+                    firstLayerPaths = GeoWrangler.invertTone(firstLayerPaths).ToList();
                 }
                 catch (Exception)
                 {
@@ -263,7 +259,7 @@ namespace Variance
             {
                 try
                 {
-                    secondLayerPaths = GeoWrangler.invertTone(secondLayerPaths, false).ToList();
+                    secondLayerPaths = GeoWrangler.invertTone(secondLayerPaths).ToList();
                 }
                 catch (Exception)
                 {
@@ -589,15 +585,15 @@ namespace Variance
         }
 
         // Preview mode is intended to allow multi-threaded evaluation for a single case - batch calculations run multiple separate single-threaded evaluations
-        public ChaosEngine(CommonVars commonVars, List<PreviewShape> simShapes, bool previewMode)
+        public ChaosEngine(CommonVars commonVars, List<PreviewShape> simShapes_, bool previewMode)
         {
-            pChaosEngine(commonVars, simShapes, previewMode);
+            pChaosEngine(commonVars, simShapes_, previewMode);
         }
 
-        void pChaosEngine(CommonVars commonVars, List<PreviewShape> simShapes, bool previewMode)
+        void pChaosEngine(CommonVars commonVars, List<PreviewShape> simShapes_, bool previewMode)
         {
             outputValid = false;
-            this.simShapes = simShapes;
+            simShapes = simShapes_;
 
             listOfOutputPoints = new Paths();
 
@@ -645,12 +641,7 @@ namespace Variance
             Int32 layerBPathCount_orig = booleanPaths[1].Count();
 
             // Let's validate that we have something reasonable for the inputs before we do something with them.
-            bool inputsValid = true;
-            if ((layerAPathCount_orig == 0) || (layerBPathCount_orig == 0))
-            {
-                // Assuming failSafe for each layer, we'd have one point per failed layer, so we fail for anything below or equal to 2. We also can't make a polygon from 2 points.
-                inputsValid = false;
-            }
+            bool inputsValid = !((layerAPathCount_orig == 0) || (layerBPathCount_orig == 0));
 
             if (inputsValid)
             {
@@ -659,11 +650,7 @@ namespace Variance
                     case (int)CommonVars.calcModes.area: // area
                         try
                         {
-                            bool perPoly = false;
-                            if (simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly)
-                            {
-                                perPoly = true;
-                            }
+                            bool perPoly = simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly;
                             AreaHandler aH = new AreaHandler(aPaths: booleanPaths[0], bPaths: booleanPaths[1], maySimplify: true, perPoly);
                             // Sum the areas by polygon returned.
                             result = (Convert.ToDouble(result) + aH.area).ToString();
@@ -742,7 +729,7 @@ namespace Variance
                             ChordHandler cH = new ChordHandler(aPath, bPath, simulationSettings);
 
                             // Fragment our result.
-                            char[] resultSeparators = new char[] { ',' }; // CSV separator for splitting results for comparison.
+                            char[] resultSeparators = { ',' }; // CSV separator for splitting results for comparison.
                             string[] tmpfraggedResult = result.Split(resultSeparators);
 #if CHAOSTHREADED
                             Parallel.For(0, tmpfraggedResult.Length, (i) =>
