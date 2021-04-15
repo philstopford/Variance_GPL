@@ -119,13 +119,11 @@ namespace Variance
                     multiThreadWarnWidth,
                     resultFieldWidth,
                     commentBoxWidth, commentBoxHeight,
-                    num_Height,
                     label_Height,
                     simButtonWidth, simButtonHeight,
-                    replayNumWidth, replayNumHeight
+                    replayNumWidth
         ;
 
-        float uiScaleFactor;
         int simRunningTabToFreeze;
 
         Scrollable controls;

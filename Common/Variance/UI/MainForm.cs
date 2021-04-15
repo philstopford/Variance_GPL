@@ -827,10 +827,7 @@ namespace Variance
             // Figure out host UI element sizes to assist in layout, at least vertically.
             // Set controls to null afterwards.
             label_Height = 13; //  (int)Math.Ceiling(qLabel.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
-            num_Height = 13; //  (int)Math.Ceiling(qNum.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
-
-            uiScaleFactor = 0.66f;
-
+            
             simulationOutputGroupBoxHeight = 57;
             simulationSettingsGroupBoxHeight = 180;
             userGuidanceWidth = 395;
@@ -840,7 +837,6 @@ namespace Variance
             simButtonHeight = 55;
 
             replayNumWidth = 80;
-            replayNumHeight = 21;
 
             multiThreadWarnWidth = 300;
             resultFieldWidth = 344;
