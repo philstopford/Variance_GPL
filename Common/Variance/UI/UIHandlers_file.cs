@@ -304,7 +304,7 @@ namespace Variance
         {
             Int32 settingsIndex = -1;
 
-            Application.Instance.Invoke(() =>
+            await Application.Instance.InvokeAsync(() =>
             {
                 // Get our layer.
                 settingsIndex = getSelectedLayerIndex();
@@ -333,10 +333,7 @@ namespace Variance
 
             if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
             {
-                Application.Instance.Invoke(() =>
-                {
-                    suspendUIHandlers();
-                });
+                await Application.Instance.InvokeAsync(suspendUIHandlers);
 
                 prepUIForLoad();
 
@@ -372,7 +369,7 @@ namespace Variance
                 
                 if (fileOK)
                 {
-                    Application.Instance.Invoke(() =>
+                    await Application.Instance.InvokeAsync(() =>
                     {
                         commonVars.getLayerSettings(settingsIndex).setString(EntropyLayerSettings.properties_s.file, commonVars.getGeoCoreHandler(settingsIndex).getFilename());
                         // Clear tracking for external point data.
@@ -413,11 +410,11 @@ namespace Variance
                     }
                     commonVars.getGeoCoreHandler(settingsIndex).getGeo().reset();
                 }
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                     commonVars.getGeoCoreHandler(settingsIndex).getGeo().updateCollections()
                 );
 
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                 {
                     // Refresh layer UI : a little hacky due to the suspended UI elements, but it works.
                     do2DLayerUI(settingsIndex, updateUI: true);
@@ -427,7 +424,7 @@ namespace Variance
                 });
             }
 
-            Application.Instance.Invoke(() =>
+            await Application.Instance.InvokeAsync(() =>
             {
                 stopIndeterminateProgress();
                 geoCoreLoadingUI(false);
