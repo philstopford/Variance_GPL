@@ -88,10 +88,8 @@ namespace Variance
         void threaded()
         {
             samples_par = 0;
-            Timer m_timer = new Timer();
             // Set up timers for the UI refresh
-            m_timer.AutoReset = true;
-            m_timer.Interval = CentralProperties.timer_interval;
+            Timer m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
             m_timer.Start();
             m_timer.Elapsed += updateHost;
 
@@ -131,7 +129,7 @@ namespace Variance
 
         public ChaosSettings getSample(int i)
         {
-            // PA search doesn't presample, so we have to generate a live sample and return it back.
+            // PA search doesn't pre-sample, so we have to generate a live sample and return it back.
             if (paSearch)
             {
                 return generateSample();
