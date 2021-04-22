@@ -13,14 +13,14 @@ namespace Variance
             {
                 try
                 {
-                    SmtpClient client = new SmtpClient();
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    SmtpClient client = new SmtpClient {ServerCertificateValidationCallback = (s, c, h, e) => true};
                     client.Connect(host, Convert.ToInt32(port), ssl);
-                    MimeMessage message = new MimeMessage();
+                    MimeMessage message = new MimeMessage
+                    {
+                        Subject = subject, Body = new TextPart("plain") {Text = messageContent}
+                    };
                     message.From.Add(new MailboxAddress(address, address));
                     message.To.Add(new MailboxAddress(address, address));
-                    message.Subject = subject;
-                    message.Body = new TextPart("plain") { Text = messageContent };
                     client.Authenticate(address, password);
                     client.Send(message);
                     client.Disconnect(true);
