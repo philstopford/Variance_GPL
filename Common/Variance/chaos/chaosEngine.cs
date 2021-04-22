@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using ClipperLib;
@@ -77,33 +78,22 @@ namespace Variance
 #if CHAOSTHREADED
             );
 #endif
-            List<Paths> returnPaths = new List<Paths>();
-            returnPaths.Add(aPath.ToList());
-            returnPaths.Add(bPath.ToList());
+            List<Paths> returnPaths = new List<Paths> {aPath.ToList(), bPath.ToList()};
 
             return returnPaths;
         }
 
         Path reOrderPath(string shapeRef, Int32 pathIndex)
         {
-            Path sourcePath;
-            Path returnPath;
             if ((shapeRef.ToUpper() != "A") && (shapeRef.ToUpper() != "B"))
             {
                 // Bad callsite. Throw exception.
                 throw (new Exception("reOrderPath: No shapeRef supplied!"));
             }
 
-            if (shapeRef.ToUpper() == "A")
-            {
-                sourcePath = booleanPaths[0][pathIndex].ToList();
-            }
-            else
-            {
-                sourcePath = booleanPaths[1][pathIndex].ToList();
-            }
+            Path sourcePath = shapeRef.ToUpper() == "A" ? booleanPaths[0][pathIndex].ToList() : booleanPaths[1][pathIndex].ToList();
 
-            returnPath = GeoWrangler.clockwiseAndReorder(sourcePath);
+            Path returnPath = GeoWrangler.clockwiseAndReorder(sourcePath);
             return returnPath;
         }
 
@@ -139,19 +129,16 @@ namespace Variance
                 }
             }
 
-            Paths ret;
-
-            ret = layerBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, preserveColinear: true);
+            Paths ret = layerBoolean(firstLayerOperator, firstLayer, secondLayerOperator, secondLayer, booleanFlag, preserveColinear: true);
 
             ret = GeoWrangler.gapRemoval(ret, extension: extension).ToList();
 
             bool holes = false;
-            bool gwHoles;
 
-            for (int i = 0; i < ret.Count; i++)
+            foreach (Path t in ret)
             {
-                holes = !Clipper.Orientation(ret[i]);
-                gwHoles = !GeoWrangler.isClockwise(ret[i]);
+                holes = !Clipper.Orientation(t);
+                bool gwHoles = !GeoWrangler.isClockwise(t);
                 if (holes != gwHoles)
                 {
                 }
@@ -164,10 +151,9 @@ namespace Variance
             // Apply the keyholing and rationalize.
             if (holes)
             {
-                Paths merged;
                 Fragmenter f = new Fragmenter(resolution * CentralProperties.scaleFactorForOperation);
                 ret = f.fragmentPaths(ret);
-                merged = GeoWrangler.makeKeyHole(ret, extension:extension);
+                Paths merged = GeoWrangler.makeKeyHole(ret, extension:extension);
 
                 int count = merged.Count;
 #if CHAOSTHREADED
@@ -182,8 +168,7 @@ namespace Variance
                 );
 #endif
                 // Squash any accidental keyholes - not ideal, but best option found so far.
-                Clipper c1 = new Clipper();
-                c1.PreserveCollinear = true;
+                Clipper c1 = new Clipper {PreserveCollinear = true};
                 c1.AddPaths(merged, PolyType.ptSubject, true);
                 c1.Execute(ClipType.ctUnion, ret);
                 ret = GeoWrangler.stripColinear(ret, 1.0);
@@ -212,12 +197,14 @@ namespace Variance
 
             IntRect bounds = ClipperBase.GetBounds(ret);
 
-            Path bound = new Path();
-            bound.Add(new IntPoint(bounds.left, bounds.bottom));
-            bound.Add(new IntPoint(bounds.left, bounds.top));
-            bound.Add(new IntPoint(bounds.right, bounds.top));
-            bound.Add(new IntPoint(bounds.right, bounds.bottom));
-            bound.Add(new IntPoint(bounds.left, bounds.bottom));
+            Path bound = new Path
+            {
+                new IntPoint(bounds.left, bounds.bottom),
+                new IntPoint(bounds.left, bounds.top),
+                new IntPoint(bounds.right, bounds.top),
+                new IntPoint(bounds.right, bounds.bottom),
+                new IntPoint(bounds.left, bounds.bottom)
+            };
 
             Clipper c = new Clipper();
 
@@ -289,23 +276,24 @@ namespace Variance
                 booleanType = "OR";
             }
 
-            Clipper c = new Clipper();
-            c.PreserveCollinear = preserveColinear; // important - if we don't do this, we lose the fragmentation on straight edges.
+            // important - if we don't do this, we lose the fragmentation on straight edges.
+            Clipper c = new Clipper {PreserveCollinear = preserveColinear};
 
             c.AddPaths(firstPaths, PolyType.ptSubject, true);
             c.AddPaths(secondPaths, PolyType.ptClip, true);
 
             Paths outputPoints = new Paths();
 
-            if (booleanType == "AND")
+            switch (booleanType)
             {
-                c.Execute(ClipType.ctIntersection, outputPoints, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+                case "AND":
+                    c.Execute(ClipType.ctIntersection, outputPoints, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+                    break;
+                case "OR":
+                    c.Execute(ClipType.ctUnion, outputPoints, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+                    break;
             }
 
-            if (booleanType == "OR")
-            {
-                c.Execute(ClipType.ctUnion, outputPoints, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-            }
             return outputPoints; // Return our first list of points as the result of the boolean.
         }
 
@@ -546,8 +534,7 @@ namespace Variance
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new Paths();
-                                    eightLayerResults[i].Add(tPath);
+                                    eightLayerResults[i] = new Paths {tPath};
                                 }
                                 else
                                 {
@@ -558,8 +545,7 @@ namespace Variance
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new Paths();
-                                    eightLayerResults[i].Add(tPath);
+                                    eightLayerResults[i] = new Paths {tPath};
                                 }
                                 else
                                 {
@@ -568,8 +554,7 @@ namespace Variance
                             }
                             else
                             {
-                                eightLayerResults[i] = new Paths();
-                                eightLayerResults[i].Add(tPath);
+                                eightLayerResults[i] = new Paths {tPath};
                             }
                             break;
                         default:
@@ -654,7 +639,7 @@ namespace Variance
                             bool perPoly = simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly;
                             AreaHandler aH = new AreaHandler(aPaths: booleanPaths[0], bPaths: booleanPaths[1], maySimplify: true, perPoly);
                             // Sum the areas by polygon returned.
-                            result = (Convert.ToDouble(result) + aH.area).ToString();
+                            result = (Convert.ToDouble(result) + aH.area).ToString(CultureInfo.InvariantCulture);
                             listOfOutputPoints.AddRange(aH.listOfOutputPoints);
                             outputValid = true;
                         }
@@ -686,12 +671,12 @@ namespace Variance
                         // Viewport needs a polygon - lines aren't handled properly, so let's double up our line.
                         try
                         {
-                            for (int poly = 0; poly < listOfOutputPoints.Count; poly++)
+                            foreach (Path t in listOfOutputPoints)
                             {
-                                Int32 pt = listOfOutputPoints[poly].Count - 1;
+                                Int32 pt = t.Count - 1;
                                 while (pt > 0)
                                 {
-                                    listOfOutputPoints[poly].Add(new IntPoint(listOfOutputPoints[poly][pt]));
+                                    t.Add(new IntPoint(t[pt]));
                                     pt--;
                                 }
                             }
@@ -705,6 +690,7 @@ namespace Variance
                         break;
 
                     case (int)CommonVars.calcModes.chord: // chord
+                        // ReSharper disable once ConvertIfStatementToNullCoalescingAssignment
                         if (result == null)
                         {
                             result = "0.0,0.0,0.0,0.0";
@@ -787,14 +773,14 @@ namespace Variance
                                     angleHandler agH = new angleHandler(layerAPath: booleanPaths[0], layerBPath: booleanPaths[1]);
                                     if (result == null)
                                     {
-                                        result = agH.minimumIntersectionAngle.ToString();
+                                        result = agH.minimumIntersectionAngle.ToString(CultureInfo.InvariantCulture);
                                         listOfOutputPoints = agH.resultPaths.ToList();
                                     }
                                     else
                                     {
                                         if (agH.minimumIntersectionAngle < Convert.ToDouble(result))
                                         {
-                                            result = agH.minimumIntersectionAngle.ToString();
+                                            result = agH.minimumIntersectionAngle.ToString(CultureInfo.InvariantCulture);
                                             listOfOutputPoints.Clear();
                                             listOfOutputPoints = agH.resultPaths.ToList();
                                         }
