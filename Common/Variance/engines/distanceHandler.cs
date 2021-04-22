@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ClipperLib;
 using Error;
@@ -16,9 +17,9 @@ namespace Variance
     class DistanceHandler
     {
         bool debug = false;
-        public Paths resultPaths { get; set; }
+        public Paths resultPaths { get; private set; }
         double resultDistance;
-        public string distanceString { get; set; }
+        public string distanceString { get; private set; }
         bool invert;
 
         void ZFillCallback(IntPoint bot1, IntPoint top1, IntPoint bot2, IntPoint top2, ref IntPoint pt)
@@ -47,11 +48,10 @@ namespace Variance
         {
             resultPaths = new Paths();
             // Safety check for no active layers.
-            if (((aPaths.Count() == 1) && (aPaths[0].Count() == 1)) ||
-                ((bPaths.Count() == 1) && (bPaths[0].Count() == 1)))
+            if (((aPaths.Count == 1) && (aPaths[0].Count == 1)) ||
+                ((bPaths.Count == 1) && (bPaths[0].Count == 1)))
             {
-                Path tempPath = new Path();
-                tempPath.Add(new IntPoint(0, 0));
+                Path tempPath = new Path {new IntPoint(0, 0)};
                 resultPaths.Add(tempPath.ToList());
                 distanceString = "N/A";
             }
@@ -75,7 +75,7 @@ namespace Variance
                     resultPaths = result.resultPaths;
                 }
 
-                distanceString = (resultDistance).ToString();
+                distanceString = (resultDistance).ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -114,47 +114,32 @@ namespace Variance
                 }
 
                 // Do we need to invert the result?
-                Clipper c = new Clipper();
-                c.PreserveCollinear = true;
+                Clipper c = new Clipper {PreserveCollinear = true};
                 Paths oCheck = new Paths();
                 c.AddPaths(bPaths, PolyType.ptClip, true);
                 c.AddPath(aPaths[shapeA], PolyType.ptSubject, true);
                 c.Execute(ClipType.ctUnion, oCheck);
 
                 double oCheckArea = 0;
-                for (int r = 0; r < oCheck.Count; r++)
+                foreach (Path t in oCheck)
                 {
-                    oCheckArea += Clipper.Area(oCheck[r]);
+                    oCheckArea += Clipper.Area(t);
                 }
 
                 if ((simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosure) || (simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosureOld)) // negative value since we're fully inside a containing polygon.
                 {
-                    if (Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) > Double.Epsilon)
-                    {
-                        resultNeedsInversion = true;
-                    }
-                    else
-                    {
-                        resultNeedsInversion = false;
-                    }
+                    resultNeedsInversion = Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) > Double.Epsilon;
                 }
                 if ((simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacing) || (simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacingOld)) // negative value since we're fully outside a containing polygon.
                 {
-                    if (Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) < Double.Epsilon)
-                    {
-                        resultNeedsInversion = true;
-                    }
-                    else
-                    {
-                        resultNeedsInversion = false;
-                    }
+                    resultNeedsInversion = Math.Abs(Math.Abs(oCheckArea) - Math.Abs(refArea)) < Double.Epsilon;
                 }
 
                 // We can query here for the minimum distance for each shape combination.
-                for (Int32 pointA = 0; pointA < aPaths[shapeA].Count(); pointA++)
+                for (Int32 pointA = 0; pointA < aPaths[shapeA].Count; pointA++)
                 {
                     // '1' forces a single nearest neighbor to be returned.
-                    var pIter = pTree.NearestNeighbors(new double[] { aPaths[shapeA][pointA].X, aPaths[shapeA][pointA].Y }, 1);
+                    NearestNeighbour<GeoLibPointF> pIter = pTree.NearestNeighbors(new double[] { aPaths[shapeA][pointA].X, aPaths[shapeA][pointA].Y }, 1);
                     while (pIter.MoveNext())
                     {
                         double currentDistance = pIter.CurrentDistance;
@@ -171,11 +156,12 @@ namespace Variance
                 }
             }
 
-            spaceResult result = new spaceResult();
-            result.resultPaths = new Paths();
-            result.resultPaths.Add(minimumDistancePath);
-            // k-d tree distance is the squared distance. Need to scale and sqrt
-            result.distance = Math.Sqrt(currentMinimum / Utils.myPow(CentralProperties.scaleFactorForOperation, 2));
+            spaceResult result = new spaceResult
+            {
+                resultPaths = new Paths {minimumDistancePath},
+                // k-d tree distance is the squared distance. Need to scale and sqrt
+                distance = Math.Sqrt(currentMinimum / Utils.myPow(CentralProperties.scaleFactorForOperation, 2))
+            };
 
             if (resultNeedsInversion)
             {
@@ -188,18 +174,14 @@ namespace Variance
         void overlap(Paths aPaths, Paths bPaths, EntropySettings simulationSettings, bool runThreaded)
         {
             bool completeOverlap = false;
-            for (Int32 layerAPoly = 0; layerAPoly < aPaths.Count(); layerAPoly++)
+            foreach (Path layerAPath in aPaths)
             {
-                Path layerAPath = aPaths[layerAPoly];
-                for (Int32 layerBPoly = 0; layerBPoly < bPaths.Count(); layerBPoly++)
+                foreach (Path layerBPath in bPaths)
                 {
-                    Path layerBPath = bPaths[layerBPoly];
-
                     Paths overlapShape = new Paths();
 
                     // Check for complete overlap
-                    Clipper c = new Clipper();
-                    c.PreserveCollinear = true;
+                    Clipper c = new Clipper {PreserveCollinear = true};
                     // Try a union and see whether the point count of the perimeter changes. This might break for re-entrant cases, but those are problematic anyway.
                     Paths fullOverlapCheck = new Paths();
                     c.AddPath(layerAPath, PolyType.ptSubject, true);
@@ -208,7 +190,7 @@ namespace Variance
                     double aArea = Math.Abs(Clipper.Area(layerAPath));
                     double bArea = Math.Abs(Clipper.Area(layerBPath));
                     double uArea = 0;
-                    foreach (var t in fullOverlapCheck)
+                    foreach (Path t in fullOverlapCheck)
                     {
                         uArea += Clipper.Area(t);
                     }
@@ -241,12 +223,12 @@ namespace Variance
                         c.Execute(ClipType.ctDifference, overlapShape);
                     }
 
-                    if ((!completeOverlap) && (overlapShape.Count() > 0)) // call if there's an overlap, and it's incomplete.
+                    if ((!completeOverlap) && (overlapShape.Any())) // call if there's an overlap, and it's incomplete.
                     {
                         spaceResult result = doPartialOverlap(overlapShape, layerAPath, layerBPath, simulationSettings, runThreaded);
                         if (result.done)
                         {
-                            if ((resultPaths.Count() == 0) || (result.distance < resultDistance))
+                            if ((!resultPaths.Any()) || (result.distance < resultDistance))
                             {
                                 resultPaths = result.resultPaths;
                                 resultDistance = result.distance;
@@ -372,11 +354,11 @@ namespace Variance
                     }
 
                     // Walk our edges to figure out the overlap.
-                    for (int aOL = 0; aOL < aOverlapEdge.Count; aOL++)
+                    foreach (Path t in aOverlapEdge)
                     {
-                        for (int bOL = 0; bOL < bOverlapEdge.Count; bOL++)
+                        foreach (Path t1 in bOverlapEdge)
                         {
-                            spaceResult tResult = overlapAssess(simulationSettings, overlapShape[poly], aOverlapEdge[aOL], bOverlapEdge[bOL], aPath, bPath, runThreaded);
+                            spaceResult tResult = overlapAssess(simulationSettings, overlapShape[poly], t, t1, aPath, bPath, runThreaded);
                             if ((result.resultPaths.Count == 0) || (tResult.distance > result.distance))
                             {
                                 result.distance = tResult.distance;
@@ -639,10 +621,10 @@ namespace Variance
 
                 double startPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], aOverlapEdge[0]);
                 double endPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], aOverlapEdge[0]);
-                for (int aPt = 0; aPt < aOverlapEdge.Count; aPt++)
+                foreach (IntPoint t in aOverlapEdge)
                 {
-                    double temp_startPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], aOverlapEdge[aPt]);
-                    double temp_endPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], aOverlapEdge[aPt]);
+                    double temp_startPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], t);
+                    double temp_endPointCheck_A_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], t);
                     if (temp_startPointCheck_A_dist < startPointCheck_A_dist)
                     {
                         startPointCheck_A_dist = temp_startPointCheck_A_dist;
@@ -655,10 +637,10 @@ namespace Variance
 
                 double startPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], bOverlapEdge[0]);
                 double endPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], bOverlapEdge[0]);
-                for (int bPt = 0; bPt < bOverlapEdge.Count; bPt++)
+                foreach (IntPoint t in bOverlapEdge)
                 {
-                    double temp_startPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], bOverlapEdge[bPt]);
-                    double temp_endPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], bOverlapEdge[bPt]);
+                    double temp_startPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][0], t);
+                    double temp_endPointCheck_B_dist = GeoWrangler.distanceBetweenPoints(clippedLines[line][1], t);
                     if (temp_startPointCheck_B_dist < startPointCheck_B_dist)
                     {
                         startPointCheck_B_dist = temp_startPointCheck_B_dist;
@@ -680,7 +662,6 @@ namespace Variance
                     // This is a special situation, it turns out.
                     // There is one specific scenario where this overlap case (start and end on the same geometry) is valid - orthogonal shapes with a bisection.
                     // The orthogonal shapes cause the rays to hit the opposite side of the shape. We don't want to reject this.
-                    validOverlap = false;
                     if (lineLength > maxDistance_orthogonalFallback)
                     {
                         maxDistance_fallbackIndex = line;
