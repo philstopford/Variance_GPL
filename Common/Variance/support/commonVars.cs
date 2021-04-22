@@ -279,8 +279,8 @@ namespace Variance
             }
         }
 
-        public object drawingLock { get; set; }
-        public object implantDrawingLock { get; set; }
+        public object drawingLock { get; private set; }
+        public object implantDrawingLock { get; private set; }
 
         bool geoCoreCDVariation;
 
@@ -326,18 +326,18 @@ namespace Variance
             replayMode = val;
         }
 
-        public Int32 HTCount { get; set; }
+        public Int32 HTCount { get; private set; }
 
-        public Storage storage { get; set; }
+        public Storage storage { get; private set; }
 
         // UI list elements that get referenced in DataContext.
-        public ObservableCollection<string>[] subshapes { get; set; }
+        public ObservableCollection<string>[] subshapes { get; private set; }
         public ObservableCollection<string> subShapesList_exp { get; set; }
-        public ObservableCollection<string> layerNames { get; set; }
+        public ObservableCollection<string> layerNames { get; private set; }
 
         // Collection that we use to populate the custom RNG mapping menus on variations.
         public static string boxMuller = "Box-Muller";
-        public ObservableCollection<string> rngCustomMapping { get; set; }
+        public ObservableCollection<string> rngCustomMapping { get; private set; }
 
         bool simulationRunning;
         public bool isSimRunning()
@@ -360,26 +360,14 @@ namespace Variance
             simulationRunning = val;
         }
 
-        public string version { get; set; }
-        public string author { get; set; }
+        public string version { get; private set; }
+        public string author { get; private set; }
         public string titleText { get; set; }
 
         public string projectFileName = "";
-        bool warningShown, geoCoreCDUWarningShown;
-
-        public void setWarningShown(bool val)
-        {
-            pSetWarningShown(val);
-        }
-
-        void pSetWarningShown(bool val)
-        {
-            warningShown = val;
-        }
-
-        string[] calcMode = { "AREA", "SPACING_ENCLOSURE", "CHORD", "ANGLE" };
+        bool geoCoreCDUWarningShown;
+        
         public enum calcModes { area, enclosure_spacing_overlap, chord, angle }
-        string[] spacEncMode = { "SPACING", "ENCLOSURE", "SPACINGOLD", "ENCLOSUREOLD" };
         public enum areaCalcModes { all, perpoly }
         public enum spacingCalcModes { spacing, enclosure, spacingOld, enclosureOld } // exp triggers projection from shortest edge for overlap evaluation.
         public enum chordCalcElements { none, a, b }
@@ -389,9 +377,11 @@ namespace Variance
         public static string[] csvHeader = { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
 
         public enum external_Type { svg, gds, oas }
-        List<string> externalTypes = new List<string> { "SVG", "GDS", "Oasis" };
+
+        readonly List<string> externalTypes = new List<string> { "SVG", "GDS", "Oasis" };
         public enum external_Filter { none, lte, gte }
-        List<string> externalFilterList = new List<string> { "", "<=", ">=" };
+
+        readonly List<string> externalFilterList = new List<string> { "", "<=", ">=" };
 
         public List<string> getExternalTypes()
         {
@@ -596,7 +586,7 @@ namespace Variance
                     if (updateGeoCoreGeometryFromFile)
                     {
                         getGeoCoreHandler(index).getGeo().updateCollections();
-                        // Get the indices based on the stored structure / layerdatatype
+                        // Get the indices based on the stored structure / layer datatype
                         int structureFromFile = Array.IndexOf(getGeoCoreHandler(index).getGeo().getStructureList().ToArray(), entropyLayerSettings.getString(EntropyLayerSettings.properties_s.structure));
                         if (structureFromFile != -1)
                         {
@@ -774,7 +764,7 @@ namespace Variance
             return status;
         }
 
-        public ObservableCollection<string> calcMode_names { get; set; }
+        public ObservableCollection<string> calcMode_names { get; private set; }
 
         List<string> availableShapes;
         public List<string> getAvailableShapes()
@@ -886,8 +876,8 @@ namespace Variance
             return geoCore_Handlers[index];
         }
 
-        public ObservableCollection<string>[] structureList { get; set; }
-        public ObservableCollection<string>[] activeStructure_LayerDataTypeList { get; set; }
+        public ObservableCollection<string>[] structureList { get; private set; }
+        public ObservableCollection<string>[] activeStructure_LayerDataTypeList { get; private set; }
 
         public ObservableCollection<string> structureList_exp { get; set; }
         public ObservableCollection<string> activeStructure_LayerDataTypeList_exp { get; set; }
@@ -958,7 +948,6 @@ namespace Variance
             nonSimulationSettings = new NonSimulationSettings(CentralProperties.version);
 
             storage = new Storage();
-            warningShown = false;
             geoCoreCDUWarningShown = false;
             // simPreview set-up
             simPreview = new SimulationPreview(ref varianceContext);
@@ -1025,13 +1014,13 @@ namespace Variance
             subShapesList_exp = new ObservableCollection<string>();
             subShapesList_exp = subshapes[0];
 
-            rngCustomMapping = new ObservableCollection<string>();
-            rngCustomMapping.Add(boxMuller); // default. Not removable.
-            for (int i = 0; i < varianceContext.rngMappingEquations.Count; i++)
+            rngCustomMapping = new ObservableCollection<string> {boxMuller};
+            // default. Not removable.
+            foreach (string t in varianceContext.rngMappingEquations)
             {
-                if (varianceContext.rngMappingEquations[i] != boxMuller) // skip the default.
+                if (t != boxMuller) // skip the default.
                 {
-                    rngCustomMapping.Add(varianceContext.rngMappingEquations[i]);
+                    rngCustomMapping.Add(t);
                 }
             }
 
@@ -1866,9 +1855,9 @@ namespace Variance
                     linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU));
                     linesToWrite.Add("Side CDU RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.sCDU_RNG));
                     string[] tempArray = summaryFile_LitData(layer);
-                    for (int i = 0; i < tempArray.Length; i++)
+                    foreach (string t in tempArray)
                     {
-                        linesToWrite.Add(tempArray[i]);
+                        linesToWrite.Add(t);
                     }
                 }
                 else
@@ -1963,9 +1952,9 @@ namespace Variance
                     linesToWrite.Add("Vertical Overlay RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.yOL_RNG));
                     // Correlation data
                     string[] tempArray = summaryFile_LitData(layer);
-                    for (int i = 0; i < tempArray.Length; i++)
+                    foreach (string t in tempArray)
                     {
-                        linesToWrite.Add(tempArray[i]);
+                        linesToWrite.Add(t);
                     }
                 }
                 linesToWrite.Add("");
