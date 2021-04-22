@@ -166,10 +166,8 @@ namespace Variance
                 return;
             }
 
-            using (StreamWriter sw = File.AppendText(filename))
-            {
-                sw.WriteLine(debugString);
-            }
+            using StreamWriter sw = File.AppendText(filename);
+            sw.WriteLine(debugString);
         }
 
         public static double do1DCalculation_3sig_edge(
@@ -247,7 +245,6 @@ namespace Variance
                 {
                     char[] csvSeparators = { ',' };
                     char[] equalSeparators = { '=' };
-                    string[] parsedString;
 
                     reading = true;
                     // Read in non-CSV data first
@@ -255,7 +252,8 @@ namespace Variance
                     sr.ReadLine();
                     // Now we have the meat of the data we need.
                     string tempString = sr.ReadLine();
-                    parsedString = tempString.Split(csvSeparators);
+                    // ReSharper disable once PossibleNullReferenceException
+                    string[] parsedString = tempString.Split(csvSeparators);
                     if (parsedString.Count() >= 6)
                     {
                         // We have 6 values to extract from this line.
@@ -332,6 +330,7 @@ namespace Variance
                     // Read in non-CSV data first
                     // Pattern line
                     string check = sr.ReadLine();
+                    // ReSharper disable once PossibleNullReferenceException
                     if (!check.StartsWith("Quilt"))
                     {
                         return false;
