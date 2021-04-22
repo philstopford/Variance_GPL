@@ -10,8 +10,8 @@ namespace Variance
 
     class AreaHandler
     {
-        public double area { get; set; }
-        public Paths listOfOutputPoints { get; set; }
+        public double area { get; private set; }
+        public Paths listOfOutputPoints { get; private set; }
 
         void ZFillCallback(IntPoint bot1, IntPoint top1, IntPoint bot2, IntPoint top2, ref IntPoint pt)
         {
@@ -28,9 +28,8 @@ namespace Variance
             Paths tmpPaths = new Paths();
             listOfOutputPoints = new Paths();
 
-            Clipper c = new Clipper();
-            c.PreserveCollinear = !maySimplify; // callsite may not want simplified geometry.
-            c.ZFillFunction = ZFillCallback;
+            // callsite may not want simplified geometry.
+            Clipper c = new Clipper {PreserveCollinear = !maySimplify, ZFillFunction = ZFillCallback};
 
             c.AddPaths(aPaths, PolyType.ptSubject, true);
 
@@ -52,7 +51,7 @@ namespace Variance
                 tmpVal = -1.0f;
             }
 
-            int polyCount = tmpPaths.Count();
+            int polyCount = tmpPaths.Count;
             for (Int32 poly = 0; poly < polyCount; poly++)
             {
                 if (perPoly)
