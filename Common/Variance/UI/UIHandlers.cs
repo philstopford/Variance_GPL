@@ -76,22 +76,11 @@ namespace Variance
             {
                 upperGadgets_panel.Content = simPreviewBox;
             }
-            if (cB_displayResults.Checked == true)
-            {
-                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 1);
-            }
-            else
-            {
-                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results, 0);
-            }
-            if (cB_displayShapes.Checked == true)
-            {
-                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape, 1);
-            }
-            else
-            {
-                commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape, 0);
-            }
+
+            commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.results,
+                cB_displayResults.Checked == true ? 1 : 0);
+            commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.shape,
+                cB_displayShapes.Checked == true ? 1 : 0);
 
             doStatusLine();
             drawSimulationPanelHandler(false);
@@ -205,14 +194,7 @@ namespace Variance
             }
             else
             {
-                if (vpindex != (int)CommonVars.twoDTabNames.layer)
-                {
-                    vpindex = CentralProperties.maxLayersForMC; // layer count
-                }
-                else
-                {
-                    vpindex = getSelectedLayerIndex();
-                }
+                vpindex = vpindex != (int)CommonVars.twoDTabNames.layer ? CentralProperties.maxLayersForMC : getSelectedLayerIndex();
             }
             viewPort.changeSettingsRef(ref mcVPSettings[vpindex]);
         }
