@@ -57,7 +57,7 @@ namespace Variance
                     return;
                 }
 
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                 {
                     statusProgressBar.Indeterminate = true;
                 });
@@ -72,7 +72,7 @@ namespace Variance
                 {
                     // Handle any task cancelled exception without crashing the tool. The cancellation may occur due to close of the tool whilst evaluation is underway.
                 }
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                 {
                     statusProgressBar.Indeterminate = false;
                 });
@@ -98,22 +98,24 @@ namespace Variance
                 int scale = 100; // for 0.01 nm resolution
                 GeoCore g = new GeoCore();
                 g.reset();
-                GCDrawingfield drawing_ = new GCDrawingfield("");
-                drawing_.accyear = (short)DateTime.Now.Year;
-                drawing_.accmonth = (short)DateTime.Now.Month;
-                drawing_.accday = (short)DateTime.Now.Day;
-                drawing_.acchour = (short)DateTime.Now.Hour;
-                drawing_.accmin = (short)DateTime.Now.Minute;
-                drawing_.accsec = (short)DateTime.Now.Second;
-                drawing_.modyear = (short)DateTime.Now.Year;
-                drawing_.modmonth = (short)DateTime.Now.Month;
-                drawing_.modday = (short)DateTime.Now.Day;
-                drawing_.modhour = (short)DateTime.Now.Hour;
-                drawing_.modmin = (short)DateTime.Now.Minute;
-                drawing_.modsec = (short)DateTime.Now.Second;
-                drawing_.databaseunits = 1000 * scale;
-                drawing_.userunits = 0.001 / scale;
-                drawing_.libname = "variance";
+                GCDrawingfield drawing_ = new GCDrawingfield("")
+                {
+                    accyear = (short) DateTime.Now.Year,
+                    accmonth = (short) DateTime.Now.Month,
+                    accday = (short) DateTime.Now.Day,
+                    acchour = (short) DateTime.Now.Hour,
+                    accmin = (short) DateTime.Now.Minute,
+                    accsec = (short) DateTime.Now.Second,
+                    modyear = (short) DateTime.Now.Year,
+                    modmonth = (short) DateTime.Now.Month,
+                    modday = (short) DateTime.Now.Day,
+                    modhour = (short) DateTime.Now.Hour,
+                    modmin = (short) DateTime.Now.Minute,
+                    modsec = (short) DateTime.Now.Second,
+                    databaseunits = 1000 * scale,
+                    userunits = 0.001 / scale,
+                    libname = "variance"
+                };
 
                 // Register layer names with geoCore. Need to compensate the 1-index for the layer registration.
                 g.addLayerName("L" + (layerIndex + 1) + "D0", commonVars.getLayerSettings(layerIndex).getString(EntropyLayerSettings.properties_s.name));
@@ -143,13 +145,13 @@ namespace Variance
                     updateProgressBar(progress);
                 });
 
-                for (int i = 0; i < previewShapes.Count; i++)
+                foreach (PreviewShape t in previewShapes)
                 {
-                    List<GeoLibPointF[]> polys = previewShapes[i].getPoints();
+                    List<GeoLibPointF[]> polys = t.getPoints();
                     for (int poly = 0; poly < polys.Count; poly++)
                     {
                         // No drawn polygons desired.
-                        if (!previewShapes[i].getDrawnPoly(poly))
+                        if (!t.getDrawnPoly(poly))
                         {
                             GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
 

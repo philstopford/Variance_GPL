@@ -174,7 +174,7 @@ namespace Variance
                     }
                 }
 
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                 {
                     statusProgressBar.Indeterminate = true;
                 });
@@ -189,7 +189,7 @@ namespace Variance
                 {
                     // Handle any task cancelled exception without crashing the tool. The cancellation may occur due to close of the tool whilst evaluation is underway.
                 }
-                Application.Instance.Invoke(() =>
+                await Application.Instance.InvokeAsync(() =>
                 {
                     statusProgressBar.Indeterminate = false;
                 });

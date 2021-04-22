@@ -989,10 +989,10 @@ namespace Variance
                 if (updateNeeded)
                 {
                     // Set indeterminate progress bar to show application is thinking.
-                    Application.Instance.Invoke(() =>
-                    {
-                        statusProgressBar.Indeterminate = true;
-                    }
+                    await Application.Instance.InvokeAsync(() =>
+                        {
+                            statusProgressBar.Indeterminate = true;
+                        }
                     );
                     entropyControl.update(commonVars);
                     // Spawn and await background task in case the calculation is long-running.
@@ -1022,10 +1022,10 @@ namespace Variance
                     }
                     postSimUI();
                     // Set the progress bar back to a fixed state
-                    Application.Instance.Invoke(() =>
-                    {
-                        statusProgressBar.Indeterminate = false;
-                    }
+                    await Application.Instance.InvokeAsync(() =>
+                        {
+                            statusProgressBar.Indeterminate = false;
+                        }
                     );
                     postSimStatusLine();
                 }

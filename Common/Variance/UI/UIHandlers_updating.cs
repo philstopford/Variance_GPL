@@ -1144,7 +1144,7 @@ namespace Variance
                 return;
             }
 
-            Application.Instance.Invoke(() =>
+            await Application.Instance.InvokeAsync(() =>
             {
                 updateStatusLine("Reticulating splines.");
             });
@@ -1186,7 +1186,7 @@ namespace Variance
 
             updateViewport();
             stopIndeterminateProgress();
-            Application.Instance.Invoke(() =>
+            await Application.Instance.InvokeAsync(() =>
             {
                 updateStatusLine("");
             });
