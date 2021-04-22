@@ -17,10 +17,11 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                gB_subShapes = new GroupBox();
                 TableLayout groupBox_layerSubShapes_table = new TableLayout();
-                gB_subShapes.Content = TableLayout.AutoSized(groupBox_layerSubShapes_table);
-                gB_subShapes.Text = "SubShapes";
+                gB_subShapes = new GroupBox
+                {
+                    Content = TableLayout.AutoSized(groupBox_layerSubShapes_table), Text = "SubShapes"
+                };
 
                 subshapes_row1(groupBox_layerSubShapes_table);
 
@@ -51,8 +52,7 @@ namespace Variance
 
             subshapes_tr0_0_tl.Rows.Add(new TableRow());
 
-            lbl_subshape_hl = new Label();
-            lbl_subshape_hl.Text = "Hor. Length";
+            lbl_subshape_hl = new Label {Text = "Hor. Length"};
             subshapes_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_hl });
 
             TableLayout row0_1 = new TableLayout();
@@ -64,8 +64,7 @@ namespace Variance
 
             subshapes_tr0_0_tl.Rows.Add(new TableRow());
 
-            lbl_subshape_ho = new Label();
-            lbl_subshape_ho.Text = "Hor. Offset";
+            lbl_subshape_ho = new Label {Text = "Hor. Offset"};
             subshapes_tr0_0_tl.Rows[1].Cells.Add(new TableCell { Control = lbl_subshape_ho });
 
             TableLayout row1_1 = new TableLayout();
@@ -77,8 +76,7 @@ namespace Variance
 
             subshapes_tr0_0_tl.Rows.Add(new TableRow());
 
-            lbl_tipLocations = new Label();
-            lbl_tipLocations.Text = "Tip Locs";
+            lbl_tipLocations = new Label {Text = "Tip Locs"};
             subshapes_tr0_0_tl.Rows[2].Cells.Add(new TableCell { Control = lbl_tipLocations });
 
             TableLayout row2_1 = new TableLayout();
@@ -95,26 +93,17 @@ namespace Variance
 
             row0_1.Rows.Add(new TableRow());
 
-            num_subshape_hl = new NumericStepper();
-            num_subshape_hl.Increment = 0.1;
-            num_subshape_hl.DecimalPlaces = 2;
-            num_subshape_hl.MinValue = 0;
+            num_subshape_hl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape_hl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_hl) });
 
-            num_subshape2_hl = new NumericStepper();
-            num_subshape2_hl.Increment = 0.1;
-            num_subshape2_hl.DecimalPlaces = 2;
-            num_subshape2_hl.MinValue = 0;
+            num_subshape2_hl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape2_hl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_hl) });
 
-            num_subshape3_hl = new NumericStepper();
-            num_subshape3_hl.Increment = 0.1;
-            num_subshape3_hl.DecimalPlaces = 2;
-            num_subshape3_hl.MinValue = 0;
+            num_subshape3_hl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape3_hl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_hl) });
@@ -122,31 +111,21 @@ namespace Variance
             row0_1.Rows[0].Cells.Add(new TableCell { Control = new Panel() });
             row0_1.Rows[0].Cells[^1].ScaleWidth = true;
 
-            lbl_subshape_vl = new Label();
-            lbl_subshape_vl.Text = "Ver. Length";
+            lbl_subshape_vl = new Label {Text = "Ver. Length"};
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_vl });
 
-            num_subshape_vl = new NumericStepper();
-            num_subshape_vl.Increment = 0.1;
-            num_subshape_vl.DecimalPlaces = 2;
-            num_subshape_vl.MinValue = 0;
+            num_subshape_vl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape_vl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_vl) });
 
-            num_subshape2_vl = new NumericStepper();
-            num_subshape2_vl.Increment = 0.1;
-            num_subshape2_vl.DecimalPlaces = 2;
-            num_subshape2_vl.MinValue = 0;
+            num_subshape2_vl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape2_vl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_vl) });
 
-            num_subshape3_vl = new NumericStepper();
-            num_subshape3_vl.Increment = 0.1;
-            num_subshape3_vl.DecimalPlaces = 2;
-            num_subshape3_vl.MinValue = 0;
+            num_subshape3_vl = new NumericStepper {Increment = 0.1, DecimalPlaces = 2, MinValue = 0};
             setSize(num_subshape3_vl, numWidth);
 
             row0_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_vl) });
@@ -158,23 +137,17 @@ namespace Variance
 
             row1_1.Rows.Add(new TableRow());
 
-            num_subshape_ho = new NumericStepper();
-            num_subshape_ho.Increment = 0.1;
-            num_subshape_ho.DecimalPlaces = 2;
+            num_subshape_ho = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape_ho, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_ho) });
 
-            num_subshape2_ho = new NumericStepper();
-            num_subshape2_ho.Increment = 0.1;
-            num_subshape2_ho.DecimalPlaces = 2;
+            num_subshape2_ho = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape2_ho, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_ho) });
 
-            num_subshape3_ho = new NumericStepper();
-            num_subshape3_ho.Increment = 0.1;
-            num_subshape3_ho.DecimalPlaces = 2;
+            num_subshape3_ho = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape3_ho, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_ho) });
@@ -182,28 +155,21 @@ namespace Variance
             row1_1.Rows[0].Cells.Add(new TableCell { Control = new Panel() });
             row1_1.Rows[0].Cells[^1].ScaleWidth = true;
 
-            lbl_subshape_vo = new Label();
-            lbl_subshape_vo.Text = "Ver. Offset";
+            lbl_subshape_vo = new Label {Text = "Ver. Offset"};
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = lbl_subshape_vo });
 
-            num_subshape_vo = new NumericStepper();
-            num_subshape_vo.Increment = 0.1;
-            num_subshape_vo.DecimalPlaces = 2;
+            num_subshape_vo = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape_vo, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape_vo) });
 
-            num_subshape2_vo = new NumericStepper();
-            num_subshape2_vo.Increment = 0.1;
-            num_subshape2_vo.DecimalPlaces = 2;
+            num_subshape2_vo = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape2_vo, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape2_vo) });
 
-            num_subshape3_vo = new NumericStepper();
-            num_subshape3_vo.Increment = 0.1;
-            num_subshape3_vo.DecimalPlaces = 2;
+            num_subshape3_vo = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_subshape3_vo, numWidth);
 
             row1_1.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_subshape3_vo) });
