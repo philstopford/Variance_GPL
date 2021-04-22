@@ -8,11 +8,11 @@ namespace Variance
     public class ShapeLibrary
     {
         Int32 shapeIndex;
-        public Boolean shapeValid { get; set; }
-        public Boolean geoCoreShapeOrthogonal { get; set; }
-        public MyVertex[] Vertex { get; set; }
-        public MyRound[] round1 { get; set; }
-        public Boolean[] tips { get; set; }
+        public Boolean shapeValid { get; private set; }
+        public Boolean geoCoreShapeOrthogonal { get; private set; }
+        public MyVertex[] Vertex { get; private set; }
+        public MyRound[] round1 { get; private set; }
+        public Boolean[] tips { get; private set; }
         EntropyLayerSettings layerSettings;
 
         public ShapeLibrary(EntropyLayerSettings mcLayerSettings)
@@ -1431,9 +1431,8 @@ namespace Variance
                         verEdge = verEdge % Vertex.Length;
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    string t = e.ToString();
                 }
             }
 
@@ -1600,38 +1599,19 @@ namespace Variance
                 GeoLibPointF normalPt = new GeoLibPointF(-dy, dx);
 
                 // Vertical edge has a normal with an X value non-zero and Y value ~0.
-                bool vertical;
-                if (Math.Abs(normalPt.X) > 0.01) // treating a 0.01 difference as being ~0
-                {
-                    vertical = true;
-                }
-                else
-                {
-                    vertical = false;
-                }
+                // treating a 0.01 difference as being ~0
+                bool vertical = Math.Abs(normalPt.X) > 0.01;
 
-                // Assess the normal to establish directionn
+                // Assess the normal to establish direction
                 if (vertical)
                 {
-                    if (normalPt.X < 0) // left facing vertical edge has normal with negative X value.
-                    {
-                        left = true;
-                    }
-                    else
-                    {
-                        left = false;
-                    }
+                    // left facing vertical edge has normal with negative X value.
+                    left = normalPt.X < 0;
                 }
                 else
                 {
-                    if (normalPt.Y < 0) // down facing horizontal edge has normal with negative Y value.
-                    {
-                        up = false;
-                    }
-                    else
-                    {
-                        up = true;
-                    }
+                    // down facing horizontal edge has normal with negative Y value.
+                    up = !(normalPt.Y < 0);
                 }
 
                 if (!vertical)
@@ -1709,38 +1689,31 @@ namespace Variance
 #else
             for (int pt = 0; pt < roundCount; pt++)
 #endif
-            {
-                bool outerVertex = false;
-
-                // Only certain changes in direction correspond to an outer vertex, for a clockwise ordered series of points.
-                if (
-                    (pt == 0) || (pt == round1.Length - 1) ||
-                    ((round1[pt].verFace < round1[pt].horFace) &&
-                     ((Vertex[round1[pt].verFace].direction == typeDirection.left1) && (Vertex[round1[pt].horFace].direction == typeDirection.up1))) ||
-                    ((round1[pt].verFace > round1[pt].horFace) &&
-                     ((Vertex[round1[pt].horFace].direction == typeDirection.up1) && (Vertex[round1[pt].verFace].direction == typeDirection.right1))) ||
-                    ((round1[pt].verFace < round1[pt].horFace) &&
-                     ((Vertex[round1[pt].verFace].direction == typeDirection.right1) && (Vertex[round1[pt].horFace].direction == typeDirection.down1))) ||
-                    ((round1[pt].verFace > round1[pt].horFace) &&
-                     ((Vertex[round1[pt].horFace].direction == typeDirection.down1) && (Vertex[round1[pt].verFace].direction == typeDirection.left1)))
-                   )
                 {
-                    outerVertex = true;
-                }
+                    // Only certain changes in direction correspond to an outer vertex, for a clockwise ordered series of points.
+                    bool outerVertex = (pt == 0) || (pt == round1.Length - 1) ||
+                                       ((round1[pt].verFace < round1[pt].horFace) &&
+                                        ((Vertex[round1[pt].verFace].direction == typeDirection.left1) && (Vertex[round1[pt].horFace].direction == typeDirection.up1))) ||
+                                       ((round1[pt].verFace > round1[pt].horFace) &&
+                                        ((Vertex[round1[pt].horFace].direction == typeDirection.up1) && (Vertex[round1[pt].verFace].direction == typeDirection.right1))) ||
+                                       ((round1[pt].verFace < round1[pt].horFace) &&
+                                        ((Vertex[round1[pt].verFace].direction == typeDirection.right1) && (Vertex[round1[pt].horFace].direction == typeDirection.down1))) ||
+                                       ((round1[pt].verFace > round1[pt].horFace) &&
+                                        ((Vertex[round1[pt].horFace].direction == typeDirection.down1) && (Vertex[round1[pt].verFace].direction == typeDirection.left1)));
 
-                if (outerVertex)
-                {
-                    round1[pt].direction = typeRound.exter;
-                    round1[pt].MaxRadius = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.oCR));
-                }
-                else
-                {
-                    round1[pt].direction = typeRound.inner;
-                    round1[pt].MaxRadius = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.iCR));
-                }
+                    if (outerVertex)
+                    {
+                        round1[pt].direction = typeRound.exter;
+                        round1[pt].MaxRadius = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.oCR));
+                    }
+                    else
+                    {
+                        round1[pt].direction = typeRound.inner;
+                        round1[pt].MaxRadius = Convert.ToDouble(layerSettings.getDecimal(EntropyLayerSettings.properties_decimal.iCR));
+                    }
 
-                Vertex[round1[pt].index].inner = !outerVertex;
-            }
+                    Vertex[round1[pt].index].inner = !outerVertex;
+                }
 #if SHAPELIBTHREADED
             );
 #endif
