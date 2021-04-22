@@ -25,8 +25,7 @@ namespace Variance
 
         void pDOEResults(string DOEName)
         {
-            results = new List<DOEResult>();
-            results.Add(new DOEResult(DOEName));
+            results = new List<DOEResult> {new DOEResult(DOEName)};
         }
 
         public void AddResult(string DOEName)
@@ -90,8 +89,7 @@ namespace Variance
             DOEName = DOEName_;
             headerSet = false;
             cells = new List<DOECell>();
-            doeHeaderInformation = new List<string>();
-            doeHeaderInformation.Add("");
+            doeHeaderInformation = new List<string> {""};
         }
 
         public void setDOEHeaderInformation(List<string> headerInformation)
