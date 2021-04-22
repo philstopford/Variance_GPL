@@ -136,7 +136,8 @@ namespace Variance
 
         GroupBox bgLayerBox, omitLayerBox, simPreviewBox;
         CheckBox cB_displayShapes, cB_displayResults;
-        CheckBox[] cB_bg, cB_omit;
+        CheckBox[] cB_bg;
+        CheckBox[] cB_omit;
         NumericStepper num_viewportZoom, num_viewportX, num_viewportY;
 
         Button btn_singleCPU, btn_multiCPU, btn_STOP, btn_Cancel;
