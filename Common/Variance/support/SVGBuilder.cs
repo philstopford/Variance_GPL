@@ -24,13 +24,15 @@ namespace Variance
             public Boolean showCoords { get; set; }
             public StyleInfo Clone()
             {
-                StyleInfo si = new StyleInfo();
-                si.pft = pft;
-                si.brushClr = brushClr;
-                si.dashArray = dashArray;
-                si.penClr = penClr;
-                si.penWidth = penWidth;
-                si.showCoords = showCoords;
+                StyleInfo si = new StyleInfo
+                {
+                    pft = pft,
+                    brushClr = brushClr,
+                    dashArray = dashArray,
+                    penClr = penClr,
+                    penWidth = penWidth,
+                    showCoords = showCoords
+                };
                 return si;
             }
             public StyleInfo()
@@ -106,9 +108,7 @@ namespace Variance
         public void AddPolygons(Polygons poly)
         {
             if (poly.Count == 0) return;
-            PolyInfo pi = new PolyInfo();
-            pi.polygons = poly;
-            pi.si = style.Clone();
+            PolyInfo pi = new PolyInfo {polygons = poly, si = style.Clone()};
             PolyInfoList.Add(pi);
         }
 
@@ -128,8 +128,7 @@ namespace Variance
                 i++;
             }
             if (i == PolyInfoList.Count) return false;
-            BoundingRect rec = new BoundingRect();
-            rec.left = PolyInfoList[i].polygons[j][0].X;
+            BoundingRect rec = new BoundingRect {left = PolyInfoList[i].polygons[j][0].X};
             rec.right = rec.left;
             rec.top = PolyInfoList[0].polygons[j][0].Y;
             rec.bottom = rec.top;
@@ -153,33 +152,32 @@ namespace Variance
             double offsetX = -rec.left + margin;
             double offsetY = -rec.top + margin;
 
-            using (StreamWriter writer = new StreamWriter(filename))
-            {
-                writer.Write(svg_header,
-                    (rec.right - rec.left) + margin * 2,
-                    (rec.bottom - rec.top) + margin * 2,
-                    (rec.right - rec.left) + margin * 2,
-                    (rec.bottom - rec.top) + margin * 2);
+            using StreamWriter writer = new StreamWriter(filename);
+            writer.Write(svg_header,
+                (rec.right - rec.left) + margin * 2,
+                (rec.bottom - rec.top) + margin * 2,
+                (rec.right - rec.left) + margin * 2,
+                (rec.bottom - rec.top) + margin * 2);
 
-                foreach (PolyInfo pi in PolyInfoList)
+            foreach (PolyInfo pi in PolyInfoList)
+            {
+                writer.Write(" <path d=\"");
+                foreach (Polygon p in pi.polygons)
                 {
-                    writer.Write(" <path d=\"");
-                    foreach (Polygon p in pi.polygons)
+                    if (p.Count < 3) continue;
+                    writer.Write(String.Format(NumberFormatInfo.InvariantInfo, " M {0:f2} {1:f2}",
+                        p[0].X * scale + offsetX,
+                        p[0].Y * scale + offsetY));
+                    for (Int32 k = 1; k < p.Count; k++)
                     {
-                        if (p.Count < 3) continue;
-                        writer.Write(String.Format(NumberFormatInfo.InvariantInfo, " M {0:f2} {1:f2}",
-                            p[0].X * scale + offsetX,
-                            p[0].Y * scale + offsetY));
-                        for (Int32 k = 1; k < p.Count; k++)
-                        {
-                            writer.Write(String.Format(NumberFormatInfo.InvariantInfo, " L {0:f2} {1:f2}",
+                        writer.Write(String.Format(NumberFormatInfo.InvariantInfo, " L {0:f2} {1:f2}",
                             p[k].X * scale + offsetX,
                             p[k].Y * scale + offsetY));
-                        }
-                        writer.Write(" z");
                     }
+                    writer.Write(" z");
+                }
 
-                    writer.Write(String.Format(NumberFormatInfo.InvariantInfo, svg_path_format,
+                writer.Write(String.Format(NumberFormatInfo.InvariantInfo, svg_path_format,
                     pi.si.brushClr.ToHtml(),
                     (float)pi.si.brushClr.A / 255,
                     (pi.si.pft == 0),
@@ -187,27 +185,26 @@ namespace Variance
                     (float)pi.si.penClr.A / 255,
                     pi.si.penWidth));
 
-                    if (pi.si.showCoords)
+                if (pi.si.showCoords)
+                {
+                    writer.Write("<g font-family=\"Verdana\" font-size=\"11\" fill=\"black\">\n\n");
+                    foreach (Polygon p in pi.polygons)
                     {
-                        writer.Write("<g font-family=\"Verdana\" font-size=\"11\" fill=\"black\">\n\n");
-                        foreach (Polygon p in pi.polygons)
+                        foreach (GeoLibPointF pt in p)
                         {
-                            foreach (GeoLibPointF pt in p)
-                            {
-                                double x = pt.X;
-                                double y = pt.Y;
-                                writer.Write(String.Format(
-                                    "<text x=\"{0}\" y=\"{1}\">{2},{3}</text>\n",
-                                    (x * scale + offsetX), (y * scale + offsetY), x, y));
+                            double x = pt.X;
+                            double y = pt.Y;
+                            writer.Write(String.Format(
+                                "<text x=\"{0}\" y=\"{1}\">{2},{3}</text>\n",
+                                (x * scale + offsetX), (y * scale + offsetY), x, y));
 
-                            }
-                            writer.Write("\n");
                         }
-                        writer.Write("</g>\n");
+                        writer.Write("\n");
                     }
+                    writer.Write("</g>\n");
                 }
-                writer.Write("</svg>\n");
             }
+            writer.Write("</svg>\n");
             return true;
         }
     }
