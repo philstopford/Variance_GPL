@@ -587,7 +587,7 @@ namespace Variance
 #if CHAOSTHREADED
             );
 #endif
-            // Rewalk to handle correlation. We can't do this in the loop above since the correlated layer's settings
+            // Re-walk to handle correlation. We can't do this in the loop above since the correlated layer's settings
             // are likely not available at that point in time.
 #if CHAOSTHREADED
             Parallel.For(0, count, (i) =>
