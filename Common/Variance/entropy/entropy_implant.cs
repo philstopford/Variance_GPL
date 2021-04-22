@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -119,7 +120,6 @@ namespace Variance
                 }
                 catch (Exception)
                 {
-                    // MessageBox.Show("MCRun() had an issue, aborting and saving results so far: " + MCRE.ToString(), "Oops", MessageBoxButtons.OK);
                     // Reject the case - something happened.
                 }
                 // Nudge progress bar.
@@ -158,10 +158,8 @@ namespace Variance
 
             multithreadWarningFunc?.Invoke();
 
-            commonVars.m_timer = new Timer();
             // Set up timers for the UI refresh
-            commonVars.m_timer.AutoReset = true;
-            commonVars.m_timer.Interval = CentralProperties.timer_interval;
+            commonVars.m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
             updateImplantSimUIMTFunc?.Invoke();
             commonVars.m_timer.Start();
 
@@ -170,13 +168,14 @@ namespace Variance
             // Attempt at parallelism.
             CancellationTokenSource cancelSource = new CancellationTokenSource();
             CancellationToken cancellationToken = cancelSource.Token;
-            if (varianceContext.numberOfThreads == -1)
+            switch (varianceContext.numberOfThreads)
             {
-                po.MaxDegreeOfParallelism = commonVars.HTCount;
-            }
-            else
-            {
-                po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
+                case -1:
+                    po.MaxDegreeOfParallelism = commonVars.HTCount;
+                    break;
+                default:
+                    po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
+                    break;
             }
 
             if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
@@ -216,9 +215,8 @@ namespace Variance
                                     implantResultPackage.Add(currentResult);
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-                                string oops = ex.Message;
                             }
 
                         }
@@ -231,6 +229,7 @@ namespace Variance
                     catch (OperationCanceledException)
                     {
                         implantResultPackage.setState(false);
+                        // ReSharper disable once AccessToDisposedClosure
                         commonVars.m_timer.Stop();
                         commonVars.runAbort = false; // reset state to allow user to abort save of results.
                         sw.Stop();
@@ -294,17 +293,17 @@ namespace Variance
         {
             reset();
             clearAbortFlagFunc?.Invoke();
-            bool simState;
             string emailString;
 
-            simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
-            if (!simState)
+            bool simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
+            switch (simState)
             {
-                emailString = "Implant run aborted";
-            }
-            else
-            {
-                emailString = "Implant run completed";
+                case false:
+                    emailString = "Implant run aborted";
+                    break;
+                default:
+                    emailString = "Implant run completed";
+                    break;
             }
             // Assume user error if perJob is set and not onCompletion.
             // We'll use simulationSettings here just because legacy put the settings there and it's the easiest option.
@@ -403,7 +402,7 @@ namespace Variance
 
             bool returnValue = false;
 
-            Int32 doneCases = implantResultPackage.getListOfResults_implant().Count();
+            Int32 doneCases = implantResultPackage.getListOfResults_implant().Count;
 
             int rows = doneCases + 1;
             string[] stringList = new string[rows];
@@ -455,7 +454,7 @@ namespace Variance
                                 csvString += implantResultPackage.getImplantResult(resultEntry).resistHeightVar + ",";
                                 csvString += implantResultPackage.getImplantResult(resultEntry).resistCRRVar + ",";
                                 csvString += implantResultPackage.getImplantResult(resultEntry).tiltVar + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).twistVar.ToString();
+                                csvString += implantResultPackage.getImplantResult(resultEntry).twistVar.ToString(CultureInfo.InvariantCulture);
                                 stringList[resultEntry + 1] = csvString;
                             }
                         }
@@ -501,11 +500,16 @@ namespace Variance
             string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
             svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
-            SVGBuilder svg = new SVGBuilder();
+            SVGBuilder svg = new SVGBuilder
+            {
+                style =
+                {
+                    brushClr = currentResult.getResistShapes()[0].getColor(),
+                    penClr = currentResult.getResistShapes()[0].getColor()
+                }
+            };
 
             // Active resist contour
-            svg.style.brushClr = currentResult.getResistShapes()[0].getColor();
-            svg.style.penClr = currentResult.getResistShapes()[0].getColor();
             svg.AddPolygons(currentResult.getResistShapes()[0].getPoints());
 
             // Background resist contour
@@ -531,22 +535,24 @@ namespace Variance
             int scale = 100; // for 0.01 nm resolution
             GeoCore g = new GeoCore();
             g.reset();
-            GCDrawingfield drawing_ = new GCDrawingfield("");
-            drawing_.accyear = (short)DateTime.Now.Year;
-            drawing_.accmonth = (short)DateTime.Now.Month;
-            drawing_.accday = (short)DateTime.Now.Day;
-            drawing_.acchour = (short)DateTime.Now.Hour;
-            drawing_.accmin = (short)DateTime.Now.Minute;
-            drawing_.accsec = (short)DateTime.Now.Second;
-            drawing_.modyear = (short)DateTime.Now.Year;
-            drawing_.modmonth = (short)DateTime.Now.Month;
-            drawing_.modday = (short)DateTime.Now.Day;
-            drawing_.modhour = (short)DateTime.Now.Hour;
-            drawing_.modmin = (short)DateTime.Now.Minute;
-            drawing_.modsec = (short)DateTime.Now.Second;
-            drawing_.databaseunits = 1000 * scale;
-            drawing_.userunits = 0.001 / scale;
-            drawing_.libname = "variance";
+            GCDrawingfield drawing_ = new GCDrawingfield("")
+            {
+                accyear = (short) DateTime.Now.Year,
+                accmonth = (short) DateTime.Now.Month,
+                accday = (short) DateTime.Now.Day,
+                acchour = (short) DateTime.Now.Hour,
+                accmin = (short) DateTime.Now.Minute,
+                accsec = (short) DateTime.Now.Second,
+                modyear = (short) DateTime.Now.Year,
+                modmonth = (short) DateTime.Now.Month,
+                modday = (short) DateTime.Now.Day,
+                modhour = (short) DateTime.Now.Hour,
+                modmin = (short) DateTime.Now.Minute,
+                modsec = (short) DateTime.Now.Second,
+                databaseunits = 1000 * scale,
+                userunits = 0.001 / scale,
+                libname = "variance"
+            };
 
             GCCell gcell_root = drawing_.addCell();
             gcell_root.accyear = (short)DateTime.Now.Year;
@@ -569,9 +575,9 @@ namespace Variance
                 List<GeoLibPointF[]> resistPolys = currentResult.getResistShapes()[i].getPoints();
                 g.addLayerName("L" + (i + 1) + "D0", "resistPolys" + i);
 
-                for (int poly = 0; poly < resistPolys.Count; poly++)
+                foreach (GeoLibPointF[] t in resistPolys)
                 {
-                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(resistPolys[poly], scale);
+                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(t, scale);
 
                     gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
                 }
@@ -580,9 +586,9 @@ namespace Variance
             // Shadowing line
             List<GeoLibPointF[]> shadowLine = currentResult.getLine(Results_implant.lines.shadow).getPoints();
             g.addLayerName("L2D0", "shadowLine");
-            for (int poly = 0; poly < shadowLine.Count; poly++)
+            foreach (GeoLibPointF[] t in shadowLine)
             {
-                GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(shadowLine[poly], scale);
+                GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(t, scale);
 
                 gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
             }
@@ -609,18 +615,23 @@ namespace Variance
             // Force the evaluation.
             implantResultPackage.getMeanAndStdDev();
             // Create our summaryFile string, assuming it is needed.
-            // This was simplier before, but now user can avoid CSV creation and will instead select the summary output filename (txt)
+            // This was simpler before, but now user can avoid CSV creation and will instead select the summary output filename (txt)
             string summaryFile_ = csvFileName;
             if (!summaryFile_.EndsWith("_summary.txt", StringComparison.CurrentCulture))
             {
                 summaryFile_ = csvFileName.Substring(0, csvFileName.Length - 4);
                 summaryFile_ += "_summary.txt";
             }
-            List<string> linesToWrite = new List<string>();
+
+            List<string> linesToWrite = new List<string>
+            {
+                "Results summary for job: " + csvFileName + " run on : " +
+                DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " +
+                implantResultPackage.runTime.ToString("0.##") + " seconds"
+            };
 
             // Results first
             // Write the results first.
-            linesToWrite.Add("Results summary for job: " + csvFileName + " run on : " + DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " + implantResultPackage.runTime.ToString("0.##") + " seconds");
             if (Debugger.IsAttached)
             {
                 linesToWrite.Add("Run under debugger : performance was lower");
