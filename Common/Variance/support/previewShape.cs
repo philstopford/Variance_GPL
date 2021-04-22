@@ -801,7 +801,7 @@ namespace Variance
                     );
 #endif
 
-                    // Refragment
+                    // Re-fragment
                     previewPoints[poly] = fragment.fragmentPath(previewPoints[poly]);
                 }
             }
@@ -830,9 +830,9 @@ namespace Variance
             }
 
             // Need to iterate our preview points.
-            for (int poly = 0; poly < previewPoints.Count(); poly++)
+            for (int poly = 0; poly < previewPoints.Count; poly++)
             {
-                if ((previewPoints[poly].Count() <= 1) || (drawnPoly[poly]))
+                if ((previewPoints[poly].Length <= 1) || (drawnPoly[poly]))
                 {
                     continue;
                 }
@@ -845,8 +845,6 @@ namespace Variance
                 // We could probably simply cast rays in the raycaster and use those, but for now reinvent the wheel here...
                 GeoLibPointF[] normals = new GeoLibPointF[ptCount];
                 GeoLibPointF[] previousNormals = new GeoLibPointF[ptCount];
-                double dx;
-                double dy;
                 // Pre-calculate these for the threading to be an option.
                 // This is a serial evaluation as we need both the previous and the current normal for each point.
 #if VARIANCETHREADED
@@ -855,6 +853,8 @@ namespace Variance
                 for (Int32 pt = 0; pt < ptCount - 1; pt++)
 #endif
                 {
+                    double dx;
+                    double dy;
                     if (pt == 0)
                     {
                         // First vertex needs special care.
@@ -1020,9 +1020,7 @@ namespace Variance
             bool debug = false;
             bool linear = false;
 
-            List<GeoLibPointF[]> updatedPolys = new List<GeoLibPointF[]>();
             List<GeoLibPointF[]> preOverlapMergePolys = new List<GeoLibPointF[]>();
-            List<bool> updatedDrawn = new List<bool>();
 
             Paths dRays = new Paths();
 
@@ -1034,15 +1032,6 @@ namespace Variance
             {
                 if ((sourceGeometry[poly].Count() <= 1) || (drawnPoly[poly]))
                 {
-                    updatedPolys.Add(previewPoints[poly]);
-                    if (drawnPoly[poly])
-                    {
-                        updatedDrawn.Add(true);
-                    }
-                    else
-                    {
-                        updatedDrawn.Add(false);
-                    }
                     // Nothing to do with drawn or zero count entries.
                     continue;
                 }
@@ -1082,6 +1071,7 @@ namespace Variance
                 RayCast rc = new RayCast(sourcePoly, collisionGeometry, Convert.ToInt32(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist) * CentralProperties.scaleFactorForOperation), false, invert:false, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxRays), emitThread, multiSampleThread, sideRayFallOff: (RayCast.falloff)entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff), sideRayFallOffMultiplier: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)));
 
                 Paths clippedLines = rc.getClippedRays().ToList();
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (debug)
                 {
                     dRays.AddRange(clippedLines);
@@ -1118,6 +1108,7 @@ namespace Variance
                     // Probably should be a sigmoid, but using this for now.
                     double displacedAmount;
 
+                    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                     if (linear)
                     {
                         displacedAmount = biasScaling * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.pBias)) * CentralProperties.scaleFactorForOperation;
@@ -1147,11 +1138,12 @@ namespace Variance
             // Check for overlaps and process as needed post-biasing.
             processOverlaps(commonVars, settingsIndex, preOverlapMergePolys, forceOverride: false);
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (debug)
             {
-                for (int ray = 0; ray < dRays.Count; ray++)
+                foreach (Path t in dRays)
                 {
-                    previewPoints.Add(GeoWrangler.pointFFromPath(dRays[ray], CentralProperties.scaleFactorForOperation));
+                    previewPoints.Add(GeoWrangler.pointFFromPath(t, CentralProperties.scaleFactorForOperation));
                     drawnPoly.Add(true);
                 }
             }
@@ -1175,9 +1167,11 @@ namespace Variance
                 geoCoreOrthogonalPoly = new List<bool>();
                 color = MyColor.Black; // overridden later.
 
-                if (entropyLayerSettings == null)
+                switch (entropyLayerSettings)
                 {
-                    entropyLayerSettings = commonVars.getLayerSettings(settingsIndex);
+                    case null:
+                        entropyLayerSettings = commonVars.getLayerSettings(settingsIndex);
+                        break;
                 }
                 if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (Int32)CommonVars.shapeNames.GEOCORE)
                 {
@@ -1401,11 +1395,7 @@ namespace Variance
                     return;
                 }
                 // OK. We need to crop our layout based on the active tile if there is a DOE flag set.
-                bool tileHandlingNeeded = false;
-                if (commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1)
-                {
-                    tileHandlingNeeded = true;
-                }
+                bool tileHandlingNeeded = commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1;
 
                 if (previewMode && tileHandlingNeeded)
                 {
@@ -1467,13 +1457,14 @@ namespace Variance
 
                 // Decouple the geometry here to avoid manipulation going back to original source.
                 List<GeoLibPointF[]> tempPolyList;
-                if (tileHandlingNeeded)
+                switch (tileHandlingNeeded)
                 {
-                    tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
-                }
-                else
-                {
-                    tempPolyList = entropyLayerSettings.getFileData().ToList();
+                    case true:
+                        tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
+                        break;
+                    default:
+                        tempPolyList = entropyLayerSettings.getFileData().ToList();
+                        break;
                 }
                 try
                 {
@@ -1848,18 +1839,19 @@ namespace Variance
                 // Can the tessellator help us out here?
                 // return GeoWrangler.makeKeyHole(sourceData);
 
-                Clipper c = new Clipper();
-                c.PreserveCollinear = true;
+                Clipper c = new Clipper {PreserveCollinear = true};
                 Paths sourcePolyData = GeoWrangler.pathsFromPointFs(sourceData, CentralProperties.scaleFactorForOperation);
                 Paths resizedPolyData = new Paths();
 
                 // Union isn't always robust, so get a bounding box and run an intersection boolean to rationalize the geometry.
                 IntRect bounds = ClipperBase.GetBounds(sourcePolyData);
-                Path bounding = new Path();
-                bounding.Add(new IntPoint(bounds.left, bounds.bottom));
-                bounding.Add(new IntPoint(bounds.left, bounds.top));
-                bounding.Add(new IntPoint(bounds.right, bounds.top));
-                bounding.Add(new IntPoint(bounds.right, bounds.bottom));
+                Path bounding = new Path
+                {
+                    new IntPoint(bounds.left, bounds.bottom),
+                    new IntPoint(bounds.left, bounds.top),
+                    new IntPoint(bounds.right, bounds.top),
+                    new IntPoint(bounds.right, bounds.bottom)
+                };
 
                 c.AddPaths(sourcePolyData, PolyType.ptClip, true);
                 c.AddPaths(sourcePolyData, PolyType.ptSubject, true);
@@ -1906,7 +1898,7 @@ namespace Variance
                     int oCount = outers.Count;
                     int cCount = cutters.Count;
 
-                    // Is any cutter fully enclosed wtihin an outer?
+                    // Is any cutter fully enclosed within an outer?
                     for (int outer = 0; outer < oCount; outer++)
                     {
                         double origArea = Math.Abs(Clipper.Area(outers[outer]));
@@ -1951,7 +1943,7 @@ namespace Variance
                 Fragmenter f = new Fragmenter(commonVars.getSimulationSettings().getResolution() * CentralProperties.scaleFactorForOperation);
                 resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData), extension:extension).ToList();
 
-                if (resizedPolyData.Count() == 0)
+                if (!resizedPolyData.Any())
                 {
                     return sourceData;
                 }
@@ -1969,7 +1961,7 @@ namespace Variance
                 // Convert back our geometry.                
                 for (int rPoly = 0; rPoly < rpdCount; rPoly++)
                 {
-                    // We have to refragment as the overlap processing changed the geometry heavily.
+                    // We have to re-fragment as the overlap processing changed the geometry heavily.
                     refinedData.Add(f.fragmentPath(GeoWrangler.pointFFromPath(resizedPolyData[rPoly], CentralProperties.scaleFactorForOperation)));
                 }
 
