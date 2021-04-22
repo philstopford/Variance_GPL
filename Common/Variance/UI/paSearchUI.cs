@@ -3,7 +3,7 @@ using Eto.Forms;
 
 namespace Variance
 {
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         Label[] lbl_paSearchLayers, lbl_paSearchPAs;
         CheckBox[,] cb_searchPA;
@@ -64,27 +64,19 @@ namespace Variance
             p.Content = row0_tl;
             row0_tl.Rows.Add(new TableRow());
 
-            lbl_passCase = new Label();
-            lbl_passCase.Text = "Pass Cases to Find";
-            lbl_passCase.ToolTip = "Minimum number of pass cases to find.";
+            lbl_passCase = new Label {Text = "Pass Cases to Find", ToolTip = "Minimum number of pass cases to find."};
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_passCase });
 
-            num_passCase = new NumericStepper();
-            num_passCase.Increment = 1;
-            num_passCase.MinValue = 1;
-            num_passCase.Value = 25000;
+            num_passCase = new NumericStepper {Increment = 1, MinValue = 1, Value = 25000};
             num_passCase.LostFocus += paSearchUI_Handler;
             num_passCase.ToolTip = "Minimum number of pass cases to find.";
             setSize(num_passCase, 80);
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCase) });
 
-            lbl_paSearch_readOut = new Label();
-            lbl_paSearch_readOut.Text = "Last result:";
+            lbl_paSearch_readOut = new Label {Text = "Last result:"};
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_paSearch_readOut });
 
-            text_paSearch = new TextBox();
-            text_paSearch.ReadOnly = true;
-            text_paSearch.Width = resultFieldWidth;
+            text_paSearch = new TextBox {ReadOnly = true, Width = resultFieldWidth};
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_paSearch });
 
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
@@ -107,40 +99,38 @@ namespace Variance
             {
                 var i = passCaseVal; // for event handler binding.
 
-                groupBox_passCaseValues[passCaseVal] = new GroupBox();
-                groupBox_passCaseValues[passCaseVal].Text = "Filter result " + passCaseVal;
+                groupBox_passCaseValues[passCaseVal] = new GroupBox {Text = "Filter result " + passCaseVal};
 
-                passCaseValues_pnl[passCaseVal] = new Panel();
-                passCaseValues_pnl[passCaseVal].Content = groupBox_passCaseValues[passCaseVal];
+                passCaseValues_pnl[passCaseVal] = new Panel {Content = groupBox_passCaseValues[passCaseVal]};
 
                 TableLayout tl = new TableLayout();
                 groupBox_passCaseValues[passCaseVal].Content = tl;
 
                 tl.Rows.Add(new TableRow());
 
-                cb_passCaseValues[passCaseVal] = new CheckBox();
-                cb_passCaseValues[passCaseVal].Text = "";
+                cb_passCaseValues[passCaseVal] = new CheckBox {Text = ""};
                 cb_passCaseValues[i].CheckedChanged += paSearchUI_Handler;
                 tl.Rows[^1].Cells.Add(new TableCell { Control = cb_passCaseValues[passCaseVal] });
 
-                rb_passValueRadioButtons[passCaseVal, 0] = new RadioButton();
-                rb_passValueRadioButtons[passCaseVal, 0].Text = "Min";
-                rb_passValueRadioButtons[passCaseVal, 0].Checked = true;
-                rb_passValueRadioButtons[passCaseVal, 0].Enabled = false;
+                rb_passValueRadioButtons[passCaseVal, 0] = new RadioButton
+                {
+                    Text = "Min", Checked = true, Enabled = false
+                };
                 rb_passValueRadioButtons[i, 0].CheckedChanged += paSearchUI_Handler;
                 tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 0] });
 
-                rb_passValueRadioButtons[passCaseVal, 1] = new RadioButton(rb_passValueRadioButtons[passCaseVal, 0]);
-                rb_passValueRadioButtons[passCaseVal, 1].Text = "Max";
-                rb_passValueRadioButtons[passCaseVal, 1].Enabled = false;
+                rb_passValueRadioButtons[passCaseVal, 1] = new RadioButton(rb_passValueRadioButtons[passCaseVal, 0])
+                {
+                    Text = "Max", Enabled = false
+                };
                 rb_passValueRadioButtons[i, 1].CheckedChanged += paSearchUI_Handler;
                 tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 1] });
 
-                num_passCaseValues[passCaseVal] = new NumericStepper();
-                num_passCaseValues[passCaseVal].DecimalPlaces = 2;
-                num_passCaseValues[passCaseVal].Increment = 0.01f;
+                num_passCaseValues[passCaseVal] = new NumericStepper
+                {
+                    DecimalPlaces = 2, Increment = 0.01f, Enabled = false
+                };
                 setSize(num_passCaseValues[passCaseVal], 55);
-                num_passCaseValues[passCaseVal].Enabled = false;
                 num_passCaseValues[i].LostFocus += paSearchUI_Handler;
                 tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCaseValues[passCaseVal]) });
 
@@ -160,10 +150,12 @@ namespace Variance
 
             for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
             {
-                lbl_paSearchLayers[layer] = new Label();
-                lbl_paSearchLayers[layer].Text = (layer + 1).ToString();
-                lbl_paSearchLayers[layer].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
-                lbl_paSearchLayers[layer].TextAlignment = TextAlignment.Center;
+                lbl_paSearchLayers[layer] = new Label
+                {
+                    Text = (layer + 1).ToString(),
+                    TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]),
+                    TextAlignment = TextAlignment.Center
+                };
 
                 tabPage_2D_PASearch_bigTable.Rows[0].Cells.Add(new TableCell { Control = lbl_paSearchLayers[layer] });
             }
@@ -172,15 +164,13 @@ namespace Variance
             {
                 TableRow tr = new TableRow();
 
-                lbl_paSearchPAs[pa] = new Label();
-                lbl_paSearchPAs[pa].Text = PASearch.paNames[pa];
+                lbl_paSearchPAs[pa] = new Label {Text = PASearch.paNames[pa]};
                 tr.Cells.Add(new TableCell { Control = lbl_paSearchPAs[pa] });
 
                 for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
                 {
-                    Panel bTc_p = new Panel();
                     TableLayout tmp_tl = new TableLayout();
-                    bTc_p.Content = tmp_tl;
+                    Panel bTc_p = new Panel {Content = tmp_tl};
 
                     // Upper row of tmp_tl
                     tmp_tl.Rows.Add(new TableRow());
@@ -192,23 +182,24 @@ namespace Variance
                     tc0p_tl.Rows.Add(new TableRow());
 
                     TableCell tc_ur_0 = new TableCell();
-                    cb_searchPA[layer, pa] = new CheckBox();
-                    cb_searchPA[layer, pa].Text = "";
+                    cb_searchPA[layer, pa] = new CheckBox {Text = ""};
                     cb_searchPA[layer, pa].CheckedChanged += paSearchUI_Handler;
                     cb_searchPA[layer, pa].ToolTip = "Layer " + (pa + 1) + ": " + PASearch.paNames[pa];
                     tc_ur_0.Control = cb_searchPA[layer, pa];
                     tc0p_tl.Rows[0].Cells.Add(tc_ur_0);
 
                     TableCell tc_ur_1 = new TableCell();
-                    num_searchPA_UpperLimit[layer, pa] = new NumericStepper();
-                    num_searchPA_UpperLimit[layer, pa].Increment = 0.01f;
-                    num_searchPA_UpperLimit[layer, pa].DecimalPlaces = 2;
+                    num_searchPA_UpperLimit[layer, pa] = new NumericStepper
+                    {
+                        Increment = 0.01f,
+                        DecimalPlaces = 2,
+                        TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]),
+                        ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa]
+                    };
                     if (!commonVars.getPASearch().paAllowsNegativeValues(pa))
                     {
                         num_searchPA_UpperLimit[layer, pa].MinValue = 0;
                     }
-                    num_searchPA_UpperLimit[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
-                    num_searchPA_UpperLimit[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
 
                     setSize(num_searchPA_UpperLimit[layer, pa], 55);
                     num_searchPA_UpperLimit[layer, pa].LostFocus += paSearchUI_Handler;
@@ -219,11 +210,13 @@ namespace Variance
                     // Lower row of tmp_tl
                     tmp_tl.Rows.Add(new TableRow());
 
-                    text_searchPA_Result[layer, pa] = new TextBox();
-                    text_searchPA_Result[layer, pa].ReadOnly = true;
-                    text_searchPA_Result[layer, pa].Width = 55 * 2;
-                    text_searchPA_Result[layer, pa].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]);
-                    text_searchPA_Result[layer, pa].ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa];
+                    text_searchPA_Result[layer, pa] = new TextBox
+                    {
+                        ReadOnly = true,
+                        Width = 55 * 2,
+                        TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]),
+                        ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa]
+                    };
                     tmp_tl.Rows[1].Cells.Add(new TableCell { Control = text_searchPA_Result[layer, pa] });
 
                     tr.Cells.Add(new TableCell { Control = bTc_p });
@@ -307,15 +300,17 @@ namespace Variance
             {
                 for (int pa = 0; pa < PASearch.paNames.Length; pa++)
                 {
+                    int layer1 = layer;
+                    int pa1 = pa;
                     Application.Instance.Invoke(() =>
                     {
-                        if (commonVars.getPASearch().isPASearchable(layer, pa))
+                        if (commonVars.getPASearch().isPASearchable(layer1, pa1))
                         {
-                            text_searchPA_Result[layer, pa].Text = "x:" + commonVars.getPASearch().getMeanValue(layer, pa) + ", s:" + commonVars.getPASearch().getSDValue(layer, pa);
+                            text_searchPA_Result[layer1, pa1].Text = "x:" + commonVars.getPASearch().getMeanValue(layer1, pa1) + ", s:" + commonVars.getPASearch().getSDValue(layer1, pa1);
                         }
                         else
                         {
-                            text_searchPA_Result[layer, pa].Text = "";
+                            text_searchPA_Result[layer1, pa1].Text = "";
                         }
                     });
                 }
