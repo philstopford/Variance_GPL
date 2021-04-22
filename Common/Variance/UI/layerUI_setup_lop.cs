@@ -14,18 +14,15 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                groupBox_LOP = new GroupBox();
-                groupBox_LOP.Text = "Layout Origin Parameters";
                 TableLayout groupBox_layer_LOP_table = new TableLayout();
-                groupBox_LOP.Content = groupBox_layer_LOP_table;
+                groupBox_LOP = new GroupBox {Text = "Layout Origin Parameters", Content = groupBox_layer_LOP_table};
 
                 TableLayout t = new TableLayout();
                 t.Rows.Add(new TableRow());
                 t.Rows[0].Cells.Add(new TableCell { Control = groupBox_LOP });
                 t.Rows[0].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
-                Panel p = new Panel();
-                p.Content = t;
+                Panel p = new Panel {Content = t};
                 tc.Control = p;
 
                 lop_row1(groupBox_layer_LOP_table);
@@ -54,32 +51,40 @@ namespace Variance
 
             tl_0.Rows.Add(new TableRow());
 
-            lbl_subShapeRef = new Label();
-            lbl_subShapeRef.Text = "Subshape Reference";
-            lbl_subShapeRef.Width = 120;
-            lbl_subShapeRef.ToolTip = "Which subshape to use for placement with respect to the world origin";
+            lbl_subShapeRef = new Label
+            {
+                Text = "Subshape Reference",
+                Width = 120,
+                ToolTip = "Which subshape to use for placement with respect to the world origin"
+            };
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_subShapeRef });
 
-            comboBox_subShapeRef = new DropDown();
-            comboBox_subShapeRef.DataContext = DataContext;
+            comboBox_subShapeRef = new DropDown
+            {
+                DataContext = DataContext,
+                SelectedIndex = 0,
+                ToolTip = "Which subshape to use for placement with respect to the world origin"
+            };
             comboBox_subShapeRef.BindDataContext(c => c.DataStore, (UIStringLists m) => m.subShapesList_exp);
-            comboBox_subShapeRef.SelectedIndex = 0;
-            comboBox_subShapeRef.ToolTip = "Which subshape to use for placement with respect to the world origin";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = comboBox_subShapeRef });
 
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = null });
 
-            lbl_posSubShape = new Label();
-            lbl_posSubShape.Text = "Position inside Subshape";
-            lbl_posSubShape.Width = 140;
-            lbl_posSubShape.ToolTip = "Which element of the subshape to use for placement with respect to the world origin";
+            lbl_posSubShape = new Label
+            {
+                Text = "Position inside Subshape",
+                Width = 140,
+                ToolTip = "Which element of the subshape to use for placement with respect to the world origin"
+            };
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_posSubShape });
 
-            comboBox_posSubShape = new DropDown();
-            comboBox_posSubShape.DataContext = DataContext;
+            comboBox_posSubShape = new DropDown
+            {
+                DataContext = DataContext,
+                SelectedIndex = (int) CommonVars.subShapeLocations.BL,
+                ToolTip = "Which element of the subshape to use for placement with respect to the world origin"
+            };
             comboBox_posSubShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.subShapePos);
-            comboBox_posSubShape.SelectedIndex = (int)CommonVars.subShapeLocations.BL;
-            comboBox_posSubShape.ToolTip = "Which element of the subshape to use for placement with respect to the world origin";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = comboBox_posSubShape });
 
         }
@@ -105,58 +110,52 @@ namespace Variance
 
             tl_0.Rows.Add(new TableRow());
 
-            lbl_globalHorOffset = new Label();
-            lbl_globalHorOffset.Text = "Global Hor Offset";
-            lbl_globalHorOffset.Width = 120;
-            lbl_globalHorOffset.ToolTip = "Horizontal offset from the world origin";
+            lbl_globalHorOffset = new Label
+            {
+                Text = "Global Hor Offset", Width = 120, ToolTip = "Horizontal offset from the world origin"
+            };
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_globalHorOffset });
 
-            num_globalHorOffset = new NumericStepper();
-            num_globalHorOffset.Increment = 0.1;
-            num_globalHorOffset.DecimalPlaces = 2;
+            num_globalHorOffset = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_globalHorOffset, 55);
             num_globalHorOffset.ToolTip = "Horizontal offset from the world origin";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_globalHorOffset) });
 
-            lbl_globalVerOffset = new Label();
-            lbl_globalVerOffset.Text = "Global Ver Offset";
-            lbl_globalVerOffset.Width = 120;
-            lbl_globalVerOffset.ToolTip = "Horizontal offset from the world origin";
+            lbl_globalVerOffset = new Label
+            {
+                Text = "Global Ver Offset", Width = 120, ToolTip = "Horizontal offset from the world origin"
+            };
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_globalVerOffset });
 
-            num_globalVerOffset = new NumericStepper();
-            num_globalVerOffset.Increment = 0.1;
-            num_globalVerOffset.DecimalPlaces = 2;
+            num_globalVerOffset = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_globalVerOffset, 55);
             num_globalVerOffset.ToolTip = "Horizontal offset from the world origin";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_globalVerOffset) });
 
             tl_0.Rows.Add(new TableRow());
 
-            lbl_rotation = new Label();
-            lbl_rotation.Text = "Rotation";
-            lbl_rotation.Width = 70;
-            lbl_rotation.ToolTip = "Counter-clockwise rotation around center of bounding box of shape";
+            lbl_rotation = new Label
+            {
+                Text = "Rotation",
+                Width = 70,
+                ToolTip = "Counter-clockwise rotation around center of bounding box of shape"
+            };
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_rotation });
 
-            num_rotation = new NumericStepper();
-            num_rotation.Increment = 0.1;
-            num_rotation.DecimalPlaces = 2;
+            num_rotation = new NumericStepper {Increment = 0.1, DecimalPlaces = 2};
             setSize(num_rotation, 55);
             num_rotation.ToolTip = "Counter-clockwise rotation around center of bounding box of shape";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_rotation) });
 
-            lbl_lithoWobble = new Label();
-            lbl_lithoWobble.Text = "Wobble";
+            lbl_lithoWobble = new Label {Text = "Wobble"};
             lbl_lithoWobble.MouseDoubleClick += wobble_RNG;
             lbl_lithoWobble.ToolTip = "3-sigma rotational variation.";
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoWobble });
 
-            num_lithoWobble = new NumericStepper();
-            num_lithoWobble.Increment = 0.1;
-            num_lithoWobble.DecimalPlaces = 2;
-            num_lithoWobble.MinValue = 0;
-            num_lithoWobble.ToolTip = "3-sigma rotational variation.";
+            num_lithoWobble = new NumericStepper
+            {
+                Increment = 0.1, DecimalPlaces = 2, MinValue = 0, ToolTip = "3-sigma rotational variation."
+            };
             setSize(num_lithoWobble, 55);
             tl_0.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoWobble) });
         }
