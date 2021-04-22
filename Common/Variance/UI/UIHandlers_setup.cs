@@ -11,27 +11,29 @@ namespace Variance
                 tabControl_main.SelectedIndexChanged += mainTabChanged;
                 tabControl_2D_simsettings.SelectedIndexChanged += subTabChanged;
 
-                entropyControl = new Entropy(ref varianceContext.vc, commonVars);
-                entropyControl.updateStatus = updateStatusLine;
-                entropyControl.configProgress = configProgressBar;
-                entropyControl.stepProgress = updateProgressBar;
-                entropyControl.abortCheckFunc = abortCheck;
-                entropyControl.clearAbortFlagFunc = clearAbortFlag;
-                entropyControl.postSimUIFunc = postSimUI;
-                entropyControl.updateSimUIFunc = updateSimUIST;
-                entropyControl.updateSimUIMTFunc = updateSimUIMT;
-                entropyControl.updateProgressBarFunc = updateProgressBar;
-                entropyControl.updateImplantSimUIFunc = updateImplantSimUIST;
-                entropyControl.updateImplantSimUIMTFunc = updateImplantSimUIMT;
-                entropyControl.abortAllRunsFunc = abortAllRuns;
-                entropyControl.abortCSVFunc = abortCSV;
-                entropyControl.abortRunFunc = abortRun;
-                entropyControl.abortRunFuncMT = abortRunMT;
-                entropyControl.multithreadWarningFunc = displayMultiThreadWarning;
-                entropyControl.simRunningFunc = simRunning;
-                entropyControl.simRunningUIFunc = simRunningUIFunc;
-                entropyControl.implantSimRunningUIFunc = simRunningUIFunc;
-                entropyControl.postSimPASearchUIFunc = paSearchUI_showResults;
+                entropyControl = new Entropy(ref varianceContext.vc, commonVars)
+                {
+                    updateStatus = updateStatusLine,
+                    configProgress = configProgressBar,
+                    stepProgress = updateProgressBar,
+                    abortCheckFunc = abortCheck,
+                    clearAbortFlagFunc = clearAbortFlag,
+                    postSimUIFunc = postSimUI,
+                    updateSimUIFunc = updateSimUIST,
+                    updateSimUIMTFunc = updateSimUIMT,
+                    updateProgressBarFunc = updateProgressBar,
+                    updateImplantSimUIFunc = updateImplantSimUIST,
+                    updateImplantSimUIMTFunc = updateImplantSimUIMT,
+                    abortAllRunsFunc = abortAllRuns,
+                    abortCSVFunc = abortCSV,
+                    abortRunFunc = abortRun,
+                    abortRunFuncMT = abortRunMT,
+                    multithreadWarningFunc = displayMultiThreadWarning,
+                    simRunningFunc = simRunning,
+                    simRunningUIFunc = simRunningUIFunc,
+                    implantSimRunningUIFunc = simRunningUIFunc,
+                    postSimPASearchUIFunc = paSearchUI_showResults
+                };
 
                 // Set listbox defaults on the settings tab.
                 for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
