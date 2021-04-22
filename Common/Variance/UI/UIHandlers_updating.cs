@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Timers;
 using Eto.Drawing;
 using Eto.Forms;
-using VeldridEto;
 
 namespace Variance
 {
@@ -25,7 +24,7 @@ namespace Variance
 #if VARIANCETHREADED
             Parallel.For(0, limit, (point) =>
 #else
-            for (Int32 point = 0; point < tmpPoints.Count(); point++)
+            for (Int32 point = 0; point < tmpPoints.Length; point++)
 #endif
             {
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0][point].X,
@@ -104,10 +103,7 @@ namespace Variance
 #endif
             otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 4);
 
-            Application.Instance.Invoke(() =>
-            {
-                updateViewport();
-            });
+            Application.Instance.Invoke(updateViewport);
         }
 
         void updateImplantSimUIST(bool doPASearch, SimResultPackage resultPackage, string resultString)
@@ -117,20 +113,20 @@ namespace Variance
             Application.Instance.Invoke(() =>
             {
                 vSurface.Invalidate();
-                if (resultTokens.Length == 3)
+                switch (resultTokens.Length)
                 {
-                    // Preview mode
-                    textBox_implantShadowNom.Text = resultTokens[0];
-                    textBox_implantShadowMin.Text = resultTokens[1];
-                    textBox_implantShadowMax.Text = resultTokens[2];
-                }
-                else
-                if (resultTokens.Length == 2)
-                {
-                    // MC run
-                    textBox_implantShadowNom.Text = resultString;
-                    textBox_implantShadowMin.Text = "";
-                    textBox_implantShadowMax.Text = "";
+                    case 3:
+                        // Preview mode
+                        textBox_implantShadowNom.Text = resultTokens[0];
+                        textBox_implantShadowMin.Text = resultTokens[1];
+                        textBox_implantShadowMax.Text = resultTokens[2];
+                        break;
+                    case 2:
+                        // MC run
+                        textBox_implantShadowNom.Text = resultString;
+                        textBox_implantShadowMin.Text = "";
+                        textBox_implantShadowMax.Text = "";
+                        break;
                 }
             });
         }
@@ -163,41 +159,13 @@ namespace Variance
                 {
                     suspendSettingsUI();
                 }
-                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1)
-                {
-                    cB_displayResults.Checked = true;
-                }
-                else
-                {
-                    cB_displayResults.Checked = false;
-                }
+                cB_displayResults.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.results) == 1;
 
-                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.ler) == 1)
-                {
-                    checkBox_LERMode.Checked = true;
-                }
-                else
-                {
-                    checkBox_LERMode.Checked = false;
-                }
+                checkBox_LERMode.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.ler) == 1;
 
-                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1)
-                {
-                    cB_displayShapes.Checked = true;
-                }
-                else
-                {
-                    cB_displayShapes.Checked = false;
-                }
+                cB_displayShapes.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.shape) == 1;
 
-                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
-                {
-                    checkBox_external.Checked = true;
-                }
-                else
-                {
-                    checkBox_external.Checked = false;
-                }
+                checkBox_external.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1;
 
                 comboBox_externalTypes.SelectedIndex = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType);
 
@@ -238,23 +206,9 @@ namespace Variance
 
                 comboBox_externalTypes.SelectedIndex = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType);
 
-                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
-                {
-                    checkBox_CSV.Checked = true;
-                }
-                else
-                {
-                    checkBox_CSV.Checked = false;
-                }
+                checkBox_CSV.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1;
 
-                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.linkCDU) == 1)
-                {
-                    checkBox_linkCDUVariation.Checked = true;
-                }
-                else
-                {
-                    checkBox_linkCDUVariation.Checked = false;
-                }
+                checkBox_linkCDUVariation.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.linkCDU) == 1;
 
                 checkBox_aChord.Enabled = false;
                 checkBox_bChord.Enabled = false;
@@ -273,14 +227,7 @@ namespace Variance
                 {
                     case (Int32)CommonVars.calcModes.area:
                         checkBox_perPoly.Enabled = true;
-                        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly)
-                        {
-                            checkBox_perPoly.Checked = true;
-                        }
-                        else
-                        {
-                            checkBox_perPoly.Checked = false;
-                        }
+                        checkBox_perPoly.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly;
 
                         break;
                     case (Int32)CommonVars.calcModes.enclosure_spacing_overlap:
@@ -312,22 +259,8 @@ namespace Variance
                     case (Int32)CommonVars.calcModes.chord:
                         checkBox_aChord.Enabled = true;
                         checkBox_bChord.Enabled = true;
-                        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) != (int)CommonVars.chordCalcElements.b)
-                        {
-                            checkBox_aChord.Checked = true;
-                        }
-                        else
-                        {
-                            checkBox_aChord.Checked = false;
-                        }
-                        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) >= (int)CommonVars.chordCalcElements.b)
-                        {
-                            checkBox_bChord.Checked = true;
-                        }
-                        else
-                        {
-                            checkBox_bChord.Checked = false;
-                        }
+                        checkBox_aChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) != (int)CommonVars.chordCalcElements.b;
+                        checkBox_bChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) >= (int)CommonVars.chordCalcElements.b;
                         break;
                     case (Int32)CommonVars.calcModes.angle:
                         break;
@@ -364,23 +297,9 @@ namespace Variance
                 num_ssNumOfCases.Value = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases);
                 num_ssPrecision.Value = commonVars.getSimulationSettings().getResolution();
 
-                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.optC) == 1)
-                {
-                    checkBox_limitCornerPoints.Checked = true;
-                }
-                else
-                {
-                    checkBox_limitCornerPoints.Checked = false;
-                }
+                checkBox_limitCornerPoints.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.optC) == 1;
 
-                if (commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 1)
-                {
-                    checkBox_greedyMultiCPU.Checked = true;
-                }
-                else
-                {
-                    checkBox_greedyMultiCPU.Checked = false;
-                }
+                checkBox_greedyMultiCPU.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 1;
 
                 resumeSettingsUI();
             });
@@ -748,10 +667,7 @@ namespace Variance
             }
             else
             {
-                Application.Instance.AsyncInvoke(() =>
-                {
-                    updateProgressBar();
-                });
+                Application.Instance.AsyncInvoke(updateProgressBar);
             }
         }
 
@@ -1004,10 +920,7 @@ namespace Variance
             {
                 // Uncritical failure.
             }
-            Application.Instance.Invoke(() =>
-            {
-                updateViewport();
-            });
+            Application.Instance.Invoke(updateViewport);
         }
 
         void updateImplantPreview(object sender, ElapsedEventArgs e)
@@ -1027,10 +940,7 @@ namespace Variance
                             }
                             else
                             {
-                                Application.Instance.Invoke(() =>
-                                {
-                                    implantPreviewUpdate();
-                                });
+                                Application.Instance.Invoke(implantPreviewUpdate);
                             }
                         }
                         catch (Exception)
@@ -1076,10 +986,7 @@ namespace Variance
                         Monitor.Exit(varianceContext.vc.implantPreviewLock);
                     }
                 }
-                Application.Instance.Invoke(() =>
-                {
-                    updateViewport();
-                });
+                Application.Instance.Invoke(updateViewport);
             }
             catch (Exception)
             {
@@ -1170,15 +1077,15 @@ namespace Variance
 
             // Iterate through our shapes
             // Note that we also load the viewport poly drawn/enabled state. This allows for background poly filtering later.
-            for (Int32 i = 0; i < previewShapes.Count; i++)
+            foreach (PreviewShape t in previewShapes)
             {
-                for (Int32 poly = 0; poly < previewShapes[i].getPoints().Count; poly++)
+                for (Int32 poly = 0; poly < t.getPoints().Count; poly++)
                 {
                     mcVPSettings[settingsIndex].addPolygon(
-                        poly: UIHelper.myPointFArrayToPointFArray(previewShapes[i].getPoints()[poly]),
-                        polyColor: Color.FromArgb(previewShapes[i].getColor().toArgb()),
+                        poly: UIHelper.myPointFArrayToPointFArray(t.getPoints()[poly]),
+                        polyColor: Color.FromArgb(t.getColor().toArgb()),
                         alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
-                        drawn: previewShapes[i].getDrawnPoly(poly),
+                        drawn: t.getDrawnPoly(poly),
                         layerIndex: settingsIndex
                     );
                 }
