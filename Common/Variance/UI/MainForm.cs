@@ -20,7 +20,7 @@ namespace Variance
     /// <summary>
     /// Your application's main form
     /// </summary>
-    public partial class MainForm : Form
+    public partial class MainForm
     {
         CommonVars commonVars;
 
@@ -203,11 +203,11 @@ namespace Variance
             {
                 string tempString = prefs.Descendants("rngMappingEquations").First().Value;
                 string[] equations = tempString.Split(new[] { ';' });
-                for (int i = 0; i < equations.Length; i++)
+                foreach (string t in equations)
                 {
-                    if (equations[i] != "Box-Muller")
+                    if (t != "Box-Muller")
                     {
-                        varianceContext.vc.rngMappingEquations.Add(equations[i]);
+                        varianceContext.vc.rngMappingEquations.Add(t);
                     }
                 }
             }
@@ -580,6 +580,7 @@ namespace Variance
             {
                 XDocument prefsXML = new XDocument(
                     new XElement("root"));
+                // ReSharper disable once PossibleNullReferenceException
                 prefsXML.Root.Add(new XElement("version", CentralProperties.version));
 
                 XElement emailPrefs = new XElement("email",
@@ -826,7 +827,7 @@ namespace Variance
         {
             // Figure out host UI element sizes to assist in layout, at least vertically.
             // Set controls to null afterwards.
-            label_Height = 13; //  (int)Math.Ceiling(qLabel.Font.MeasureString("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVVWXYZ").Height);
+            label_Height = 13;
             
             simulationOutputGroupBoxHeight = 57;
             simulationSettingsGroupBoxHeight = 180;
@@ -901,14 +902,7 @@ namespace Variance
             }
 
             int index = getSelectedLayerIndex();
-            if (commonVars.getLayerSettings(index).getInt(EntropyLayerSettings.properties_i.enabled) == 1)
-            {
-                lb_enableDisable.Text = "Disable";
-            }
-            else
-            {
-                lb_enableDisable.Text = "Enable";
-            }
+            lb_enableDisable.Text = commonVars.getLayerSettings(index).getInt(EntropyLayerSettings.properties_i.enabled) == 1 ? "Disable" : "Enable";
         }
 
         void enableDisable()
@@ -927,15 +921,13 @@ namespace Variance
         }
 
 
-        public MainForm(ref bool doPrompts, VarianceContextGUI _varianceContext)
+        public MainForm(VarianceContextGUI _varianceContext)
         {
-            pMainForm(ref doPrompts, _varianceContext);
+            pMainForm(_varianceContext);
         }
 
-        void pMainForm(ref bool doPrompts, VarianceContextGUI _varianceContext)
+        void pMainForm(VarianceContextGUI _varianceContext)
         {
-            doPrompts = true;
-
             // Figure out whether we should display the help menu, if documentation is available.
             helpPath = Path.Combine(EtoEnvironment.GetFolderPath(EtoSpecialFolder.ApplicationResources), "Documentation", "index.html");
             helpAvailable = File.Exists(helpPath);
@@ -944,10 +936,11 @@ namespace Variance
         }
 
         private bool _veldridReady;
-        public bool VeldridReady
+
+        private bool VeldridReady
         {
-            get { return _veldridReady; }
-            private set
+            get => _veldridReady;
+            set
             {
                 _veldridReady = value;
 
@@ -956,9 +949,10 @@ namespace Variance
         }
 
         private bool _formReady;
-        public bool FormReady
+
+        private bool FormReady
         {
-            get { return _formReady; }
+            get => _formReady;
             set
             {
                 _formReady = value;
@@ -1043,6 +1037,7 @@ namespace Variance
                 // app bundle that instead bundles Mono by way of mkbundle, on the
                 // other hand, it returns the directory containing the .app.
 
+                // ReSharper disable once PossibleNullReferenceException
                 exeDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
                 shaders = Path.Combine("..", "Resources", "shaders");
             }
@@ -1208,19 +1203,19 @@ namespace Variance
                 comboBox_geoEqtn_Op[i].SelectedIndex = 0;
             }
 
-            for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+            foreach (DropDown t in comboBox_geoEqtn_Op_2Layer)
             {
-                comboBox_geoEqtn_Op_2Layer[i].SelectedIndex = 0;
+                t.SelectedIndex = 0;
             }
 
-            for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+            foreach (DropDown t in comboBox_geoEqtn_Op_4Layer)
             {
-                comboBox_geoEqtn_Op_4Layer[i].SelectedIndex = 0;
+                t.SelectedIndex = 0;
             }
 
-            for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+            foreach (DropDown t in comboBox_geoEqtn_Op_8Layer)
             {
-                comboBox_geoEqtn_Op_8Layer[i].SelectedIndex = 0;
+                t.SelectedIndex = 0;
             }
 
             comboBox_calcModes.SelectedIndex = 0;
@@ -1288,10 +1283,11 @@ namespace Variance
 
         void resetViewPorts()
         {
-            for (int i = 0; i < mcVPSettings.Length; i++)
+            foreach (OVPSettings t in mcVPSettings)
             {
-                mcVPSettings[i].fullReset();
+                t.fullReset();
             }
+
             otkVPSettings_implant.fullReset();
         }
 
@@ -1373,7 +1369,6 @@ namespace Variance
                 viewPort.ovpSettings.drawPoints(!viewPort.ovpSettings.drawPoints());
                 updateViewport();
             };
-            displayOptionsSubItemIndex++;
 
             if (mainIndex != (int)CommonVars.upperTabNames.Implant)
             {
@@ -1476,7 +1471,6 @@ namespace Variance
                 viewPort.fastZoomIn(-1000);
                 updateViewport();
             };
-            zoomInSubItemIndex++;
 
             vp_menu.Items.AddSeparator();
             itemIndex++;
@@ -1519,7 +1513,6 @@ namespace Variance
                 viewPort.fastZoomOut(-1000);
                 updateViewport();
             };
-            zoomOutSubItemIndex++;
 
             if (mainIndex != (int)CommonVars.upperTabNames.Implant)
             {
@@ -1532,14 +1525,7 @@ namespace Variance
                     vp_menu.Items[freezeThawIndex].Text = "Freeze (f)";
                 }
 
-                if (viewPort.savedLocation_valid)
-                {
-                    vp_menu.Items[loadBookmarkIndex].Enabled = true;
-                }
-                else
-                {
-                    vp_menu.Items[loadBookmarkIndex].Enabled = false;
-                }
+                vp_menu.Items[loadBookmarkIndex].Enabled = viewPort.savedLocation_valid;
             }
 
             int svgIndex = itemIndex + 1;
@@ -1572,9 +1558,7 @@ namespace Variance
         void setup_tabs()
         {
             tabPage2_table = new TableLayout();
-            tabPage2 = new TabPage();
-            tabPage2.Text = "2D Calculation";
-            tabPage2.Content = tabPage2_table;
+            tabPage2 = new TabPage {Text = "2D Calculation", Content = tabPage2_table};
 
             tabControl_main.Pages.Add(tabPage2);
 
@@ -1582,25 +1566,19 @@ namespace Variance
             tabPage_implant_table = new TableLayout();
             tabPage_implant_scrollable.Content = tabPage_implant_table;
 
-            tabPage_implant = new TabPage();
-            tabPage_implant.Text = "Implant";
+            tabPage_implant = new TabPage {Text = "Implant", Content = tabPage_implant_scrollable};
 
-            tabPage_implant.Content = tabPage_implant_scrollable;
 
             tabControl_main.Pages.Add(tabPage_implant);
 
-            tab_1DCalc = new TabPage();
-            tab_1DCalc.Text = "1D Calculation";
+            tab_1DCalc = new TabPage {Text = "1D Calculation"};
             tabControl_main.Pages.Add(tab_1DCalc);
 
             tabPage_utilities_table = new TableLayout();
-            Scrollable tabPage_utilities_scrollable = new Scrollable();
-            tabPage_utilities_scrollable.Content = tabPage_utilities_table;
+            Scrollable tabPage_utilities_scrollable = new Scrollable {Content = tabPage_utilities_table};
 
-            tabPage_utilities = new TabPage();
-            tabPage_utilities.Text = "Utils";
+            tabPage_utilities = new TabPage {Text = "Utils", Content = tabPage_utilities_scrollable};
 
-            tabPage_utilities.Content = tabPage_utilities_scrollable;
 
             tabControl_main.Pages.Add(tabPage_utilities);
 
@@ -1615,31 +1593,21 @@ namespace Variance
 
             twoD_LayerUISetup();
 
-            tabPage_2D_Settings = new TabPage();
-            tabPage_2D_Settings.Text = "Settings";
-            tabPage_2D_Settings.Content = tabPage_2D_Settings_scrollable;
+            tabPage_2D_Settings = new TabPage {Text = "Settings", Content = tabPage_2D_Settings_scrollable};
             tabControl_2D_simsettings.Pages.Add(tabPage_2D_Settings);
 
-            Scrollable tabPage_2D_DOE_scrollable = new Scrollable();
             tabPage_2D_DOE_table = new TableLayout();
-            tabPage_2D_DOE_scrollable.Content = tabPage_2D_DOE_table;
+            Scrollable tabPage_2D_DOE_scrollable = new Scrollable {Content = tabPage_2D_DOE_table};
 
-            tabPage_2D_DOE = new TabPage();
-            tabPage_2D_DOE.Text = "DOE";
-
-            tabPage_2D_DOE.Content = tabPage_2D_DOE_scrollable;
+            tabPage_2D_DOE = new TabPage {Text = "DOE", Content = tabPage_2D_DOE_scrollable};
 
             tabControl_2D_simsettings.Pages.Add(tabPage_2D_DOE);
 
-
-            tabPage_2D_PASearch_scrollable = new Scrollable();
             tabPage_2D_PASearch_table = new TableLayout();
-            tabPage_2D_PASearch_scrollable.Content = tabPage_2D_PASearch_table;
+            tabPage_2D_PASearch_scrollable = new Scrollable {Content = tabPage_2D_PASearch_table};
 
-            tabPage_2D_PASearch = new TabPage();
-            tabPage_2D_PASearch.Text = "PA Search";
+            tabPage_2D_PASearch = new TabPage {Text = "PA Search", Content = tabPage_2D_PASearch_scrollable};
 
-            tabPage_2D_PASearch.Content = tabPage_2D_PASearch_scrollable;
 
             tabControl_2D_simsettings.Pages.Add(tabPage_2D_PASearch);
         }
@@ -1647,18 +1615,19 @@ namespace Variance
         void setup_layout()
         {
             // mainPanel is tab UI.
-            Panel mainPanel = new Panel();
-            mainPanel.Size = new Size(920, 800); // force the UI out to contain the panel. Hope this will be redundant eventually with the table UI.
-            mainPanel.Content = mainTable;
+            Panel mainPanel = new Panel {Size = new Size(920, 800), Content = mainTable};
+            // force the UI out to contain the panel. Hope this will be redundant eventually with the table UI.
             // rightPanel will take viewport and controls.
             Panel rightPanel = new Panel();
-            Panel mainSplitter = new Panel();
-            mainSplitter.Content = new Splitter
+            Panel mainSplitter = new Panel
             {
-                Orientation = Orientation.Horizontal,
-                FixedPanel = SplitterFixedPanel.Panel1,
-                Panel1 = mainPanel,
-                Panel2 = rightPanel,
+                Content = new Splitter
+                {
+                    Orientation = Orientation.Horizontal,
+                    FixedPanel = SplitterFixedPanel.Panel1,
+                    Panel1 = mainPanel,
+                    Panel2 = rightPanel,
+                }
             };
 
             // Controls
@@ -1673,20 +1642,20 @@ namespace Variance
             };
 
             // We need an additional level here to take the status label and progress bar in the lower portion of the UI.
-            Panel outerPanel_upper = new Panel();
-            outerPanel_upper.Content = mainSplitter;
-            Panel outerPanel_lower = new Panel();
+            Panel outerPanel_upper = new Panel {Content = mainSplitter};
             TableLayout outerPanel_lower_content = new TableLayout();
+            Panel outerPanel_lower = new Panel {Content = outerPanel_lower_content};
             TableRow oplc_row0 = new TableRow();
             outerPanel_lower_content.Rows.Add(oplc_row0);
-            outerPanel_lower.Content = outerPanel_lower_content;
-            Panel outerPanel = new Panel();
-            outerPanel.Content = new Splitter
+            Panel outerPanel = new Panel
             {
-                Orientation = Orientation.Vertical,
-                FixedPanel = SplitterFixedPanel.Panel2,
-                Panel1 = outerPanel_upper,
-                Panel2 = outerPanel_lower,
+                Content = new Splitter
+                {
+                    Orientation = Orientation.Vertical,
+                    FixedPanel = SplitterFixedPanel.Panel2,
+                    Panel1 = outerPanel_upper,
+                    Panel2 = outerPanel_lower,
+                }
             };
 
             // Assign the outer panel to the contents.
@@ -1698,26 +1667,19 @@ namespace Variance
             mainTable.Rows[0].Cells.Add(new TableCell { Control = tabControl_main });
 
             // Stick our progress indicator and status label in here.
-            statusReadout = new Label();
-            statusReadout.Text = "Welcome";
-            statusReadout.TextAlignment = TextAlignment.Center;
+            statusReadout = new Label {Text = "Welcome", TextAlignment = TextAlignment.Center};
             oplc_row0.Cells.Add(new TableCell { Control = statusReadout, ScaleWidth = true });
 
-            statusProgressBar = new ProgressBar();
-            statusProgressBar.Value = 0;
-            statusProgressBar.Size = new Size(100, label_Height);
+            statusProgressBar = new ProgressBar {Value = 0, Size = new Size(100, label_Height)};
             oplc_row0.Cells.Add(new TableCell { Control = statusProgressBar, ScaleWidth = false });
         }
 
         void setupComment(TableCell tc)
         {
-            Panel p = new Panel();
-            commentBox = new RichTextArea();
-            p.Content = commentBox;
-            tc.Control = TableLayout.AutoSized(p, centered: true);
-            commentBox.Wrap = true;
-            commentBox.ReadOnly = false;
+            commentBox = new RichTextArea {Wrap = true, ReadOnly = false};
             commentBox.LostFocus += commentChanged;
+            Panel p = new Panel {Content = commentBox};
+            tc.Control = TableLayout.AutoSized(p, centered: true);
             setSize(commentBox, commentBoxWidth, commentBoxHeight);
         }
 
@@ -1801,26 +1763,22 @@ namespace Variance
             p.Content = buttons_table;
             buttons_table.Rows.Add(new TableRow());
 
-            btn_singleCPU = new Button();
-            btn_singleCPU.Text = "Single\r\nCPU";
-            setSize(btn_singleCPU, simButtonWidth, simButtonHeight);
+            btn_singleCPU = new Button {Text = "Single\r\nCPU"};
             btn_singleCPU.Click += monteCarloSingleThreadEventHandler;
+            setSize(btn_singleCPU, simButtonWidth, simButtonHeight);
             // buttons_table.Rows[0].Cells.Add(new TableCell() { Control = btn_singleCPU });
 
-            btn_multiCPU = new Button();
-            btn_multiCPU.Text = "Multi\r\nCPU";
+            btn_multiCPU = new Button {Text = "Multi\r\nCPU"};
             setSize(btn_multiCPU, simButtonWidth, simButtonHeight);
             btn_multiCPU.Click += monteCarloMultipleThreadEventHandler;
             buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_multiCPU });
 
-            btn_Cancel = new Button();
-            btn_Cancel.Text = "Cancel";
+            btn_Cancel = new Button {Text = "Cancel"};
             setSize(btn_Cancel, simButtonWidth, simButtonHeight);
             btn_Cancel.Click += btnCancel;
             buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Cancel });
 
-            btn_STOP = new Button();
-            btn_STOP.Text = "STOP";
+            btn_STOP = new Button {Text = "STOP"};
             setSize(btn_STOP, simButtonWidth, simButtonHeight);
             btn_STOP.Click += btnSTOP;
             buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_STOP });
@@ -1828,44 +1786,31 @@ namespace Variance
 
         void viewport_gadgets(TableCell tc)
         {
-            Panel p = new Panel();
+            TableLayout viewport_gadgets_tl = new TableLayout();
+            Panel p = new Panel {Content = viewport_gadgets_tl};
             tc.Control = p; // TableLayout.AutoSized(p, centered: true);
 
-            TableLayout viewport_gadgets_tl = new TableLayout();
-            p.Content = viewport_gadgets_tl;
             viewport_gadgets_tl.Rows.Add(new TableRow());
 
-            lbl_simPreviewZoom = new Label();
-            lbl_simPreviewZoom.Text = "Zoom";
+            lbl_simPreviewZoom = new Label {Text = "Zoom"};
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_simPreviewZoom });
 
-            num_viewportZoom = new NumericStepper();
-            num_viewportZoom.DecimalPlaces = 2;
-            num_viewportZoom.Increment = 0.01;
-            num_viewportZoom.Value = 1.0;
-            num_viewportZoom.MinValue = 0.001;
+            num_viewportZoom = new NumericStepper {DecimalPlaces = 2, Increment = 0.01, Value = 1.0, MinValue = 0.001};
             setSize(num_viewportZoom, 55);
             num_viewportZoom.LostFocus += zoomChanged;
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportZoom) });
 
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding
 
-            lbl_viewportPos = new Label();
-            lbl_viewportPos.Text = "Position";
+            lbl_viewportPos = new Label {Text = "Position"};
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = lbl_viewportPos });
 
-            num_viewportX = new NumericStepper();
-            num_viewportX.DecimalPlaces = 2;
-            num_viewportX.Increment = 0.01;
-            num_viewportX.Value = 0;
+            num_viewportX = new NumericStepper {DecimalPlaces = 2, Increment = 0.01, Value = 0};
             setSize(num_viewportX, 75);
             num_viewportX.LostFocus += posChanged;
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportX) });
 
-            num_viewportY = new NumericStepper();
-            num_viewportY.DecimalPlaces = 2;
-            num_viewportY.Increment = 0.01;
-            num_viewportY.Value = 0;
+            num_viewportY = new NumericStepper {DecimalPlaces = 2, Increment = 0.01, Value = 0};
             setSize(num_viewportY, 75);
             num_viewportY.LostFocus += posChanged;
             viewport_gadgets_tl.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_viewportY) });
@@ -1901,30 +1846,23 @@ namespace Variance
 
         void setupOmitLayerCheckboxes(TableCell tc)
         {
-            Panel p = new Panel();
-            tc.Control = TableLayout.AutoSized(p, centered: true);
-
-            omitLayerBox = new GroupBox();
-
-            p.Content = omitLayerBox;
-            omitLayerBox.Text = "Omit layers (Boolean)";
-
             TableLayout omitLayerBox_table = new TableLayout();
-            omitLayerBox.Content = omitLayerBox_table;
+            omitLayerBox_table.Rows.Add(new TableRow());
+            omitLayerBox_table.Rows.Add(new TableRow());
 
-            omitLayerBox_table.Rows.Add(new TableRow());
-            omitLayerBox_table.Rows.Add(new TableRow());
+            omitLayerBox = new GroupBox {Text = "Omit layers (Boolean)", Content = omitLayerBox_table};
+
+            Panel p = new Panel {Content = omitLayerBox};
+            tc.Control = TableLayout.AutoSized(p, centered: true);
 
             cB_omit = new CheckBox[CentralProperties.maxLayersForMC];
             int rowIndex = 0;
             for (int cb = 0; cb < CentralProperties.maxLayersForMC; cb++)
             {
                 // Don't add a button for our current layer
-                cB_omit[cb] = new CheckBox();
-                cB_omit[cb].Text = (cb + 1).ToString();
+                cB_omit[cb] = new CheckBox {Text = (cb + 1).ToString()};
 
-                TableCell tc0 = new TableCell();
-                tc0.Control = cB_omit[cb];
+                TableCell tc0 = new TableCell {Control = cB_omit[cb]};
                 omitLayerBox_table.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if ((cb + 1) == CentralProperties.maxLayersForMC / 2)
@@ -1946,18 +1884,14 @@ namespace Variance
 
         void setupBGLayerCheckboxes(TableCell tc)
         {
-            Panel p = new Panel();
-            tc.Control = TableLayout.AutoSized(p, centered: true);
-
-            bgLayerBox = new GroupBox();
-            p.Content = bgLayerBox;
-
-            bgLayerBox.Text = "Background layers";
-
             bgLayerBox_table = new TableLayout();
-            bgLayerBox.Content = bgLayerBox_table;
+            bgLayerBox = new GroupBox {Text = "Background layers", Content = bgLayerBox_table};
+
             bgLayerBox_table.Rows.Add(new TableRow());
             bgLayerBox_table.Rows.Add(new TableRow());
+
+            Panel p = new Panel {Content = bgLayerBox};
+            tc.Control = TableLayout.AutoSized(p, centered: true);
 
             cB_bg = new CheckBox[CentralProperties.maxLayersForMC];
 
@@ -1965,11 +1899,9 @@ namespace Variance
             for (int cb = 0; cb < CentralProperties.maxLayersForMC; cb++)
             {
                 // Don't add a button for our current layer
-                cB_bg[cb] = new CheckBox();
-                cB_bg[cb].Text = (cb + 1).ToString();
+                cB_bg[cb] = new CheckBox {Text = (cb + 1).ToString()};
 
-                TableCell tc0 = new TableCell();
-                tc0.Control = cB_bg[cb];
+                TableCell tc0 = new TableCell {Control = cB_bg[cb]};
                 bgLayerBox_table.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if ((cb + 1) == CentralProperties.maxLayersForMC / 2)
@@ -1981,25 +1913,18 @@ namespace Variance
 
         void setup_simPreviewBox()
         {
-            simPreviewBox = new GroupBox();
-            simPreviewBox.Text = "Simulation Elements";
-
             TableLayout simPreviewBox_table = new TableLayout();
-            simPreviewBox.Content = simPreviewBox_table;
             simPreviewBox_table.Rows.Add(new TableRow());
 
-            cB_displayShapes = new CheckBox();
-            cB_displayShapes.Text = "Display input shapes for each case";
-            simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = cB_displayShapes });
-            cB_displayShapes.Checked = true;
+            simPreviewBox = new GroupBox {Text = "Simulation Elements", Content = simPreviewBox_table};
 
-            cB_displayResults = new CheckBox();
-            cB_displayResults.Text = "Display results for each case";
+            cB_displayShapes = new CheckBox {Text = "Display input shapes for each case", Checked = true};
+            simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = cB_displayShapes });
+
+            cB_displayResults = new CheckBox {Text = "Display results for each case", Checked = true};
             simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = cB_displayResults });
 
             simPreviewBox_table.Rows[0].Cells.Add(new TableCell { Control = null });
-
-            cB_displayResults.Checked = true;
         }
 
         void setSize(Button _control, int width, int height)
