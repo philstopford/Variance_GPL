@@ -87,6 +87,7 @@ namespace Variance
             return resultText;
         }
 
+        // ReSharper disable once UnusedMember.Local
         void doOffsets(EntropyLayerSettings entropyLayerSettings)
         {
             // OK. Now we need to pay attention to the subshape reference settings.
@@ -176,8 +177,7 @@ namespace Variance
             varianceContext = _varianceContext;
             simShapes = new List<PreviewShape>();
             previewShapes = new List<List<GeoLibPointF[]>>();
-            points = new List<GeoLibPointF[]>();
-            points.Add(new GeoLibPointF[1]);
+            points = new List<GeoLibPointF[]> {new GeoLibPointF[1]};
         }
         
         void updatePreview(List<PreviewShape> simShapes_)
