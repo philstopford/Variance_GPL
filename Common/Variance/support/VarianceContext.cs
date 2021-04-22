@@ -19,8 +19,8 @@ namespace Variance
         public string host { get; set; }
         public string port { get; set; }
         public bool ssl { get; set; }
-        public bool perJob { get; private set; }
-        public bool completion { get; private set; }
+        public bool perJob { get; set; }
+        public bool completion { get; set; }
         public string emailAddress { get; set; }
         public string emailPwd { get; set; }
         public Int32 openGLZoomFactor { get; set; }
