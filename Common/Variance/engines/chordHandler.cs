@@ -20,6 +20,8 @@ namespace Variance
         public double[] bChordLengths { get; private set; }
         Int32 aPath_maxX_index;
         Int32 bPath_maxY_index;
+        Int32 aPath_minX_index;
+        Int32 bPath_minY_index;
         KDTree<IntPoint> aTree;
         KDTree<IntPoint> bTree;
 
@@ -46,9 +48,9 @@ namespace Variance
             Clipper c = new Clipper {ZFillFunction = ZFillCallback, PreserveCollinear = true};
             c.AddPath(testPath, PolyType.ptSubject, false);
             c.AddPath(b, PolyType.ptClip, true);
-            PolyTree polyTree_top = new PolyTree();
-            c.Execute(ClipType.ctIntersection, polyTree_top);
-            Paths topChords = Clipper.OpenPathsFromPolyTree(polyTree_top); // potentially more than one chord.
+            PolyTree polyTree_bottom = new PolyTree();
+            c.Execute(ClipType.ctIntersection, polyTree_bottom);
+            Paths bottomChords = Clipper.OpenPathsFromPolyTree(polyTree_bottom); // potentially more than one chord.
 
             // Now we evaluate the lower edge
             // We have to start from the max index because it could be shared between top and bottom chords.
@@ -56,67 +58,26 @@ namespace Variance
             testPath.Clear();
             c.Clear();
 
-            while (pt < a.Count)
+            bool aDone = false;
+            
+            while (!aDone)
             {
+                pt %= a.Count;
                 testPath.Add(new IntPoint(a[pt]));
+                if (pt == aPath_minX_index)
+                {
+                    aDone = true;
+                }
                 pt++;
             }
 
             c.AddPath(testPath, PolyType.ptSubject, false);
             c.AddPath(b, PolyType.ptClip, true);
-            PolyTree polyTree_bottom = new PolyTree();
-            c.Execute(ClipType.ctIntersection, polyTree_bottom);
-            Paths bottomChords = Clipper.OpenPathsFromPolyTree(polyTree_bottom); // potentially more than one chord.
+            PolyTree polyTree_top = new PolyTree();
+            c.Execute(ClipType.ctIntersection, polyTree_top);
+            Paths topChords = Clipper.OpenPathsFromPolyTree(polyTree_top); // potentially more than one chord.
 
             // Now let's see what we have.
-
-            double minTopChordLength = 0;
-            Path topChord = new Path {new IntPoint(0, 0)};
-            // safety in case we have no chords on the top.
-            foreach (Path t in topChords)
-            {
-                // Does this chord segment actually belong to the 'B' geometry.
-                bool topEdgeIsFromA = true;
-                // First point and last point might not be matched to original geometry (imperfect intersection)
-                for (int tCPt = 1; tCPt < t.Count - 1; tCPt++)
-                {
-                    var pIter = aTree.NearestNeighbors(new double[] { t[tCPt].X, t[tCPt].Y }, 1);
-                    while (pIter.MoveNext())
-                    {
-                        if (pIter.CurrentDistance > 0)
-                        {
-                            topEdgeIsFromA = false;
-                            break;
-                        }
-                    }
-                    if (!topEdgeIsFromA)
-                    {
-                        break;
-                    }
-                }
-
-                if (!topEdgeIsFromA)
-                {
-                    continue;
-                }
-
-                // skip if false case
-                if ((topChords.Count == 1) || ((topChords.Count > 1) && ((t[0].Z == -1) && (t[^1].Z == -1))))
-                {
-                    double chordLength = 0;
-                    // Assess length of each chord and only report the minimum length one.
-                    for (int chordpt = 0; chordpt < t.Count - 1; chordpt++)
-                    {
-                        chordLength += GeoWrangler.distanceBetweenPoints(t[chordpt], t[chordpt + 1]);
-                    }
-
-                    if ((minTopChordLength == 0) || (chordLength < minTopChordLength))
-                    {
-                        minTopChordLength = chordLength;
-                        topChord = t;
-                    }
-                }
-            }
 
             double minBottomChordLength = 0;
             Path bottomChord = new Path {new IntPoint(0, 0)};
@@ -128,7 +89,7 @@ namespace Variance
                 // First point and last point might not be matched to original geometry (imperfect intersection)
                 for (int bCPt = 1; bCPt < t.Count - 1; bCPt++)
                 {
-                    var pIter = aTree.NearestNeighbors(new double[] { t[bCPt].X, t[bCPt].Y }, 1);
+                    NearestNeighbour<IntPoint> pIter = aTree.NearestNeighbors(new double[] { t[bCPt].X, t[bCPt].Y }, 1);
                     while (pIter.MoveNext())
                     {
                         if (pIter.CurrentDistance > 0)
@@ -166,11 +127,59 @@ namespace Variance
                 }
             }
 
-            aChordLengths[0] = minBottomChordLength;
-            a_chordPaths.Add(bottomChord.ToList());
+            double minTopChordLength = 0;
+            Path topChord = new Path {new IntPoint(0, 0)};
+            // safety in case we have no chords on the top.
+            foreach (Path t in topChords)
+            {
+                // Does this chord segment actually belong to the 'B' geometry.
+                bool topEdgeIsFromA = true;
+                // First point and last point might not be matched to original geometry (imperfect intersection)
+                for (int tCPt = 1; tCPt < t.Count - 1; tCPt++)
+                {
+                    NearestNeighbour<IntPoint> pIter = aTree.NearestNeighbors(new double[] { t[tCPt].X, t[tCPt].Y }, 1);
+                    while (pIter.MoveNext())
+                    {
+                        if (pIter.CurrentDistance > 0)
+                        {
+                            topEdgeIsFromA = false;
+                            break;
+                        }
+                    }
+                    if (!topEdgeIsFromA)
+                    {
+                        break;
+                    }
+                }
 
-            aChordLengths[1] = minTopChordLength;
+                if (!topEdgeIsFromA)
+                {
+                    continue;
+                }
+
+                // skip if false case
+                if ((topChords.Count == 1) || ((topChords.Count > 1) && ((t[0].Z == -1) && (t[^1].Z == -1))))
+                {
+                    double chordLength = 0;
+                    // Assess length of each chord and only report the minimum length one.
+                    for (int chordpt = 0; chordpt < t.Count - 1; chordpt++)
+                    {
+                        chordLength += GeoWrangler.distanceBetweenPoints(t[chordpt], t[chordpt + 1]);
+                    }
+
+                    if ((minTopChordLength == 0) || (chordLength < minTopChordLength))
+                    {
+                        minTopChordLength = chordLength;
+                        topChord = t;
+                    }
+                }
+            }
+
+            aChordLengths[0] = minTopChordLength;
             a_chordPaths.Add(topChord.ToList());
+
+            aChordLengths[1] = minBottomChordLength;
+            a_chordPaths.Add(bottomChord.ToList());
         }
 
         void doPathB()
@@ -189,85 +198,46 @@ namespace Variance
                 pt++;
             }
 
+            pt = Math.Max(0, pt - 1);
+
             Clipper c = new Clipper {PreserveCollinear = true, ZFillFunction = ZFillCallback};
-            c.AddPath(testPath, PolyType.ptSubject, false);
-            c.AddPath(a, PolyType.ptClip, true);
-            PolyTree polyTree_left = new PolyTree();
-            c.Execute(ClipType.ctIntersection, polyTree_left);
-            Paths leftChords = Clipper.OpenPathsFromPolyTree(polyTree_left); // potentially more than one chord.
-
-            // Now we evaluate the right edge
-            // We have to start from the max index because it could be shared between top and bottom chords.
-            testPath.Clear();
-            c.Clear();
-
-            while (pt < b.Count)
-            {
-                testPath.Add(new IntPoint(b[pt]));
-                pt++;
-            }
-
-            c.ZFillFunction = ZFillCallback;
             c.AddPath(testPath, PolyType.ptSubject, false);
             c.AddPath(a, PolyType.ptClip, true);
             PolyTree polyTree_right = new PolyTree();
             c.Execute(ClipType.ctIntersection, polyTree_right);
             Paths rightChords = Clipper.OpenPathsFromPolyTree(polyTree_right); // potentially more than one chord.
 
-            // Now let's see what we have.
+            // Now we evaluate the right edge
+            // We have to start from the max index because it could be shared between top and bottom chords.
+            testPath.Clear();
+            c.Clear();
 
-            double minLeftChordLength = 0;
-            Path leftChord = new Path {new IntPoint(0, 0)};
-            // safety in case we have no chords on the left.
-
-            foreach (Path t in leftChords)
+            bool bDone = false;
+            
+            while (!bDone)
             {
-                // Does this chord segment actually belong to the 'B' geometry.
-                bool leftEdgeIsFromB = true;
-                // First point and last point might not be matched to original geometry (imperfect intersection)
-                for (int lCPt = 1; lCPt < t.Count - 1; lCPt++)
+                pt %= b.Count;
+                testPath.Add(new IntPoint(b[pt]));
+                if (pt == bPath_minY_index)
                 {
-                    var pIter = bTree.NearestNeighbors(new double[] { t[lCPt].X, t[lCPt].Y }, 1);
-                    while (pIter.MoveNext())
-                    {
-                        if (pIter.CurrentDistance > 0)
-                        {
-                            leftEdgeIsFromB = false;
-                            break;
-                        }
-                    }
-                    if (!leftEdgeIsFromB)
-                    {
-                        break;
-                    }
+                    bDone = true;
                 }
-
-                if (!leftEdgeIsFromB)
-                {
-                    continue;
-                }
-
-                // skip if false case
-                if ((leftChords.Count == 1) || ((leftChords.Count > 1) && ((t[0].Z == -1) && (t[^1].Z == -1))))
-                {
-                    double chordLength = 0;
-                    // Assess length of each chord and only report the minimum length one.
-                    for (int chordpt = 0; chordpt < t.Count - 1; chordpt++)
-                    {
-                        chordLength += GeoWrangler.distanceBetweenPoints(t[chordpt], t[chordpt + 1]);
-                    }
-
-                    if ((minLeftChordLength == 0) || (chordLength < minLeftChordLength))
-                    {
-                        minLeftChordLength = chordLength;
-                        leftChord = t;
-                    }
-                }
+                pt++;
             }
+
+            c.ZFillFunction = ZFillCallback;
+            c.AddPath(testPath, PolyType.ptSubject, false);
+            c.AddPath(a, PolyType.ptClip, true);
+            PolyTree polyTree_left = new PolyTree();
+            c.Execute(ClipType.ctIntersection, polyTree_left);
+            Paths leftChords = Clipper.OpenPathsFromPolyTree(polyTree_left); // potentially more than one chord.
+
+            // Now let's see what we have.
 
             double minRightChordLength = 0;
             Path rightChord = new Path {new IntPoint(0, 0)};
             // safety in case we have no chords on the right.
+
             foreach (Path t in rightChords)
             {
                 // Does this chord segment actually belong to the 'B' geometry.
@@ -275,7 +245,7 @@ namespace Variance
                 // First point and last point might not be matched to original geometry (imperfect intersection)
                 for (int rCPt = 1; rCPt < t.Count - 1; rCPt++)
                 {
-                    var pIter = bTree.NearestNeighbors(new double[] { t[rCPt].X, t[rCPt].Y }, 1);
+                    NearestNeighbour<IntPoint> pIter = bTree.NearestNeighbors(new double[] { t[rCPt].X, t[rCPt].Y }, 1);
                     while (pIter.MoveNext())
                     {
                         if (pIter.CurrentDistance > 0)
@@ -296,7 +266,7 @@ namespace Variance
                 }
 
                 // skip if false case
-                if ((rightChords.Count == 1) || (rightChords.Count > 1 && ((t[0].Z == -1) && (t[^1].Z == -1))))
+                if ((rightChords.Count == 1) || ((rightChords.Count > 1) && ((t[0].Z == -1) && (t[^1].Z == -1))))
                 {
                     double chordLength = 0;
                     // Assess length of each chord and only report the minimum length one.
@@ -313,11 +283,59 @@ namespace Variance
                 }
             }
 
-            bChordLengths[0] = minRightChordLength;
-            b_chordPaths.Add(rightChord.ToList());
+            double minLeftChordLength = 0;
+            Path leftChord = new Path {new IntPoint(0, 0)};
+            // safety in case we have no chords on the left.
+            foreach (Path t in leftChords)
+            {
+                // Does this chord segment actually belong to the 'B' geometry.
+                bool leftEdgeIsFromB = true;
+                // First point and last point might not be matched to original geometry (imperfect intersection)
+                for (int lCPt = 1; lCPt < t.Count - 1; lCPt++)
+                {
+                    NearestNeighbour<IntPoint> pIter = bTree.NearestNeighbors(new double[] { t[lCPt].X, t[lCPt].Y }, 1);
+                    while (pIter.MoveNext())
+                    {
+                        if (pIter.CurrentDistance > 0)
+                        {
+                            leftEdgeIsFromB = false;
+                            break;
+                        }
+                    }
+                    if (!leftEdgeIsFromB)
+                    {
+                        break;
+                    }
+                }
 
-            bChordLengths[1] = minLeftChordLength;
+                if (!leftEdgeIsFromB)
+                {
+                    continue;
+                }
+
+                // skip if false case
+                if ((leftChords.Count == 1) || (leftChords.Count > 1 && ((t[0].Z == -1) && (t[^1].Z == -1))))
+                {
+                    double chordLength = 0;
+                    // Assess length of each chord and only report the minimum length one.
+                    for (int chordpt = 0; chordpt < t.Count - 1; chordpt++)
+                    {
+                        chordLength += GeoWrangler.distanceBetweenPoints(t[chordpt], t[chordpt + 1]);
+                    }
+
+                    if ((minLeftChordLength == 0) || (chordLength < minLeftChordLength))
+                    {
+                        minLeftChordLength = chordLength;
+                        leftChord = t;
+                    }
+                }
+            }
+
+            bChordLengths[0] = minLeftChordLength;
             b_chordPaths.Add(leftChord.ToList());
+
+            bChordLengths[1] = minRightChordLength;
+            b_chordPaths.Add(rightChord.ToList());
 
         }
 
@@ -328,15 +346,10 @@ namespace Variance
 
         void chordHandlerLogic(Paths aSource, Paths bSource, EntropySettings simulationSettings)
         {
-            a_chordPaths = new Paths(2);
-            Path tmpPath = new Path {new IntPoint(0, 0)};
-            a_chordPaths.Add(tmpPath.ToList());
-            a_chordPaths.Add(tmpPath.ToList());
-            b_chordPaths = new Paths(2) {tmpPath.ToList(), tmpPath.ToList()};
-            aChordLengths = new double[2];
-            aChordLengths[0] = aChordLengths[1] = 0.0;
-            bChordLengths = new double[2];
-            bChordLengths[0] = bChordLengths[1] = 0.0;
+            a_chordPaths = new Paths(2) {new Path {new IntPoint(0, 0)}, new Path {new IntPoint(0, 0)}};
+            b_chordPaths = new Paths(2) {new Path {new IntPoint(0, 0)}, new Path {new IntPoint(0, 0)}};
+            aChordLengths = new[] {0.0, 0.0};
+            bChordLengths = new[] {0.0, 0.0};
 
             List<ChordHandler> cHList = new List<ChordHandler>();
             for (Int32 aIndex = 0; aIndex < aSource.Count; aIndex++)
@@ -362,7 +375,7 @@ namespace Variance
 				So, in the checks below, the condition against zero is there to take any non-zero value that is reported; then we apply the minimum value from there.
 			*/
 
-            for (Int32 result = 0; result < cHList.Count(); result++)
+            for (Int32 result = 0; result < cHList.Count; result++)
             {
                 for (Int32 resultIndex = 0; resultIndex < 2; resultIndex++)
                 {
@@ -405,13 +418,15 @@ namespace Variance
             a_chordPaths = new Paths(2);
             b_chordPaths = new Paths(2);
 
-            aChordLengths = new double[] { 0, 0 };
-            bChordLengths = new double[] { 0, 0 };
+            aChordLengths = new[] { 0.0, 0.0 };
+            bChordLengths = new[] { 0.0, 0.0 };
 
             // Max and min indices for each path.
             // We'll use these for our chord within the edge checks.
             aPath_maxX_index = GeoWrangler.MaxX(a);
             bPath_maxY_index = GeoWrangler.MaxY(b);
+            aPath_minX_index = GeoWrangler.MinX(a);
+            bPath_minY_index = GeoWrangler.MinY(b);
 
             // Set up KDTrees for edge inspection.
             aTree = new KDTree<IntPoint>(2, a.Count);
@@ -447,7 +462,7 @@ namespace Variance
                 }
             }
 
-            double cutOffValue = simulationSettings.getResolution() * CentralProperties.scaleFactorForOperation; // arbitrary cut-off since rounding errors don't always mean 0 for a glancing contact.
+            double cutOffValue = simulationSettings.getResolution() * CentralProperties.scaleFactorForOperation / 10; // arbitrary cut-off since rounding errors don't always mean 0 for a glancing contact.
 
             for (int r = 0; r < 2; r++)
             {

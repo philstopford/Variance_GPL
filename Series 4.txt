@@ -1,5 +1,12 @@
 Changelog for Variance
 
+4.4.1
+
+	- ChordHandler bug fix to edge case.
+	 - Rare cases would cause an early termination of the chord, truncating the evaluation. This has now been mitigated by a change in the internal edge construction.
+	 - Tweaked the glancing value cutoff to better resolve coarse simulation results without dropping the chord entirely.
+	- General code overhaul, reducing line count and improving readability.
+
 4.4b2
 
 	- DesignLibs fixes for resizing of box and text entities.
