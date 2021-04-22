@@ -174,11 +174,13 @@ namespace Variance
                     }
 
                     // Avoid duplicated geometry - this is insurance against older projects files that may have doubled-up polygons included.
-                    string p_Hash = Utils.GetMD5Hash(polyData);
-                    if (hashList.IndexOf(p_Hash) == -1)
+                    string p_Hash = polyData.GetMD5Hash();
+                    switch (hashList.IndexOf(p_Hash))
                     {
-                        hashList.Add(p_Hash);
-                        returnList.Add(polyData);
+                        case -1:
+                            hashList.Add(p_Hash);
+                            returnList.Add(polyData);
+                            break;
                     }
                 }
             }
@@ -233,6 +235,7 @@ namespace Variance
         {
             double[] camParameters;
             XDocument doc = new XDocument(new XElement("Variance"));
+            // ReSharper disable once PossibleNullReferenceException
             doc.Root.Add(new XElement("version", nonSimulationSettings_.version));
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
@@ -545,10 +548,10 @@ namespace Variance
 
         public string loadSimulationSettings(string currentVersion, string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, List<EntropyLayerSettings> listOfSettings, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
         {
-            return pLoadSimulationSettings(currentVersion, filename, simulationSettings, simulationSettings_nonSim, listOfSettings, implantSimSettings, implantSettings_nonSim, implantSettings_, nonSimulationSettings_);
+            return pLoadSimulationSettings(currentVersion, filename, simulationSettings, simulationSettings_nonSim, implantSimSettings, implantSettings_nonSim, implantSettings_);
         }
 
-        string pLoadSimulationSettings(string currentVersion, string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, List<EntropyLayerSettings> listOfSettings, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
+        string pLoadSimulationSettings(string currentVersion, string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_)
         {
             loadedLayers = new bool[CentralProperties.maxLayersForMC];
             string returnString = "";
@@ -566,7 +569,6 @@ namespace Variance
             // root is required for legacy projects.
             if ((simulationFromFile.Name != "Variance") && (simulationFromFile.Name != "root"))
             {
-                error = true;
                 return "This is not a " + CentralProperties.productName + " project file.";
             }
 
@@ -1168,7 +1170,7 @@ namespace Variance
                 }
                 catch (Exception)
                 {
-                    // Compatability shim for old 3.x projects where setting name in XML was wrong.
+                    // Compatibility shim for old 3.x projects where setting name in XML was wrong.
                     try
                     {
                         readSettings.setDecimal(EntropyLayerSettings.properties_decimal.lwrFreq, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("LWRFreq").First().Value));
