@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using ClipperLib;
 using geoLib;
@@ -139,7 +140,7 @@ namespace Variance
                 // Use our shape engine to create a nice ellipse.
                 EntropyShape ms = new EntropyShape(entropySettings, implant_MLS, settingsIndex: 0, doPASearch: false, previewMode: true, implant_js);
 
-                // Set up our sourcePath for clipping, recentering it at 0,0 as well.
+                // Set up our sourcePath for clipping, re-centering it at 0,0 as well.
                 Path sourcePath = new Path();
                 for (int pt = 0; pt < ms.getPoints().Length; pt++)
                 {
@@ -148,21 +149,22 @@ namespace Variance
                     sourcePath.Add(new IntPoint((Int64)(x * CentralProperties.scaleFactorForOperation),
                                                 (Int64)(y * CentralProperties.scaleFactorForOperation)));
                 }
-                Paths source = new Paths();
-                source.Add(sourcePath);
+
+                Paths source = new Paths {sourcePath};
 
                 // Build our mask polygon from the bounds and 0,0 reference. Curiously, Clipper's top/bottom bounds are flipped from what might be expected.
                 IntRect bounds = ClipperBase.GetBounds(source);
-                Path maskPoly = new Path();
-                maskPoly.Add(new IntPoint(0, 0));
-                maskPoly.Add(new IntPoint(0, bounds.bottom));
-                maskPoly.Add(new IntPoint(bounds.right, bounds.bottom));
-                maskPoly.Add(new IntPoint(bounds.right, 0));
-                maskPoly.Add(new IntPoint(0, 0));
+                Path maskPoly = new Path
+                {
+                    new IntPoint(0, 0),
+                    new IntPoint(0, bounds.bottom),
+                    new IntPoint(bounds.right, bounds.bottom),
+                    new IntPoint(bounds.right, 0),
+                    new IntPoint(0, 0)
+                };
 
                 // Get our region extracted using the mask.
-                Clipper c = new Clipper();
-                c.PreserveCollinear = false;
+                Clipper c = new Clipper {PreserveCollinear = false};
                 c.AddPath(sourcePath, PolyType.ptSubject, true);
                 c.AddPath(maskPoly, PolyType.ptClip, true);
                 Paths solution = new Paths();
@@ -321,9 +323,9 @@ namespace Variance
                         }
 
                         // X intersect : y = mx + c and so we need to solve for y = 0, i.e. mx = -c
-                        if (angle + 90.0f >= Convert.ToDouble(tiltAngle_3sigmaVar) * Math.Cos(Utils.toRadians(twistAngle_3sigmaVar)))
+                        if (angle + 90.0f >=
+                            Convert.ToDouble(tiltAngle_3sigmaVar) * Math.Cos(Utils.toRadians(twistAngle_3sigmaVar)))
                         {
-                            nomPtIndex = pt;
                             nomXIntercept = -c_ / m;
                             nomYIntercept = c_;
                             break;
@@ -342,7 +344,7 @@ namespace Variance
                 double actualResistWidth = implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.w) + (chaosSettings.getValue(ChaosSettings_implant.properties.resistCDVar) * implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.wV));
                 // Force a format here to avoid blanks in some cases.
                 result = (shadow[1].X - (actualResistWidth / 2.0f)).ToString("#.##");
-                // Extra check in case of an escape above, but shoudn't be needed.
+                // Extra check in case of an escape above, but shouldn't be needed.
                 if (result == "")
                 {
                     result = "0.0";
@@ -363,13 +365,13 @@ namespace Variance
                     maxShadow[2] = new GeoLibPointF(maxShadow[1].X, maxShadow[1].Y);
                     maxShadow[3] = new GeoLibPointF(maxShadow[0].X, maxShadow[0].Y);
 
-                    min = (minShadow[1].X - (actualResistWidth / 2.0f)).ToString();
+                    min = (minShadow[1].X - (actualResistWidth / 2.0f)).ToString(CultureInfo.InvariantCulture);
                     // Seem to get periodic blanks for 0 cases so force the issue here.
                     if (min == "")
                     {
                         min = "0.0";
                     }
-                    max = (maxShadow[1].X - (actualResistWidth / 2.0f)).ToString();
+                    max = (maxShadow[1].X - (actualResistWidth / 2.0f)).ToString(CultureInfo.InvariantCulture);
                     // Seem to get periodic blanks for 0 cases so force the issue here.
                     if (max == "")
                     {
