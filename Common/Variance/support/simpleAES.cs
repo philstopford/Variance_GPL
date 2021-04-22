@@ -8,8 +8,8 @@ namespace Variance
     public class SimpleAES
     {
         // Change these keys
-        private byte[] Key;// = { 123, 217, 19, 11, 24, 26, 85, 45, 114, 184, 27, 162, 37, 112, 222, 209, 241, 24, 175, 144, 173, 53, 196, 29, 24, 26, 17, 218, 131, 236, 53, 209 };
-        private byte[] Vector;// = { 146, 64, 191, 111, 23, 3, 113, 119, 231, 121, 252, 112, 79, 32, 114, 156 };
+        private readonly byte[] Key;// = { 123, 217, 19, 11, 24, 26, 85, 45, 114, 184, 27, 162, 37, 112, 222, 209, 241, 24, 175, 144, 173, 53, 196, 29, 24, 26, 17, 218, 131, 236, 53, 209 };
+        private readonly byte[] Vector;// = { 146, 64, 191, 111, 23, 3, 113, 119, 231, 121, 252, 112, 79, 32, 114, 156 };
 
         private ICryptoTransform EncryptorTransform, DecryptorTransform;
         private UTF8Encoding UTFEncoder;
@@ -48,7 +48,7 @@ namespace Variance
 
         /// -------------- Two Utility Methods (not used but may be useful) -----------
         /// Generates an encryption key.
-        static public byte[] GenerateEncryptionKey()
+        public static byte[] GenerateEncryptionKey()
         {
             //Generate a Key.
             RijndaelManaged rm = new RijndaelManaged();
@@ -57,7 +57,7 @@ namespace Variance
         }
 
         /// Generates a unique encryption vector
-        static public byte[] GenerateEncryptionVector()
+        public static byte[] GenerateEncryptionVector()
         {
             //Generate a Vector
             RijndaelManaged rm = new RijndaelManaged();
@@ -139,13 +139,12 @@ namespace Variance
             if (str.Length == 0)
                 throw new Exception("Invalid string value in StrToByteArray");
 
-            byte val;
             byte[] byteArr = new byte[str.Length / 3];
             int i = 0;
             int j = 0;
             do
             {
-                val = byte.Parse(str.Substring(i, 3));
+                byte val = byte.Parse(str.Substring(i, 3));
                 byteArr[j++] = val;
                 i += 3;
             }
@@ -158,11 +157,10 @@ namespace Variance
         //      return enc.GetString(byteArr);    
         public string ByteArrToString(byte[] byteArr)
         {
-            byte val;
             string tempStr = "";
             for (int i = 0; i <= byteArr.GetUpperBound(0); i++)
             {
-                val = byteArr[i];
+                byte val = byteArr[i];
                 if (val < 10)
                     tempStr += "00" + val;
                 else if (val < 100)
