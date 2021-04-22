@@ -375,7 +375,7 @@ namespace Variance
                 offset = 0;
             }
             string returnString = "";
-            if (DOESettings.getTileList_ColRow().Count() > 0)
+            if (DOESettings.getTileList_ColRow().Any())
             {
                 int entry = 0;
                 returnString += (DOESettings.getTileList_Value(entry, 0) + offset) + "," + (DOESettings.getTileList_Value(entry, 1) + offset);
@@ -439,7 +439,7 @@ namespace Variance
                     default:
                         // All other cases.
                         string[] tmpCoordPairArray = tmpString.Split(tileSep);
-                        if (tmpCoordPairArray.Count() == 0)
+                        if (!tmpCoordPairArray.Any())
                         {
                             // User used incorrect syntax. Failsafe.
                             ErrorReporter.showMessage_OK("Couldn't find a coordinate pair", "Invalid input");
@@ -464,14 +464,7 @@ namespace Variance
                                 }
                             }
                         }
-                        if (!DOESettings.getTileList_ColRow().Any())
-                        {
-                            entryOK = false;
-                        }
-                        else
-                        {
-                            entryOK = true;
-                        }
+                        entryOK = DOESettings.getTileList_ColRow().Any();
                         break;
                 }
             }
