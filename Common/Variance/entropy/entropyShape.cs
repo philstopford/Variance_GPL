@@ -110,7 +110,7 @@ namespace Variance
 
         List<GeoLibPointF> makeShape(bool returnEarly, bool cornerCheck, EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, int settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape)
         {
-            List<GeoLibPointF> mcPoints = new List<GeoLibPointF>(); // overall points container. We'll use this to populate and send back our Point array later. Ints only...
+            List<GeoLibPointF> mcPoints = new List<GeoLibPointF>(); // overall points container. We'll use this to populate and send back our Point array later. Int only...
 
             Vertex = shape.Vertex;
             tips = shape.tips;
@@ -229,8 +229,6 @@ namespace Variance
             for (Int32 corner = 0; corner < round1.Count(); corner++)
             {
                 double previousEdgeLength;
-                double nextEdgeLength;
-                double currentEdgeLength;
 
                 if (corner == 0)
                 {
@@ -248,14 +246,14 @@ namespace Variance
                 }
 
                 // Wrap around if we exceed the length
-                nextEdgeLength = Math.Abs(
+                double nextEdgeLength = Math.Abs(
                     GeoWrangler.distanceBetweenPoints(new GeoLibPointF(Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].X, Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].Y),
-                                                    new GeoLibPointF(Vertex[round1[(corner + 2) % (round1.Count() - 1)].index].X, Vertex[round1[(corner + 2) % (round1.Count() - 1)].index].Y))
+                        new GeoLibPointF(Vertex[round1[(corner + 2) % (round1.Count() - 1)].index].X, Vertex[round1[(corner + 2) % (round1.Count() - 1)].index].Y))
                 );
 
-                currentEdgeLength = Math.Abs(
+                double currentEdgeLength = Math.Abs(
                     GeoWrangler.distanceBetweenPoints(new GeoLibPointF(Vertex[round1[corner].index].X, Vertex[round1[corner].index].Y),
-                                                    new GeoLibPointF(Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].X, Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].Y))
+                        new GeoLibPointF(Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].X, Vertex[round1[(corner + 1) % (round1.Count() - 1)].index].Y))
                 );
 
                 double offset = 0.5f * currentEdgeLength;
@@ -298,14 +296,15 @@ namespace Variance
                     // Get our associated vertical edge Y position
                     double yPoint1;
                     double yPoint2 = Vertex[round1[(corner + 1) % (round1.Count() - 1)].horFace].Y;
-                    if (corner == 0)
+                    switch (corner)
                     {
-                        // Need to wrap around for bias look-up
-                        yPoint1 = Vertex[round1[round1.Count() - 1].horFace].Y;
-                    }
-                    else
-                    {
-                        yPoint1 = Vertex[round1[corner].horFace].Y;
+                        case 0:
+                            // Need to wrap around for bias look-up
+                            yPoint1 = Vertex[round1[round1.Count() - 1].horFace].Y;
+                            break;
+                        default:
+                            yPoint1 = Vertex[round1[corner].horFace].Y;
+                            break;
                     }
 
                     if (yPoint1 < yPoint2)
@@ -335,8 +334,7 @@ namespace Variance
                 {
                     // Tweak horizontal edge
                     double xPoint1 = Vertex[round1[corner].verFace].X;
-                    double xPoint2;
-                    xPoint2 = Vertex[round1[(corner + 1) % (round1.Count() - 1)].verFace].X;
+                    double xPoint2 = Vertex[round1[(corner + 1) % (round1.Count() - 1)].verFace].X;
 
                     if (xPoint1 < xPoint2)
                     {
@@ -374,11 +372,10 @@ namespace Variance
             }
 
             List<GeoLibPointF> mcHorEdgePoints = new List<GeoLibPointF>(); // corner coordinates list, used as a temporary container for each iteration
-            List<GeoLibPointF> mcVerEdgePoints = new List<GeoLibPointF>(); // edge coordinates list, used as a temporary container for each iteration
-            List<List<GeoLibPointF>> mcHorEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each corner in the shape, in order. We cast these to Ints in the mcPoints list.
-            List<List<GeoLibPointF>> mcVerEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each edge in the shape, in order. We cast these to Ints in the mcPoints list.
+            List<List<GeoLibPointF>> mcHorEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each corner in the shape, in order. We cast these to Int in the mcPoints list.
+            List<List<GeoLibPointF>> mcVerEdgePointsList = new List<List<GeoLibPointF>>(); // Hold our lists of doubles for each edge in the shape, in order. We cast these to Int in the mcPoints list.
             
-            for (Int32 round = 0; round < round1.Count() - 1; round++)
+            for (Int32 round = 0; round < round1.Length - 1; round++)
             {
                 // Derive our basic coordinates for the three vertices on the edge.
                 double start_x = Vertex[round1[round].index].X;
@@ -440,13 +437,14 @@ namespace Variance
 
                     if (doPASearch)
                     {
-                        if (startInnerRounding)
+                        switch (startInnerRounding)
                         {
-                            paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.icPA, settingsIndex);
-                        }
-                        else
-                        {
-                            paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.ocPA, settingsIndex);
+                            case true:
+                                paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.icPA, settingsIndex);
+                                break;
+                            default:
+                                paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.ocPA, settingsIndex);
+                                break;
                         }
                     }
 
@@ -658,13 +656,14 @@ namespace Variance
                     paSearchAffectsCornerRounding = false;
                     if (doPASearch)
                     {
-                        if (startInnerRounding)
+                        switch (startInnerRounding)
                         {
-                            paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.icPA, settingsIndex);
-                        }
-                        else
-                        {
-                            paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.ocPA, settingsIndex);
+                            case true:
+                                paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.icPA, settingsIndex);
+                                break;
+                            default:
+                                paSearchAffectsCornerRounding = chaosSettings.getBool(ChaosSettings.bools.ocPA, settingsIndex);
+                                break;
                         }
                     }
 
@@ -874,7 +873,6 @@ namespace Variance
             {
                 // Get our start and end Y positions for our vertical edge.
                 List<GeoLibPointF> startHorEdgePointList = mcHorEdgePointsList[edge];
-                List<GeoLibPointF> endHorEdgePointList;
                 Int32 endHorEdgePointListIndex;
                 if (edge == 0)
                 {
@@ -885,7 +883,7 @@ namespace Variance
                     endHorEdgePointListIndex = edge - 1;
                 }
 
-                endHorEdgePointList = mcHorEdgePointsList[endHorEdgePointListIndex];
+                List<GeoLibPointF> endHorEdgePointList = mcHorEdgePointsList[endHorEdgePointListIndex];
                 Double vert_x = endHorEdgePointList[endHorEdgePointList.Count() - 1].X;
                 Double startPoint_y = endHorEdgePointList[endHorEdgePointList.Count() - 1].Y;
                 Double endPoint_y = startHorEdgePointList[0].Y;
@@ -894,13 +892,12 @@ namespace Variance
                 GeoLibPointF[] fragments = fragment.fragmentPath(new [] { new GeoLibPointF(vert_x, startPoint_y), new GeoLibPointF(vert_x, endPoint_y) });
 
                 mcVerEdgePointsList.Add(fragments.ToList()); // make a deep copy of the points.
-                mcVerEdgePoints.Clear();
             }
 
             // OK. We have our corners and edges. We need to walk them now. We'll apply the subshape 1 offset at the same time.
-            for (Int32 section = 0; section < mcVerEdgePointsList.Count(); section++)
+            for (Int32 section = 0; section < mcVerEdgePointsList.Count; section++)
             {
-                for (Int32 point = 0; point < mcVerEdgePointsList[section].Count(); point++)
+                for (Int32 point = 0; point < mcVerEdgePointsList[section].Count; point++)
                 {
                     double x = mcVerEdgePointsList[section][point].X + Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset));
                     double y = mcVerEdgePointsList[section][point].Y + Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset));
@@ -961,16 +958,18 @@ namespace Variance
 
             if (!failSafe)
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if ((!geoCoreShapeDefined) || (geoCoreShapeDefined && shape.geoCoreShapeOrthogonal))
                 {
+                    // ReSharper disable twice ConditionIsAlwaysTrueOrFalse
                     mcPoints = makeShape(returnEarly, cornerCheck, entropySettings, entropyLayerSettingsList, settingsIndex, doPASearch, previewMode, chaosSettings, shape);
                 }
                 else
                 {
                     // We have a non-orthogonal geoCore shape, so we take the defined vertices and use them directly. No rounding or tips (tips might be doable at a later date).
-                    for (int pt = 0; pt < shape.Vertex.Length; pt++)
+                    foreach (MyVertex t in shape.Vertex)
                     {
-                        mcPoints.Add(new GeoLibPointF(shape.Vertex[pt].X, shape.Vertex[pt].Y));
+                        mcPoints.Add(new GeoLibPointF(t.X, t.Y));
                     }
                 }
                 if (returnEarly || cornerCheck)
@@ -1043,10 +1042,10 @@ namespace Variance
                 }
             }
 
-            for (int pt = 0; pt < mcPoints.Count; pt++)
+            foreach (GeoLibPointF t in mcPoints)
             {
-                mcPoints[pt].X += xOverlayVal;
-                mcPoints[pt].Y += yOverlayVal;
+                t.X += xOverlayVal;
+                t.Y += yOverlayVal;
             }
 
             double threshold = 1E-5; // threshold for proximity, to avoid normal extraction issues.
@@ -1092,9 +1091,11 @@ namespace Variance
                 // Get our bounding box.
                 BoundingBox bb = new BoundingBox(mcPoints);
 
-                if (pivot == null)
+                switch (pivot)
                 {
-                    pivot = new GeoLibPointF(bb.getMidPoint());
+                    case null:
+                        pivot = new GeoLibPointF(bb.getMidPoint());
+                        break;
                 }
 
                 // OK. Let's try some rotation and wobble.
