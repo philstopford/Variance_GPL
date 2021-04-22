@@ -12,9 +12,9 @@ namespace Variance
 
     class angleHandler
     {
-        public double minimumIntersectionAngle { get; set; }
+        public double minimumIntersectionAngle { get; private set; }
         Paths listOfOutputPoints;
-        public Paths resultPaths { get; set; } // will only have one path, for minimum angle.
+        public Paths resultPaths { get; private set; } // will only have one path, for minimum angle.
 
         void ZFillCallback(IntPoint bot1, IntPoint top1, IntPoint bot2, IntPoint top2, ref IntPoint pt)
         {
@@ -34,8 +34,7 @@ namespace Variance
             listOfOutputPoints = new Paths();
             resultPaths = new Paths();
             Path resultPath = new Path();
-            Clipper c = new Clipper();
-            c.ZFillFunction = ZFillCallback;
+            Clipper c = new Clipper {ZFillFunction = ZFillCallback};
             c.AddPaths(layerAPath, PolyType.ptSubject, true);
             c.AddPaths(layerBPath, PolyType.ptClip, true);
 
@@ -46,9 +45,9 @@ namespace Variance
             minimumIntersectionAngle = 180.0; // no intersection angle.
 
             double tmpVal = 0.0;
-            for (Int32 i = 0; i < listOfOutputPoints.Count(); i++)
+            foreach (Path t in listOfOutputPoints)
             {
-                tmpVal += Clipper.Area(listOfOutputPoints[i]);
+                tmpVal += Clipper.Area(t);
             }
             if (tmpVal == 0.0)
             {
@@ -60,16 +59,13 @@ namespace Variance
             else
             {
                 double temporaryResult = 180.0;
-                Path temporaryPath = new Path();
-                temporaryPath.Add(new IntPoint(0, 0));
-                temporaryPath.Add(new IntPoint(0, 0));
-                temporaryPath.Add(new IntPoint(0, 0));
-                for (Int32 path = 0; path < listOfOutputPoints.Count(); path++)
+                Path temporaryPath = new Path {new IntPoint(0, 0), new IntPoint(0, 0), new IntPoint(0, 0)};
+                foreach (Path t in listOfOutputPoints)
                 {
-                    Path overlapPath = GeoWrangler.clockwise(listOfOutputPoints[path]);
+                    Path overlapPath = GeoWrangler.clockwise(t);
 
                     int pt = 0;
-                    while (pt < overlapPath.Count())
+                    while (pt < overlapPath.Count)
                     {
                         if (overlapPath[pt].Z == -1)
                         {
@@ -104,7 +100,7 @@ namespace Variance
                                 }
                                 interSection_A = overlapPath[refPt];
                             }
-                            else if (pt == overlapPath.Count() - 1) // last point in the list
+                            else if (pt == overlapPath.Count - 1) // last point in the list
                             {
                                 // Find preceding not-identical point.
                                 int refPt = pt;
