@@ -15,10 +15,8 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                gB_layerBoolean = new GroupBox();
                 TableLayout groupBox_layerBoolean_table = new TableLayout();
-                gB_layerBoolean.Content = groupBox_layerBoolean_table;
-                gB_layerBoolean.Text = "Boolean";
+                gB_layerBoolean = new GroupBox {Content = groupBox_layerBoolean_table, Text = "Boolean"};
 
                 rB_BooleanA = new RadioButton[CentralProperties.maxLayersForMC];
                 rB_BooleanB = new RadioButton[CentralProperties.maxLayersForMC];
@@ -87,9 +85,8 @@ namespace Variance
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_BooleanOpA) });
             comboBox_BooleanOpA.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
 
-            Panel p = new Panel();
             TableLayout boolATable = new TableLayout();
-            p.Content = boolATable;
+            Panel p = new Panel {Content = boolATable};
             row0_tl.Rows[^1].Cells.Add(new TableCell { Control = p });
 
             TableRow boolA_tr0 = new TableRow();
@@ -97,12 +94,9 @@ namespace Variance
             TableRow boolA_tr1 = new TableRow();
             boolATable.Rows.Add(boolA_tr1);
 
-            rB_BooleanA[0] = new RadioButton();
-            rB_BooleanA[0].Text = "0";
-            rB_BooleanA[0].Checked = true;
+            rB_BooleanA[0] = new RadioButton {Text = "0", Checked = true};
 
-            TableCell rB_boolA_0tc = new TableCell();
-            rB_boolA_0tc.Control = rB_BooleanA[0];
+            TableCell rB_boolA_0tc = new TableCell {Control = rB_BooleanA[0]};
 
             boolATable.Rows[0].Cells.Add(rB_boolA_0tc);
 
@@ -110,11 +104,8 @@ namespace Variance
             int rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_BooleanA[button] = new RadioButton(rB_BooleanA[0]);
-                rB_BooleanA[button].Text = button.ToString();
-                rB_BooleanA[button].Checked = false;
-                TableCell tc0 = new TableCell();
-                tc0.Control = rB_BooleanA[button];
+                rB_BooleanA[button] = new RadioButton(rB_BooleanA[0]) {Text = button.ToString(), Checked = false};
+                TableCell tc0 = new TableCell {Control = rB_BooleanA[button]};
                 boolATable.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if (button + 1 == CentralProperties.maxLayersForMC / 2)
@@ -145,9 +136,8 @@ namespace Variance
             row2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_BooleanOpB) });
             comboBox_BooleanOpB.BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
 
-            Panel p = new Panel();
             TableLayout boolBTable = new TableLayout();
-            p.Content = boolBTable;
+            Panel p = new Panel {Content = boolBTable};
             row2_tl.Rows[^1].Cells.Add(new TableCell { Control = p });
 
             TableRow boolB_tr0 = new TableRow();
@@ -155,12 +145,9 @@ namespace Variance
             TableRow boolB_tr1 = new TableRow();
             boolBTable.Rows.Add(boolB_tr1);
 
-            rB_BooleanB[0] = new RadioButton();
-            rB_BooleanB[0].Text = "0";
-            rB_BooleanB[0].Checked = true;
+            rB_BooleanB[0] = new RadioButton {Text = "0", Checked = true};
 
-            TableCell rB_boolB_0tc = new TableCell();
-            rB_boolB_0tc.Control = rB_BooleanB[0];
+            TableCell rB_boolB_0tc = new TableCell {Control = rB_BooleanB[0]};
 
             boolBTable.Rows[0].Cells.Add(rB_boolB_0tc);
 
@@ -168,11 +155,8 @@ namespace Variance
             int rowIndex = 0;
             for (int rb = 1; rb < CentralProperties.maxLayersForMC; rb++)
             {
-                rB_BooleanB[button] = new RadioButton(rB_BooleanB[0]);
-                rB_BooleanB[button].Text = button.ToString();
-                rB_BooleanB[button].Checked = false;
-                TableCell tc0 = new TableCell();
-                tc0.Control = rB_BooleanB[button];
+                rB_BooleanB[button] = new RadioButton(rB_BooleanB[0]) {Text = button.ToString(), Checked = false};
+                TableCell tc0 = new TableCell {Control = rB_BooleanB[button]};
                 boolBTable.Rows[rowIndex].Cells.Add(tc0);
                 // Wrap our positioning.
                 if (button + 1 == CentralProperties.maxLayersForMC / 2)
@@ -188,27 +172,22 @@ namespace Variance
         {
             row3_tl.Rows.Add(new TableRow());
 
-            lbl_TipLocations_boolean = new Label();
-            lbl_TipLocations_boolean.Text = "Tip Locs";
+            lbl_TipLocations_boolean = new Label {Text = "Tip Locs"};
             row3_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_TipLocations_boolean });
 
             comboBox_TipLocations_boolean = new DropDown();
             row3_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_TipLocations_boolean) });
             comboBox_TipLocations_boolean.BindDataContext(c => c.DataStore, (UIStringLists m) => m.tipLocs);
 
-
             row3_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
-            lbl_rayExtension = new Label();
-            lbl_rayExtension.Text = "Extension";
-            lbl_rayExtension.ToolTip = "Extension factor for keyhole raycast.";
+            lbl_rayExtension = new Label {Text = "Extension", ToolTip = "Extension factor for keyhole raycast."};
             row3_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_rayExtension) });
 
-            num_rayExtension = new NumericStepper();
-            num_rayExtension.MinValue = 1.0;
-            num_rayExtension.Increment = 0.1;
-            num_rayExtension.DecimalPlaces = 2;
-            num_rayExtension.ToolTip = "Line end extension.";
+            num_rayExtension = new NumericStepper
+            {
+                MinValue = 1.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Line end extension."
+            };
             setSize(num_rayExtension, 55);
             row3_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_rayExtension) });
 
