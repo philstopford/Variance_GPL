@@ -39,15 +39,13 @@ namespace Variance
 
         void bias_row1(TableLayout etchandbias_table)
         {
-            groupBox_etchandbias_reg = new GroupBox {Text = "Regular"};
+            TableLayout regBias_table = new TableLayout();
+            groupBox_etchandbias_reg = new GroupBox {Text = "Regular", Content = regBias_table};
             TableRow tr = new TableRow();
             etchandbias_table.Rows.Add(tr);
             tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_reg });
             tr.Cells.Add(new TableCell { Control = null });
-
-            TableLayout regBias_table = new TableLayout();
-            groupBox_etchandbias_reg.Content = regBias_table;
-
+            
             // Outer table, row 1
             TableRow biasEtch_tr0 = new TableRow();
             biasEtch_tr0.Cells.Add(new TableCell());
@@ -194,14 +192,12 @@ namespace Variance
 
         void bias_row2(TableLayout etchandbias_table)
         {
-            groupBox_etchandbias_prox = new GroupBox {Text = "Proximity"};
+            TableLayout proxBias_table = new TableLayout();
+            groupBox_etchandbias_prox = new GroupBox {Text = "Proximity", Content = proxBias_table};
             TableRow tr = new TableRow();
             etchandbias_table.Rows.Add(tr);
             tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_prox });
             tr.Cells.Add(new TableCell { Control = null });
-
-            TableLayout proxBias_table = new TableLayout();
-            groupBox_etchandbias_prox.Content = proxBias_table;
 
             // Outer table, row 2
             TableRow biasEtch_tr1 = new TableRow();
