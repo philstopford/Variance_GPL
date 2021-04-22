@@ -9,7 +9,6 @@ namespace Variance
     public class SimResultPackage
     {
         object previewLock;
-        string lastMeanStdDev;
         object resultLock;
         object cleavedResultLock;
         object meanStdLock;
@@ -107,9 +106,9 @@ namespace Variance
         {
             List<string[]> resultStrings = new List<string[]>();
             char[] s = { ',' };
-            for (int i = 0; i < listOfResults_implant.Count; i++)
+            foreach (Results_implant t in listOfResults_implant)
             {
-                resultStrings.Add(listOfResults_implant[i].getResult().Split(s));
+                resultStrings.Add(t.getResult().Split(s));
             }
 
             return resultStrings;
@@ -119,9 +118,9 @@ namespace Variance
         {
             List<string[]> resultStrings = new List<string[]>();
             char[] s = { ',' };
-            for (int i = 0; i < listOfResults.Count; i++)
+            foreach (Results t in listOfResults)
             {
-                resultStrings.Add(listOfResults[i].getResult().Split(s));
+                resultStrings.Add(t.getResult().Split(s));
             }
 
             return resultStrings;
@@ -165,7 +164,7 @@ namespace Variance
 #if VARIANCETHREADED
             );
 #endif
-            for (int r = 0; r < results.Count; r++)
+            foreach (string[] t in results)
             {
 #if VARIANCETHREADED
                 Parallel.For(0, numberOfResultsFields, (i) =>
@@ -174,9 +173,9 @@ namespace Variance
 #endif
                 {
                     // Could have "N/A" and need to skip the result in that case.
-                    if (results[r][i] != "N/A")
+                    if (t[i] != "N/A")
                     {
-                        res[i].Add(Convert.ToDouble(results[r][i]));
+                        res[i].Add(Convert.ToDouble(t[i]));
                     }
                 }
 #if VARIANCETHREADED
@@ -283,8 +282,8 @@ namespace Variance
             return ret;
         }
 
-        public string resultString { get; set; }
-        char[] csvSeparator = { ',' }; // to cleave the results apart.
+        private string resultString { get; set; }
+        readonly char[] csvSeparator = { ',' }; // to cleave the results apart.
         Results lastResult;
         Results_implant lastResult_implant;
         public double runTime { get; set; }
@@ -308,7 +307,6 @@ namespace Variance
             cleavedResultLock = new object();
             meanStdLock = new object();
             resultString = "";
-            lastMeanStdDev = "";
             runTime = 0.0;
             previewResult = new Results();
             previewResult_implant = new Results_implant();
@@ -428,7 +426,7 @@ namespace Variance
             }
         }
 
-        public void updateCleavedResults(string[] newResults)
+        private void updateCleavedResults(string[] newResults)
         {
             pUpdateCleavedResults(newResults);
         }
@@ -559,7 +557,6 @@ namespace Variance
                         }
                     }
                 }
-                lastMeanStdDev = returnString;
             }
             finally
             {
