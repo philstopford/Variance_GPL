@@ -675,9 +675,7 @@ namespace Variance
                 {
                     return;
                 }
-
-                commonVars.setWarningShown(false);
-
+                
                 if ((twoDIndex == (int)CommonVars.twoDTabNames.settings) || (twoDIndex == (int)CommonVars.twoDTabNames.paSearch))
                 {
                     startButtonCheck();
