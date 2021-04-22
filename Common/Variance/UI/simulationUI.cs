@@ -56,11 +56,9 @@ namespace Variance
 
             tabPage_2D_Settings_table.Rows.Add(new TableRow());
 
-            Panel p = new Panel();
-            tabPage_2D_Settings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(p, centered: true) });
-
             TableLayout nestedTL = new TableLayout();
-            p.Content = nestedTL;
+            Panel p = new Panel {Content = nestedTL};
+            tabPage_2D_Settings_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(p, centered: true) });
 
             nestedTL.Rows.Add(new TableRow());
 
@@ -78,21 +76,20 @@ namespace Variance
             nestedTL.Rows[^1].Cells.Add(results_tc);
             twoD_SettingsUI_results(results_tc);
 
-            lbl_multiThreadResultNote = new Label();
-            lbl_multiThreadResultNote.TextColor = UIHelper.myColorToColor(MyColor.Red);
-            lbl_multiThreadResultNote.Width = multiThreadWarnWidth;
-            lbl_multiThreadResultNote.TextAlignment = TextAlignment.Left;
-            lbl_multiThreadResultNote.Text = "Update frequency readout";
-            lbl_multiThreadResultNote.Visible = false;
+            lbl_multiThreadResultNote = new Label
+            {
+                TextColor = UIHelper.myColorToColor(MyColor.Red),
+                Width = multiThreadWarnWidth,
+                TextAlignment = TextAlignment.Left,
+                Text = "Update frequency readout",
+                Visible = false
+            };
 
-            Panel p2 = new Panel();
             TableLayout t2 = new TableLayout();
-            p2.Content = t2;
+            Panel p2 = new Panel {Content = t2};
             t2.Rows.Add(new TableRow());
 
-
-            TableCell updates_tc = new TableCell();
-            updates_tc.Control = p2;
+            TableCell updates_tc = new TableCell {Control = p2};
             nestedTL.Rows.Add(new TableRow());
             nestedTL.Rows[^1].Cells.Add(updates_tc);
 
@@ -104,9 +101,8 @@ namespace Variance
 
         void twoD_SettingsUISetup_upperRow(TableCell tc)
         {
-            Panel p = new Panel();
             TableLayout tl = new TableLayout();
-            p.Content = tl;
+            Panel p = new Panel {Content = tl};
             tc.Control = p;
 
             tl.Rows.Add(new TableRow());
@@ -116,9 +112,8 @@ namespace Variance
             TableCell tc1 = new TableCell();
             tl.Rows[^1].Cells.Add(tc1);
 
-            Panel p2 = new Panel();
             TableLayout tl2 = new TableLayout();
-            p2.Content = tl2;
+            Panel p2 = new Panel {Content = tl2};
             tc0.Control = p2;
 
             tl2.Rows.Add(new TableRow());
@@ -133,74 +128,74 @@ namespace Variance
             twoD_SettingsUI_sim();
             t2c1.Control = groupBox_simSettings;
 
-            textBox_userGuidance = new TextArea();
+            textBox_userGuidance = new TextArea {Wrap = true, ReadOnly = true, Text = "Testing 1 2 3"};
             setSize(textBox_userGuidance, userGuidanceWidth, userGuidanceHeight);
-            textBox_userGuidance.Wrap = true;
-            textBox_userGuidance.ReadOnly = true;
-            textBox_userGuidance.Text = "Testing 1 2 3";
             tc1.Control = textBox_userGuidance;
         }
 
         void twoD_SettingsUI_setOutput()
         {
-            groupBox_setOutput = new GroupBox();
             TableLayout groupBox_setOutput_table = new TableLayout();
-            groupBox_setOutput.Content = groupBox_setOutput_table;
-            groupBox_setOutput.Text = "Set Output Controls";
+            groupBox_setOutput = new GroupBox {Content = groupBox_setOutput_table, Text = "Set Output Controls"};
 
             groupBox_setOutput_table.Rows.Add(new TableRow());
-            Panel row0Pnl = new Panel();
-            groupBox_setOutput_table.Rows[^1].Cells.Add(new TableCell { Control = row0Pnl });
             TableLayout row0TL = new TableLayout();
-            row0Pnl.Content = row0TL;
             row0TL.Rows.Add(new TableRow());
 
-            comboBox_calcModes = new DropDown();
-            comboBox_calcModes.Width = 400;
+            Panel row0Pnl = new Panel {Content = row0TL};
+            groupBox_setOutput_table.Rows[^1].Cells.Add(new TableCell { Control = row0Pnl });
+
+            comboBox_calcModes = new DropDown {Width = 400};
             comboBox_calcModes.BindDataContext(c => c.DataStore, (UIStringLists m) => m.calcModes);
             row0TL.Rows[^1].Cells.Add(comboBox_calcModes);
 
             groupBox_setOutput_table.Rows.Add(new TableRow());
-            Panel row1Pnl = new Panel();
-            groupBox_setOutput_table.Rows[^1].Cells.Add(new TableCell { Control = row1Pnl });
             TableLayout row1TL = new TableLayout();
-            row1Pnl.Content = row1TL;
+            Panel row1Pnl = new Panel {Content = row1TL};
+            groupBox_setOutput_table.Rows[^1].Cells.Add(new TableCell { Control = row1Pnl });
             row1TL.Rows.Add(new TableRow());
 
-            checkBox_withinMode = new CheckBox();
-            checkBox_withinMode.Text = "Enclosure";
-            checkBox_withinMode.ToolTip = "Report minimum enclosure rather than minimum spacing value.";
+            checkBox_withinMode = new CheckBox
+            {
+                Text = "Enclosure", ToolTip = "Report minimum enclosure rather than minimum spacing value."
+            };
             row1TL.Rows[^1].Cells.Add(checkBox_withinMode);
 
-            checkBox_useShortestEdge = new CheckBox();
-            checkBox_useShortestEdge.Text = "Short Edge";
-            checkBox_useShortestEdge.ToolTip = "Use shortest edge of overlap for raycast.\nUsed for cases where A-to-B cannot be guaranteed.\nImposes some calculation overhead.";
+            checkBox_useShortestEdge = new CheckBox
+            {
+                Text = "Short Edge",
+                ToolTip =
+                    "Use shortest edge of overlap for raycast.\nUsed for cases where A-to-B cannot be guaranteed.\nImposes some calculation overhead."
+            };
             row1TL.Rows[^1].Cells.Add(checkBox_useShortestEdge);
 
-            checkBox_aChord = new CheckBox();
-            checkBox_aChord.Text = "T/B";
-            checkBox_aChord.Checked = true;
-            checkBox_aChord.ToolTip = "Evaluate top/bottom chord lengths. Report 'N/A' if not chosen.";
+            checkBox_aChord = new CheckBox
+            {
+                Text = "T/B",
+                Checked = true,
+                ToolTip = "Evaluate top/bottom chord lengths. Report 'N/A' if not chosen."
+            };
             row1TL.Rows[^1].Cells.Add(checkBox_aChord);
 
-            checkBox_bChord = new CheckBox();
-            checkBox_bChord.Text = "L/R";
-            checkBox_bChord.Checked = true;
-            checkBox_bChord.ToolTip = "Evaluate left/right chord lengths. Report 'N/A' if not chosen.";
+            checkBox_bChord = new CheckBox
+            {
+                Text = "L/R",
+                Checked = true,
+                ToolTip = "Evaluate left/right chord lengths. Report 'N/A' if not chosen."
+            };
             row1TL.Rows[^1].Cells.Add(checkBox_bChord);
 
-            checkBox_perPoly = new CheckBox();
-            checkBox_perPoly.Text = "Per-Poly";
-            checkBox_perPoly.ToolTip = "Assess each polygon from overlap, to report minimum overlap area.";
+            checkBox_perPoly = new CheckBox
+            {
+                Text = "Per-Poly", ToolTip = "Assess each polygon from overlap, to report minimum overlap area."
+            };
             row1TL.Rows[^1].Cells.Add(checkBox_perPoly);
         }
 
         void twoD_SettingsUI_sim()
         {
-            groupBox_simSettings = new GroupBox();
             TableLayout groupBox_simSettings_table = new TableLayout();
-            groupBox_simSettings.Content = groupBox_simSettings_table;
-            groupBox_simSettings.Text = "Simulation Settings";
+            groupBox_simSettings = new GroupBox {Content = groupBox_simSettings_table, Text = "Simulation Settings"};
 
             groupBox_simSettings_table.Rows.Add(new TableRow());
             TableCell tc0 = new TableCell();
@@ -212,46 +207,52 @@ namespace Variance
             TableCell tc1 = new TableCell();
             groupBox_simSettings_table.Rows[^1].Cells.Add(tc1);
 
-            Panel tc1_p = new Panel();
-            tc1.Control = tc1_p;
             TableLayout tc1_tl = new TableLayout();
-            tc1_p.Content = tc1_tl;
+            Panel tc1_p = new Panel {Content = tc1_tl};
+            tc1.Control = tc1_p;
 
             tc1_tl.Rows.Add(new TableRow());
 
-            checkBox_linkCDUVariation = new CheckBox();
-            checkBox_linkCDUVariation.Text = "Link variation for tip and side CDU";
-            checkBox_linkCDUVariation.ToolTip = "Allow for independent tip and side CDU variation, if enabled.";
+            checkBox_linkCDUVariation = new CheckBox
+            {
+                Text = "Link variation for tip and side CDU",
+                ToolTip = "Allow for independent tip and side CDU variation, if enabled."
+            };
             tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_linkCDUVariation });
 
-            checkBox_CSV = new CheckBox();
-            checkBox_CSV.Text = "CSV";
-            checkBox_CSV.ToolTip = "Write out a CSV file containing the result for each case and its inputs. Allows for offline deep-dive review.";
+            checkBox_CSV = new CheckBox
+            {
+                Text = "CSV",
+                ToolTip =
+                    "Write out a CSV file containing the result for each case and its inputs. Allows for offline deep-dive review."
+            };
             tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_CSV });
 
             tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
-
 
             groupBox_simSettings_table.Rows.Add(new TableRow());
             TableCell tce = new TableCell();
             groupBox_simSettings_table.Rows[^1].Cells.Add(tce);
 
-            Panel tce_p = new Panel();
-            tce.Control = tce_p;
             TableLayout tce_tl = new TableLayout();
-            tce_p.Content = tce_tl;
+            Panel tce_p = new Panel {Content = tce_tl};
+            tce.Control = tce_p;
 
             tce_tl.Rows.Add(new TableRow());
 
-            checkBox_external = new CheckBox();
-            checkBox_external.Text = "Write out ";
-            checkBox_external.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
+            checkBox_external = new CheckBox
+            {
+                Text = "Write out ",
+                ToolTip =
+                    "Write out a file containing the result for each case and its inputs. Will require significantly more memory."
+            };
             tce_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_external });
 
-            comboBox_externalTypes = new DropDown();
-            comboBox_externalTypes.DataContext = DataContext;
+            comboBox_externalTypes = new DropDown
+            {
+                DataContext = DataContext, ToolTip = "Choose your external file type"
+            };
             comboBox_externalTypes.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalTypeList);
-            comboBox_externalTypes.ToolTip = "Choose your external file type";
             tce_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalTypes });
 
             tce_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
@@ -261,97 +262,89 @@ namespace Variance
             TableCell tce2 = new TableCell();
             groupBox_simSettings_table.Rows[^1].Cells.Add(tce2);
 
-            Panel tce2_p = new Panel();
-            tce2.Control = tce2_p;
             TableLayout tce2_tl = new TableLayout();
-            tce2_p.Content = tce2_tl;
+            Panel tce2_p = new Panel {Content = tce2_tl};
+            tce2.Control = tce2_p;
 
             tce2_tl.Rows.Add(new TableRow());
 
-            checkBox_externalCriteria = new CheckBox();
-            checkBox_externalCriteria.Text = "if ";
-            checkBox_externalCriteria.ToolTip = "Write out a file containing the result for each case and its inputs. Will require significantly more memory.";
+            checkBox_externalCriteria = new CheckBox
+            {
+                Text = "if ",
+                ToolTip =
+                    "Write out a file containing the result for each case and its inputs. Will require significantly more memory."
+            };
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_externalCriteria });
 
-            comboBox_externalCriteria1 = new DropDown();
-            comboBox_externalCriteria1.DataContext = DataContext;
+            comboBox_externalCriteria1 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
             comboBox_externalCriteria1.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-            comboBox_externalCriteria1.ToolTip = "Choose filter";
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria1 });
 
-            num_externalCriteria1 = new NumericStepper();
-            num_externalCriteria1.Value = 0.0;
-            num_externalCriteria1.Increment = 0.1;
-            num_externalCriteria1.DecimalPlaces = 2;
-            num_externalCriteria1.ToolTip = "Define value";
+            num_externalCriteria1 = new NumericStepper
+            {
+                Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
+            };
             setSize(num_externalCriteria1, 55);
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria1) });
 
-            comboBox_externalCriteria2 = new DropDown();
-            comboBox_externalCriteria2.DataContext = DataContext;
+            comboBox_externalCriteria2 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
             comboBox_externalCriteria2.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-            comboBox_externalCriteria2.ToolTip = "Choose filter";
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria2 });
 
-            num_externalCriteria2 = new NumericStepper();
-            num_externalCriteria2.Value = 0.0;
-            num_externalCriteria2.Increment = 0.1;
-            num_externalCriteria2.DecimalPlaces = 2;
-            num_externalCriteria2.ToolTip = "Define value";
+            num_externalCriteria2 = new NumericStepper
+            {
+                Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
+            };
             setSize(num_externalCriteria2, 55);
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria2) });
 
-            comboBox_externalCriteria3 = new DropDown();
-            comboBox_externalCriteria3.DataContext = DataContext;
+            comboBox_externalCriteria3 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
             comboBox_externalCriteria3.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-            comboBox_externalCriteria3.ToolTip = "Choose filter";
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria3 });
 
-            num_externalCriteria3 = new NumericStepper();
-            num_externalCriteria3.Value = 0.0;
-            num_externalCriteria3.Increment = 0.1;
-            num_externalCriteria3.DecimalPlaces = 2;
-            num_externalCriteria3.ToolTip = "Define value";
+            num_externalCriteria3 = new NumericStepper
+            {
+                Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
+            };
             setSize(num_externalCriteria3, 55);
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria3) });
 
-            comboBox_externalCriteria4 = new DropDown();
-            comboBox_externalCriteria4.DataContext = DataContext;
+            comboBox_externalCriteria4 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
             comboBox_externalCriteria4.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-            comboBox_externalCriteria4.ToolTip = "Choose filter";
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria4 });
 
-            num_externalCriteria4 = new NumericStepper();
-            num_externalCriteria4.Value = 0.0;
-            num_externalCriteria4.Increment = 0.1;
-            num_externalCriteria4.DecimalPlaces = 2;
-            num_externalCriteria4.ToolTip = "Define value";
+            num_externalCriteria4 = new NumericStepper
+            {
+                Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
+            };
             setSize(num_externalCriteria4, 55);
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria4) });
 
             tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
-
             groupBox_simSettings_table.Rows.Add(new TableRow());
             TableCell tc2 = new TableCell();
             groupBox_simSettings_table.Rows[^1].Cells.Add(tc2);
 
-            Panel tc2_p = new Panel();
-            tc2.Control = tc2_p;
             TableLayout tc2_tl = new TableLayout();
-            tc2_p.Content = tc2_tl;
+            Panel tc2_p = new Panel {Content = tc2_tl};
+            tc2.Control = tc2_p;
 
             tc2_tl.Rows.Add(new TableRow());
 
-            lbl_rng = new Label();
-            lbl_rng.Text = "RNG";
-            lbl_rng.ToolTip = "Choice of random number generators. Cryptographic is 10% slower, but more rigorous.";
+            lbl_rng = new Label
+            {
+                Text = "RNG",
+                ToolTip = "Choice of random number generators. Cryptographic is 10% slower, but more rigorous."
+            };
             tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_rng });
 
-            comboBox_RNG = new DropDown();
-            comboBox_RNG.DataContext = DataContext;
+            comboBox_RNG = new DropDown
+            {
+                DataContext = DataContext,
+                ToolTip = "Choice of random number generators. Cryptographic is 10% slower, but more rigorous."
+            };
             comboBox_RNG.BindDataContext(c => c.DataStore, (UIStringLists m) => m.rngTypeList);
-            comboBox_RNG.ToolTip = "Choice of random number generators. Cryptographic is 10% slower, but more rigorous.";
             tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_RNG });
 
             groupBox_simSettings_table.Rows.Add(new TableRow());
@@ -360,26 +353,24 @@ namespace Variance
 
             groupBox_simSettings_table.Rows[^1].Cells.Add(new TableCell { Control = null });
 
-            Panel tc3_p = new Panel();
-            tc3.Control = tc3_p;
             TableLayout tc3_tl = new TableLayout();
-            tc3_p.Content = tc3_tl;
+            Panel tc3_p = new Panel {Content = tc3_tl};
+            tc3.Control = tc3_p;
 
             tc3_tl.Rows.Add(new TableRow());
 
-            checkBox_debugCalc = new CheckBox();
-            checkBox_debugCalc.Text = "Debug";
-            checkBox_debugCalc.ToolTip = "Enable debug (calculation engine support depending).";
+            checkBox_debugCalc = new CheckBox
+            {
+                Text = "Debug", ToolTip = "Enable debug (calculation engine support depending)."
+            };
             tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_debugCalc });
 
             tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
 
-            lbl_ssTotalPoints = new Label();
-            lbl_ssTotalPoints.Text = "Total # points";
+            lbl_ssTotalPoints = new Label {Text = "Total # points"};
             tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_ssTotalPoints });
 
-            text_ssTotalPoints = new TextBox();
-            text_ssTotalPoints.ReadOnly = true;
+            text_ssTotalPoints = new TextBox {ReadOnly = true};
             tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = text_ssTotalPoints });
 
 
@@ -394,77 +385,78 @@ namespace Variance
             rp0.Content = r0_tl;
             r0_tl.Rows.Add(new TableRow());
 
-            lbl_ssNumOfCases = new Label();
-            lbl_ssNumOfCases.Text = "Number of Cases";
-            lbl_ssNumOfCases.ToolTip = "Total number of cases to evaluate.";
+            lbl_ssNumOfCases = new Label {Text = "Number of Cases", ToolTip = "Total number of cases to evaluate."};
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_ssNumOfCases });
 
-            num_ssNumOfCases = new NumericStepper();
-            num_ssNumOfCases.Value = 25000;
-            num_ssNumOfCases.Increment = 1;
-            num_ssNumOfCases.MinValue = 1;
+            num_ssNumOfCases = new NumericStepper
+            {
+                Value = 25000, Increment = 1, MinValue = 1, ToolTip = "Total number of cases to evaluate."
+            };
             setSize(num_ssNumOfCases, 80);
-            num_ssNumOfCases.ToolTip = "Total number of cases to evaluate.";
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_ssNumOfCases) });
 
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
-            checkBox_greedyMultiCPU = new CheckBox();
-            checkBox_greedyMultiCPU.Text = "All CPUs (multi CPU)";
-            checkBox_greedyMultiCPU.ToolTip = "In multi-threaded runs, use all cores on system, rather than leaving one idle";
+            checkBox_greedyMultiCPU = new CheckBox
+            {
+                Text = "All CPUs (multi CPU)",
+                ToolTip = "In multi-threaded runs, use all cores on system, rather than leaving one idle"
+            };
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_greedyMultiCPU });
 
             r0_tl.Rows.Add(new TableRow());
 
-            lbl_ssPrecision = new Label();
-            lbl_ssPrecision.Text = "Resolution (nm)";
-            lbl_ssPrecision.ToolTip = "Spacing interval for points on edges.";
+            lbl_ssPrecision = new Label {Text = "Resolution (nm)", ToolTip = "Spacing interval for points on edges."};
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_ssPrecision });
 
-            num_ssPrecision = new NumericStepper();
-            num_ssPrecision.Value = 1.0;
-            num_ssPrecision.Increment = 0.1;
-            num_ssPrecision.MinValue = 0.01;
-            num_ssPrecision.DecimalPlaces = 2;
-            num_ssPrecision.ToolTip = "Spacing interval for points on edges.";
+            num_ssPrecision = new NumericStepper
+            {
+                Value = 1.0,
+                Increment = 0.1,
+                MinValue = 0.01,
+                DecimalPlaces = 2,
+                ToolTip = "Spacing interval for points on edges."
+            };
             setSize(num_ssPrecision, 80);
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_ssPrecision) });
 
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
-            checkBox_LERMode = new CheckBox();
-            checkBox_LERMode.Text = "LER as LWR/sqrt(2)";
-            checkBox_LERMode.ToolTip = "Define LER as LWR/1.414 instead of LWR/2.";
+            checkBox_LERMode = new CheckBox
+            {
+                Text = "LER as LWR/sqrt(2)", ToolTip = "Define LER as LWR/1.414 instead of LWR/2."
+            };
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_LERMode });
 
             r0_tl.Rows.Add(new TableRow());
 
-            lbl_cornerSegments = new Label();
-            lbl_cornerSegments.Text = "Corner Segments";
-            lbl_cornerSegments.ToolTip = "Number of segments to create in corners.";
+            lbl_cornerSegments = new Label
+            {
+                Text = "Corner Segments", ToolTip = "Number of segments to create in corners."
+            };
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_cornerSegments });
 
-            num_cornerSegments = new NumericStepper();
-            num_cornerSegments.Value = 90;
-            num_cornerSegments.Increment = 1;
-            num_cornerSegments.MinValue = 2;
+            num_cornerSegments = new NumericStepper
+            {
+                Value = 90, Increment = 1, MinValue = 2, ToolTip = "Number of segments to create in corners."
+            };
             setSize(num_cornerSegments, 60);
-            num_cornerSegments.ToolTip = "Number of segments to create in corners.";
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_cornerSegments) });
 
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
-            checkBox_limitCornerPoints = new CheckBox();
-            checkBox_limitCornerPoints.Text = "Optimize corner pt density";
-            checkBox_limitCornerPoints.ToolTip = "Prevent points in corners being spaced more closely than the resolution limit for edges.";
+            checkBox_limitCornerPoints = new CheckBox
+            {
+                Text = "Optimize corner pt density",
+                ToolTip = "Prevent points in corners being spaced more closely than the resolution limit for edges."
+            };
             r0_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_limitCornerPoints });
         }
 
         void twoD_SettingsUI_geoEqtn(TableCell tc)
         {
-            Panel p = new Panel();
             TableLayout tl = new TableLayout();
-            p.Content = tl;
+            Panel p = new Panel {Content = tl};
             tc.Control = TableLayout.AutoSized(p, centered: true);
 
             tl.Rows.Add(new TableRow());
@@ -477,71 +469,60 @@ namespace Variance
             comboBox_geoEqtn_Op_4Layer = new DropDown[comboBox_geoEqtn_Op_2Layer.Length / 2];
             comboBox_geoEqtn_Op_8Layer = new DropDown[comboBox_geoEqtn_Op_4Layer.Length / 2];
 
-            groupBox_GeoEqtn = new GroupBox();
+            TableLayout groupBox_GeoEqtn_table = new TableLayout();
+            groupBox_GeoEqtn = new GroupBox {Content = groupBox_GeoEqtn_table, Text = "Geometric Equation"};
             tc0.Control = groupBox_GeoEqtn;
             tl.Rows[0].Cells.Add(new TableCell { Control = null });
-
-            TableLayout groupBox_GeoEqtn_table = new TableLayout();
-            groupBox_GeoEqtn.Content = groupBox_GeoEqtn_table;
-            groupBox_GeoEqtn.Text = "Geometric Equation";
 
             TableRow tr0 = new TableRow();
             groupBox_GeoEqtn_table.Rows.Add(tr0);
 
-            groupBox_GeoEqtnA = new GroupBox();
             TableLayout groupBox_GeoEqtnA_table = new TableLayout();
-            groupBox_GeoEqtnA.Content = groupBox_GeoEqtnA_table;
-            groupBox_GeoEqtnA.Text = "Geometric Equation A";
+            groupBox_GeoEqtnA = new GroupBox {Content = groupBox_GeoEqtnA_table, Text = "Geometric Equation A"};
             tr0.Cells.Add(new TableCell { Control = groupBox_GeoEqtnA });
 
             TableRow tr1 = new TableRow();
             groupBox_GeoEqtn_table.Rows.Add(tr1);
 
-            label_AB = new Label();
-            label_AB.Text = "testing 1 2 3";
-            label_AB.TextAlignment = TextAlignment.Center;
+            label_AB = new Label {Text = "testing 1 2 3", TextAlignment = TextAlignment.Center};
             tr1.Cells.Add(new TableCell { Control = label_AB });
 
             TableRow tr2 = new TableRow();
             groupBox_GeoEqtn_table.Rows.Add(tr2);
 
-            groupBox_GeoEqtnB = new GroupBox();
             TableLayout groupBox_GeoEqtnB_table = new TableLayout();
-            groupBox_GeoEqtnB.Content = groupBox_GeoEqtnB_table;
-            groupBox_GeoEqtnB.Text = "Geometric Equation B";
+            groupBox_GeoEqtnB = new GroupBox {Content = groupBox_GeoEqtnB_table, Text = "Geometric Equation B"};
             tr2.Cells.Add(new TableCell { Control = groupBox_GeoEqtnB });
 
             for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
             {
-                comboBox_geoEqtn_Op_8Layer[i] = new DropDown();
-                comboBox_geoEqtn_Op_8Layer[i].Width = 40;
+                comboBox_geoEqtn_Op_8Layer[i] = new DropDown {Width = 40};
                 comboBox_geoEqtn_Op_8Layer[i].BindDataContext(c => c.DataStore, (UIStringLists m) => m.booleanList);
             }
 
             for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
             {
-                comboBox_geoEqtn_Op_4Layer[i] = new DropDown();
-                comboBox_geoEqtn_Op_4Layer[i].Width = 40;
+                comboBox_geoEqtn_Op_4Layer[i] = new DropDown {Width = 40};
                 comboBox_geoEqtn_Op_4Layer[i].BindDataContext(c => c.DataStore, (UIStringLists m) => m.booleanList);
             }
 
             for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
             {
-                comboBox_geoEqtn_Op_2Layer[i] = new DropDown();
-                comboBox_geoEqtn_Op_2Layer[i].Width = 40;
+                comboBox_geoEqtn_Op_2Layer[i] = new DropDown {Width = 40};
                 comboBox_geoEqtn_Op_2Layer[i].BindDataContext(c => c.DataStore, (UIStringLists m) => m.booleanList);
             }
 
             for (int i = 0; i < comboBox_geoEqtn_Op.Length; i++)
             {
-                comboBox_geoEqtn_Op[i] = new DropDown();
-                comboBox_geoEqtn_Op[i].Width = 40;
+                comboBox_geoEqtn_Op[i] = new DropDown {Width = 40};
                 comboBox_geoEqtn_Op[i].BindDataContext(c => c.DataStore, (UIStringLists m) => m.notList);
 
-                label_geoEqtn_Op[i] = new Label();
-                label_geoEqtn_Op[i].TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[i]);
-                label_geoEqtn_Op[i].Text = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name);
-                label_geoEqtn_Op[i].Width = 50;
+                label_geoEqtn_Op[i] = new Label
+                {
+                    TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[i]),
+                    Text = commonVars.getLayerSettings(i).getString(EntropyLayerSettings.properties_s.name),
+                    Width = 50
+                };
 
                 var i2 = i;
 
@@ -566,12 +547,11 @@ namespace Variance
 
         void twoD_SettingsUI_geoEqtnA(TableCell tc)
         {
-            Panel p = new Panel();
+            TableLayout outer_tl = new TableLayout();
+            Panel p = new Panel {Content = outer_tl};
 
             tc.Control = p;
 
-            TableLayout outer_tl = new TableLayout();
-            p.Content = outer_tl;
             TableRow row0 = new TableRow();
             outer_tl.Rows.Add(row0);
             aRow0(row0);
@@ -584,8 +564,7 @@ namespace Variance
             outer_tl.Rows.Add(row2);
             aRow2(row2);
 
-            TableRow padding = new TableRow();
-            padding.ScaleHeight = true;
+            TableRow padding = new TableRow {ScaleHeight = true};
             outer_tl.Rows.Add(padding);
         }
 
@@ -735,8 +714,7 @@ namespace Variance
             outer_tl.Rows.Add(row2);
             bRow2(row2);
 
-            TableRow padding = new TableRow();
-            padding.ScaleHeight = true;
+            TableRow padding = new TableRow {ScaleHeight = true};
             outer_tl.Rows.Add(padding);
         }
 
@@ -869,40 +847,40 @@ namespace Variance
 
         void twoD_SettingsUI_replay(TableCell tc)
         {
-            Panel p = new Panel();
             TableLayout tl = new TableLayout();
-            p.Content = tl;
+            Panel p = new Panel {Content = tl};
             tc.Control = tc.Control = p; //TableLayout.AutoSized(p, centered: true);
 
             tl.Rows.Add(new TableRow());
             TableCell tc0 = new TableCell();
             tl.Rows[0].Cells.Add(tc0);
 
-            groupBox_replay = new GroupBox();
+            TableLayout groupBox_replay_table = new TableLayout();
+            groupBox_replay = new GroupBox {Content = groupBox_replay_table, Text = "Replay"};
             tc0.Control = groupBox_replay;
             tl.Rows[0].Cells.Add(new TableCell { Control = null });
 
-            TableLayout groupBox_replay_table = new TableLayout();
             TableRow tr0 = new TableRow();
             groupBox_replay_table.Rows.Add(tr0);
-            groupBox_replay.Content = groupBox_replay_table;
-            groupBox_replay.Text = "Replay";
 
-            button_replay = new Button();
-            button_replay.Text = "Load CSV File";
-            button_replay.ToolTip = "Load CSV file generated from a run using this project file.\n\rThis will allow replay of the cases.";
+            button_replay = new Button
+            {
+                Text = "Load CSV File",
+                ToolTip =
+                    "Load CSV file generated from a run using this project file.\n\rThis will allow replay of the cases."
+            };
             tr0.Cells.Add(new TableCell { Control = TableLayout.AutoSized(button_replay) });
 
-            checkBox_replay = new CheckBox();
-            checkBox_replay.Text = "Enable";
-            checkBox_replay.ToolTip = "Enable replay using a CSV file from the loaded project";
+            checkBox_replay = new CheckBox
+            {
+                Text = "Enable", ToolTip = "Enable replay using a CSV file from the loaded project"
+            };
             tr0.Cells.Add(new TableCell { Control = checkBox_replay });
 
-            num_replay = new NumericStepper();
-            num_replay.MinValue = 0;
-            num_replay.MaxValue = 0;
-            num_replay.Increment = 1;
-            num_replay.ToolTip = "Which case to view from the loaded CSV file";
+            num_replay = new NumericStepper
+            {
+                MinValue = 0, MaxValue = 0, Increment = 1, ToolTip = "Which case to view from the loaded CSV file"
+            };
             setSize(num_replay, replayNumWidth);
             tr0.Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_replay) });
 
@@ -917,13 +895,10 @@ namespace Variance
             TableLayout tl = new TableLayout();
             tl.Rows.Add(new TableRow());
 
-            lbl_testArea = new Label();
-            lbl_testArea.Text = "Result for this run";
-            lbl_testArea.TextAlignment = TextAlignment.Left;
+            lbl_testArea = new Label {Text = "Result for this run", TextAlignment = TextAlignment.Left};
             tl.Rows[0].Cells.Add(new TableCell { Control = lbl_testArea });
 
-            text_testArea = new TextBox();
-            text_testArea.ReadOnly = true;
+            text_testArea = new TextBox {ReadOnly = true};
             setSize(text_testArea, 470);
             text_testArea.Text = "N/A";
 
