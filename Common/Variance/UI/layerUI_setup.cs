@@ -54,10 +54,7 @@ namespace Variance
             }
 
             experiment_table = new TableLayout();
-            tabPage_2D_experiment = new TabPage();
-            tabPage_2D_experiment.Text = "Experiment";
-
-            tabPage_2D_experiment.Content = experiment_table;
+            tabPage_2D_experiment = new TabPage {Text = "Experiment", Content = experiment_table};
 
             tabControl_2D_simsettings.Pages.Add(tabPage_2D_experiment);
 
@@ -67,12 +64,8 @@ namespace Variance
             Panel p = new Panel();
             row0.Cells.Add(new TableCell { Control = p });
 
-            listBox_layers = new ListBox();
-            listBox_layers.Width = 55;
-            listBox_layers.DataContext = DataContext;
+            listBox_layers = new ListBox {Width = 55, DataContext = DataContext, ContextMenu = listbox_menu};
             listBox_layers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.layerNames);
-            listBox_layers.ContextMenu = listbox_menu;
-
             listBox_layers.SelectedIndexChanged += listbox_change;
 
             Scrollable scrollable_twoDLayer = new Scrollable();
@@ -96,8 +89,7 @@ namespace Variance
             Application.Instance.Invoke(() =>
             {
                 TableLayout tl = new TableLayout();
-                Panel p = new Panel();
-                p.Content = tl;
+                Panel p = new Panel {Content = tl};
                 tabPage_2D_layer_table.Rows.Add(new TableRow());
                 tabPage_2D_layer_table.Rows[0].Cells.Add(new TableCell { Control = p });
                 tabPage_2D_layer_table.Rows.Add(new TableRow { ScaleHeight = true });
@@ -115,11 +107,9 @@ namespace Variance
                 // Need to inject another table here for the LOP content.
 
                 tl.Rows.Add(new TableRow());
-                Panel lop_panel = new Panel();
-                tl.Rows[^1].Cells.Add(new TableCell { Control = lop_panel });
-
                 TableLayout tl_lop = new TableLayout();
-                lop_panel.Content = tl_lop;
+                Panel lop_panel = new Panel {Content = tl_lop};
+                tl.Rows[^1].Cells.Add(new TableCell { Control = lop_panel });
 
                 tl_lop.Rows.Add(new TableRow());
 
@@ -156,14 +146,12 @@ namespace Variance
                 TableCell exportTC = new TableCell();
                 tl.Rows[^1].Cells.Add(exportTC);
 
-                Panel pExportTL = new Panel();
-                exportTC.Control = pExportTL;
                 TableLayout exportTL = new TableLayout();
-                pExportTL.Content = exportTL;
+                Panel pExportTL = new Panel {Content = exportTL};
+                exportTC.Control = pExportTL;
                 exportTL.Rows.Add(new TableRow());
 
-                Button exportToLayout = new Button();
-                exportToLayout.Text = "Export to Layout";
+                Button exportToLayout = new Button {Text = "Export to Layout"};
                 exportTL.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
                 exportToLayout.Click += exportActiveLayerToLayout;
 
@@ -198,52 +186,24 @@ namespace Variance
                 commonVars.structureList_exp = commonVars.structureList[settingsIndex];
                 commonVars.activeStructure_LayerDataTypeList_exp = commonVars.activeStructure_LayerDataTypeList[settingsIndex];
 
+                cB_edgeSlide.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.edgeSlide) == 1;
+
                 if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.edgeSlide) == 1)
                 {
-                    cB_edgeSlide.Checked = true;
                     num_edgeSlideTension.Enabled = true;
                 }
                 else
                 {
-                    cB_edgeSlide.Checked = false;
                     cB_edgeSlide.Enabled = false;
                 }
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1)
-                {
-                    cB_FlipH.Checked = true;
-                }
-                else
-                {
-                    cB_FlipH.Checked = false;
-                }
+                cB_FlipH.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
-                {
-                    cB_FlipV.Checked = true;
-                }
-                else
-                {
-                    cB_FlipV.Checked = false;
-                }
+                cB_FlipV.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignX) == 1)
-                {
-                    cB_alignGeometryX.Checked = true;
-                }
-                else
-                {
-                    cB_alignGeometryX.Checked = false;
-                }
+                cB_alignGeometryX.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignX) == 1;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignY) == 1)
-                {
-                    cB_alignGeometryY.Checked = true;
-                }
-                else
-                {
-                    cB_alignGeometryY.Checked = false;
-                }
+                cB_alignGeometryY.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.alignY) == 1;
 
                 cB_alignGeometryX.Enabled = false;
                 cB_alignGeometryY.Enabled = false;
@@ -268,22 +228,8 @@ namespace Variance
                     cB_Layer.Checked = false;
                     cB_ShowDrawn.Enabled = false;
                 }
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.omit) == 1)
-                {
-                    cB_omit[settingsIndex].Checked = true;
-                }
-                else
-                {
-                    cB_omit[settingsIndex].Checked = false;
-                }
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.showDrawn) == 1)
-                {
-                    cB_ShowDrawn.Checked = true;
-                }
-                else
-                {
-                    cB_ShowDrawn.Checked = false;
-                }
+                cB_omit[settingsIndex].Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.omit) == 1;
+                cB_ShowDrawn.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.showDrawn) == 1;
                 num_subshape_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
                 num_subshape_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
                 num_subshape_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset);
@@ -313,32 +259,11 @@ namespace Variance
                     // Don't care.
                 }
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
-                {
-                    cB_geoCore_shapeEngine.Checked = true;
-                }
-                else
-                {
-                    cB_geoCore_shapeEngine.Checked = false;
-                }
+                cB_geoCore_shapeEngine.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.perPoly) == 1)
-                {
-                    cB_geoCore_shapeEngine_perPoly.Checked = true;
-                }
-                else
-                {
-                    cB_geoCore_shapeEngine_perPoly.Checked = false;
-                }
+                cB_geoCore_shapeEngine_perPoly.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.perPoly) == 1;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.refLayout) == 1)
-                {
-                    cB_geoCore_layoutReference.Checked = true;
-                }
-                else
-                {
-                    cB_geoCore_layoutReference.Checked = false;
-                }
+                cB_geoCore_layoutReference.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.refLayout) == 1;
 
                 // Layout handling
                 textBox_fileLocation_geoCore.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.file);
@@ -444,14 +369,7 @@ namespace Variance
                 num_lithoLWRFreq.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq);
                 num_lithoLWR2.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2);
                 num_lithoLWR2Freq.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq);
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1)
-                {
-                    cB_layer_LWRPreview.Checked = true;
-                }
-                else
-                {
-                    cB_layer_LWRPreview.Checked = false;
-                }
+                cB_layer_LWRPreview.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1;
                 try
                 {
                     comboBox_LWRNoiseType.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrType);
@@ -594,9 +512,7 @@ namespace Variance
 
             layerGadgets_table.Rows.Add(new TableRow());
 
-            GroupBox gadgets_gb = new GroupBox();
-            gadgets_gb.Text = "Layer";
-            gadgets_gb.Content = TableLayout.AutoSized(layerGadgets_table);
+            GroupBox gadgets_gb = new GroupBox {Text = "Layer", Content = TableLayout.AutoSized(layerGadgets_table)};
             tc.Control = gadgets_gb;
         }
 
@@ -621,13 +537,10 @@ namespace Variance
 
             gadgets_tr0_0_tl.Rows.Add(new TableRow());
 
-            cB_Layer = new CheckBox();
-            cB_Layer.Text = "Enabled";
-            cB_Layer.ToolTip = "If checked, include the layer in the simulation";
+            cB_Layer = new CheckBox {Text = "Enabled", ToolTip = "If checked, include the layer in the simulation"};
             gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = cB_Layer });
 
-            text_layerName = new TextBox();
-            text_layerName.ToolTip = "Layer name. If blank, the layer number will be used";
+            text_layerName = new TextBox {ToolTip = "Layer name. If blank, the layer number will be used"};
             gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = text_layerName });
             gadgets_tr0_0_tl.Rows[0].Cells[^1].ScaleWidth = true;
         }
@@ -653,11 +566,11 @@ namespace Variance
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            comboBox_layerShape = new DropDown();
-            comboBox_layerShape.DataContext = DataContext;
+            comboBox_layerShape = new DropDown
+            {
+                DataContext = DataContext, SelectedIndex = 0, ToolTip = "Type of shape to generate"
+            };
             comboBox_layerShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.shapes);
-            comboBox_layerShape.SelectedIndex = 0;
-            comboBox_layerShape.ToolTip = "Type of shape to generate";
             gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell { Control = comboBox_layerShape });
         }
 
@@ -668,11 +581,8 @@ namespace Variance
 
             layerGadgets2_row1(layerGadgets2_table);
 
-            GroupBox gadgets_gb = new GroupBox();
-            gadgets_gb.Text = "Misc";
-            Panel p = new Panel();
-            gadgets_gb.Content = p;
-            p.Content = layerGadgets2_table;
+            Panel p = new Panel {Content = layerGadgets2_table};
+            GroupBox gadgets_gb = new GroupBox {Text = "Misc", Content = p};
             tc.Control = gadgets_gb;
         }
 
@@ -698,26 +608,24 @@ namespace Variance
             TableLayout flipAign_tl = new TableLayout();
             flipAign_tl.Rows.Add(new TableRow());
 
-            cB_FlipH = new CheckBox();
-            cB_FlipH.Text = "Flip H";
-            cB_FlipH.ToolTip = "Flip shape horizontally";
+            cB_FlipH = new CheckBox {Text = "Flip H", ToolTip = "Flip shape horizontally"};
             flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_FlipH });
 
-            cB_alignGeometryX = new CheckBox();
-            cB_alignGeometryX.Text = "Align X";
-            cB_alignGeometryX.ToolTip = "Centers the flipped shape on the non-flipped shape in X";
+            cB_alignGeometryX = new CheckBox
+            {
+                Text = "Align X", ToolTip = "Centers the flipped shape on the non-flipped shape in X"
+            };
             flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_alignGeometryX });
 
             flipAign_tl.Rows.Add(new TableRow());
 
-            cB_FlipV = new CheckBox();
-            cB_FlipV.Text = "Flip V";
-            cB_FlipV.ToolTip = "Flip shape vertically";
+            cB_FlipV = new CheckBox {Text = "Flip V", ToolTip = "Flip shape vertically"};
             flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_FlipV });
 
-            cB_alignGeometryY = new CheckBox();
-            cB_alignGeometryY.Text = "Align Y";
-            cB_alignGeometryY.ToolTip = "Centers the flipped shape on the non-flipped shape in Y";
+            cB_alignGeometryY = new CheckBox
+            {
+                Text = "Align Y", ToolTip = "Centers the flipped shape on the non-flipped shape in Y"
+            };
             flipAign_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_alignGeometryY });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
@@ -725,16 +633,12 @@ namespace Variance
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            cB_ShowDrawn = new CheckBox();
-            cB_ShowDrawn.Text = "Show Drawn";
-            cB_ShowDrawn.ToolTip = "Show drawn shape for the contour";
+            cB_ShowDrawn = new CheckBox {Text = "Show Drawn", ToolTip = "Show drawn shape for the contour"};
             gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_ShowDrawn });
 
             gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-            cB_layer_LWRPreview = new CheckBox();
-            cB_layer_LWRPreview.Text = "Show LWR";
-            cB_layer_LWRPreview.ToolTip = "Preview of LWR";
+            cB_layer_LWRPreview = new CheckBox {Text = "Show LWR", ToolTip = "Preview of LWR"};
             gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_layer_LWRPreview });
         }
     }
