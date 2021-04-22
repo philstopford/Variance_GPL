@@ -2,11 +2,11 @@ namespace keys
 {
     static class Arrays
     {
-        public static byte[] nameKey = {
+        public static readonly byte[] nameKey = {
              99, 219, 117,  66,   0, 105, 168, 252,  10,  53,  58, 203,  75, 210, 179,   1,
             148,  22,  25,  84, 216, 171,   7, 189, 214, 185, 100,  12, 168, 195, 229,  18
         }; // 32
-        public static byte[] nameVector = {
+        public static readonly byte[] nameVector = {
             227, 220, 222, 240, 209,  34, 113,  32, 127, 153, 225, 109, 102, 198,  95, 135
         }; // 16
 

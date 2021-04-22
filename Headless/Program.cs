@@ -48,8 +48,8 @@ namespace Variance
                     // Validate that this is actually a file
                     if (System.IO.File.Exists(emailFile))
                     {
-                        bool addressOK, pwdOK, serverOK, portOK;
-                        addressOK = pwdOK = serverOK = portOK = false;
+                        bool pwdOK, serverOK, portOK;
+                        bool addressOK = pwdOK = serverOK = portOK = false;
                         // Set our flags to ensure we have a valid email configuration
 
                         char[] splitArray = new char[] { ' ' };
@@ -104,8 +104,8 @@ namespace Variance
                     // Extract XML file.
                     try
                     {
-                        string[] tokens = args[i].Split(new char[] { '.' });
-                        string extension = tokens[tokens.Length - 1];
+                        string[] tokens = args[i].Split(new[] { '.' });
+                        string extension = tokens[^1];
                         if ((extension.ToUpper() == "VARIANCE") || (extension.ToUpper() == "XML"))
                         {
                             xmlFile = args[i];
@@ -135,14 +135,16 @@ namespace Variance
 
                 Int32 HTCount = Environment.ProcessorCount;
                 VarianceContext varianceContext = new VarianceContext(implantMode, xmlFile, numberOfThreads,
-                                                            HTCount, "Variance_hl");
-                varianceContext.emailAddress = emailAddress;
-                varianceContext.emailPwd = emailPwd;
-                varianceContext.ssl = emailSSL;
-                varianceContext.host = emailServer;
-                varianceContext.port = emailPort;
-                varianceContext.completion = emailOnCompletion;
-                varianceContext.perJob = emailPerJob;
+                    HTCount, "Variance_hl")
+                {
+                    emailAddress = emailAddress,
+                    emailPwd = emailPwd,
+                    ssl = emailSSL,
+                    host = emailServer,
+                    port = emailPort,
+                    completion = emailOnCompletion,
+                    perJob = emailPerJob
+                };
                 Headless hl = new Headless(varianceContext);
 
                 Console.CancelKeyPress += hl.cancelHandler;
