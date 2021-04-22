@@ -268,11 +268,11 @@ namespace Variance
                     continue;
                 }
 
-                for (int j = 0; j < CommonVars.csvHeader.Length; j++)
+                foreach (string t in CommonVars.csvHeader)
                 {
-                    searchString = CommonVars.csvHeader[j] + (i);
+                    searchString = t + (i);
                     colIndex = Array.IndexOf(parsed[0], searchString);
-                    switch (CommonVars.csvHeader[j])
+                    switch (t)
                     {
                         case "CDUSVar":
                             chaosSettings.setValue(ChaosSettings.properties.CDUSVar, i, Convert.ToDouble(parsed[index][colIndex]));
