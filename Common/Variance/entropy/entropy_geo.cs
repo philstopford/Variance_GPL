@@ -97,13 +97,14 @@ namespace Variance
 
         void entropyRunCore_singleThread(bool previewMode, Int32 numberOfCases, Int32 row, Int32 col, bool doPASearch)
         {
-            if (!doPASearch)
+            switch (doPASearch)
             {
-                setSampler(numberOfCases, previewMode, doPASearch:false);
-            }
-            else
-            {
-                setSampler(1, previewMode, doPASearch:false);
+                case false:
+                    setSampler(numberOfCases, previewMode, doPASearch:false);
+                    break;
+                default:
+                    setSampler(1, previewMode, doPASearch:false);
+                    break;
             }
             sampler.sample(false);
 
@@ -323,10 +324,8 @@ namespace Variance
             // Set our input state in case of custom RNG mapping.
             resultPackage.nonGaussianInput = nonGaussianInput;
 
-            commonVars.m_timer = new Timer();
             // Set up timers for the UI refresh
-            commonVars.m_timer.AutoReset = true;
-            commonVars.m_timer.Interval = CentralProperties.timer_interval;
+            commonVars.m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
             updateSimUIMTFunc?.Invoke();
             commonVars.m_timer.Start();
 
@@ -515,7 +514,6 @@ namespace Variance
                             }
                             catch (Exception ex)
                             {
-                                string oops = ex.Message;
                             }
 
                         }
@@ -536,6 +534,7 @@ namespace Variance
                     catch (OperationCanceledException)
                     {
                         resultPackage.setState(false);
+                        // ReSharper disable once AccessToDisposedClosure
                         commonVars.m_timer.Stop();
                         commonVars.runAbort = false; // reset state to allow user to abort save of results.
                         sw.Stop();
@@ -1392,7 +1391,6 @@ namespace Variance
                 throw new Exception("ChaosSettings are null!");
             }
             string value = "N/A";
-            List<GeoLibPointF[]> listOfPoints;
             GeoLibPointF[] points;
 
             // Replay mode
@@ -1431,11 +1429,11 @@ namespace Variance
 
             ChaosEngine currentJobEngine = new ChaosEngine(commonVars, simShapes, previewMode);
 
-            listOfPoints = new List<GeoLibPointF[]>();
+            List<GeoLibPointF[]> listOfPoints = new List<GeoLibPointF[]>();
             if (currentJobEngine.isValid())
             {
                 value = currentJobEngine.getResult();
-                for (Int32 listMember = 0; listMember < currentJobEngine.getPaths().Count(); listMember++)
+                for (Int32 listMember = 0; listMember < currentJobEngine.getPaths().Count; listMember++)
                 {
                     // Check whether we need to manually close our shape or not, also only for the area case.
                     int length = currentJobEngine.getPaths()[listMember].Count();
