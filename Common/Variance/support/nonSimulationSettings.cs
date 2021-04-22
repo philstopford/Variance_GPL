@@ -5,7 +5,7 @@ namespace Variance
 {
     public class NonSimulationSettings
     {
-        public string version { get; set; }
+        public string version { get; private set; }
 
         public string host { get; set; }
         public string port { get; set; }
