@@ -66,14 +66,7 @@ namespace Variance
                         commonVars.userCancelQuery = true;
                         commonVars.cancelling = true;
                         DialogResult dR = MessageBox.Show("Abort and save results so far?", "Abort run?", MessageBoxButtons.YesNo);
-                        if (dR == DialogResult.Yes)
-                        {
-                            commonVars.runAbort = true;
-                        }
-                        else
-                        {
-                            commonVars.runAbort = false;
-                        }
+                        commonVars.runAbort = dR == DialogResult.Yes;
                         commonVars.userCancelQuery = false;
                     });
                 }
@@ -168,6 +161,7 @@ namespace Variance
                 };
                 try
                 {
+                    // ReSharper disable once PossibleNullReferenceException
                     string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new[] { '.' });
                     string fileName = "";
                     for (int i = 0; i < tokens.Length - 2; i++)
@@ -197,6 +191,7 @@ namespace Variance
                 }
             }
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (doPASearch || (!doPASearch && fileChosen))
             {
                 // Tidy up cruft prior to run. May not be necessary.
@@ -235,9 +230,9 @@ namespace Variance
                 // Disable menu items to avoid trouble.
                 var menu = Menu;
                 var menuItems = menu.Items;
-                for (int i = 0; i < menuItems.Count; i++)
+                foreach (MenuItem t in menuItems)
                 {
-                    menuItems[i].Enabled = false;
+                    t.Enabled = false;
                 }
                 // Activate stop button to enable run abort.
                 btn_STOP.Enabled = true;
@@ -337,17 +332,11 @@ namespace Variance
         {
             if (Platform.IsGtk)
             {
-                Application.Instance.AsyncInvoke(() =>
-                {
-                    postSimUI_2();
-                });
+                Application.Instance.AsyncInvoke(postSimUI_2);
             }
             else
             {
-                Application.Instance.Invoke(() =>
-                {
-                    postSimUI_2();
-                });
+                Application.Instance.Invoke(postSimUI_2);
             }
         }
 
@@ -376,9 +365,9 @@ namespace Variance
             // Re-enable menu items.
             var menu = Menu;
             var menuItems = menu.Items;
-            for (int i = 0; i < menuItems.Count; i++)
+            foreach (MenuItem t in menuItems)
             {
-                menuItems[i].Enabled = true;
+                t.Enabled = true;
             }
         }
 
@@ -482,19 +471,19 @@ namespace Variance
                     comboBox_geoEqtn_Op[i].SelectedIndexChanged += entropySettingsChanged;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
+                foreach (DropDown t in comboBox_geoEqtn_Op_2Layer)
                 {
-                    comboBox_geoEqtn_Op_2Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                    t.SelectedIndexChanged += entropySettingsChanged;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
+                foreach (DropDown t in comboBox_geoEqtn_Op_4Layer)
                 {
-                    comboBox_geoEqtn_Op_4Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                    t.SelectedIndexChanged += entropySettingsChanged;
                 }
 
-                for (int i = 0; i < comboBox_geoEqtn_Op_8Layer.Length; i++)
+                foreach (DropDown t in comboBox_geoEqtn_Op_8Layer)
                 {
-                    comboBox_geoEqtn_Op_8Layer[i].SelectedIndexChanged += entropySettingsChanged;
+                    t.SelectedIndexChanged += entropySettingsChanged;
                 }
 
                 checkBox_perPoly.CheckedChanged += entropySettingsChanged;
@@ -553,26 +542,12 @@ namespace Variance
 
                 for (int i = 0; i < comboBox_geoEqtn_Op_2Layer.Length; i++)
                 {
-                    if (commonVars.interLayerRelationship_2(i))
-                    {
-                        comboBox_geoEqtn_Op_2Layer[i].Enabled = true;
-                    }
-                    else
-                    {
-                        comboBox_geoEqtn_Op_2Layer[i].Enabled = false;
-                    }
+                    comboBox_geoEqtn_Op_2Layer[i].Enabled = commonVars.interLayerRelationship_2(i);
                 }
 
                 for (int i = 0; i < comboBox_geoEqtn_Op_4Layer.Length; i++)
                 {
-                    if (commonVars.interLayerRelationship_4(i))
-                    {
-                        comboBox_geoEqtn_Op_4Layer[i].Enabled = true;
-                    }
-                    else
-                    {
-                        comboBox_geoEqtn_Op_4Layer[i].Enabled = false;
-                    }
+                    comboBox_geoEqtn_Op_4Layer[i].Enabled = commonVars.interLayerRelationship_4(i);
                 }
             });
         }
@@ -716,11 +691,7 @@ namespace Variance
                 }
 
                 // Retrieve our settings.
-                checkBox_perPoly.Enabled = false;
-                if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.area)
-                {
-                    checkBox_perPoly.Enabled = true;
-                }
+                checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.area;
 
                 checkBox_withinMode.Enabled = false;
                 checkBox_useShortestEdge.Enabled = false;
@@ -984,7 +955,7 @@ namespace Variance
             }
 
             // Make a single run when on the right tab, to populate the preview structures, and only if simulation not running.
-            if (!commonVars.isSimRunning())// && (tabPage_2D_simsettings.SelectedIndex == (int)CommonVars.twoDTabNames.settings))
+            if (!commonVars.isSimRunning())
             {
                 if (updateNeeded)
                 {
@@ -997,7 +968,7 @@ namespace Variance
                     entropyControl.update(commonVars);
                     // Spawn and await background task in case the calculation is long-running.
                     // Avoids blocking the UI.
-                    // Freeze the UI to avoid cascasing runs.
+                    // Freeze the UI to avoid cascading runs.
                     simRunningUIFunc();
                     btn_STOP.Enabled = false; // No ability to abort a single case, so don't mislead the user. They are along for the ride.
 
