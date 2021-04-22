@@ -13,14 +13,14 @@ namespace Variance
         public object previewLock;
         public object implantPreviewLock;
         public bool implantMode { get; set; }
-        public string xmlFileArg { get; set; }
-        public int numberOfThreads { get; set; }
+        public string xmlFileArg { get; private set; }
+        public int numberOfThreads { get; private set; }
         public object referenceUI { get; set; }
         public string host { get; set; }
         public string port { get; set; }
         public bool ssl { get; set; }
-        public bool perJob { get; set; }
-        public bool completion { get; set; }
+        public bool perJob { get; private set; }
+        public bool completion { get; private set; }
         public string emailAddress { get; set; }
         public string emailPwd { get; set; }
         public Int32 openGLZoomFactor { get; set; }
@@ -29,11 +29,11 @@ namespace Variance
         public bool AA { get; set; }
         public bool FilledPolygons { get; set; }
         public bool drawPoints { get; set; }
-        public Colors colors { get; set; }
+        public Colors colors { get; private set; }
         public bool layerPreviewDOETile { get; set; }
         public bool geoCoreCDVariation { get; set; }
-        public Int32 HTCount { get; set; }
-        public List<string> rngMappingEquations { get; set; }
+        public Int32 HTCount { get; private set; }
+        public List<string> rngMappingEquations { get; private set; }
         public string licenseLocation { get; set; }
         public byte[] _certPubicKeyData { get; set; }
         public bool friendlyNumber { get; set; }
