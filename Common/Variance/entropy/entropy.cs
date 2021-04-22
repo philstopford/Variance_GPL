@@ -54,21 +54,21 @@ namespace Variance
         public delegate void simRunningUI();
         public simRunningUI simRunningUIFunc { get; set; }
 
-        char[] csvSeparator = { ',' }; // to cleave the results apart.
-        public Stopwatch sw { get; set; }
-        public Stopwatch sw_Preview { get; set; }
+        readonly char[] csvSeparator = { ',' }; // to cleave the results apart.
+        public Stopwatch sw { get; private set; }
+        public Stopwatch sw_Preview { get; private set; }
         public Int32 currentProgress;
-        public bool multiCaseSim { get; set; }
+        public bool multiCaseSim { get; private set; }
         public double swTime { get; set; }
-        public bool simJustDone { get; set; }
+        public bool simJustDone { get; private set; }
         public Int64 timeOfLastPreviewUpdate { get; set; }
         CommonVars commonVars;
 
         string baseFileName;
 
-        VarianceContext varianceContext;
+        readonly VarianceContext varianceContext;
 
-        public string lastSimResultsOverview { get; set; }
+        public string lastSimResultsOverview { get; private set; }
         string resultString;
 
         public Entropy(ref VarianceContext varianceContext_, CommonVars commonVars_)
@@ -122,13 +122,14 @@ namespace Variance
                 {
                     multiCaseSim = true;
                     previewMode = false;
-                    if (!doPASearch)
+                    switch (doPASearch)
                     {
-                        configProgress?.Invoke(0, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases));
-                    }
-                    else
-                    {
-                        configProgress?.Invoke(0, commonVars.getPASearch().numberofPassCases);
+                        case false:
+                            configProgress?.Invoke(0, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases));
+                            break;
+                        default:
+                            configProgress?.Invoke(0, commonVars.getPASearch().numberofPassCases);
+                            break;
                     }
 
                     simRunningUIFunc?.Invoke();
@@ -214,7 +215,7 @@ namespace Variance
                 }
 
                 // If user requested file save, let's add to the list for eventual writing.
-                if ((baseFileName != null) && (baseFileName != ""))
+                if (!string.IsNullOrEmpty(baseFileName))
                 {
                     clearAbortFlagFunc?.Invoke(); // reset our abort handler in case user also wants to abort save.
                     if (!previewMode)
