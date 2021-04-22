@@ -6,12 +6,8 @@ using resources;
 
 namespace Variance
 {
-    public class CreditsScreen : Form
+    public sealed class CreditsScreen : Form
     {
-        // public System.Diagnostics.Process p = new System.Diagnostics.Process();
-
-        RichTextArea textBox_credits;
-
         public CreditsScreen(Form parent, string textToDisplay)
         {
             Title = CentralProperties.productName + " " + CentralProperties.version;
@@ -29,7 +25,14 @@ namespace Variance
             content.Rows[0].Cells.Add(new TableCell { Control = TableLayout.AutoSized(imageHolder, centered: true) });
 
             content.Rows.Add(new TableRow());
-            textBox_credits = new RichTextArea();
+            RichTextArea textBox_credits = new RichTextArea
+            {
+                Size = new Size(550, 260),
+                Wrap = true,
+                ReadOnly = true,
+                Text = textToDisplay,
+                CaretIndex = 0
+            };
             try
             {
                 textBox_credits.Font = SystemFonts.Default(13 * 0.66f);
@@ -38,11 +41,6 @@ namespace Variance
             {
 
             }
-            textBox_credits.Size = new Size(550, 260);
-            textBox_credits.Wrap = true;
-            textBox_credits.ReadOnly = true;
-            textBox_credits.Text = textToDisplay;
-            textBox_credits.CaretIndex = 0;
 
             content.Rows[1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(textBox_credits, centered: true) });
 
