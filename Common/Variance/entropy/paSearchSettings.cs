@@ -13,8 +13,9 @@ namespace Variance
             tipBias : need support for positive/negative limits and variation.
             proxBias : deep shape engine support, like others.
         */
-        public static string[] paNames = { "xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble" };
-        public enum paEnum { XOL, YOL, SCDU, TCDU, LWR, LWR2, HTIPNVAR, HTIPPVAR, VTIPNVAR, VTIPPVAR, ICR, OCR, WOB }
+        public static readonly string[] paNames = { "xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble" };
+
+        private enum paEnum { XOL, YOL, SCDU, TCDU, LWR, LWR2, HTIPNVAR, HTIPPVAR, VTIPNVAR, VTIPPVAR, ICR, OCR, WOB }
 
         bool[,] searchablePAs;
         decimal[,] upperLimit;
@@ -45,9 +46,9 @@ namespace Variance
 
         // Expose these as they are less complicated than the layer case.
         public int numberofPassCases { get; set; }
-        public double[] filterValues { get; set; }
-        public bool[] useFilter { get; set; }
-        public bool[] filterIsMaxValue { get; set; }
+        public double[] filterValues { get; private set; }
+        public bool[] useFilter { get; private set; }
+        public bool[] filterIsMaxValue { get; private set; }
 
         public PASearch()
         {
@@ -195,9 +196,9 @@ namespace Variance
                             {
                                 case (int)paEnum.XOL:
                                 case (int)paEnum.YOL:
-                                    // case (int)paEnum.LWR:
-                                    // case (int)paEnum.SBIAS:
-                                    // case (int)paEnum.PBIAS:
+                                // case (int)paEnum.LWR:
+                                // case (int)paEnum.SBIAS:
+                                // case (int)paEnum.PBIAS:
                                     enable = true;
                                     break;
                                 default:
@@ -526,11 +527,11 @@ namespace Variance
             double s = 0.0;
             int k = 1;
 
-            for (int value = 0; value < rawValues.Count; value++)
+            foreach (double t in rawValues)
             {
                 double tmpM = m;
 
-                double _value = rawValues[value];
+                double _value = t;
                 m += (_value - tmpM) / k;
                 s += (_value - tmpM) * (_value - m);
                 k++;
