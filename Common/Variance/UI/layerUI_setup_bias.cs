@@ -17,18 +17,18 @@ namespace Variance
         {
             Application.Instance.Invoke(() =>
             {
-                groupBox_etchandbias = new GroupBox();
-                groupBox_etchandbias.Text = "Bias and Etch Parameters";
                 TableLayout groupBox_layer_etchandbias_table = new TableLayout();
-                groupBox_etchandbias.Content = groupBox_layer_etchandbias_table;
+                groupBox_etchandbias = new GroupBox
+                {
+                    Text = "Bias and Etch Parameters", Content = groupBox_layer_etchandbias_table
+                };
 
                 TableLayout t = new TableLayout();
                 t.Rows.Add(new TableRow());
                 t.Rows[0].Cells.Add(new TableCell { Control = groupBox_etchandbias });
                 t.Rows[0].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
-                Panel p = new Panel();
-                p.Content = t;
+                Panel p = new Panel {Content = t};
                 tc.Control = p;
 
                 bias_row1(groupBox_layer_etchandbias_table);
@@ -39,8 +39,7 @@ namespace Variance
 
         void bias_row1(TableLayout etchandbias_table)
         {
-            groupBox_etchandbias_reg = new GroupBox();
-            groupBox_etchandbias_reg.Text = "Regular";
+            groupBox_etchandbias_reg = new GroupBox {Text = "Regular"};
             TableRow tr = new TableRow();
             etchandbias_table.Rows.Add(tr);
             tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_reg });
@@ -68,17 +67,21 @@ namespace Variance
 
             biasEtch_tr0_0_tl.Rows.Add(new TableRow());
 
-            lbl_sidebias = new Label();
-            lbl_sidebias.Text = "Side Bias (Edge)";
-            lbl_sidebias.Width = 90;
-            lbl_sidebias.ToolTip = "Bias applied to each edge that is not defined as a tip.";
+            lbl_sidebias = new Label
+            {
+                Text = "Side Bias (Edge)",
+                Width = 90,
+                ToolTip = "Bias applied to each edge that is not defined as a tip."
+            };
             biasEtch_tr0_0_tl.Rows[^1].Cells.Add(new TableCell());
             biasEtch_tr0_0_tl.Rows[^1].Cells[0].Control = lbl_sidebias;
 
-            num_sidebias = new NumericStepper();
-            num_sidebias.Increment = 0.1;
-            num_sidebias.DecimalPlaces = 2;
-            num_sidebias.ToolTip = "Bias applied to each edge that is not defined as a tip.";
+            num_sidebias = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                ToolTip = "Bias applied to each edge that is not defined as a tip."
+            };
             setSize(num_sidebias, 55);
             biasEtch_tr0_0_tl.Rows[^1].Cells.Add(new TableCell());
             biasEtch_tr0_0_tl.Rows[^1].Cells[1].Control = TableLayout.AutoSized(num_sidebias);
@@ -94,43 +97,47 @@ namespace Variance
 
             nestedTable.Rows.Add(new TableRow());
 
-            lbl_hTipbias = new Label();
-            lbl_hTipbias.Text = "Horizontal tip bias";
-            lbl_hTipbias.ToolTip = "Bias applied to each subshape edge that is a left or right tip.";
+            lbl_hTipbias = new Label
+            {
+                Text = "Horizontal tip bias",
+                ToolTip = "Bias applied to each subshape edge that is a left or right tip."
+            };
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_hTipbias });
 
-            num_hTipbias = new NumericStepper();
-            num_hTipbias.Increment = 0.1;
-            num_hTipbias.DecimalPlaces = 2;
-            num_hTipbias.ToolTip = "Bias applied to each subshape edge that is a left or right tip.";
+            num_hTipbias = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                ToolTip = "Bias applied to each subshape edge that is a left or right tip."
+            };
             setSize(num_hTipbias, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_hTipbias) });
 
-            lbl_hTipPVar = new Label();
-            lbl_hTipPVar.Text = "Var +";
+            lbl_hTipPVar = new Label {Text = "Var +", ToolTip = "Positive 3-sigma bias variation for left/right tips."};
             lbl_hTipPVar.MouseDoubleClick += hTipPVar_RNG;
-            lbl_hTipPVar.ToolTip = "Positive 3-sigma bias variation for left/right tips.";
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_hTipPVar });
 
-            num_hTipPVar = new NumericStepper();
-            num_hTipPVar.Increment = 0.1;
-            num_hTipPVar.DecimalPlaces = 2;
-            num_hTipPVar.MinValue = 0;
-            num_hTipPVar.ToolTip = "Positive 3-sigma bias variation for left/right tips.";
+            num_hTipPVar = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                MinValue = 0,
+                ToolTip = "Positive 3-sigma bias variation for left/right tips."
+            };
             setSize(num_hTipPVar, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_hTipPVar) });
 
-            lbl_hTipNVar = new Label();
-            lbl_hTipNVar.Text = "-";
+            lbl_hTipNVar = new Label {Text = "-", ToolTip = "Negative 3-sigma bias variation for left/right tips."};
             lbl_hTipNVar.MouseDoubleClick += hTipNVar_RNG;
-            lbl_hTipNVar.ToolTip = "Negative 3-sigma bias variation for left/right tips.";
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_hTipNVar });
 
-            num_hTipNVar = new NumericStepper();
-            num_hTipNVar.Increment = 0.1;
-            num_hTipNVar.DecimalPlaces = 2;
-            num_hTipNVar.MinValue = 0;
-            num_hTipNVar.ToolTip = "Negative 3-sigma bias variation for left/right tips.";
+            num_hTipNVar = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                MinValue = 0,
+                ToolTip = "Negative 3-sigma bias variation for left/right tips."
+            };
             setSize(num_hTipNVar, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_hTipNVar) });
 
@@ -138,43 +145,47 @@ namespace Variance
 
             nestedTable.Rows.Add(new TableRow());
 
-            lbl_vTipbias = new Label();
-            lbl_vTipbias.Text = "Vertical tip bias";
-            lbl_vTipbias.ToolTip = "Bias applied to each subshape edge that is a top or bottom tip.";
+            lbl_vTipbias = new Label
+            {
+                Text = "Vertical tip bias",
+                ToolTip = "Bias applied to each subshape edge that is a top or bottom tip."
+            };
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_vTipbias });
 
-            num_vTipbias = new NumericStepper();
-            num_vTipbias.Increment = 0.1;
-            num_vTipbias.DecimalPlaces = 2;
-            num_vTipbias.ToolTip = "Bias applied to each subshape edge that is a top or bottom tip.";
+            num_vTipbias = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                ToolTip = "Bias applied to each subshape edge that is a top or bottom tip."
+            };
             setSize(num_vTipbias, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_vTipbias) });
 
-            lbl_vTipPVar = new Label();
-            lbl_vTipPVar.Text = "Var +";
+            lbl_vTipPVar = new Label {Text = "Var +", ToolTip = "Positive 3-sigma bias variation for top/bottom tips."};
             lbl_vTipPVar.MouseDoubleClick += vTipPVar_RNG;
-            lbl_vTipPVar.ToolTip = "Positive 3-sigma bias variation for top/bottom tips.";
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_vTipPVar });
 
-            num_vTipPVar = new NumericStepper();
-            num_vTipPVar.Increment = 0.1;
-            num_vTipPVar.DecimalPlaces = 2;
-            num_vTipPVar.MinValue = 0;
-            num_vTipPVar.ToolTip = "Positive 3-sigma bias variation for top/bottom tips.";
+            num_vTipPVar = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                MinValue = 0,
+                ToolTip = "Positive 3-sigma bias variation for top/bottom tips."
+            };
             setSize(num_vTipPVar, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_vTipPVar) });
 
-            lbl_vTipNVar = new Label();
-            lbl_vTipNVar.Text = "-";
+            lbl_vTipNVar = new Label {Text = "-", ToolTip = "Negative 3-sigma bias variation for top/bottom tips."};
             lbl_vTipNVar.MouseDoubleClick += vTipNVar_RNG;
-            lbl_vTipNVar.ToolTip = "Negative 3-sigma bias variation for top/bottom tips.";
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_vTipNVar });
 
-            num_vTipNVar = new NumericStepper();
-            num_vTipNVar.Increment = 0.1;
-            num_vTipNVar.DecimalPlaces = 2;
-            num_vTipNVar.MinValue = 0;
-            num_vTipNVar.ToolTip = "Negative 3-sigma bias variation for top/bottom tips.";
+            num_vTipNVar = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                MinValue = 0,
+                ToolTip = "Negative 3-sigma bias variation for top/bottom tips."
+            };
             setSize(num_vTipNVar, 55);
             nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_vTipNVar) });
 
@@ -183,8 +194,7 @@ namespace Variance
 
         void bias_row2(TableLayout etchandbias_table)
         {
-            groupBox_etchandbias_prox = new GroupBox();
-            groupBox_etchandbias_prox.Text = "Proximity";
+            groupBox_etchandbias_prox = new GroupBox {Text = "Proximity"};
             TableRow tr = new TableRow();
             etchandbias_table.Rows.Add(tr);
             tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_prox });
@@ -212,67 +222,79 @@ namespace Variance
 
             biasEtch_tr1_0_tl.Rows.Add(new TableRow());
 
-            lbl_pitchDepBias = new Label();
-            lbl_pitchDepBias.Text = "Proximity bias";
-            lbl_pitchDepBias.ToolTip = "Maximum bias to be applied to edges based on visibility-based space to nearest edges.";
+            lbl_pitchDepBias = new Label
+            {
+                Text = "Proximity bias",
+                ToolTip = "Maximum bias to be applied to edges based on visibility-based space to nearest edges."
+            };
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_pitchDepBias) });
 
-            num_pitchDepBias = new NumericStepper();
-            num_pitchDepBias.Increment = 0.1;
-            num_pitchDepBias.DecimalPlaces = 2;
-            num_pitchDepBias.ToolTip = "Maximum bias to be applied to edges based on visibility-based space to nearest edges.";
+            num_pitchDepBias = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                ToolTip = "Maximum bias to be applied to edges based on visibility-based space to nearest edges."
+            };
             setSize(num_pitchDepBias, 55);
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_pitchDepBias) });
 
-            lbl_pitchDepBiasIsoDistance = new Label();
-            lbl_pitchDepBiasIsoDistance.Text = "Isolated edge distance";
-            lbl_pitchDepBiasIsoDistance.ToolTip = "Distance from nearest feature (in-layer) when edge is considered isolated and gets full proximity-dependent bias applied.";
+            lbl_pitchDepBiasIsoDistance = new Label
+            {
+                Text = "Isolated edge distance",
+                ToolTip =
+                    "Distance from nearest feature (in-layer) when edge is considered isolated and gets full proximity-dependent bias applied."
+            };
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_pitchDepBiasIsoDistance) });
 
-            num_pitchDepBiasIsoDistance = new NumericStepper();
-            num_pitchDepBiasIsoDistance.Increment = 0.1;
-            num_pitchDepBiasIsoDistance.DecimalPlaces = 2;
-            num_pitchDepBiasIsoDistance.ToolTip = "Distance from nearest feature (in-layer) when edge is considered isolated and gets full proximity-dependent bias applied.";
+            num_pitchDepBiasIsoDistance = new NumericStepper
+            {
+                Increment = 0.1,
+                DecimalPlaces = 2,
+                ToolTip =
+                    "Distance from nearest feature (in-layer) when edge is considered isolated and gets full proximity-dependent bias applied."
+            };
             setSize(num_pitchDepBiasIsoDistance, 55);
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_pitchDepBiasIsoDistance) });
 
             biasEtch_tr1_0_tl.Rows.Add(new TableRow());
 
-            lbl_pitchDepBiasSideRays = new Label();
-            lbl_pitchDepBiasSideRays.Text = "Side Rays";
-            lbl_pitchDepBiasSideRays.ToolTip = "Number of additional rays to fire each side of main ray.";
+            lbl_pitchDepBiasSideRays = new Label
+            {
+                Text = "Side Rays", ToolTip = "Number of additional rays to fire each side of main ray."
+            };
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_pitchDepBiasSideRays) });
 
-            num_pitchDepBiasSideRays = new NumericStepper();
-            num_pitchDepBiasSideRays.Increment = 1;
-            num_pitchDepBiasSideRays.MinValue = 0;
-            num_pitchDepBiasSideRays.Value = 2;
-            num_pitchDepBiasSideRays.DecimalPlaces = 0;
-            num_pitchDepBiasSideRays.ToolTip = "Number of additional rays to fire each side of main ray.";
+            num_pitchDepBiasSideRays = new NumericStepper
+            {
+                Increment = 1,
+                MinValue = 0,
+                Value = 2,
+                DecimalPlaces = 0,
+                ToolTip = "Number of additional rays to fire each side of main ray."
+            };
             setSize(num_pitchDepBiasSideRays, 55);
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_pitchDepBiasSideRays) });
 
-            lbl_proxBiasFallOff = new Label();
-            lbl_proxBiasFallOff.Text = "Falloff";
-            lbl_proxBiasFallOff.ToolTip = "Falloff for side rays";
+            lbl_proxBiasFallOff = new Label {Text = "Falloff", ToolTip = "Falloff for side rays"};
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_proxBiasFallOff });
 
-            comboBox_proxBiasFallOff = new DropDown();
-            comboBox_proxBiasFallOff.ToolTip = "Falloff to apply for side rays.";
+            comboBox_proxBiasFallOff = new DropDown {ToolTip = "Falloff to apply for side rays."};
             comboBox_proxBiasFallOff.BindDataContext(c => c.DataStore, (UIStringLists m) => m.fallOffList);
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_proxBiasFallOff) });
 
-            lbl_proxBiasFallOffMultiplier = new Label();
-            lbl_proxBiasFallOffMultiplier.Text = "x";
-            lbl_proxBiasFallOffMultiplier.ToolTip = "Multiplier for falloff";
+            lbl_proxBiasFallOffMultiplier = new Label {Text = "x", ToolTip = "Multiplier for falloff"};
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_proxBiasFallOffMultiplier) });
 
-            num_proxBiasFallOffMultiplier = new NumericStepper();
-            num_proxBiasFallOffMultiplier.Increment = 0.1;
-            num_proxBiasFallOffMultiplier.MinValue = 0;
-            num_proxBiasFallOffMultiplier.Value = Convert.ToDouble(EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier));
-            num_proxBiasFallOffMultiplier.DecimalPlaces = 2;
-            num_proxBiasFallOffMultiplier.ToolTip = "Multipler for falloff";
+            num_proxBiasFallOffMultiplier = new NumericStepper
+            {
+                Increment = 0.1,
+                MinValue = 0,
+                Value = Convert.ToDouble(
+                    EntropyLayerSettings.getDefaultDecimal(EntropyLayerSettings.properties_decimal
+                        .proxSideRaysMultiplier)),
+                DecimalPlaces = 2,
+                ToolTip = "Multiplier for falloff"
+            };
             setSize(num_proxBiasFallOffMultiplier, 55);
             biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_proxBiasFallOffMultiplier) });
         }
