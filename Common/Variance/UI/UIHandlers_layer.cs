@@ -143,14 +143,7 @@ namespace Variance
                         break;
                 }
 
-                if (commonVars.rngCustomMapping[itemIndex] != CommonVars.boxMuller)
-                {
-                    sourceLabel_RNG.TextColor = Color.FromArgb(MyColor.OrangeRed.toArgb());
-                }
-                else
-                {
-                    sourceLabel_RNG.TextColor = Color.FromArgb(MyColor.Black.toArgb());
-                }
+                sourceLabel_RNG.TextColor = Color.FromArgb(commonVars.rngCustomMapping[itemIndex] != CommonVars.boxMuller ? MyColor.OrangeRed.toArgb() : MyColor.Black.toArgb());
             }
             catch (Exception)
             {
@@ -162,9 +155,9 @@ namespace Variance
         {
             menu_customRNG = new ContextMenu();
             int itemIndex = 0;
-            for (int i = 0; i < commonVars.rngCustomMapping.Count; i++)
+            foreach (string t in commonVars.rngCustomMapping)
             {
-                menu_customRNG.Items.Add(new ButtonMenuItem { Text = commonVars.rngCustomMapping[i] });
+                menu_customRNG.Items.Add(new ButtonMenuItem { Text = t });
                 menu_customRNG.Items[itemIndex].Click += customRNGContextMenuHandler;
                 itemIndex++;
             }
@@ -180,14 +173,7 @@ namespace Variance
 
         void setOmitLayer(int index, bool status)
         {
-            if (status)
-            {
-                commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.omit, 1);
-            }
-            else
-            {
-                commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.omit, 0);
-            }
+            commonVars.getLayerSettings(index).setInt(EntropyLayerSettings.properties_i.omit, status ? 1 : 0);
             uiFollowChanges();
         }
 
