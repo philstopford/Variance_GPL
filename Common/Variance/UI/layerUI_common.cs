@@ -756,13 +756,14 @@ namespace Variance
                     warnNeeded = false;
                 }
 
-                if (warnNeeded)
+                switch (warnNeeded)
                 {
-                    updateStatusLine(warningString);
-                }
-                else
-                {
-                    updateStatusLine("");
+                    case true:
+                        updateStatusLine(warningString);
+                        break;
+                    default:
+                        updateStatusLine("");
+                        break;
                 }
 
                 reviewComboBoxes(settingsIndex);
