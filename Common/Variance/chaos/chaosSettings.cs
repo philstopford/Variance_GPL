@@ -626,6 +626,29 @@ namespace Variance
 #endif
         }
 
+        public ChaosSettings(ChaosSettings source)
+        {
+            overlayX = source.overlayX;
+            overlayY = source.overlayY;
+            hTipBiasType = source.hTipBiasType;
+            vTipBiasType = source.vTipBiasType;
+            horTipBiasVar = source.horTipBiasVar;
+            verTipBiasVar = source.verTipBiasVar;
+            iCVar = source.iCVar;
+            iC_PAsearch = source.iC_PAsearch;
+            oCVar = source.oCVar;
+            oC_PAsearch = source.oC_PAsearch;
+            LWRVar = source.LWRVar;
+            LWR2Var = source.LWR2Var;
+            CDUTVar = source.CDUTVar;
+            CDUSVar = source.CDUSVar;
+            wobbleVar = source.wobbleVar;
+            LWRSeed = source.LWRSeed;
+            LWR2Seed = source.LWR2Seed;
+            previewMode = source.previewMode;
+            customRNGMapping = source.customRNGMapping;
+        }
+        
         bool rngCheck(string rngString)
         {
             return ((rngString != "") && (rngString != CommonVars.boxMuller));

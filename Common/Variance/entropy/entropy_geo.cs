@@ -106,7 +106,7 @@ namespace Variance
                     setSampler(1, previewMode, doPASearch:false);
                     break;
             }
-            sampler.sample(false);
+            sampler.sample(false, true);
 
             sw.Start();
 
@@ -295,7 +295,7 @@ namespace Variance
         {
             setSampler(numberOfCases: doPASearch ? 1: numberOfCases, previewMode, doPASearch);
 
-            sampler.sample(true);
+            sampler.sample(true, true);
 
             sw.Start();
 

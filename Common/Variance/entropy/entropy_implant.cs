@@ -150,7 +150,7 @@ namespace Variance
         void entropyRunCore_implant_multipleThread(bool previewMode, Int32 numberOfCases)
         {
             setSampler_implant(numberOfCases, previewMode);
-            sampler.sample(true);
+            sampler.sample(true, false);
 
             Int32 numberOfResultsFields = 1;
 
