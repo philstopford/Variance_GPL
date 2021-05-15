@@ -153,12 +153,6 @@ namespace Variance
                 sampleIndices[i] = i;
             }
 
-            int[] layerIndices = new int[CentralProperties.maxLayersForMC];
-            for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
-            {
-                layerIndices[i] = i;
-            }
-
             for (int dimension = 0; dimension < dimensions; dimension++)
             {
                 // Reshuffle for each dimension
@@ -166,11 +160,10 @@ namespace Variance
                 for (int i = 0; i < sampleCount; i++)
                 {
                     newSettings[i] = new ChaosSettings(samples[i]);
-                    layerIndices.Shuffle();
                     for (int s = 0; s < CentralProperties.maxLayersForMC; s++)
                     {
                         // Get value from the new index in for our dimension
-                        double newValue = samples[sampleIndices[i]].getValue((ChaosSettings.properties) dimension, layerIndices[s]); 
+                        double newValue = samples[sampleIndices[i]].getValue((ChaosSettings.properties) dimension, s); 
                         newSettings[i].setValue((ChaosSettings.properties) dimension, s, newValue);
                     }
                 }
