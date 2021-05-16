@@ -1381,7 +1381,7 @@ namespace Variance
                     vp_menu.Items.Add(new ButtonMenuItem { Text = "Freeze (f)" });
                 }
                 freezeThawIndex = itemIndex;
-                vp_menu.Items[itemIndex].Click += delegate
+                vp_menu.Items[freezeThawIndex].Click += delegate
                 {
                     viewPort.freeze_thaw();
                 };
