@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.11-ci-20210422.772645364" />
-    <PackageReference Include="MailKit" Version="2.11.1" />
+    <PackageReference Include="Eto.Forms" Version="2.6.0-ci-20210515.845877805" />
+    <PackageReference Include="MailKit" Version="2.12.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="5.0.1" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
