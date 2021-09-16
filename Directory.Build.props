@@ -21,7 +21,7 @@
     files avoids problems with generated AssemblyInfo, among other benefits. -->
     <BaseOutputPath>$(ArtifactsDir)bin\$(MSBuildProjectName)\</BaseOutputPath>
 
-    <VeldridSpirvVersion>1.0.13</VeldridSpirvVersion>
+    <VeldridSpirvVersion>1.0.14</VeldridSpirvVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOS) == 'Windows'">
