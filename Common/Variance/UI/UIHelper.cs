@@ -1,6 +1,7 @@
 ﻿using color;
 using Eto.Drawing;
 using geoLib;
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -32,7 +33,7 @@ namespace Variance
         {
             int length = sourceArray.Length;
             PointF[] returnArray = new PointF[length];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, length, (i) =>
 #else
             for (int i = 0; i < length; i++)
@@ -40,7 +41,7 @@ namespace Variance
             {
                 returnArray[i] = myPointFToPointF(sourceArray[i]);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             return returnArray;
@@ -50,7 +51,7 @@ namespace Variance
         {
             int length = sourceArray.Length;
             GeoLibPointF[] returnArray = new GeoLibPointF[length];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, length, (i) =>
 #else
             for (int i = 0; i < length; i++)
@@ -58,7 +59,7 @@ namespace Variance
             {
                 returnArray[i] = pointFTomyPointF(sourceArray[i]);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             return returnArray;

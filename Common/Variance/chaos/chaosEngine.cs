@@ -54,7 +54,7 @@ namespace Variance
         {
             // Put 0-index point at minX (see method for more notes)
             int aCount = aPath.Count;
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, aCount, (path) =>
 #else
             for (Int32 path = 0; path < aCount; path++)
@@ -62,12 +62,12 @@ namespace Variance
             {
                 aPath[path] = reOrderPath("A", path);
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             // Put 0-index point at minY (see method for more notes)
             int bCount = bPath.Count;
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, bCount, (path) =>
 #else
             for (Int32 path = 0; path < bCount; path++)
@@ -75,7 +75,7 @@ namespace Variance
             {
                 bPath[path] = reOrderPath("B", path);
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             List<Paths> returnPaths = new List<Paths> {aPath.ToList(), bPath.ToList()};
@@ -156,7 +156,7 @@ namespace Variance
                 Paths merged = GeoWrangler.makeKeyHole(ret, extension:extension);
 
                 int count = merged.Count;
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                 Parallel.For(0, count, (i) =>
 #else
                 for (int i = 0; i < count; i++)
@@ -164,7 +164,7 @@ namespace Variance
                 {
                     merged[i] = GeoWrangler.clockwise(merged[i]);
                 }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                 );
 #endif
                 // Squash any accidental keyholes - not ideal, but best option found so far.
@@ -179,7 +179,7 @@ namespace Variance
             if (rigorous && !holes)
             {
                 int count = ret.Count;
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                 Parallel.For(0, count, (i) =>
 #else
                 for (int i = 0; i < count; i++)
@@ -188,7 +188,7 @@ namespace Variance
                     ret[i] = GeoWrangler.clockwise(ret[i]);
                     ret[i] = GeoWrangler.close(ret[i]);
                 }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                 );
 #endif
                 // Return here because the attempt to rationalize the geometry below also screws things up, it seems.
@@ -316,7 +316,7 @@ namespace Variance
 
             Path tPath = new Path();
 
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, limit2, (i) =>
 #else
             for (int i = 0; i < limit2; i++)
@@ -342,7 +342,7 @@ namespace Variance
                     }
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             /* Direct the 4 layer boolean approach
@@ -353,7 +353,7 @@ namespace Variance
              */
             int[] doLayer4Boolean = new int[limit4];
 
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, limit4, (i) =>
 #else
             for (int i = 0; i < limit4; i++)
@@ -382,10 +382,10 @@ namespace Variance
                     }
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, limit4, (i) =>
 #else
             for (int i = 0; i < limit4; i++)
@@ -444,7 +444,7 @@ namespace Variance
                     }
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             /* Direct the 8 layer boolean approach
@@ -455,7 +455,7 @@ namespace Variance
              */
             int[] doLayer8Boolean = new int[limit8];
             
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, limit8, (i) =>
 #else
             for (int i = 0; i < limit8; i++)
@@ -500,11 +500,11 @@ namespace Variance
                     }
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
 
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, limit8, (i) =>
 #else
             for (int i = 0; i < limit8; i++)
@@ -564,7 +564,7 @@ namespace Variance
                     }
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             return eightLayerResults;
@@ -718,7 +718,7 @@ namespace Variance
                             // Fragment our result.
                             char[] resultSeparators = { ',' }; // CSV separator for splitting results for comparison.
                             string[] tmpfraggedResult = result.Split(resultSeparators);
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                             Parallel.For(0, tmpfraggedResult.Length, (i) =>
 #else
                             for (Int32 i = 0; i < tmpfraggedResult.Length; i++)
@@ -726,7 +726,7 @@ namespace Variance
                             {
                                 fraggedResult[i] = Convert.ToDouble(tmpfraggedResult[i]);
                             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
                             );
 #endif
                             fraggedResult[0] = cH.aChordLengths[0] / CentralProperties.scaleFactorForOperation;

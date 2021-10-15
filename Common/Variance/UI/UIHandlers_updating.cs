@@ -21,7 +21,7 @@ namespace Variance
             // Evaluated resist side. We know there's a single polygon in previewShapes and we know the resist evaluation is the first entry in the resistShapes list.
             int limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0].Count();
             PointF[] tmpPoints = new PointF[limit];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, limit, (point) =>
 #else
             for (Int32 point = 0; point < tmpPoints.Length; point++)
@@ -30,7 +30,7 @@ namespace Variance
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0][point].X,
                     (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0][point].Y);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             otkVPSettings_implant.addPolygon(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), false, 0);
@@ -38,7 +38,7 @@ namespace Variance
             // Background - second item in the resistShapes, but again a single polygon.
             limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0].Count();
             tmpPoints = new PointF[limit];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, limit, (point) =>
 #else
             for (Int32 point = 0; point < tmpPoints.Count(); point++)
@@ -47,7 +47,7 @@ namespace Variance
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].X,
                     (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].Y);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             otkVPSettings_implant.addBGPolygon(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.bg), 1);
@@ -55,7 +55,7 @@ namespace Variance
             // Now add our shadowing line. Single polygon in the shadowLine's previewPoints.
             limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0].Count();
             tmpPoints = new PointF[limit];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, limit, (point) =>
 #else
             for (Int32 point = 0; point < tmpPoints.Count(); point++)
@@ -64,7 +64,7 @@ namespace Variance
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0][point].X,
                     (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0][point].Y);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 2);
@@ -72,7 +72,7 @@ namespace Variance
             // Now add our min shadowing line. Single polygon in the shadowLine's previewPoints.
             limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0].Count();
             tmpPoints = new PointF[limit];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, limit, (point) =>
 #else
             for (Int32 point = 0; point < tmpPoints.Count(); point++)
@@ -81,7 +81,7 @@ namespace Variance
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].X,
                     (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].Y);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 3);
@@ -89,7 +89,7 @@ namespace Variance
             // Now add our max shadowing line. Single polygon in the shadowLine's previewPoints.
             limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0].Count();
             tmpPoints = new PointF[limit];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, limit, (point) =>
 #else
             for (Int32 point = 0; point < tmpPoints.Count(); point++)
@@ -98,7 +98,7 @@ namespace Variance
                 tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0][point].X,
                     (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0][point].Y);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 4);
@@ -824,7 +824,7 @@ namespace Variance
                                 {
                                     int length = commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Count();
                                     PointF[] tmpPoints = new PointF[length];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                                     Parallel.For(0, length, (point) =>
 #else
                                     for (Int32 point = 0; point < length; point++)
@@ -832,7 +832,7 @@ namespace Variance
                                     {
                                         tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly)[point].X, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly)[point].Y);
                                     }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                                     );
 #endif
                                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].addPolygon(

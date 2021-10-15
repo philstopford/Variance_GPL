@@ -69,7 +69,7 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.polyList[poly].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
                 int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 Parallel.For(0, count, (pt) =>
 #else
                 for (int pt = 0; pt < count; pt++)
@@ -77,7 +77,7 @@ namespace Variance
                 {
                     temp[pt].Y = -temp[pt].Y;
                 }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 );
 #endif
                 svg.AddPolygons(temp);
@@ -89,7 +89,7 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.bgPolyList[poly].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
                 int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 Parallel.For(0, count, (pt) =>
 #else
                 for (int pt = 0; pt < count; pt++)
@@ -97,7 +97,7 @@ namespace Variance
                 {
                     temp[pt].Y = -temp[pt].Y;
                 }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 );
 #endif
                 svg.AddPolygons(temp);
@@ -110,7 +110,7 @@ namespace Variance
                 svg.style.penClr = UIHelper.colorToMyColor(vpSettings.lineList[line].color);
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
                 int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 Parallel.For(0, count, (pt) =>
 #else
                 for (int pt = 0; pt < count; pt++)
@@ -118,7 +118,7 @@ namespace Variance
                 {
                     temp[pt].Y = -temp[pt].Y;
                 }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 );
 #endif
                 svg.AddPolygons(temp);
@@ -241,7 +241,7 @@ namespace Variance
             {
                 GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
                 int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 Parallel.For(0, count, (pt) =>
 #else
                 for (int pt = 0; pt < count; pt++)
@@ -249,7 +249,7 @@ namespace Variance
                 {
                     temp[pt].Y = -temp[pt].Y;
                 }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                 );
 #endif
                 int layerIndex = vpSettings.polySourceIndex[poly];
@@ -271,7 +271,7 @@ namespace Variance
                 if (polyLength > 2)
                 {
                     GeoLibPoint[] ePoly = new GeoLibPoint[polyLength];
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     Parallel.For(0, polyLength, (pt) =>
 #else
                     for (int pt = 0; pt < polyLength; pt++)
@@ -280,7 +280,7 @@ namespace Variance
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
                     }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     );
 #endif
                     gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
@@ -293,7 +293,7 @@ namespace Variance
                 {
                     GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
                     int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     Parallel.For(0, count, (pt) =>
 #else
                     for (int pt = 0; pt < count; pt++)
@@ -301,7 +301,7 @@ namespace Variance
                     {
                         temp[pt].Y = -temp[pt].Y;
                     }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     );
 #endif
                     int layerIndex = vpSettings.lineSourceIndex[line];
@@ -320,7 +320,7 @@ namespace Variance
                     }
 
                     GeoLibPoint[] ePoly = new GeoLibPoint[count];
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     Parallel.For(0, count, (pt) =>
 #else
                     for (int pt = 0; pt < count; pt++)
@@ -329,7 +329,7 @@ namespace Variance
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
                     }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     );
 #endif
                     gcell_root.addPath(ePoly.ToArray(), layerIndex + 1, 0);
@@ -342,7 +342,7 @@ namespace Variance
                 {
                     GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
                     int count = temp.Length;
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     Parallel.For(0, count, (pt) =>
 #else
                     for (int pt = 0; pt < count; pt++)
@@ -350,7 +350,7 @@ namespace Variance
                     {
                         temp[pt].Y = -temp[pt].Y;
                     }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     );
 #endif
                     int layerIndex = vpSettings.bgPolySourceIndex[poly];
@@ -369,7 +369,7 @@ namespace Variance
                     }
 
                     GeoLibPoint[] ePoly = new GeoLibPoint[count];
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     Parallel.For(0, count, (pt) =>
 #else
                     for (int pt = 0; pt < count; pt++)
@@ -378,7 +378,7 @@ namespace Variance
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
                         ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
                     }
-#if SVGTHREADED
+#if !SVGSINGLETHREADED
                     );
 #endif
                     gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0);

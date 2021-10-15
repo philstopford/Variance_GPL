@@ -435,7 +435,7 @@ namespace Variance
             wobbleVar = new double[count];
             LWRSeed = new int[count];
             LWR2Seed = new int[count];
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, count, (i) =>
 #else
             for (int i = 0; i < count; i++)
@@ -584,12 +584,12 @@ namespace Variance
                     LWR2Seed[i] = UtilityFuncs.getRandomInt(simSettings);
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
             // Re-walk to handle correlation. We can't do this in the loop above since the correlated layer's settings
             // are likely not available at that point in time.
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             Parallel.For(0, count, (i) =>
 #else
             for (int i = 0; i < count; i++)
@@ -621,7 +621,7 @@ namespace Variance
                     LWR2Seed[i] = LWR2Seed[listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)];
                 }
             }
-#if CHAOSTHREADED
+#if !CHAOSSINGLETHREADED
             );
 #endif
         }

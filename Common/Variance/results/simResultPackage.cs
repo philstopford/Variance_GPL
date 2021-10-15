@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using utility;
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -153,7 +154,7 @@ namespace Variance
 
             List<double>[] res = new List<double>[numberOfResultsFields];
 
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, numberOfResultsFields, (i) =>
 #else
             for (int i = 0; i < numberOfResultsFields; i++)
@@ -161,12 +162,12 @@ namespace Variance
             {
                 res[i] = new List<double>();
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             foreach (string[] t in results)
             {
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 Parallel.For(0, numberOfResultsFields, (i) =>
 #else
                 for (int i = 0; i < numberOfResultsFields; i++)
@@ -178,7 +179,7 @@ namespace Variance
                         res[i].Add(Convert.ToDouble(t[i]));
                     }
                 }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 );
 #endif
             }

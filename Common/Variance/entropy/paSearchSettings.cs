@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -93,7 +94,7 @@ namespace Variance
             {
                 return;
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, paNames.Length, (j) =>
 #else
             for (int j = 0; j < paNames.Length; j++)
@@ -104,7 +105,7 @@ namespace Variance
                 meanValues[layer, j] = "";
                 stdDevValues[layer, j] = "";
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
         }
@@ -178,7 +179,7 @@ namespace Variance
         {
             int length = paNames.Length;
             bool[] enabled = new bool[length];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, length, (i) =>
 #else
             for (int i = 0; i < length; i++)
@@ -210,7 +211,7 @@ namespace Variance
                 }
                 enabled[i] = enable;
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             return enabled;
@@ -224,7 +225,7 @@ namespace Variance
 
         void pBackupOriginalValues(CommonVars commonVars)
         {
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, CentralProperties.maxLayersForMC, (i) =>
 #else
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
@@ -283,7 +284,7 @@ namespace Variance
                     originalValues[i, (int)paEnum.WOB] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
                 }
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
         }

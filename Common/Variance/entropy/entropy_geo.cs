@@ -1444,7 +1444,7 @@ namespace Variance
                     }
                     points = new GeoLibPointF[arraySize];
 
-#if ENTROPYTHREADED
+#if !ENTROPYSINGLETHREADED
                     Parallel.For(0, length, (i) =>
 #else
                     for (Int32 i = 0; i < length; i++)
@@ -1454,7 +1454,7 @@ namespace Variance
                         points[i] = new GeoLibPointF(((float)currentJobEngine.getPaths()[listMember][i].X / CentralProperties.scaleFactorForOperation),
                                                      ((float)currentJobEngine.getPaths()[listMember][i].Y / CentralProperties.scaleFactorForOperation));
                     }
-#if ENTROPYTHREADED
+#if !ENTROPYSINGLETHREADED
                     );
 #endif
                     // Close the shape only if we have an area calculation; for other cases we expect lines.

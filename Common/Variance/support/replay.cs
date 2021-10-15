@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Error;
 using utility;
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -249,7 +250,7 @@ namespace Variance
             int colIndex;
             // Find out which layers we have active.
             bool[] activeLayers = new bool[CentralProperties.maxLayersForMC];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, CentralProperties.maxLayersForMC, (i) =>
 #else
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
@@ -257,7 +258,7 @@ namespace Variance
             {
                 activeLayers[i] = (commonVars_.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1);
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
 

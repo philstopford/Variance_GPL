@@ -8,6 +8,7 @@ using geoLib;
 using geoWrangler;
 using Noise;
 using utility; // tiled layout handling, Layout biasing/CDU.
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -767,7 +768,7 @@ namespace Variance
                 if ((!drawnPoly[poly]) && ((commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC1) != 0) || (commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC2) != 0)))
                 {
                     int pCount = previewPoints[poly].Count();
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     Parallel.For(0, pCount, (point) =>
 #else
                     for (Int32 point = 0; point < pCount; point++)
@@ -797,7 +798,7 @@ namespace Variance
                         previewPoints[poly][point] = new GeoLibPointF(px, py);
 
                     }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     );
 #endif
 
@@ -847,7 +848,7 @@ namespace Variance
                 GeoLibPointF[] previousNormals = new GeoLibPointF[ptCount];
                 // Pre-calculate these for the threading to be an option.
                 // This is a serial evaluation as we need both the previous and the current normal for each point.
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 Parallel.For(0, ptCount - 1, (pt) => 
 #else
                 for (Int32 pt = 0; pt < ptCount - 1; pt++)
@@ -868,13 +869,13 @@ namespace Variance
                     }
                     normals[pt] = new GeoLibPointF(-dy, dx);
                 }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 );
 #endif
                 normals[^1] = new GeoLibPointF(normals[0]);
 
                 int nLength = normals.Length;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 Parallel.For(1, nLength, (pt) => 
 #else
                 for (int pt = 1; pt < nLength; pt++)
@@ -882,13 +883,13 @@ namespace Variance
                 {
                     previousNormals[pt] = new GeoLibPointF(normals[pt - 1]);
                 }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 );
 #endif
 
                 previousNormals[0] = new GeoLibPointF(normals[^2]);
 
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 Parallel.For(0, ptCount - 1, pt =>
 #else
                 for (int pt = 0; pt < ptCount - 1; pt++)
@@ -941,7 +942,7 @@ namespace Variance
 
                     jitteredPoints[pt] = new GeoLibPointF(jitteredX, jitteredY);
                 }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                 );
 #endif
                 jitteredPoints[ptCount - 1] = new GeoLibPointF(jitteredPoints[0]);
@@ -1295,7 +1296,7 @@ namespace Variance
 
                             // Apply our deltas
                             int tLength = tempArray.Length;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, tLength, (i) => 
 #else
                             for (Int32 i = 0; i < tLength; i++)
@@ -1304,7 +1305,7 @@ namespace Variance
                                 tempArray[i].X += xOffset;
                                 tempArray[i].Y += yOffset;
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                             previewPoints.Add(tempArray);
@@ -1331,7 +1332,7 @@ namespace Variance
                         for (Int32 poly = 0; poly < pCount; poly++)
                         {
                             int ptCount = previewPoints[poly].Count();
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, ptCount, (point) =>
 #else
                             for (Int32 point = 0; point < ptCount; point++)
@@ -1342,7 +1343,7 @@ namespace Variance
 
                                 previewPoints[poly][point] = new GeoLibPointF(px, py);
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                             if ((Math.Abs(previewPoints[poly][0].X - previewPoints[poly][previewPoints[poly].Count() - 1].X) > Double.Epsilon) ||
@@ -1526,7 +1527,7 @@ namespace Variance
 
                             tempPoly = new GeoLibPointF[arraySize];
 
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, arraySize, (pt) => 
 #else
                             for (int pt = 0; pt < arraySize; pt++)
@@ -1534,7 +1535,7 @@ namespace Variance
                             {
                                 tempPoly[pt] = new GeoLibPointF(tempPolyList[poly][pt].X + xOffset, tempPolyList[poly][pt].Y + yOffset);
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                         }
@@ -1544,7 +1545,7 @@ namespace Variance
 
                             tempPoly = new GeoLibPointF[polySize];
 
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, polySize, (pt) => 
 #else
                             for (Int32 pt = 0; pt < polySize; pt++)
@@ -1552,7 +1553,7 @@ namespace Variance
                             {
                                 tempPoly[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly][pt].X + xOffset, entropyLayerSettings.getFileData()[poly][pt].Y + yOffset);
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                         }
@@ -1603,7 +1604,7 @@ namespace Variance
                         if (!drawnPoly[poly])
                         {
                             int ptCount = previewPoints[poly].Count();
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, ptCount, (pt) =>
 #else
                             for (int pt = 0; pt < ptCount; pt++)
@@ -1612,7 +1613,7 @@ namespace Variance
                                 previewPoints[poly][pt].X += xOverlayVal;
                                 previewPoints[poly][pt].Y += yOverlayVal;
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                         }
@@ -1699,7 +1700,7 @@ namespace Variance
                 {
                     int arraySize = entropyLayerSettings.getFileData()[poly].Length;
                     GeoLibPointF[] tmp = new GeoLibPointF[arraySize];
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     Parallel.For(0, arraySize, (pt) => 
 #else
                     for (Int32 pt = 0; pt < arraySize; pt++)
@@ -1708,7 +1709,7 @@ namespace Variance
                         tmp[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly][pt].X + xOffset,
                                                entropyLayerSettings.getFileData()[poly][pt].Y + yOffset);
                     }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     );
 #endif
                     previewPoints.Add(tmp);
@@ -1755,7 +1756,7 @@ namespace Variance
 
             // This is set later, if needed, to force an early return from the overlap processing path.
             int bpCount = booleanPaths.Count;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             Parallel.For(0, bpCount, (i) => 
 #else
             for (int i = 0; i < bpCount; i++)
@@ -1770,7 +1771,7 @@ namespace Variance
 
                 }
             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
             );
 #endif
             // Scale back down again.

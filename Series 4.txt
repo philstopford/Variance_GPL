@@ -1,5 +1,9 @@
 Changelog for Variance
 
+4.5a1
+
+	- Multithreading work.
+
 4.4.1
 
 	- ChordHandler bug fix to edge case.

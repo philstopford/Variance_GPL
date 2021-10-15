@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.0-ci-20210903.1199118398" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.0-ci-20211006.1311218691" />
     <PackageReference Include="Eto.Veldrid.Wpf" Version="0.1.0" />
   </ItemGroup>
 

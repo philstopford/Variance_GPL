@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
+using System.Threading.Tasks;
 
 namespace Variance
 {
@@ -161,7 +162,7 @@ namespace Variance
                             Int32 colorIndex = tile % varianceContext.vc.colors.resultColors.Count(); // map our result into the available colors.
                             PointF[] currentTile = tilePoly.ToArray();
                             int length = currentTile.Length;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             Parallel.For(0, length, (pt) =>
 #else
                             for (int pt = 0; pt < length; pt++)
@@ -170,7 +171,7 @@ namespace Variance
                                 currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                                 currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
                             }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                             );
 #endif
                             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
@@ -190,7 +191,7 @@ namespace Variance
                 {
                     PointF[] currentTile = tilePoly.ToArray();
                     int length = currentTile.Length;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     Parallel.For(0, length, (pt) =>
 #else
                     for (int pt = 0; pt < length; pt++)
@@ -199,7 +200,7 @@ namespace Variance
                         currentTile[pt].X += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileCol) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                         currentTile[pt].Y += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileRow) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
                     }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                     );
 #endif
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
@@ -219,7 +220,7 @@ namespace Variance
                         Int32 row = commonVars.getSimulationSettings().getDOESettings().getTileList_Value(tile, 1);
                         PointF[] currentTile = tilePoly.ToArray();
                         int length = currentTile.Length;
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                         Parallel.For(0, length, (pt) =>
 #else
                         for (int pt = 0; pt < length; pt++)
@@ -228,7 +229,7 @@ namespace Variance
                             currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
                             currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
                         }
-#if VARIANCETHREADED
+#if !VARIANCESINGLETHREADED
                         );
 #endif
                         mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
