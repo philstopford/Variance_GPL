@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
@@ -12,11 +12,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-
-  </PropertyGroup>
+  
 
   <ItemGroup>
     <Compile Include="..\..\Eto\Common\Variance.cs" Link="support\Variance.cs" />
@@ -24,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.6.0-ci-20211006.1311218691" />
+    <PackageReference Include="Eto.Forms" Version="2.6.0-ci-20211113.1455266255" />
     <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="5.0.1" />

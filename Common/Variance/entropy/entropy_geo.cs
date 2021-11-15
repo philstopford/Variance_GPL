@@ -595,7 +595,7 @@ namespace Variance
                     for (Int32 poly = 0; poly < commonVars.getLayerSettings(layer).getFileData().Count(); poly++)
                     {
                         Path polyPath = GeoWrangler.pathFromPointF(commonVars.getLayerSettings(layer).getFileData()[poly], CentralProperties.scaleFactorForOperation);
-                        string polyHash = polyPath.GetMD5Hash();
+                        string polyHash = Utils.GetMD5Hash(polyPath);
                         if (polyHashCodes.IndexOf(polyHash) == -1)
                         {
                             // Hash not found - assuming unique polygon. This is done to avoid impact of copy/paste fails in layout where

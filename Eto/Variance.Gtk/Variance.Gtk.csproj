@@ -2,14 +2,9 @@
 	
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.6.0-ci-20210903.1199118398" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.6.0-ci-20211113.1455266255" />
     <PackageReference Include="Eto.Veldrid.Gtk" Version="0.1.0" />
   </ItemGroup>
 

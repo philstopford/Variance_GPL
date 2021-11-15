@@ -423,9 +423,9 @@ namespace Variance
 
             // Ensure our hash is current.
             commonVars_.setHashes();
-            string losh = commonVars_.getListOfSettings().GetMD5Hash();
-            string ssth = commonVars_.getSimulationSettings().GetMD5Hash();
-            string geoch = commonVars_.getGeoCoreHandlers().GetMD5Hash();
+            string losh = Utils.GetMD5Hash(commonVars_.getListOfSettings());
+            string ssth = Utils.GetMD5Hash(commonVars_.getSimulationSettings());
+            string geoch = Utils.GetMD5Hash(commonVars_.getGeoCoreHandlers());
 
             // restore the values to avoid trouble.
             commonVars_.setHashes(oldHashes);

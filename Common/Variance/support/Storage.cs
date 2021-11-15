@@ -174,7 +174,7 @@ namespace Variance
                     }
 
                     // Avoid duplicated geometry - this is insurance against older projects files that may have doubled-up polygons included.
-                    string p_Hash = polyData.GetMD5Hash();
+                    string p_Hash = Utils.GetMD5Hash(polyData);
                     switch (hashList.IndexOf(p_Hash))
                     {
                         case -1:

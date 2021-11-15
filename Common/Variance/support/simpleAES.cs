@@ -36,7 +36,8 @@ namespace Variance
         private void init()
         {
             //This is our encryption method
-            RijndaelManaged rm = new RijndaelManaged();
+            // RijndaelManaged rm = new RijndaelManaged();
+            Aes rm = Aes.Create();
 
             //Create an encryptor and a decryptor using our encryption method, key, and vector.
             EncryptorTransform = rm.CreateEncryptor(Key, Vector);
@@ -51,7 +52,8 @@ namespace Variance
         public static byte[] GenerateEncryptionKey()
         {
             //Generate a Key.
-            RijndaelManaged rm = new RijndaelManaged();
+            // RijndaelManaged rm = new RijndaelManaged();
+            Aes rm = Aes.Create();
             rm.GenerateKey();
             return rm.Key;
         }
@@ -60,7 +62,8 @@ namespace Variance
         public static byte[] GenerateEncryptionVector()
         {
             //Generate a Vector
-            RijndaelManaged rm = new RijndaelManaged();
+            // RijndaelManaged rm = new RijndaelManaged();
+            Aes rm = Aes.Create();
             rm.GenerateIV();
             return rm.IV;
         }

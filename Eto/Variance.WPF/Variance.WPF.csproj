@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <ApplicationIcon>Monte_Carlo_2550495b_ico.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
@@ -11,10 +11,6 @@
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
-
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants></DefineConstants>
@@ -34,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.0-ci-20211006.1311218691" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.0-ci-20211113.1455266255" />
     <PackageReference Include="Eto.Veldrid.Wpf" Version="0.1.0" />
   </ItemGroup>
 

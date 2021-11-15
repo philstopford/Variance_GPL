@@ -2207,11 +2207,11 @@ namespace Variance
 
         void pSetHashes()
         {
-            geoCoreHash = geoCore_Handlers.GetMD5Hash();
-            listOfSettingsHash = listOfSettings.GetMD5Hash();
-            entropyGeoHash = simulationSettings.GetMD5Hash();
-            implantHash = implantSettings.GetMD5Hash();
-            entropyImplantHash = implantSimulationSettings.GetMD5Hash();
+            geoCoreHash = Utils.GetMD5Hash(geoCore_Handlers);
+            listOfSettingsHash = Utils.GetMD5Hash(listOfSettings);
+            entropyGeoHash = Utils.GetMD5Hash(simulationSettings);
+            implantHash = Utils.GetMD5Hash(implantSettings);
+            entropyImplantHash = Utils.GetMD5Hash(implantSimulationSettings);
             changed = false;
         }
 
@@ -2223,11 +2223,11 @@ namespace Variance
         string[] pGetHashes()
         {
             string[] hashes = new string[5];
-            hashes[0] = geoCore_Handlers.GetMD5Hash();
-            hashes[1] = listOfSettings.GetMD5Hash();
-            hashes[2] = simulationSettings.GetMD5Hash();
-            hashes[3] = implantSettings.GetMD5Hash();
-            hashes[4] = implantSimulationSettings.GetMD5Hash();
+            hashes[0] = Utils.GetMD5Hash(geoCore_Handlers);
+            hashes[1] = Utils.GetMD5Hash(listOfSettings);
+            hashes[2] = Utils.GetMD5Hash(simulationSettings);
+            hashes[3] = Utils.GetMD5Hash(implantSettings);
+            hashes[4] = Utils.GetMD5Hash(implantSimulationSettings);
 
             return hashes;
         }
@@ -2253,35 +2253,35 @@ namespace Variance
 
         void pCheckChanged()
         {
-            string tmp = geoCore_Handlers.GetMD5Hash();
+            string tmp = Utils.GetMD5Hash(geoCore_Handlers);
             if ((geoCoreHash != null) && (tmp != geoCoreHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = listOfSettings.GetMD5Hash();
+            tmp = Utils.GetMD5Hash(listOfSettings);
             if ((listOfSettingsHash != null) && (tmp != listOfSettingsHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = simulationSettings.GetMD5Hash();
+            tmp = Utils.GetMD5Hash(simulationSettings);
             if ((entropyGeoHash != null) && (tmp != entropyGeoHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = implantSettings.GetMD5Hash();
+            tmp = Utils.GetMD5Hash(implantSettings);
             if ((implantHash != null) && (tmp != implantHash))
             {
                 changed = true;
                 return;
             }
 
-            tmp = implantSimulationSettings.GetMD5Hash();
+            tmp = Utils.GetMD5Hash(implantSimulationSettings);
             if ((entropyImplantHash != null) && (tmp != entropyImplantHash))
             {
                 changed = true;
