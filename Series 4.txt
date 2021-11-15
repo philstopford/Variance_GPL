@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.5a1
 
+	- NET 6.0 migration.
 	- Multithreading work.
 
 4.4.1
