@@ -57,7 +57,7 @@ internal static class Program
                 // Extract XML file.
                 try
                 {
-                    string[] tokens = args[i].Split(new char[] { '.' });
+                    string[] tokens = args[i].Split(new[] { '.' });
                     string extension = tokens[^1];
                     if (extension.ToUpper() == "VARIANCE" || extension.ToUpper() == "XML")
                     {

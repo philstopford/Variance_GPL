@@ -2,7 +2,7 @@
 
 namespace Variance;
 
-internal class VHeadless
+internal static class VHeadless
 {
     private static void Main(string[] args)
     {

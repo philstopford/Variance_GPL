@@ -16,11 +16,11 @@ public class Headless
         public ConsoleSpinner()
         {
             counter = 0;
-            sequence = new string[] { "/", "-", "\\", "|" };
-            sequence = new string[] { ".", "o", "0", "o" };
-            sequence = new string[] { "+", "x" };
-            sequence = new string[] { "V", "<", "^", ">" };
-            sequence = new string[] { ".   ", "..  ", "... ", "...." };
+            sequence = new[] { "/", "-", "\\", "|" };
+            sequence = new[] { ".", "o", "0", "o" };
+            sequence = new[] { "+", "x" };
+            sequence = new[] { "V", "<", "^", ">" };
+            sequence = new[] { ".   ", "..  ", "... ", "...." };
         }
 
         public void Turn()
@@ -110,9 +110,9 @@ public class Headless
                         Console.WriteLine("Converging on: " + entropyControl.getResultPackage().getMeanAndStdDev());
                         t = entropyControl.getResultPackage().getHistograms(50);
                     }
-                    for (int l = 0; l < t.Count; l++)
+                    foreach (string t1 in t)
                     {
-                        Console.WriteLine(t[l]);
+                        Console.WriteLine(t1);
                     }
                 }
                 catch (Exception)
@@ -148,9 +148,9 @@ public class Headless
             Console.WriteLine("Converged on: " + entropyControl.getResultPackage().getMeanAndStdDev());
             t = entropyControl.getResultPackage().getHistograms(50);
         }
-        for (int l = 0; l < t.Count; l++)
+        foreach (string t1 in t)
         {
-            Console.WriteLine(t[l]);
+            Console.WriteLine(t1);
         }
     }
 
@@ -178,57 +178,58 @@ public class Headless
 
     private void abortRun()
     {
-        if (!commonVars.cancelling)
+        if (commonVars.cancelling)
         {
-            if (commonVars.runAbort && !commonVars.userCancelQuery)
-            {
-                commonVars.userCancelQuery = true;
-                commonVars.cancelling = true;
-                Console.WriteLine("Abort and save results so far? (y/n) ");
-                string userInput = Console.ReadLine();
-                if (userInput.ToUpper().StartsWith("Y"))
-                {
-                    commonVars.runAbort = true;
-                }
-                else
-                {
-                    commonVars.runAbort = false;
-                }
-                commonVars.userCancelQuery = false;
-            }
-            commonVars.cancelling = false;
+            return;
         }
+
+        if (commonVars.runAbort && !commonVars.userCancelQuery)
+        {
+            commonVars.userCancelQuery = true;
+            commonVars.cancelling = true;
+            Console.WriteLine("Abort and save results so far? (y/n) ");
+            string userInput = Console.ReadLine();
+            if (userInput != null)
+            {
+                commonVars.runAbort = userInput.ToUpper().StartsWith("Y");
+            }
+
+            commonVars.userCancelQuery = false;
+        }
+        commonVars.cancelling = false;
     }
 
     private void abortRunMT(SimResultPackage resultPackage, CancellationTokenSource cancelSource, CancellationToken cancellationToken)
     {
-        if (!commonVars.cancelling)
+        if (commonVars.cancelling)
         {
-            if (commonVars.runAbort && !commonVars.userCancelQuery)
-            {
-                commonVars.userCancelQuery = true;
-                commonVars.cancelling = true;
-                Console.WriteLine("Abort and save results so far? (y/n) ");
-                string userInput = Console.ReadLine();
-                if (userInput.ToUpper().StartsWith("Y"))
-                {
-                    commonVars.runAbort = true;
-                }
-                else
-                {
-                    commonVars.runAbort = false;
-                }
-                commonVars.userCancelQuery = false;
-
-                if (commonVars.runAbort)
-                {
-                    resultPackage.setState(false);
-                    cancelSource.Cancel();
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-            }
-            commonVars.cancelling = false;
+            return;
         }
+
+        if (commonVars.runAbort && !commonVars.userCancelQuery)
+        {
+            commonVars.userCancelQuery = true;
+            commonVars.cancelling = true;
+            Console.WriteLine("Abort and save results so far? (y/n) ");
+            string userInput = Console.ReadLine();
+            if (userInput != null && userInput.ToUpper().StartsWith("Y"))
+            {
+                commonVars.runAbort = true;
+            }
+            else
+            {
+                commonVars.runAbort = false;
+            }
+            commonVars.userCancelQuery = false;
+
+            if (commonVars.runAbort)
+            {
+                resultPackage.setState(false);
+                cancelSource.Cancel();
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+        }
+        commonVars.cancelling = false;
     }
 
     public void cancelHandler(object sender, ConsoleCancelEventArgs e)
@@ -262,11 +263,7 @@ public class Headless
         }
         Console.WriteLine("Starting run for " + tmp + " cases.");
         entropyControl.swTime = 0.0;
-        bool threaded = true;
-        if (varianceContext.numberOfThreads == 1)
-        {
-            threaded = false;
-        }
+        bool threaded = varianceContext.numberOfThreads != 1;
 
         entropyControl.EntropyRun(commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases), csvFile, threaded, false);
     }
@@ -445,15 +442,13 @@ public class Headless
                 ErrorReporter.showMessage_OK("File does not exist. Exiting.", "Error: ");
                 return;
             }
-            else
+
+            string[] tokens = varianceContext.xmlFileArg.Split(new[] { '.' });
+            // XML file?
+            if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
-                string[] tokens = varianceContext.xmlFileArg.Split(new char[] { '.' });
-                // XML file?
-                if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
-                {
-                    ErrorReporter.showMessage_OK("Valid input file is expected. Exiting.", "Error: ");
-                    return;
-                }
+                ErrorReporter.showMessage_OK("Valid input file is expected. Exiting.", "Error: ");
+                return;
             }
 
             Console.Write("Loading from " + varianceContext.xmlFileArg + "....");
