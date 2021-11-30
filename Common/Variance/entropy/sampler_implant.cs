@@ -3,117 +3,118 @@ using System.Threading;
 using System.Threading.Tasks;
 using Timer = System.Timers.Timer;
 
-namespace Variance
+namespace Variance;
+
+internal class Sampler_Implant
 {
-    class Sampler_Implant
+    public delegate void updateProgressBar(double val);
+    public updateProgressBar updateProgressBarFunc { get; set; }
+
+    private ChaosSettings_implant[] samples;
+
+    private int dimensions;
+    private int sampleCount, samples_par;
+    private bool pMode;
+    private double progress;
+
+    private EntropySettings entropySettings_implant;
+
+    public Sampler_Implant(int number, bool previewMode, EntropySettings entropySettings)
     {
-        public delegate void updateProgressBar(double val);
-        public updateProgressBar updateProgressBarFunc { get; set; }
+        init(number, previewMode, entropySettings);
+    }
 
-        ChaosSettings_implant[] samples;
+    private void init(int number, bool previewMode, EntropySettings entropySettings)
+    {
+        dimensions = ChaosSettings_implant.getDimensions();
+        sampleCount = number;
+        pMode = previewMode;
+        entropySettings_implant = entropySettings;
+    }
 
-        int dimensions;
-        int sampleCount, samples_par;
-        bool pMode;
-        double progress;
+    public int getDimensions()
+    {
+        return pGetDimensions();
+    }
 
-        EntropySettings entropySettings_implant;
+    private int pGetDimensions()
+    {
+        return dimensions;
+    }
+    public void sample(bool useThreads)
+    {
+        progress = 0;
+        samples = new ChaosSettings_implant[sampleCount];
 
-        public Sampler_Implant(int number, bool previewMode, EntropySettings entropySettings)
+        if (useThreads)
         {
-            init(number, previewMode, entropySettings);
+            threaded();
         }
-
-        void init(int number, bool previewMode, EntropySettings entropySettings)
+        else
         {
-            dimensions = ChaosSettings_implant.getDimensions();
-            sampleCount = number;
-            pMode = previewMode;
-            entropySettings_implant = entropySettings;
+            unthreaded();
         }
+    }
 
-        public int getDimensions()
+    private void unthreaded()
+    {
+        int increment = sampleCount / 100;
+        if (increment < 1)
         {
-            return pGetDimensions();
+            increment = 1;
         }
+        updateProgressBarFunc?.Invoke(progress);
 
-        int pGetDimensions()
+        for (int i = 0; i < sampleCount; i++)
         {
-            return dimensions;
-        }
-        public void sample(bool useThreads)
-        {
-            progress = 0;
-            samples = new ChaosSettings_implant[sampleCount];
+            ChaosSettings_implant currentJobSettings = new(pMode, entropySettings_implant);
+            samples[i] = currentJobSettings;
 
-            if (useThreads)
+            if (i % increment != 0)
             {
-                threaded();
+                continue;
             }
-            else
-            {
-                unthreaded();
-            }
-        }
 
-        void unthreaded()
-        {
-            int increment = sampleCount / 100;
-            if (increment < 1)
-            {
-                increment = 1;
-            }
             updateProgressBarFunc?.Invoke(progress);
-
-            for (int i = 0; i < sampleCount; i++)
-            {
-                ChaosSettings_implant currentJobSettings = new ChaosSettings_implant(pMode, entropySettings_implant);
-                samples[i] = currentJobSettings;
-
-                if (i % increment == 0)
-                {
-                    updateProgressBarFunc?.Invoke(progress);
-                    progress += 0.01;
-                }
-            }
+            progress += 0.01;
         }
+    }
 
-        void updateHost(object sender, EventArgs e)
-        {
-            progress = (double)samples_par / sampleCount;
-            updateProgressBarFunc?.Invoke(progress);
-        }
+    private void updateHost(object sender, EventArgs e)
+    {
+        progress = (double)samples_par / sampleCount;
+        updateProgressBarFunc?.Invoke(progress);
+    }
 
-        void threaded()
-        {
-            samples_par = 0;
-            // Set up timers for the UI refresh
-            Timer m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
-            m_timer.Start();
-            m_timer.Elapsed += updateHost;
+    private void threaded()
+    {
+        samples_par = 0;
+        // Set up timers for the UI refresh
+        Timer m_timer = new() {AutoReset = true, Interval = CentralProperties.timer_interval};
+        m_timer.Start();
+        m_timer.Elapsed += updateHost;
 
-            ParallelOptions po = new ParallelOptions();
+        ParallelOptions po = new();
 
-            Parallel.For(0, sampleCount, po, (i, loopState) =>
+        Parallel.For(0, sampleCount, po, (i, loopState) =>
             {
-                ChaosSettings_implant currentJobSettings = new ChaosSettings_implant(pMode, entropySettings_implant);
+                ChaosSettings_implant currentJobSettings = new(pMode, entropySettings_implant);
                 samples[i] = currentJobSettings;
                 Interlocked.Increment(ref samples_par);
             }
-            );
+        );
 
-            m_timer.Stop();
-            m_timer.Dispose();
-        }
+        m_timer.Stop();
+        m_timer.Dispose();
+    }
 
-        public ChaosSettings_implant getSample(int i)
-        {
-            return pGetSample(i);
-        }
+    public ChaosSettings_implant getSample(int i)
+    {
+        return pGetSample(i);
+    }
 
-        ChaosSettings_implant pGetSample(int i)
-        {
-            return samples[i];
-        }
+    private ChaosSettings_implant pGetSample(int i)
+    {
+        return samples[i];
     }
 }

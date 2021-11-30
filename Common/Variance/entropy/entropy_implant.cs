@@ -15,180 +15,176 @@ using oasis;
 using utility;
 using Timer = System.Timers.Timer;
 
-namespace Variance
+namespace Variance;
+
+public partial class Entropy
 {
-    public partial class Entropy
+    public delegate void forceImplantRepaint();
+    public forceImplantRepaint forceImplantRepaintFunc { get; set; }
+
+    public delegate void updateImplantSimUIMT();
+    public updateSimUIMT updateImplantSimUIMTFunc { get; set; }
+
+    public delegate void updateImplantSimUI(SimResultPackage implantResultPackage, string resultString);
+    public updateSimUI updateImplantSimUIFunc { get; set; }
+
+    public delegate void implantSimRunningUI();
+    public simRunningUI implantSimRunningUIFunc { get; set; }
+
+    private SimResultPackage implantResultPackage;
+
+    public SimResultPackage getImplantResultPackage()
     {
-        public delegate void forceImplantRepaint();
-        public forceImplantRepaint forceImplantRepaintFunc { get; set; }
+        return pGetImplantResultPackage();
+    }
 
-        public delegate void updateImplantSimUIMT();
-        public updateSimUIMT updateImplantSimUIMTFunc { get; set; }
+    private SimResultPackage pGetImplantResultPackage()
+    {
+        return implantResultPackage;
+    }
 
-        public delegate void updateImplantSimUI(SimResultPackage implantResultPackage, string resultString);
-        public updateSimUI updateImplantSimUIFunc { get; set; }
+    private Sampler_Implant sampler_implant;
 
-        public delegate void implantSimRunningUI();
-        public simRunningUI implantSimRunningUIFunc { get; set; }
+    private void setSampler_implant(int numberOfCases, bool previewMode)
+    {
+        sampler_implant = new Sampler_Implant(numberOfCases, previewMode, commonVars.getImplantSimulationSettings());
+        string tmp = commonVars.getFriendly() ? Utils.friendlyNumber(sampler_implant.getDimensions() * numberOfCases) : (sampler_implant.getDimensions() * numberOfCases).ToString();
+        updateStatus?.Invoke("Computing " + tmp + " samples.");
+        sampler_implant.updateProgressBarFunc = uiProgressBarWrapper;
+    }
 
-        SimResultPackage implantResultPackage;
+    private void entropyRunCore_implant_singleThread(bool previewMode, int numberOfCases)
+    {
+        const int numberOfResultsFields = 1;
+        // Let's sample this
+        const int sampleRate = 100;
 
-        public SimResultPackage getImplantResultPackage()
+        setSampler_implant(numberOfCases, previewMode);
+        sampler_implant.sample(false);
+        sw.Start();
+
+        implantResultPackage = new SimResultPackage(ref varianceContext.implantPreviewLock, numberOfCases, numberOfResultsFields);
+        sw.Reset();
+        for (int i = 0; i < numberOfCases; i++)
         {
-            return pGetImplantResultPackage();
-        }
-
-        SimResultPackage pGetImplantResultPackage()
-        {
-            return implantResultPackage;
-        }
-
-        Sampler_Implant sampler_implant;
-
-        void setSampler_implant(int numberOfCases, bool previewMode)
-        {
-            sampler_implant = new Sampler_Implant(numberOfCases, previewMode, commonVars.getImplantSimulationSettings());
-            string tmp;
-            if (commonVars.getFriendly())
-            {
-                tmp = Utils.friendlyNumber(sampler_implant.getDimensions() * numberOfCases);
-            }
-            else
-            {
-                tmp = (sampler_implant.getDimensions() * numberOfCases).ToString();
-            }
-            updateStatus?.Invoke("Computing " + tmp + " samples.");
-            sampler_implant.updateProgressBarFunc = uiProgressBarWrapper;
-        }
-
-        void entropyRunCore_implant_singleThread(bool previewMode, Int32 numberOfCases)
-        {
-            Int32 numberOfResultsFields = 1;
-            // Let's sample this
-            Int32 sampleRate = 100;
-
-            setSampler_implant(numberOfCases, previewMode);
-            sampler_implant.sample(false);
             sw.Start();
-
-            implantResultPackage = new SimResultPackage(ref varianceContext.implantPreviewLock, numberOfCases, numberOfResultsFields);
-            sw.Reset();
-            for (Int32 i = 0; i < numberOfCases; i++)
-            {
-                sw.Start();
-                currentProgress = i + 1;
-                try
-                {
-                    // Get the results from the implant calc engine.
-                    ChaosSettings_implant cs = sampler_implant.getSample(i);
-                    implantResultPackage.Add(entropyEval_implant(cs));
-
-                    if ((numberOfCases == 1) || (currentProgress % sampleRate == 0))
-                    {
-                        // Update the preview configuration.
-                        if (implantResultPackage.getImplantResult(i).isValid())
-                        {
-                            if (numberOfCases > 1)
-                            {
-                                try
-                                {
-                                    resultString = implantResultPackage.getMeanAndStdDev();
-                                }
-                                catch (Exception)
-                                {
-                                    // Non-critical if an exception is raised. Ignore and carry on.
-                                }
-                            }
-                            else
-                            {
-                                // Need to workaround some oddness here. The .ToString() calls below seemed to turn "0.0" into blanks.
-                                string tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getResult()).ToString("0.##");
-                                resultString += tmp + ",";
-
-                                tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getMin()).ToString("0.##");
-                                resultString += tmp + ",";
-
-                                tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getMax()).ToString("0.##");
-                                resultString += tmp;
-                            }
-                            updateImplantSimUIFunc?.Invoke(false, implantResultPackage, resultString);
-                        }
-                        // Force redraw. We could use the progress bar to repaint, though.
-                        // Note that this is an ugly hack to also ensure we collect stop button presses.
-                        forceImplantRepaintFunc?.Invoke();
-                    }
-                }
-                catch (Exception)
-                {
-                    // Reject the case - something happened.
-                }
-                // Nudge progress bar.
-                if (numberOfCases > 1)
-                {
-                    timeOfFlight_implant(sw.Elapsed.TotalSeconds);
-                    stepProgress?.Invoke();
-                }
-
-                // Check if user cancelled.
-                if (abortRunFunc != null)
-                {
-                    abortRunFunc();
-                    if (commonVars.runAbort)
-                    {
-                        sw.Stop();
-                        implantResultPackage.setState(false);
-                        commonVars.runAbort = false; // reset state to allow user to abort save of results.
-                        break;
-                    }
-                }
-            }
-
-            implantResultPackage.setRunTime(sw.Elapsed.TotalSeconds);
-            sw.Stop();
-        }
-
-        void entropyRunCore_implant_multipleThread(bool previewMode, Int32 numberOfCases)
-        {
-            setSampler_implant(numberOfCases, previewMode);
-            sampler.sample(true, false);
-
-            Int32 numberOfResultsFields = 1;
-
-            implantResultPackage = new SimResultPackage(ref varianceContext.implantPreviewLock, numberOfCases, numberOfResultsFields);
-
-            multithreadWarningFunc?.Invoke();
-
-            // Set up timers for the UI refresh
-            commonVars.m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
-            updateImplantSimUIMTFunc?.Invoke();
-            commonVars.m_timer.Start();
-
-            // Set our parallel task options based on user settings.
-            ParallelOptions po = new ParallelOptions();
-            // Attempt at parallelism.
-            CancellationTokenSource cancelSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = cancelSource.Token;
-            switch (varianceContext.numberOfThreads)
-            {
-                case -1:
-                    po.MaxDegreeOfParallelism = commonVars.HTCount;
-                    break;
-                default:
-                    po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
-                    break;
-            }
-
-            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
-            {
-                if (po.MaxDegreeOfParallelism > 1) // avoid setting to 0
-                {
-                    po.MaxDegreeOfParallelism -= 1;
-                }
-            }
-
+            currentProgress = i + 1;
             try
             {
-                Parallel.For(0, numberOfCases, po, (i, loopState) =>
+                // Get the results from the implant calc engine.
+                ChaosSettings_implant cs = sampler_implant.getSample(i);
+                implantResultPackage.Add(entropyEval_implant(cs));
+
+                if (numberOfCases == 1 || currentProgress % sampleRate == 0)
+                {
+                    // Update the preview configuration.
+                    if (implantResultPackage.getImplantResult(i).isValid())
+                    {
+                        if (numberOfCases > 1)
+                        {
+                            try
+                            {
+                                resultString = implantResultPackage.getMeanAndStdDev();
+                            }
+                            catch (Exception)
+                            {
+                                // Non-critical if an exception is raised. Ignore and carry on.
+                            }
+                        }
+                        else
+                        {
+                            // Need to workaround some oddness here. The .ToString() calls below seemed to turn "0.0" into blanks.
+                            string tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getResult()).ToString("0.##");
+                            resultString += tmp + ",";
+
+                            tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getMin()).ToString("0.##");
+                            resultString += tmp + ",";
+
+                            tmp = Convert.ToDouble(implantResultPackage.getImplantResult(i).getMax()).ToString("0.##");
+                            resultString += tmp;
+                        }
+                        updateImplantSimUIFunc?.Invoke(false, implantResultPackage, resultString);
+                    }
+                    // Force redraw. We could use the progress bar to repaint, though.
+                    // Note that this is an ugly hack to also ensure we collect stop button presses.
+                    forceImplantRepaintFunc?.Invoke();
+                }
+            }
+            catch (Exception)
+            {
+                // Reject the case - something happened.
+            }
+            // Nudge progress bar.
+            if (numberOfCases > 1)
+            {
+                timeOfFlight_implant(sw.Elapsed.TotalSeconds);
+                stepProgress?.Invoke();
+            }
+
+            // Check if user cancelled.
+            if (abortRunFunc == null)
+            {
+                continue;
+            }
+
+            abortRunFunc();
+            if (!commonVars.runAbort)
+            {
+                continue;
+            }
+
+            sw.Stop();
+            implantResultPackage.setState(false);
+            commonVars.runAbort = false; // reset state to allow user to abort save of results.
+            break;
+        }
+
+        implantResultPackage.setRunTime(sw.Elapsed.TotalSeconds);
+        sw.Stop();
+    }
+
+    private void entropyRunCore_implant_multipleThread(bool previewMode, int numberOfCases)
+    {
+        setSampler_implant(numberOfCases, previewMode);
+        sampler.sample(true, false);
+
+        const int numberOfResultsFields = 1;
+
+        implantResultPackage = new SimResultPackage(ref varianceContext.implantPreviewLock, numberOfCases, numberOfResultsFields);
+
+        multithreadWarningFunc?.Invoke();
+
+        // Set up timers for the UI refresh
+        commonVars.m_timer = new Timer {AutoReset = true, Interval = CentralProperties.timer_interval};
+        updateImplantSimUIMTFunc?.Invoke();
+        commonVars.m_timer.Start();
+
+        // Set our parallel task options based on user settings.
+        ParallelOptions po = new();
+        // Attempt at parallelism.
+        CancellationTokenSource cancelSource = new();
+        CancellationToken cancellationToken = cancelSource.Token;
+        switch (varianceContext.numberOfThreads)
+        {
+            case -1:
+                po.MaxDegreeOfParallelism = commonVars.HTCount;
+                break;
+            default:
+                po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
+                break;
+        }
+
+        if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
+        {
+            if (po.MaxDegreeOfParallelism > 1) // avoid setting to 0
+            {
+                po.MaxDegreeOfParallelism -= 1;
+            }
+        }
+
+        try
+        {
+            Parallel.For(0, numberOfCases, po, (i, loopState) =>
                 {
                     try
                     {
@@ -200,11 +196,11 @@ namespace Variance
                             try
                             {
                                 {
-                                    if ((commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1) && (baseFileName != ""))
+                                    if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1 && baseFileName != "")
                                     {
                                         switch (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType))
                                         {
-                                            case (Int32)CommonVars.external_Type.svg:
+                                            case (int)CommonVars.external_Type.svg:
                                                 writeSVG(currentResult, i, numberOfCases);
                                                 break;
                                             default:
@@ -236,445 +232,444 @@ namespace Variance
                         loopState.Stop();
                     }
                 }
-                );
-            }
-            catch (OperationCanceledException)
-            {
-                implantResultPackage.setState(false);
-                commonVars.runAbort = false; // reset state to allow user to abort save of results.
-                commonVars.m_timer.Stop();
-                sw.Stop();
-            }
-            catch (AggregateException)
-            {
-                commonVars.m_timer.Stop();
-                sw.Stop();
-            }
-            catch (Exception)
-            {
-            }
-            commonVars.m_timer.Stop();
-            commonVars.m_timer.Dispose();
-            implantResultPackage.setRunTime(swTime);
-            sw.Stop();
-            sw.Reset();
+            );
         }
-
-        Results_implant entropyEval_implant(ChaosSettings_implant currentJobSettings)
+        catch (OperationCanceledException)
         {
-            // UI handler has already applied 'accuracy' to the resolution and angular resolution values.
+            implantResultPackage.setState(false);
+            commonVars.runAbort = false; // reset state to allow user to abort save of results.
+            commonVars.m_timer.Stop();
+            sw.Stop();
+        }
+        catch (AggregateException)
+        {
+            commonVars.m_timer.Stop();
+            sw.Stop();
+        }
+        catch (Exception)
+        {
+        }
+        commonVars.m_timer.Stop();
+        commonVars.m_timer.Dispose();
+        implantResultPackage.setRunTime(swTime);
+        sw.Stop();
+        sw.Reset();
+    }
 
-            ChaosEngine_implant currentJobEngine = new ChaosEngine_implant(currentJobSettings, commonVars.getImplantSimulationSettings(), commonVars.getImplantSettings());
+    private Results_implant entropyEval_implant(ChaosSettings_implant currentJobSettings)
+    {
+        // UI handler has already applied 'accuracy' to the resolution and angular resolution values.
 
-            Results_implant evalResults = new Results_implant();
+        ChaosEngine_implant currentJobEngine = new(currentJobSettings, commonVars.getImplantSimulationSettings(), commonVars.getImplantSettings());
 
-            if (currentJobEngine.isValid())
-            {
-                evalResults.setResult(currentJobEngine.getResult());
-                evalResults.setMin(currentJobEngine.getMin());
-                evalResults.setMax(currentJobEngine.getMax());
-                evalResults.resistWidthVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistCDVar);
-                evalResults.resistHeightVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistHeightVar);
-                evalResults.resistCRRVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistTopCRRVar);
-                evalResults.tiltVar = currentJobSettings.getValue(ChaosSettings_implant.properties.tiltVar);
-                evalResults.twistVar = currentJobSettings.getValue(ChaosSettings_implant.properties.twistVar);
-                evalResults.setResistShapes(commonVars.getColors(), currentJobEngine.getGeom(), currentJobEngine.getBGGeom(), currentJobEngine.getShadow(), currentJobEngine.getMinShadow(), currentJobEngine.getMaxShadow());
-                evalResults.setValid(currentJobEngine.isValid());
-            }
+        Results_implant evalResults = new();
+
+        if (!currentJobEngine.isValid())
+        {
             return evalResults;
         }
 
-        public void entropyRun_implant(Int32 numberOfCases, string csvFile, bool useThreads)
+        evalResults.setResult(currentJobEngine.getResult());
+        evalResults.setMin(currentJobEngine.getMin());
+        evalResults.setMax(currentJobEngine.getMax());
+        evalResults.resistWidthVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistCDVar);
+        evalResults.resistHeightVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistHeightVar);
+        evalResults.resistCRRVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistTopCRRVar);
+        evalResults.tiltVar = currentJobSettings.getValue(ChaosSettings_implant.properties.tiltVar);
+        evalResults.twistVar = currentJobSettings.getValue(ChaosSettings_implant.properties.twistVar);
+        evalResults.setResistShapes(commonVars.getColors(), currentJobEngine.getGeom(), currentJobEngine.getBGGeom(), currentJobEngine.getShadow(), currentJobEngine.getMinShadow(), currentJobEngine.getMaxShadow());
+        evalResults.setValid(currentJobEngine.isValid());
+        return evalResults;
+    }
+
+    public void entropyRun_implant(int numberOfCases, string csvFile, bool useThreads)
+    {
+        pEntropyRun_implant(numberOfCases, csvFile, useThreads);
+    }
+
+    private void pEntropyRun_implant(int numberOfCases, string csvFile, bool useThreads)
+    {
+        reset();
+        clearAbortFlagFunc?.Invoke();
+        string emailString;
+
+        bool simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
+        switch (simState)
         {
-            pEntropyRun_implant(numberOfCases, csvFile, useThreads);
+            case false:
+                emailString = "Implant run aborted";
+                break;
+            default:
+                emailString = "Implant run completed";
+                break;
+        }
+        // Assume user error if perJob is set and not onCompletion.
+        // We'll use simulationSettings here just because legacy put the settings there and it's the easiest option.
+        if (commonVars.getNonSimulationSettings().emailOnCompletion && numberOfCases > 1)
+        {
+            Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
         }
 
-        void pEntropyRun_implant(Int32 numberOfCases, string csvFile, bool useThreads)
+        if (numberOfCases > 1)
         {
-            reset();
-            clearAbortFlagFunc?.Invoke();
-            string emailString;
-
-            bool simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
-            switch (simState)
-            {
-                case false:
-                    emailString = "Implant run aborted";
-                    break;
-                default:
-                    emailString = "Implant run completed";
-                    break;
-            }
-            // Assume user error if perJob is set and not onCompletion.
-            // We'll use simulationSettings here just because legacy put the settings there and it's the easiest option.
-            if (commonVars.getNonSimulationSettings().emailOnCompletion && (numberOfCases > 1))
-            {
-                Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
-            }
-
-            if (numberOfCases > 1)
-            {
-                implantResultPackage.getMeanAndStdDev();
-                updateStatus?.Invoke(lastSimResultsOverview);
-            }
-
-            postSimUIFunc?.Invoke();
+            implantResultPackage.getMeanAndStdDev();
+            updateStatus?.Invoke(lastSimResultsOverview);
         }
 
-        public void timeOfFlight_implant(double swTime_)
-        {
-            pTimeOfFlight_implant(swTime_);
-        }
+        postSimUIFunc?.Invoke();
+    }
 
-        void pTimeOfFlight_implant(double swTime_)
+    public void timeOfFlight_implant(double swTime_)
+    {
+        pTimeOfFlight_implant(swTime_);
+    }
+
+    private void pTimeOfFlight_implant(double swTime_)
+    {
+        // Update status bar with elapsed and predicted time.
+        try
         {
-            // Update status bar with elapsed and predicted time.
-            try
+            if (swTime_ == 0.0)
             {
-                if (swTime_ != 0.0)
+                return;
+            }
+
+            int numberOfCases = commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases);
+
+            TimeSpan eT = TimeSpan.FromSeconds(swTime_);
+            string statusLineString = eT.Seconds + " s elapsed";
+            if (eT.Minutes >= 1)
+            {
+                // We have minutes
+                statusLineString = eT.Minutes + " m, " + statusLineString;
+            }
+            if (eT.Hours >= 1)
+            {
+                // We have hours.
+                statusLineString = eT.Hours + " h, " + statusLineString;
+            }
+
+            if (currentProgress != numberOfCases)
+            {
+                double completionTime = swTime_ / currentProgress * numberOfCases - currentProgress;
+                TimeSpan cT = TimeSpan.FromSeconds(completionTime);
+                statusLineString += "; ";
+
+                if (cT.Hours >= 1)
                 {
-                    int numberOfCases = commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases);
-
-                    TimeSpan eT = TimeSpan.FromSeconds(swTime_);
-                    string statusLineString = eT.Seconds + " s elapsed";
-                    if (eT.Minutes >= 1)
-                    {
-                        // We have minutes
-                        statusLineString = eT.Minutes + " m, " + statusLineString;
-                    }
-                    if (eT.Hours >= 1)
-                    {
-                        // We have hours.
-                        statusLineString = eT.Hours + " h, " + statusLineString;
-                    }
-
-                    if (currentProgress != numberOfCases)
-                    {
-                        double completionTime = ((swTime_ / currentProgress) * numberOfCases - currentProgress);
-                        TimeSpan cT = TimeSpan.FromSeconds(completionTime);
-                        statusLineString += "; ";
-
-                        if (cT.Hours >= 1)
-                        {
-                            // We have hours.
-                            statusLineString += cT.Hours + " h";
-                        }
-                        if (cT.Minutes >= 1)
-                        {
-                            if (cT.Hours >= 1)
-                            {
-                                statusLineString += ", ";
-                            }
-                            // We have minutes
-                            statusLineString += cT.Minutes + " m";
-                        }
-                        if (!((cT.Minutes < 1) && (cT.Hours < 1)))
-                        {
-                            statusLineString += ", ";
-                        }
-                        statusLineString += cT.Seconds + " s remaining";
-                    }
-
-                    string tmp;
-                    if (commonVars.getFriendly())
-                    {
-                        tmp = Utils.friendlyNumber(currentProgress) + "/" + Utils.friendlyNumber(numberOfCases);
-                    }
-                    else
-                    {
-                        tmp = currentProgress + "/" + numberOfCases;
-                    }
-
-                    statusLineString += " => (" + tmp + ") complete";
-                    updateStatus?.Invoke(statusLineString);
+                    // We have hours.
+                    statusLineString += cT.Hours + " h";
                 }
+                if (cT.Minutes >= 1)
+                {
+                    if (cT.Hours >= 1)
+                    {
+                        statusLineString += ", ";
+                    }
+                    // We have minutes
+                    statusLineString += cT.Minutes + " m";
+                }
+                if (!(cT.Minutes < 1 && cT.Hours < 1))
+                {
+                    statusLineString += ", ";
+                }
+                statusLineString += cT.Seconds + " s remaining";
             }
-            catch (Exception)
+
+            string tmp;
+            if (commonVars.getFriendly())
             {
-                // We don't care - this is a UI update call; non-critical.
+                tmp = Utils.friendlyNumber(currentProgress) + "/" + Utils.friendlyNumber(numberOfCases);
             }
+            else
+            {
+                tmp = currentProgress + "/" + numberOfCases;
+            }
+
+            statusLineString += " => (" + tmp + ") complete";
+            updateStatus?.Invoke(statusLineString);
+        }
+        catch (Exception)
+        {
+            // We don't care - this is a UI update call; non-critical.
+        }
+    }
+
+    private bool saveResults_implant()
+    {
+        string csvFileName = baseFileName;
+        csvFileName += ".csv";
+
+        bool returnValue = false;
+
+        int doneCases = implantResultPackage.getListOfResults_implant().Count;
+
+        int rows = doneCases + 1;
+        string[] stringList = new string[rows];
+
+        configProgress?.Invoke(0, doneCases);
+        string headerString = "Run,Implant Shadowing";
+        headerString += ",";
+        headerString += "CDUVar" + ",";
+        headerString += "HeightVar" + ",";
+        headerString += "CRRVar" + ",";
+        headerString += "tiltAngleVar" + ",";
+        headerString += "twistAngleVar";
+        stringList[0] = headerString;
+        commonVars.runAbort = false;
+
+        try
+        {
+            summaryFile_implant(csvFileName);
+        }
+        catch (Exception)
+        {
+            // MessageBox.Show(ex.Message);
         }
 
-        bool saveResults_implant()
+        string statusLine = "No CSV or external files written per job settings.All done.";
+
+        if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
         {
-            string csvFileName = baseFileName;
-            csvFileName += ".csv";
+            // Set our parallel task options based on user settings.
+            // Attempt at parallelism.
+            CancellationTokenSource cancelSource = new();
+            CancellationToken cancellationToken = cancelSource.Token;
 
-            bool returnValue = false;
-
-            Int32 doneCases = implantResultPackage.getListOfResults_implant().Count;
-
-            int rows = doneCases + 1;
-            string[] stringList = new string[rows];
-
-            configProgress?.Invoke(0, doneCases);
-            string headerString = "Run,Implant Shadowing";
-            headerString += ",";
-            headerString += "CDUVar" + ",";
-            headerString += "HeightVar" + ",";
-            headerString += "CRRVar" + ",";
-            headerString += "tiltAngleVar" + ",";
-            headerString += "twistAngleVar";
-            stringList[0] = headerString;
-            commonVars.runAbort = false;
-
-            try
+            string statusString = "Compiling CSV file for results";
+            updateStatus?.Invoke(statusString);
+            int counter = 0;
+            Parallel.For(0, doneCases, (resultEntry, loopState) =>
             {
-                summaryFile_implant(csvFileName);
-            }
-            catch (Exception)
-            {
-                // MessageBox.Show(ex.Message);
-            }
+                try
+                {
+                    if (implantResultPackage.getImplantResult(resultEntry).isValid())
+                    {
+                        if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
+                        {
+                            // result can be a CSV string for multiple values - header is aligned above
+                            string csvString = resultEntry + "," + implantResultPackage.getImplantResult(resultEntry).getResult();
+                            csvString += ",";
+                            csvString += implantResultPackage.getImplantResult(resultEntry).resistWidthVar + ",";
+                            csvString += implantResultPackage.getImplantResult(resultEntry).resistHeightVar + ",";
+                            csvString += implantResultPackage.getImplantResult(resultEntry).resistCRRVar + ",";
+                            csvString += implantResultPackage.getImplantResult(resultEntry).tiltVar + ",";
+                            csvString += implantResultPackage.getImplantResult(resultEntry).twistVar.ToString(CultureInfo.InvariantCulture);
+                            stringList[resultEntry + 1] = csvString;
+                        }
+                    }
 
-            string statusLine = "No CSV or external files written per job settings.All done.";
+                    Interlocked.Increment(ref counter);
+                    abortCSVFunc?.Invoke(cancelSource, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    commonVars.runAbort = false;
+                    commonVars.cancelling = false;
+                    loopState.Stop();
+                }
+                catch (Exception)
+                {
+                }
+            });
 
+            File.WriteAllLines(csvFileName, stringList);
+            statusLine = counter + " results saved to CSV file";
+        }
+
+        if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
+        {
             if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
             {
-                // Set our parallel task options based on user settings.
-                // Attempt at parallelism.
-                CancellationTokenSource cancelSource = new CancellationTokenSource();
-                CancellationToken cancellationToken = cancelSource.Token;
-
-                string statusString = "Compiling CSV file for results";
-                updateStatus?.Invoke(statusString);
-                int counter = 0;
-                Parallel.For(0, doneCases, (resultEntry, loopState) =>
-                {
-                    try
-                    {
-                        if (implantResultPackage.getImplantResult(resultEntry).isValid())
-                        {
-                            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
-                            {
-                                // result can be a CSV string for multiple values - header is aligned above
-                                string csvString = resultEntry + "," + implantResultPackage.getImplantResult(resultEntry).getResult();
-                                csvString += ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistWidthVar + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistHeightVar + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).resistCRRVar + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).tiltVar + ",";
-                                csvString += implantResultPackage.getImplantResult(resultEntry).twistVar.ToString(CultureInfo.InvariantCulture);
-                                stringList[resultEntry + 1] = csvString;
-                            }
-                        }
-
-                        Interlocked.Increment(ref counter);
-                        abortCSVFunc?.Invoke(cancelSource, cancellationToken);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        commonVars.runAbort = false;
-                        commonVars.cancelling = false;
-                        loopState.Stop();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                });
-
-                File.WriteAllLines(csvFileName, stringList);
-                statusLine = counter + " results saved to CSV file";
+                statusLine += " and";
             }
+            statusLine += " shapes saved to ";
 
-            if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.external) == 1)
-            {
-                if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.csv) == 1)
-                {
-                    statusLine += " and";
-                }
-                statusLine += " shapes saved to ";
-
-                statusLine += commonVars.getExternalTypes()[commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType)] + " files";
-            }
-
-            updateStatus?.Invoke(statusLine);
-            forceRepaintFunc?.Invoke();
-            return returnValue;
+            statusLine += commonVars.getExternalTypes()[commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.externalType)] + " files";
         }
 
-        void writeSVG(Results_implant currentResult, int resultEntry, int numberOfCases)
+        updateStatus?.Invoke(statusLine);
+        forceRepaintFunc?.Invoke();
+        return returnValue;
+    }
+
+    private void writeSVG(Results_implant currentResult, int resultEntry, int numberOfCases)
+    {
+        string svgFileName = baseFileName;
+
+        string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
+        svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
+
+        SVGBuilder svg = new()
         {
-            string svgFileName = baseFileName;
-
-            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
-            svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
-
-            SVGBuilder svg = new SVGBuilder
+            style =
             {
-                style =
-                {
-                    brushClr = currentResult.getResistShapes()[0].getColor(),
-                    penClr = currentResult.getResistShapes()[0].getColor()
-                }
-            };
+                brushClr = currentResult.getResistShapes()[0].getColor(),
+                penClr = currentResult.getResistShapes()[0].getColor()
+            }
+        };
 
-            // Active resist contour
-            svg.AddPolygons(currentResult.getResistShapes()[0].getPoints());
+        // Active resist contour
+        svg.AddPolygons(currentResult.getResistShapes()[0].getPoints());
 
-            // Background resist contour
-            svg.style.brushClr = currentResult.getResistShapes()[1].getColor();
-            svg.style.penClr = currentResult.getResistShapes()[1].getColor();
-            svg.AddPolygons(currentResult.getResistShapes()[1].getPoints());
+        // Background resist contour
+        svg.style.brushClr = currentResult.getResistShapes()[1].getColor();
+        svg.style.penClr = currentResult.getResistShapes()[1].getColor();
+        svg.AddPolygons(currentResult.getResistShapes()[1].getPoints());
 
-            // Shadow
-            svg.style.brushClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
-            svg.style.penClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
-            svg.AddPolygons(currentResult.getLine(Results_implant.lines.shadow).getPoints());
+        // Shadow
+        svg.style.brushClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
+        svg.style.penClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
+        svg.AddPolygons(currentResult.getLine(Results_implant.lines.shadow).getPoints());
 
-            svg.SaveToFile(svgFileName);
-        }
+        svg.SaveToFile(svgFileName);
+    }
 
-        void writeLayout_implant(Results_implant currentResult, int resultEntry, int numberOfCases, int type)
+    private void writeLayout_implant(Results_implant currentResult, int resultEntry, int numberOfCases, int type)
+    {
+        string layoutFileName = baseFileName;
+
+        string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
+        layoutFileName += "_run" + resultEntry.ToString(paddingString);
+
+        int scale = 100; // for 0.01 nm resolution
+        GeoCore g = new();
+        g.reset();
+        GCDrawingfield drawing_ = new("")
         {
-            string layoutFileName = baseFileName;
+            accyear = (short) DateTime.Now.Year,
+            accmonth = (short) DateTime.Now.Month,
+            accday = (short) DateTime.Now.Day,
+            acchour = (short) DateTime.Now.Hour,
+            accmin = (short) DateTime.Now.Minute,
+            accsec = (short) DateTime.Now.Second,
+            modyear = (short) DateTime.Now.Year,
+            modmonth = (short) DateTime.Now.Month,
+            modday = (short) DateTime.Now.Day,
+            modhour = (short) DateTime.Now.Hour,
+            modmin = (short) DateTime.Now.Minute,
+            modsec = (short) DateTime.Now.Second,
+            databaseunits = 1000 * scale,
+            userunits = 0.001 / scale,
+            libname = "variance"
+        };
 
-            string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
-            layoutFileName += "_run" + resultEntry.ToString(paddingString);
+        GCCell gcell_root = drawing_.addCell();
+        gcell_root.accyear = (short)DateTime.Now.Year;
+        gcell_root.accmonth = (short)DateTime.Now.Month;
+        gcell_root.accday = (short)DateTime.Now.Day;
+        gcell_root.acchour = (short)DateTime.Now.Hour;
+        gcell_root.accmin = (short)DateTime.Now.Minute;
+        gcell_root.accsec = (short)DateTime.Now.Second;
+        gcell_root.modyear = (short)DateTime.Now.Year;
+        gcell_root.modmonth = (short)DateTime.Now.Month;
+        gcell_root.modday = (short)DateTime.Now.Day;
+        gcell_root.modhour = (short)DateTime.Now.Hour;
+        gcell_root.modmin = (short)DateTime.Now.Minute;
+        gcell_root.modsec = (short)DateTime.Now.Second;
+        gcell_root.cellName = "implantCase" + resultEntry;
 
-            int scale = 100; // for 0.01 nm resolution
-            GeoCore g = new GeoCore();
-            g.reset();
-            GCDrawingfield drawing_ = new GCDrawingfield("")
+        // Resist
+        for (int i = 0; i < 2; i++)
+        {
+            List<GeoLibPointF[]> resistPolys = currentResult.getResistShapes()[i].getPoints();
+            g.addLayerName("L" + (i + 1) + "D0", "resistPolys" + i);
+
+            foreach (GeoLibPoint[] ePoly in resistPolys.Select(t => GeoWrangler.resize_to_int(t, scale)))
             {
-                accyear = (short) DateTime.Now.Year,
-                accmonth = (short) DateTime.Now.Month,
-                accday = (short) DateTime.Now.Day,
-                acchour = (short) DateTime.Now.Hour,
-                accmin = (short) DateTime.Now.Minute,
-                accsec = (short) DateTime.Now.Second,
-                modyear = (short) DateTime.Now.Year,
-                modmonth = (short) DateTime.Now.Month,
-                modday = (short) DateTime.Now.Day,
-                modhour = (short) DateTime.Now.Hour,
-                modmin = (short) DateTime.Now.Minute,
-                modsec = (short) DateTime.Now.Second,
-                databaseunits = 1000 * scale,
-                userunits = 0.001 / scale,
-                libname = "variance"
-            };
-
-            GCCell gcell_root = drawing_.addCell();
-            gcell_root.accyear = (short)DateTime.Now.Year;
-            gcell_root.accmonth = (short)DateTime.Now.Month;
-            gcell_root.accday = (short)DateTime.Now.Day;
-            gcell_root.acchour = (short)DateTime.Now.Hour;
-            gcell_root.accmin = (short)DateTime.Now.Minute;
-            gcell_root.accsec = (short)DateTime.Now.Second;
-            gcell_root.modyear = (short)DateTime.Now.Year;
-            gcell_root.modmonth = (short)DateTime.Now.Month;
-            gcell_root.modday = (short)DateTime.Now.Day;
-            gcell_root.modhour = (short)DateTime.Now.Hour;
-            gcell_root.modmin = (short)DateTime.Now.Minute;
-            gcell_root.modsec = (short)DateTime.Now.Second;
-            gcell_root.cellName = "implantCase" + resultEntry;
-
-            // Resist
-            for (int i = 0; i < 2; i++)
-            {
-                List<GeoLibPointF[]> resistPolys = currentResult.getResistShapes()[i].getPoints();
-                g.addLayerName("L" + (i + 1) + "D0", "resistPolys" + i);
-
-                foreach (GeoLibPointF[] t in resistPolys)
-                {
-                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(t, scale);
-
-                    gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
-                }
-            }
-
-            // Shadowing line
-            List<GeoLibPointF[]> shadowLine = currentResult.getLine(Results_implant.lines.shadow).getPoints();
-            g.addLayerName("L2D0", "shadowLine");
-            foreach (GeoLibPointF[] t in shadowLine)
-            {
-                GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(t, scale);
-
-                gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
-            }
-
-            g.setDrawing(drawing_);
-            g.setValid(true);
-
-            switch (type)
-            {
-                case (int)CommonVars.external_Type.gds:
-                    gdsWriter gw = new gdsWriter(g, layoutFileName + ".gds");
-                    gw.save();
-                    break;
-                case (int)CommonVars.external_Type.oas:
-                    oasWriter ow = new oasWriter(g, layoutFileName + ".oas");
-                    ow.save();
-                    break;
-
+                gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
             }
         }
 
-        void summaryFile_implant(string csvFileName)
+        // Shadowing line
+        List<GeoLibPointF[]> shadowLine = currentResult.getLine(Results_implant.lines.shadow).getPoints();
+        g.addLayerName("L2D0", "shadowLine");
+        foreach (GeoLibPoint[] ePoly in shadowLine.Select(t => GeoWrangler.resize_to_int(t, scale)))
         {
-            // Force the evaluation.
-            implantResultPackage.getMeanAndStdDev();
-            // Create our summaryFile string, assuming it is needed.
-            // This was simpler before, but now user can avoid CSV creation and will instead select the summary output filename (txt)
-            string summaryFile_ = csvFileName;
-            if (!summaryFile_.EndsWith("_summary.txt", StringComparison.CurrentCulture))
-            {
-                summaryFile_ = csvFileName.Substring(0, csvFileName.Length - 4);
-                summaryFile_ += "_summary.txt";
-            }
+            gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
+        }
 
-            List<string> linesToWrite = new List<string>
-            {
-                "Results summary for job: " + csvFileName + " run on : " +
-                DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " +
-                implantResultPackage.runTime.ToString("0.##") + " seconds"
-            };
+        g.setDrawing(drawing_);
+        g.setValid(true);
 
-            // Results first
-            // Write the results first.
-            if (Debugger.IsAttached)
-            {
-                linesToWrite.Add("Run under debugger : performance was lower");
-            }
+        switch (type)
+        {
+            case (int)CommonVars.external_Type.gds:
+                gdsWriter gw = new(g, layoutFileName + ".gds");
+                gw.save();
+                break;
+            case (int)CommonVars.external_Type.oas:
+                oasWriter ow = new(g, layoutFileName + ".oas");
+                ow.save();
+                break;
 
-            linesToWrite.Add("");
-            for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.properties.mean).Length; resultGroup++)
-            {
-                linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count() + " cases: x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, resultGroup).ToString("0.##"));
-            }
+        }
+    }
 
-            linesToWrite.Add("");
+    private void summaryFile_implant(string csvFileName)
+    {
+        // Force the evaluation.
+        implantResultPackage.getMeanAndStdDev();
+        // Create our summaryFile string, assuming it is needed.
+        // This was simpler before, but now user can avoid CSV creation and will instead select the summary output filename (txt)
+        string summaryFile_ = csvFileName;
+        if (!summaryFile_.EndsWith("_summary.txt", StringComparison.CurrentCulture))
+        {
+            summaryFile_ = csvFileName.Substring(0, csvFileName.Length - 4);
+            summaryFile_ += "_summary.txt";
+        }
 
-            linesToWrite.AddRange(implantResultPackage.getHistograms());
+        List<string> linesToWrite = new()
+        {
+            "Results summary for job: " + csvFileName + " run on : " +
+            DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " +
+            implantResultPackage.runTime.ToString("0.##") + " seconds"
+        };
 
-            // Simulation Settings
-            linesToWrite.Add("");
-            linesToWrite.Add("Implant settings for job");
-            linesToWrite.Add("");
-            linesToWrite.Add("Resist Width: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.w));
-            linesToWrite.Add("Resist CDU: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.wV));
-            linesToWrite.Add("Resist Height: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.h));
-            linesToWrite.Add("Resist Height Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.hV));
-            linesToWrite.Add("Resist Top CRR: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cRR));
-            linesToWrite.Add("Resist Top CRR Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cV));
-            linesToWrite.Add("");
-            linesToWrite.Add("Implant Tilt Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tilt));
-            linesToWrite.Add("Implant Tilt Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tiltV));
-            linesToWrite.Add("Implant Twist Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twist));
-            linesToWrite.Add("Implant Twist Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twistV));
+        // Results first
+        // Write the results first.
+        if (Debugger.IsAttached)
+        {
+            linesToWrite.Add("Run under debugger : performance was lower");
+        }
 
-            // Simulation Settings
-            linesToWrite.Add("");
-            commonVars.getSimulationSettings_implant(linesToWrite);
+        linesToWrite.Add("");
+        for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.properties.mean).Length; resultGroup++)
+        {
+            linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count + " cases: x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, resultGroup).ToString("0.##"));
+        }
 
-            try
-            {
-                File.WriteAllLines(summaryFile_, linesToWrite);
-            }
-            catch (Exception ex)
-            {
-                ErrorReporter.showMessage_OK(ex.ToString(), "Exception");
-            }
+        linesToWrite.Add("");
+
+        linesToWrite.AddRange(implantResultPackage.getHistograms());
+
+        // Simulation Settings
+        linesToWrite.Add("");
+        linesToWrite.Add("Implant settings for job");
+        linesToWrite.Add("");
+        linesToWrite.Add("Resist Width: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.w));
+        linesToWrite.Add("Resist CDU: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.wV));
+        linesToWrite.Add("Resist Height: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.h));
+        linesToWrite.Add("Resist Height Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.hV));
+        linesToWrite.Add("Resist Top CRR: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cRR));
+        linesToWrite.Add("Resist Top CRR Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.cV));
+        linesToWrite.Add("");
+        linesToWrite.Add("Implant Tilt Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tilt));
+        linesToWrite.Add("Implant Tilt Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.tiltV));
+        linesToWrite.Add("Implant Twist Angle: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twist));
+        linesToWrite.Add("Implant Twist Angle Var: " + commonVars.getImplantSettings().getDouble(EntropyImplantSettings.properties_d.twistV));
+
+        // Simulation Settings
+        linesToWrite.Add("");
+        commonVars.getSimulationSettings_implant(linesToWrite);
+
+        try
+        {
+            File.WriteAllLines(summaryFile_, linesToWrite);
+        }
+        catch (Exception ex)
+        {
+            ErrorReporter.showMessage_OK(ex.ToString(), "Exception");
         }
     }
 }

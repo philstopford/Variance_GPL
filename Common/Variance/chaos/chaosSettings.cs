@@ -1,442 +1,442 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Variance
+namespace Variance;
+
+public class ChaosSettings
 {
-    public class ChaosSettings
+    public enum properties { overlayX, overlayY, hTipBiasType, vTipBiasType, hTipBiasVar, vTipBiasVar, icVar, ocVar, LWRVar, LWR2Var, CDUTVar, CDUSVar, wobbleVar }
+    public enum ints { lwrSeed, lwr2Seed }
+    public enum bools { icPA, ocPA }
+
+    private const int dimensions = 15; // number of variations.
+
+    public static int getDimensions()
     {
-        public enum properties { overlayX, overlayY, hTipBiasType, vTipBiasType, hTipBiasVar, vTipBiasVar, icVar, ocVar, LWRVar, LWR2Var, CDUTVar, CDUSVar, wobbleVar }
-        public enum ints { lwrSeed, lwr2Seed }
-        public enum bools { icPA, ocPA }
+        return pGetDimensions();
+    }
 
-        static int dimensions = 15; // number of variations.
+    private static int pGetDimensions()
+    {
+        return dimensions;
+    }
 
-        public static int getDimensions()
+    // This holds all of our run specific variations. It should be set up before EntropyShape is called.
+    private double[] overlayX;
+    private double[] overlayY;
+    private double[] hTipBiasType;
+    private double[] vTipBiasType;
+    private double[] horTipBiasVar;
+    private double[] verTipBiasVar;
+    private double[] iCVar;
+    private bool[] iC_PAsearch;
+    private double[] oCVar;
+    private bool[] oC_PAsearch;
+    private double[] LWRVar;
+    private double[] LWR2Var;
+    private double[] CDUTVar;
+    private double[] CDUSVar;
+    private double[] wobbleVar;
+    private int[] LWRSeed;
+    private int[] LWR2Seed;
+    private bool previewMode;
+    private bool customRNGMapping;
+
+    public bool getPreviewMode()
+    {
+        return pGetPreviewMode();
+    }
+
+    private bool pGetPreviewMode()
+    {
+        return previewMode;
+    }
+
+    public void setPreviewMode(bool p)
+    {
+        pSetPreviewMode(p);
+    }
+
+    private void pSetPreviewMode(bool p)
+    {
+        previewMode = p;
+    }
+
+    public bool getCustomRNGMapping()
+    {
+        return pGetCustomRNGMapping();
+    }
+
+    private bool pGetCustomRNGMapping()
+    {
+        return customRNGMapping;
+    }
+
+    public void setCustomRNGMapping(bool p)
+    {
+        pSetCustomRNGMapping(p);
+    }
+
+    private void pSetCustomRNGMapping(bool p)
+    {
+        customRNGMapping = p;
+    }
+
+    public void setValue(properties p, int index, double value)
+    {
+        pSetValue((int)p, index, value);
+    }
+
+    private void pSetValue(int p, int index, double value)
+    {
+        switch (p)
         {
-            return pGetDimensions();
+            case (int)properties.overlayX:
+                overlayX[index] = value;
+                break;
+            case (int)properties.overlayY:
+                overlayY[index] = value;
+                break;
+            case (int)properties.hTipBiasType:
+                hTipBiasType[index] = value;
+                break;
+            case (int)properties.vTipBiasType:
+                vTipBiasType[index] = value;
+                break;
+            case (int)properties.hTipBiasVar:
+                horTipBiasVar[index] = value;
+                break;
+            case (int)properties.vTipBiasVar:
+                verTipBiasVar[index] = value;
+                break;
+            case (int)properties.icVar:
+                iCVar[index] = value;
+                break;
+            case (int)properties.ocVar:
+                oCVar[index] = value;
+                break;
+            case (int)properties.LWRVar:
+                LWRVar[index] = value;
+                break;
+            case (int)properties.LWR2Var:
+                LWR2Var[index] = value;
+                break;
+            case (int)properties.CDUTVar:
+                CDUTVar[index] = value;
+                break;
+            case (int)properties.CDUSVar:
+                CDUSVar[index] = value;
+                break;
+            case (int)properties.wobbleVar:
+                wobbleVar[index] = value;
+                break;
+        }
+    }
+
+    public double getValue(properties p, int index)
+    {
+        return pGetValue((int)p, index);
+    }
+
+    private double pGetValue(int p, int index)
+    {
+        double retVal = 0;
+        switch (p)
+        {
+            case (int)properties.overlayX:
+                retVal = overlayX[index];
+                break;
+            case (int)properties.overlayY:
+                retVal = overlayY[index];
+                break;
+            case (int)properties.hTipBiasType:
+                retVal = hTipBiasType[index];
+                break;
+            case (int)properties.vTipBiasType:
+                retVal = vTipBiasType[index];
+                break;
+            case (int)properties.hTipBiasVar:
+                retVal = horTipBiasVar[index];
+                break;
+            case (int)properties.vTipBiasVar:
+                retVal = verTipBiasVar[index];
+                break;
+            case (int)properties.icVar:
+                retVal = iCVar[index];
+                break;
+            case (int)properties.ocVar:
+                retVal = oCVar[index];
+                break;
+            case (int)properties.LWRVar:
+                retVal = LWRVar[index];
+                break;
+            case (int)properties.LWR2Var:
+                retVal = LWR2Var[index];
+                break;
+            case (int)properties.CDUTVar:
+                retVal = CDUTVar[index];
+                break;
+            case (int)properties.CDUSVar:
+                retVal = CDUSVar[index];
+                break;
+            case (int)properties.wobbleVar:
+                retVal = wobbleVar[index];
+                break;
         }
 
-        static int pGetDimensions()
+        return retVal;
+    }
+
+    public double[] getValues(properties p)
+    {
+        return pGetValues((int)p);
+    }
+
+    private double[] pGetValues(int p)
+    {
+        double[] retVal = { };
+        switch (p)
         {
-            return dimensions;
+            case (int)properties.overlayX:
+                retVal = overlayX;
+                break;
+            case (int)properties.overlayY:
+                retVal = overlayY;
+                break;
+            case (int)properties.hTipBiasType:
+                retVal = hTipBiasType;
+                break;
+            case (int)properties.vTipBiasType:
+                retVal = vTipBiasType;
+                break;
+            case (int)properties.hTipBiasVar:
+                retVal = horTipBiasVar;
+                break;
+            case (int)properties.vTipBiasVar:
+                retVal = verTipBiasVar;
+                break;
+            case (int)properties.icVar:
+                retVal = iCVar;
+                break;
+            case (int)properties.ocVar:
+                retVal = oCVar;
+                break;
+            case (int)properties.LWRVar:
+                retVal = LWRVar;
+                break;
+            case (int)properties.LWR2Var:
+                retVal = LWR2Var;
+                break;
+            case (int)properties.CDUTVar:
+                retVal = CDUTVar;
+                break;
+            case (int)properties.CDUSVar:
+                retVal = CDUSVar;
+                break;
+            case (int)properties.wobbleVar:
+                retVal = wobbleVar;
+                break;
         }
 
-        // This holds all of our run specific variations. It should be set up before EntropyShape is called.
-        double[] overlayX;
-        double[] overlayY;
-        double[] hTipBiasType;
-        double[] vTipBiasType;
-        double[] horTipBiasVar;
-        double[] verTipBiasVar;
-        double[] iCVar;
-        bool[] iC_PAsearch;
-        double[] oCVar;
-        bool[] oC_PAsearch;
-        double[] LWRVar;
-        double[] LWR2Var;
-        double[] CDUTVar;
-        double[] CDUSVar;
-        double[] wobbleVar;
-        int[] LWRSeed;
-        int[] LWR2Seed;
-        bool previewMode;
-        bool customRNGMapping;
+        return retVal;
+    }
 
-        public bool getPreviewMode()
+    public void setValues(properties p, double[] values)
+    {
+        pSetValues((int)p, values);
+    }
+
+    private void pSetValues(int p, double[] values)
+    {
+        switch (p)
         {
-            return pGetPreviewMode();
+            case (int)properties.overlayX:
+                overlayX = values;
+                break;
+            case (int)properties.overlayY:
+                overlayY = values;
+                break;
+            case (int)properties.hTipBiasType:
+                hTipBiasType = values;
+                break;
+            case (int)properties.vTipBiasType:
+                vTipBiasType = values;
+                break;
+            case (int)properties.hTipBiasVar:
+                horTipBiasVar = values;
+                break;
+            case (int)properties.vTipBiasVar:
+                verTipBiasVar = values;
+                break;
+            case (int)properties.icVar:
+                iCVar = values;
+                break;
+            case (int)properties.ocVar:
+                oCVar = values;
+                break;
+            case (int)properties.LWRVar:
+                LWRVar = values;
+                break;
+            case (int)properties.LWR2Var:
+                LWR2Var = values;
+                break;
+            case (int)properties.CDUTVar:
+                CDUTVar = values;
+                break;
+            case (int)properties.CDUSVar:
+                CDUSVar = values;
+                break;
+            case (int)properties.wobbleVar:
+                wobbleVar = values;
+                break;
         }
+    }
 
-        bool pGetPreviewMode()
+    public void setInt(ints i, int index, int value)
+    {
+        pSetInt((int)i, index, value);
+    }
+
+    private void pSetInt(int i, int index, int value)
+    {
+        switch (i)
         {
-            return previewMode;
+            case (int)ints.lwrSeed:
+                LWRSeed[index] = value;
+                break;
+            case (int)ints.lwr2Seed:
+                LWR2Seed[index] = value;
+                break;
         }
+    }
 
-        public void setPreviewMode(bool p)
+    public int getInt(ints i, int index)
+    {
+        return pGetInt((int)i, index);
+    }
+
+    private int pGetInt(int i, int index)
+    {
+        int retVal = 0;
+        switch (i)
         {
-            pSetPreviewMode(p);
+            case (int)ints.lwrSeed:
+                retVal = LWRSeed[index];
+                break;
+            case (int)ints.lwr2Seed:
+                retVal = LWR2Seed[index];
+                break;
         }
+        return retVal;
+    }
 
-        void pSetPreviewMode(bool p)
+    public int[] getInts(ints i)
+    {
+        return pGetInts((int)i);
+    }
+
+    private int[] pGetInts(int i)
+    {
+        int[] retVal = { };
+        switch (i)
         {
-            previewMode = p;
+            case (int)ints.lwrSeed:
+                retVal = LWRSeed;
+                break;
+            case (int)ints.lwr2Seed:
+                retVal = LWR2Seed;
+                break;
         }
+        return retVal;
+    }
 
-        public bool getCustomRNGMapping()
+    public void setBool(bools b, int index, bool value)
+    {
+        pSetBool((int)b, index, value);
+    }
+
+    private void pSetBool(int b, int index, bool value)
+    {
+        switch (b)
         {
-            return pGetCustomRNGMapping();
+            case (int)bools.icPA:
+                iC_PAsearch[index] = value;
+                break;
+            case (int)bools.ocPA:
+                oC_PAsearch[index] = value;
+                break;
         }
+    }
 
-        bool pGetCustomRNGMapping()
+    public bool getBool(bools b, int index)
+    {
+        return pGetBool((int)b, index);
+    }
+
+    private bool pGetBool(int b, int index)
+    {
+        bool retVal = false;
+        switch (b)
         {
-            return customRNGMapping;
+            case (int)bools.icPA:
+                retVal = iC_PAsearch[index];
+                break;
+            case (int)bools.ocPA:
+                retVal = oC_PAsearch[index];
+                break;
         }
+        return retVal;
+    }
 
-        public void setCustomRNGMapping(bool p)
+    public bool[] getBools(bools b)
+    {
+        return pGetBools((int)b);
+    }
+
+    private bool[] pGetBools(int b)
+    {
+        bool[] retVal = { };
+        switch (b)
         {
-            pSetCustomRNGMapping(p);
+            case (int)bools.icPA:
+                retVal = iC_PAsearch;
+                break;
+            case (int)bools.ocPA:
+                retVal = oC_PAsearch;
+                break;
         }
+        return retVal;
+    }
 
-        void pSetCustomRNGMapping(bool p)
-        {
-            customRNGMapping = p;
-        }
+    public ChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
+    {
+        pChaosSettings(previewMode_, listOfSettings, simSettings);
+    }
 
-        public void setValue(properties p, int index, double value)
-        {
-            pSetValue((int)p, index, value);
-        }
-
-        void pSetValue(int p, int index, double value)
-        {
-            switch (p)
-            {
-                case (int)properties.overlayX:
-                    overlayX[index] = value;
-                    break;
-                case (int)properties.overlayY:
-                    overlayY[index] = value;
-                    break;
-                case (int)properties.hTipBiasType:
-                    hTipBiasType[index] = value;
-                    break;
-                case (int)properties.vTipBiasType:
-                    vTipBiasType[index] = value;
-                    break;
-                case (int)properties.hTipBiasVar:
-                    horTipBiasVar[index] = value;
-                    break;
-                case (int)properties.vTipBiasVar:
-                    verTipBiasVar[index] = value;
-                    break;
-                case (int)properties.icVar:
-                    iCVar[index] = value;
-                    break;
-                case (int)properties.ocVar:
-                    oCVar[index] = value;
-                    break;
-                case (int)properties.LWRVar:
-                    LWRVar[index] = value;
-                    break;
-                case (int)properties.LWR2Var:
-                    LWR2Var[index] = value;
-                    break;
-                case (int)properties.CDUTVar:
-                    CDUTVar[index] = value;
-                    break;
-                case (int)properties.CDUSVar:
-                    CDUSVar[index] = value;
-                    break;
-                case (int)properties.wobbleVar:
-                    wobbleVar[index] = value;
-                    break;
-            }
-        }
-
-        public double getValue(properties p, int index)
-        {
-            return pGetValue((int)p, index);
-        }
-
-        double pGetValue(int p, int index)
-        {
-            double retVal = 0;
-            switch (p)
-            {
-                case (int)properties.overlayX:
-                    retVal = overlayX[index];
-                    break;
-                case (int)properties.overlayY:
-                    retVal = overlayY[index];
-                    break;
-                case (int)properties.hTipBiasType:
-                    retVal = hTipBiasType[index];
-                    break;
-                case (int)properties.vTipBiasType:
-                    retVal = vTipBiasType[index];
-                    break;
-                case (int)properties.hTipBiasVar:
-                    retVal = horTipBiasVar[index];
-                    break;
-                case (int)properties.vTipBiasVar:
-                    retVal = verTipBiasVar[index];
-                    break;
-                case (int)properties.icVar:
-                    retVal = iCVar[index];
-                    break;
-                case (int)properties.ocVar:
-                    retVal = oCVar[index];
-                    break;
-                case (int)properties.LWRVar:
-                    retVal = LWRVar[index];
-                    break;
-                case (int)properties.LWR2Var:
-                    retVal = LWR2Var[index];
-                    break;
-                case (int)properties.CDUTVar:
-                    retVal = CDUTVar[index];
-                    break;
-                case (int)properties.CDUSVar:
-                    retVal = CDUSVar[index];
-                    break;
-                case (int)properties.wobbleVar:
-                    retVal = wobbleVar[index];
-                    break;
-            }
-
-            return retVal;
-        }
-
-        public double[] getValues(properties p)
-        {
-            return pGetValues((int)p);
-        }
-
-        double[] pGetValues(int p)
-        {
-            double[] retVal = { };
-            switch (p)
-            {
-                case (int)properties.overlayX:
-                    retVal = overlayX;
-                    break;
-                case (int)properties.overlayY:
-                    retVal = overlayY;
-                    break;
-                case (int)properties.hTipBiasType:
-                    retVal = hTipBiasType;
-                    break;
-                case (int)properties.vTipBiasType:
-                    retVal = vTipBiasType;
-                    break;
-                case (int)properties.hTipBiasVar:
-                    retVal = horTipBiasVar;
-                    break;
-                case (int)properties.vTipBiasVar:
-                    retVal = verTipBiasVar;
-                    break;
-                case (int)properties.icVar:
-                    retVal = iCVar;
-                    break;
-                case (int)properties.ocVar:
-                    retVal = oCVar;
-                    break;
-                case (int)properties.LWRVar:
-                    retVal = LWRVar;
-                    break;
-                case (int)properties.LWR2Var:
-                    retVal = LWR2Var;
-                    break;
-                case (int)properties.CDUTVar:
-                    retVal = CDUTVar;
-                    break;
-                case (int)properties.CDUSVar:
-                    retVal = CDUSVar;
-                    break;
-                case (int)properties.wobbleVar:
-                    retVal = wobbleVar;
-                    break;
-            }
-
-            return retVal;
-        }
-
-        public void setValues(properties p, double[] values)
-        {
-            pSetValues((int)p, values);
-        }
-
-        void pSetValues(int p, double[] values)
-        {
-            switch (p)
-            {
-                case (int)properties.overlayX:
-                    overlayX = values;
-                    break;
-                case (int)properties.overlayY:
-                    overlayY = values;
-                    break;
-                case (int)properties.hTipBiasType:
-                    hTipBiasType = values;
-                    break;
-                case (int)properties.vTipBiasType:
-                    vTipBiasType = values;
-                    break;
-                case (int)properties.hTipBiasVar:
-                    horTipBiasVar = values;
-                    break;
-                case (int)properties.vTipBiasVar:
-                    verTipBiasVar = values;
-                    break;
-                case (int)properties.icVar:
-                    iCVar = values;
-                    break;
-                case (int)properties.ocVar:
-                    oCVar = values;
-                    break;
-                case (int)properties.LWRVar:
-                    LWRVar = values;
-                    break;
-                case (int)properties.LWR2Var:
-                    LWR2Var = values;
-                    break;
-                case (int)properties.CDUTVar:
-                    CDUTVar = values;
-                    break;
-                case (int)properties.CDUSVar:
-                    CDUSVar = values;
-                    break;
-                case (int)properties.wobbleVar:
-                    wobbleVar = values;
-                    break;
-            }
-        }
-
-        public void setInt(ints i, int index, int value)
-        {
-            pSetInt((int)i, index, value);
-        }
-
-        void pSetInt(int i, int index, int value)
-        {
-            switch (i)
-            {
-                case (int)ints.lwrSeed:
-                    LWRSeed[index] = value;
-                    break;
-                case (int)ints.lwr2Seed:
-                    LWR2Seed[index] = value;
-                    break;
-            }
-        }
-
-        public int getInt(ints i, int index)
-        {
-            return pGetInt((int)i, index);
-        }
-
-        int pGetInt(int i, int index)
-        {
-            int retVal = 0;
-            switch (i)
-            {
-                case (int)ints.lwrSeed:
-                    retVal = LWRSeed[index];
-                    break;
-                case (int)ints.lwr2Seed:
-                    retVal = LWR2Seed[index];
-                    break;
-            }
-            return retVal;
-        }
-
-        public int[] getInts(ints i)
-        {
-            return pGetInts((int)i);
-        }
-
-        int[] pGetInts(int i)
-        {
-            int[] retVal = { };
-            switch (i)
-            {
-                case (int)ints.lwrSeed:
-                    retVal = LWRSeed;
-                    break;
-                case (int)ints.lwr2Seed:
-                    retVal = LWR2Seed;
-                    break;
-            }
-            return retVal;
-        }
-
-        public void setBool(bools b, int index, bool value)
-        {
-            pSetBool((int)b, index, value);
-        }
-
-        void pSetBool(int b, int index, bool value)
-        {
-            switch (b)
-            {
-                case (int)bools.icPA:
-                    iC_PAsearch[index] = value;
-                    break;
-                case (int)bools.ocPA:
-                    oC_PAsearch[index] = value;
-                    break;
-            }
-        }
-
-        public bool getBool(bools b, int index)
-        {
-            return pGetBool((int)b, index);
-        }
-
-        bool pGetBool(int b, int index)
-        {
-            bool retVal = false;
-            switch (b)
-            {
-                case (int)bools.icPA:
-                    retVal = iC_PAsearch[index];
-                    break;
-                case (int)bools.ocPA:
-                    retVal = oC_PAsearch[index];
-                    break;
-            }
-            return retVal;
-        }
-
-        public bool[] getBools(bools b)
-        {
-            return pGetBools((int)b);
-        }
-
-        bool[] pGetBools(int b)
-        {
-            bool[] retVal = { };
-            switch (b)
-            {
-                case (int)bools.icPA:
-                    retVal = iC_PAsearch;
-                    break;
-                case (int)bools.ocPA:
-                    retVal = oC_PAsearch;
-                    break;
-            }
-            return retVal;
-        }
-
-        public ChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
-        {
-            pChaosSettings(previewMode_, listOfSettings, simSettings);
-        }
-
-        void pChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
-        {
-            customRNGMapping = false;
-            previewMode = previewMode_;
-            int count = listOfSettings.Count;
-            overlayX = new double[count];
-            overlayY = new double[count];
-            hTipBiasType = new double[count];
-            vTipBiasType = new double[count];
-            horTipBiasVar = new double[count];
-            verTipBiasVar = new double[count];
-            iCVar = new double[count];
-            iC_PAsearch = new bool[count];
-            oCVar = new double[count];
-            oC_PAsearch = new bool[count];
-            LWRVar = new double[count];
-            LWR2Var = new double[count];
-            CDUSVar = new double[count];
-            CDUTVar = new double[count];
-            wobbleVar = new double[count];
-            LWRSeed = new int[count];
-            LWR2Seed = new int[count];
+    private void pChaosSettings(bool previewMode_, List<EntropyLayerSettings> listOfSettings, EntropySettings simSettings) // set to true for preview; else we run with random inputs
+    {
+        customRNGMapping = false;
+        previewMode = previewMode_;
+        int count = listOfSettings.Count;
+        overlayX = new double[count];
+        overlayY = new double[count];
+        hTipBiasType = new double[count];
+        vTipBiasType = new double[count];
+        horTipBiasVar = new double[count];
+        verTipBiasVar = new double[count];
+        iCVar = new double[count];
+        iC_PAsearch = new bool[count];
+        oCVar = new double[count];
+        oC_PAsearch = new bool[count];
+        LWRVar = new double[count];
+        LWR2Var = new double[count];
+        CDUSVar = new double[count];
+        CDUTVar = new double[count];
+        wobbleVar = new double[count];
+        LWRSeed = new int[count];
+        LWR2Seed = new int[count];
 #if !CHAOSSINGLETHREADED
-            Parallel.For(0, count, (i) =>
+        Parallel.For(0, count, i =>
 #else
             for (int i = 0; i < count; i++)
 #endif
@@ -486,12 +486,12 @@ namespace Variance
 
                     horTipBiasVar[i] = UtilityFuncs.getGaussianRandomNumber3(simSettings);
                     // Need to pay attention to sign here, to pull the right custom equation.
-                    if ((hTipBiasType[i] < 0.5) && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipNVar_RNG)))
+                    if (hTipBiasType[i] < 0.5 && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipNVar_RNG)))
                     {
                         customRNGMapping = true;
                         horTipBiasVar[i] = UtilityFuncs.getCustomMappedRandomNumber(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipNVar_RNG), simSettings);
                     }
-                    if ((hTipBiasType[i] >= 0.5) && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipPVar_RNG)))
+                    if (hTipBiasType[i] >= 0.5 && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipPVar_RNG)))
                     {
                         customRNGMapping = true;
                         horTipBiasVar[i] = UtilityFuncs.getCustomMappedRandomNumber(listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipPVar_RNG), simSettings);
@@ -499,12 +499,12 @@ namespace Variance
 
                     verTipBiasVar[i] = UtilityFuncs.getGaussianRandomNumber3(simSettings);
                     // Need to pay attention to sign here, to pull the right custom equation.
-                    if ((vTipBiasType[i] < 0.5) && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipNVar_RNG)))
+                    if (vTipBiasType[i] < 0.5 && rngCheck(listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipNVar_RNG)))
                     {
                         customRNGMapping = true;
                         verTipBiasVar[i] = UtilityFuncs.getCustomMappedRandomNumber(listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipNVar_RNG), simSettings);
                     }
-                    if ((vTipBiasType[i] >= 0.5) && ((listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG) != "") && (listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG) != CommonVars.boxMuller)))
+                    if (vTipBiasType[i] >= 0.5 && listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG) != "" && listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG) != CommonVars.boxMuller)
                     {
                         verTipBiasVar[i] = UtilityFuncs.getCustomMappedRandomNumber(listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG), simSettings);
                     }
@@ -585,12 +585,12 @@ namespace Variance
                 }
             }
 #if !CHAOSSINGLETHREADED
-            );
+        );
 #endif
-            // Re-walk to handle correlation. We can't do this in the loop above since the correlated layer's settings
-            // are likely not available at that point in time.
+        // Re-walk to handle correlation. We can't do this in the loop above since the correlated layer's settings
+        // are likely not available at that point in time.
 #if !CHAOSSINGLETHREADED
-            Parallel.For(0, count, (i) =>
+        Parallel.For(0, count, i =>
 #else
             for (int i = 0; i < count; i++)
 #endif
@@ -622,36 +622,35 @@ namespace Variance
                 }
             }
 #if !CHAOSSINGLETHREADED
-            );
+        );
 #endif
-        }
+    }
 
-        public ChaosSettings(ChaosSettings source)
-        {
-            overlayX = source.overlayX;
-            overlayY = source.overlayY;
-            hTipBiasType = source.hTipBiasType;
-            vTipBiasType = source.vTipBiasType;
-            horTipBiasVar = source.horTipBiasVar;
-            verTipBiasVar = source.verTipBiasVar;
-            iCVar = source.iCVar;
-            iC_PAsearch = source.iC_PAsearch;
-            oCVar = source.oCVar;
-            oC_PAsearch = source.oC_PAsearch;
-            LWRVar = source.LWRVar;
-            LWR2Var = source.LWR2Var;
-            CDUTVar = source.CDUTVar;
-            CDUSVar = source.CDUSVar;
-            wobbleVar = source.wobbleVar;
-            LWRSeed = source.LWRSeed;
-            LWR2Seed = source.LWR2Seed;
-            previewMode = source.previewMode;
-            customRNGMapping = source.customRNGMapping;
-        }
-        
-        bool rngCheck(string rngString)
-        {
-            return ((rngString != "") && (rngString != CommonVars.boxMuller));
-        }
+    public ChaosSettings(ChaosSettings source)
+    {
+        overlayX = source.overlayX;
+        overlayY = source.overlayY;
+        hTipBiasType = source.hTipBiasType;
+        vTipBiasType = source.vTipBiasType;
+        horTipBiasVar = source.horTipBiasVar;
+        verTipBiasVar = source.verTipBiasVar;
+        iCVar = source.iCVar;
+        iC_PAsearch = source.iC_PAsearch;
+        oCVar = source.oCVar;
+        oC_PAsearch = source.oC_PAsearch;
+        LWRVar = source.LWRVar;
+        LWR2Var = source.LWR2Var;
+        CDUTVar = source.CDUTVar;
+        CDUSVar = source.CDUSVar;
+        wobbleVar = source.wobbleVar;
+        LWRSeed = source.LWRSeed;
+        LWR2Seed = source.LWR2Seed;
+        previewMode = source.previewMode;
+        customRNGMapping = source.customRNGMapping;
+    }
+
+    private static bool rngCheck(string rngString)
+    {
+        return rngString != "" && rngString != CommonVars.boxMuller;
     }
 }

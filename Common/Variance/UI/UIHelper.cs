@@ -3,38 +3,38 @@ using Eto.Drawing;
 using geoLib;
 using System.Threading.Tasks;
 
-namespace Variance
+namespace Variance;
+
+public static class UIHelper
 {
-    public static class UIHelper
+    public static Color myColorToColor(MyColor sourceColor)
     {
-        public static Color myColorToColor(MyColor sourceColor)
-        {
-            Color returnColor;
-            returnColor = Color.FromArgb(sourceColor.R, sourceColor.G, sourceColor.B);
-            return returnColor;
-        }
+        Color returnColor;
+        returnColor = Color.FromArgb(sourceColor.R, sourceColor.G, sourceColor.B);
+        return returnColor;
+    }
 
-        public static MyColor colorToMyColor(Color sourceColor)
-        {
-            return new MyColor(sourceColor.R, sourceColor.G, sourceColor.B);
-        }
+    public static MyColor colorToMyColor(Color sourceColor)
+    {
+        return new MyColor(sourceColor.R, sourceColor.G, sourceColor.B);
+    }
 
-        public static PointF myPointFToPointF(GeoLibPointF sourcePoint)
-        {
-            return new PointF((float)sourcePoint.X, (float)sourcePoint.Y);
-        }
+    public static PointF myPointFToPointF(GeoLibPointF sourcePoint)
+    {
+        return new PointF((float)sourcePoint.X, (float)sourcePoint.Y);
+    }
 
-        public static GeoLibPointF pointFTomyPointF(PointF sourcePoint)
-        {
-            return new GeoLibPointF(sourcePoint.X, sourcePoint.Y);
-        }
+    public static GeoLibPointF pointFTomyPointF(PointF sourcePoint)
+    {
+        return new GeoLibPointF(sourcePoint.X, sourcePoint.Y);
+    }
 
-        public static PointF[] myPointFArrayToPointFArray(GeoLibPointF[] sourceArray)
-        {
-            int length = sourceArray.Length;
-            PointF[] returnArray = new PointF[length];
+    public static PointF[] myPointFArrayToPointFArray(GeoLibPointF[] sourceArray)
+    {
+        int length = sourceArray.Length;
+        PointF[] returnArray = new PointF[length];
 #if !VARIANCESINGLETHREADED
-            Parallel.For(0, length, (i) =>
+        Parallel.For(0, length, i =>
 #else
             for (int i = 0; i < length; i++)
 #endif
@@ -42,17 +42,17 @@ namespace Variance
                 returnArray[i] = myPointFToPointF(sourceArray[i]);
             }
 #if !VARIANCESINGLETHREADED
-            );
+        );
 #endif
-            return returnArray;
-        }
+        return returnArray;
+    }
 
-        public static GeoLibPointF[] pointFArrayTomyPointFArray(PointF[] sourceArray)
-        {
-            int length = sourceArray.Length;
-            GeoLibPointF[] returnArray = new GeoLibPointF[length];
+    public static GeoLibPointF[] pointFArrayTomyPointFArray(PointF[] sourceArray)
+    {
+        int length = sourceArray.Length;
+        GeoLibPointF[] returnArray = new GeoLibPointF[length];
 #if !VARIANCESINGLETHREADED
-            Parallel.For(0, length, (i) =>
+        Parallel.For(0, length, i =>
 #else
             for (int i = 0; i < length; i++)
 #endif
@@ -60,9 +60,8 @@ namespace Variance
                 returnArray[i] = pointFTomyPointF(sourceArray[i]);
             }
 #if !VARIANCESINGLETHREADED
-            );
+        );
 #endif
-            return returnArray;
-        }
+        return returnArray;
     }
 }
