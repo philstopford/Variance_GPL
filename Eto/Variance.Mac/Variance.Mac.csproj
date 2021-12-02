@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.6.0-ci-20211113.1455266255" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.6.1-ci-20211202.1529715902" />
     <PackageReference Include="Eto.Veldrid.Mac64" Version="0.1.0" />
   </ItemGroup>
 
