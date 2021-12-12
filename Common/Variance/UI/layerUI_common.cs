@@ -1108,14 +1108,7 @@ public partial class MainForm
         comboBox_lDList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_structureList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
 
-        if ((bool)cB_DOE_geoCore.Checked)
-        {
-            commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, 1);
-        }
-        else
-        {
-            commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, 0);
-        }
+        commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, (bool)cB_DOE_geoCore.Checked ? 1 : 0);
     }
 
     private void do2DLayerUI_X(int settingsIndex)
