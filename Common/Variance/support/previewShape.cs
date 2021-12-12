@@ -1247,6 +1247,9 @@ public class PreviewShape
         xOffset = Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset) + entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset));
         yOffset = Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset) + entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset));
 
+        // OK. We need to crop our layout based on the active tile if there is a DOE flag set.
+        bool tileHandlingNeeded = commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1;
+
         if (mode == 1)
         {
             // We need this check and early return because previewShape is now used in the layer preview
@@ -1264,8 +1267,6 @@ public class PreviewShape
                 geoCoreOrthogonalPoly.Add(true);
                 return;
             }
-            // OK. We need to crop our layout based on the active tile if there is a DOE flag set.
-            bool tileHandlingNeeded = commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1;
 
             switch (previewMode)
             {
@@ -1572,26 +1573,41 @@ public class PreviewShape
             // Drawn polygons only.
             // Needed to take this approach, otherwise fileData gets tied to the previewPoints list and things go wrong quickly.
             // .ToList() was insufficient to avoid the link.
-            for (int poly = 0; poly < entropyLayerSettings.getFileData().Count; poly++)
+            
+            // Decouple the geometry here to avoid manipulation going back to original source.
+            switch (tileHandlingNeeded)
             {
-                int arraySize = entropyLayerSettings.getFileData()[poly].Length;
-                GeoLibPointF[] tmp = new GeoLibPointF[arraySize];
+                case true:
+                    List<GeoLibPointF[]> tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
+                    foreach (GeoLibPointF[] t in tempPolyList)
+                    {
+                        previewPoints.Add(GeoWrangler.close(t));
+                        drawnPoly.Add(true);
+                    }
+                    break;
+                default:
+                    for (int poly = 0; poly < entropyLayerSettings.getFileData().Count; poly++)
+                    {
+                        int arraySize = entropyLayerSettings.getFileData()[poly].Length;
+                        GeoLibPointF[] tmp = new GeoLibPointF[arraySize];
 #if !VARIANCESINGLETHREADED
-                Parallel.For(0, arraySize, pt => 
+                        Parallel.For(0, arraySize, pt => 
 #else
                     for (Int32 pt = 0; pt < arraySize; pt++)
 #endif
-                    {
-                        tmp[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly][pt].X + xOffset,
-                            entropyLayerSettings.getFileData()[poly][pt].Y + yOffset);
-                    }
+                            {
+                                tmp[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly][pt].X + xOffset,
+                                    entropyLayerSettings.getFileData()[poly][pt].Y + yOffset);
+                            }
 #if !VARIANCESINGLETHREADED
-                );
+                        );
 #endif
-                previewPoints.Add(tmp);
-                bool drawn = true;
-                drawnPoly.Add(drawn);
+                        previewPoints.Add(tmp);
+                        drawnPoly.Add(true);
+                    }
+                    break;
             }
+
         }
     }
 
