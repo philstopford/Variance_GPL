@@ -649,7 +649,7 @@ public partial class MainForm
     {
         Application.Instance.Invoke(() =>
         {
-            statusProgressBar.Visible = false;
+            // statusProgressBar.Visible = false;
             statusProgressBar.Indeterminate = false;
             configProgressBar(0, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases));
         });

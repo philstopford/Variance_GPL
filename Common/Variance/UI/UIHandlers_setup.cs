@@ -68,7 +68,7 @@ public partial class MainForm
 
             btn_multiCPU.Enabled = false;
             btn_STOP.Enabled = false;
-            statusProgressBar.Visible = false;
+            // statusProgressBar.Visible = false;
 
             // Configure GDS DOE UI defaults
             btn_useCSViDRM.Enabled = false;

@@ -380,7 +380,7 @@ public partial class MainForm
     {
         Application.Instance.Invoke(() =>
         {
-            statusProgressBar.Visible = true;
+            // statusProgressBar.Visible = true;
             statusProgressBar.Indeterminate = true;
         });
     }
@@ -628,7 +628,7 @@ public partial class MainForm
 
             btn_multiCPU.Enabled = false;
             btn_STOP.Enabled = false;
-            statusProgressBar.Visible = false;
+            // statusProgressBar.Visible = false;
             if (mainIndex != (int)CommonVars.upperTabNames.twoD)
             {
                 return;
@@ -664,7 +664,7 @@ public partial class MainForm
                 case (int)CommonVars.twoDTabNames.paSearch:
                     startButtonCheck();
                     upperGadgets_panel.Content = simPreviewBox;
-                    statusProgressBar.Visible = true;
+                    // statusProgressBar.Visible = true;
                     break;
                 case (int)CommonVars.twoDTabNames.DOE:
                     updateStatusLine("Configure DOE settings.");

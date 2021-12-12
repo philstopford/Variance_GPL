@@ -98,7 +98,7 @@ public partial class MainForm
         btn_multiCPU.Enabled = false;
         btn_STOP.Enabled = false;
 
-        statusProgressBar.Visible = false;
+        // statusProgressBar.Visible = false;
 
         upperGadgets_panel.Content = new Panel();
 
@@ -112,7 +112,7 @@ public partial class MainForm
 
             upperGadgets_panel.Content = simPreviewBox;
 
-            statusProgressBar.Visible = true;
+            // statusProgressBar.Visible = true;
 
             commentBox.Enabled = true;
 
