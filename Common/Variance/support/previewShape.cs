@@ -1729,9 +1729,6 @@ public class PreviewShape
     {
         try
         {
-            // Can the tessellator help us out here?
-            // return GeoWrangler.makeKeyHole(sourceData);
-
             Clipper c = new() {PreserveCollinear = true};
             Paths sourcePolyData = GeoWrangler.pathsFromPointFs(sourceData, CentralProperties.scaleFactorForOperation);
             Paths resizedPolyData = new();

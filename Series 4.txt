@@ -2,6 +2,7 @@ Changelog for Variance
 
 4.4.2
 
+	- Addressing keyholer limitation from nested donuts.
 	- NET 6.0 migration.
 	- Fixed missing progress bar.
 	- DOE tile preview in layer now also crops 'drawn' to show just tile contents.
