@@ -13,6 +13,9 @@ public partial class MainForm
     private TextBox textBox_fileLocation_geoCore;
     private CheckBox cB_DOE_geoCore, cB_geoCore_shapeEngine, cB_geoCore_shapeEngine_perPoly, cB_geoCore_layoutReference;
 
+    private NumericStepper num_geoCore_rayExtension;
+    private Label lbl_geoCore_rayExtension;
+
     private void twoD_LayerUISetup_geoCore()
     {
         Application.Instance.Invoke(() =>
@@ -126,6 +129,17 @@ public partial class MainForm
         tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(comboBox_polyFill_geoCore) });
 
         tl2.Rows[^1].Cells.Add(new TableCell { ScaleWidth = true });
+
+        lbl_geoCore_rayExtension = new Label {Text = "Extension", ToolTip = "Extension factor for keyhole raycast."};
+        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_geoCore_rayExtension) });
+
+        num_geoCore_rayExtension = new NumericStepper
+        {
+            MinValue = 1.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Line end extension."
+        };
+        setSize(num_geoCore_rayExtension, 55);
+        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_geoCore_rayExtension) });
+
     }
 
     private void geocore_row0_1(TableCell tc)

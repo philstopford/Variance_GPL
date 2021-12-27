@@ -1231,6 +1231,7 @@ public class EntropyLayerSettings
     private decimal verOverlay;
     private decimal proxSideRaysMultiplier;
     private decimal rayExtension;
+    private decimal gcRayExtension;
 
     public enum properties_decimal
     {
@@ -1248,7 +1249,7 @@ public class EntropyLayerSettings
         sCDU, tCDU,
         xOL, yOL,
         proxSideRaysMultiplier,
-        rayExtension
+        rayExtension, gcRayExtension
     }
 
     public decimal getDecimal(properties_decimal p)
@@ -1387,6 +1388,9 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 ret = rayExtension;
                 break;
+            case properties_decimal.gcRayExtension:
+                ret = gcRayExtension;
+                break;
         }
 
         return ret;
@@ -1522,6 +1526,9 @@ public class EntropyLayerSettings
                 ret = default_proximitySideRaysFallOffMultiplier;
                 break;
             case properties_decimal.rayExtension:
+                ret = default_rayExtension;
+                break;
+            case properties_decimal.gcRayExtension:
                 ret = default_rayExtension;
                 break;
         }
@@ -1664,6 +1671,9 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 rayExtension = val;
                 break;
+            case properties_decimal.gcRayExtension:
+                gcRayExtension = val;
+                break;
         }
     }
 
@@ -1801,6 +1811,9 @@ public class EntropyLayerSettings
                 break;
             case properties_decimal.rayExtension:
                 rayExtension = default_rayExtension;
+                break;
+            case properties_decimal.gcRayExtension:
+                gcRayExtension = default_rayExtension;
                 break;
         }
     }

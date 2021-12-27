@@ -1701,9 +1701,20 @@ public class PreviewShape
                 notDrawnStuff.Add(sourceData[i]);
             }
         }
-        List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, extension:Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)), forceOverride, pft);
 
-        List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, extension: Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)), forceOverride, pft);
+        double extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
+            .getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
+
+        if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) ==
+            (int) CommonVars.shapeNames.GEOCORE)
+        {
+            extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
+                .getDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension));
+        }
+        
+        List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, extension:extension, forceOverride, pft);
+
+        List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, extension: extension, forceOverride, pft);
 
         previewPoints.Clear();
         drawnPoly.Clear();

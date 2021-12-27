@@ -414,6 +414,7 @@ public class Storage
                 new XElement("geoCoreShapeEngine", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.gCSEngine)),
                 new XElement("geoCoreShapeEnginePerPoly", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.perPoly)),
                 new XElement("geoCoreReferenceLayout", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.refLayout)),
+                new XElement("geoCoreRayExtension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension)),
                 // fileData is List<PointF[]> where each list entry is a polygon.
                 new XElement("fileData", stringFromFileData(listOfSettings[i].getFileData()))
             );
@@ -1770,6 +1771,15 @@ public class Storage
             }
 
             readSettings.setReloaded(true);
+
+            try
+            {
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("geoCoreRayExtension").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension);
+            }
 
             try
             {
