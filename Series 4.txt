@@ -2,8 +2,13 @@ Changelog for Variance
 
 4.4.2
 
-	- Addressing keyholer limitation from nested donuts.
-	 - Fairly tricky problem to solve, with ongoing R&D here.
+	- Addressing some keyholer limitations seen originally for nested donuts.
+	 - This was a fairly tricky problem to solve, with multiple parts.
+	  - The larger 'cutter' was being included in the cut for inner parts, which obviously cut them away.
+	   - Now, we check for 'lost' area with the keyholer; in case of a change of exposed area, we know geometry has been lost and check for full coverage of outers. Those cutters will be dropped for the re-scan, allowing for continued subtractive processing of the outers.
+	  - As part of this rescan, some internal duplication of geometry is possible; this is now caught with a clean-up stage to avoid another cause of missed geometry.
+	   ! Still to diagnose where this duplication is coming from; expect it is coming from the re-screen mentioned above.
+	   - This fail case was seen with ILB using the ouput from the nested donut scenario.
 	- NET 6.0 migration.
 	- Fixed missing progress bar.
 	- DOE tile preview in layer now also crops 'drawn' to show just tile contents.
