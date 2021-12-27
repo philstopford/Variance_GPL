@@ -10,6 +10,7 @@ Changelog for Variance
 	   ! Still to diagnose where this duplication is coming from; expect it is coming from the re-screen mentioned above.
 	   - This fail case was seen with ILB using the ouput from the nested donut scenario.
 	 - Added ray extension property to geoCore layer, similar to that for the ILB UI.
+ 	- GeoCore copy/paste fix.
 	- NET 6.0 migration.
 	- Fixed missing progress bar.
 	- DOE tile preview in layer now also crops 'drawn' to show just tile contents.
