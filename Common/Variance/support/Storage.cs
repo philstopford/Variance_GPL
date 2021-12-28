@@ -414,7 +414,7 @@ public class Storage
                 new XElement("geoCoreShapeEngine", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.gCSEngine)),
                 new XElement("geoCoreShapeEnginePerPoly", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.perPoly)),
                 new XElement("geoCoreReferenceLayout", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.refLayout)),
-                new XElement("geoCoreRayExtension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension)),
+                new XElement("geoCoreRayExtension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor)),
                 // fileData is List<PointF[]> where each list entry is a polygon.
                 new XElement("fileData", stringFromFileData(listOfSettings[i].getFileData()))
             );
@@ -1774,11 +1774,11 @@ public class Storage
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("geoCoreRayExtension").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("geoCoreRayExtension").First().Value));
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor);
             }
 
             try

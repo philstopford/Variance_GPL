@@ -944,7 +944,7 @@ public partial class MainForm
         comboBox_tipLocations_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
         cB_DOE_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension, Convert.ToDecimal(num_geoCore_rayExtension.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor, Convert.ToDecimal(num_geoCore_rayExtension.Value));
 
         // Disable subshapes
         comboBox_subShapeRef.SelectedIndex = 0;
@@ -1843,7 +1843,7 @@ public partial class MainForm
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             comboBox_tipLocations_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shape0Tip);
             comboBox_polyFill_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.fill);
-            num_geoCore_rayExtension.Value = Convert.ToDouble(commonVars.getLayerSettings(layer).getDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension));
+            num_geoCore_rayExtension.Value = Convert.ToDouble(commonVars.getLayerSettings(layer).getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor));
             try
             {
                 comboBox_structureList_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.structure);

@@ -1249,7 +1249,7 @@ public class EntropyLayerSettings
         sCDU, tCDU,
         xOL, yOL,
         proxSideRaysMultiplier,
-        rayExtension, gcRayExtension
+        rayExtension, keyhole_factor
     }
 
     public decimal getDecimal(properties_decimal p)
@@ -1388,7 +1388,7 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 ret = rayExtension;
                 break;
-            case properties_decimal.gcRayExtension:
+            case properties_decimal.keyhole_factor:
                 ret = gcRayExtension;
                 break;
         }
@@ -1528,7 +1528,7 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 ret = default_rayExtension;
                 break;
-            case properties_decimal.gcRayExtension:
+            case properties_decimal.keyhole_factor:
                 ret = default_rayExtension;
                 break;
         }
@@ -1671,7 +1671,7 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 rayExtension = val;
                 break;
-            case properties_decimal.gcRayExtension:
+            case properties_decimal.keyhole_factor:
                 gcRayExtension = val;
                 break;
         }
@@ -1812,7 +1812,7 @@ public class EntropyLayerSettings
             case properties_decimal.rayExtension:
                 rayExtension = default_rayExtension;
                 break;
-            case properties_decimal.gcRayExtension:
+            case properties_decimal.keyhole_factor:
                 gcRayExtension = default_rayExtension;
                 break;
         }

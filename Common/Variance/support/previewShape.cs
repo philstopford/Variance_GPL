@@ -1705,16 +1705,18 @@ public class PreviewShape
         double extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
             .getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
 
+        double customSizing = 0;
+
         if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) ==
             (int) CommonVars.shapeNames.GEOCORE)
         {
-            extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
-                .getDecimal(EntropyLayerSettings.properties_decimal.gcRayExtension));
+            customSizing = GeoWrangler.keyhole_sizing * Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
+                .getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor));
         }
         
-        List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, extension:extension, forceOverride, pft);
+        List<GeoLibPointF[]> processed_Drawn = processOverlaps_core(commonVars, drawnStuff, customSizing:customSizing, extension:extension, forceOverride, pft);
 
-        List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, extension: extension, forceOverride, pft);
+        List<GeoLibPointF[]> processed_NotDrawn = processOverlaps_core(commonVars, notDrawnStuff, customSizing:customSizing, extension: extension, forceOverride, pft);
 
         previewPoints.Clear();
         drawnPoly.Clear();
@@ -1736,7 +1738,7 @@ public class PreviewShape
 
     }
 
-    private List<GeoLibPointF[]> processOverlaps_core(CommonVars commonVars, List<GeoLibPointF[]> sourceData, double extension, bool forceOverride = false, PolyFillType pft = PolyFillType.pftNonZero)
+    private List<GeoLibPointF[]> processOverlaps_core(CommonVars commonVars, List<GeoLibPointF[]> sourceData, double customSizing, double extension, bool forceOverride = false, PolyFillType pft = PolyFillType.pftNonZero)
     {
         try
         {
@@ -1842,7 +1844,7 @@ public class PreviewShape
 
             // We need to run the fragmenter here because the keyholer / raycaster pipeline needs points for emission.
             Fragmenter f = new(commonVars.getSimulationSettings().getResolution() * CentralProperties.scaleFactorForOperation);
-            resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData), extension:extension).ToList();
+            resizedPolyData = GeoWrangler.makeKeyHole(f.fragmentPaths(resizedPolyData), customSizing:customSizing, extension:extension).ToList();
 
             if (!resizedPolyData.Any())
             {
