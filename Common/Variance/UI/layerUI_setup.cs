@@ -296,7 +296,7 @@ public partial class MainForm
                 comboBox_structureList_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
                 comboBox_lDList_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid() && !commonVars.getLayerSettings(settingsIndex).isReloaded();
                 comboBox_tipLocations_geoCore.Enabled = commonVars.getGeoCoreHandler(settingsIndex).isValid();
-                num_geoCore_rayExtension.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor);
+                num_geoCore_keyHoleSizing.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor);
 
             }
 

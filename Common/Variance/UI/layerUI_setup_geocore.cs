@@ -13,8 +13,8 @@ public partial class MainForm
     private TextBox textBox_fileLocation_geoCore;
     private CheckBox cB_DOE_geoCore, cB_geoCore_shapeEngine, cB_geoCore_shapeEngine_perPoly, cB_geoCore_layoutReference;
 
-    private NumericStepper num_geoCore_rayExtension;
-    private Label lbl_geoCore_rayExtension;
+    private NumericStepper num_geoCore_keyHoleSizing;
+    private Label lbl_geoCore_keyHoleSizing;
 
     private void twoD_LayerUISetup_geoCore()
     {
@@ -130,15 +130,15 @@ public partial class MainForm
 
         tl2.Rows[^1].Cells.Add(new TableCell { ScaleWidth = true });
 
-        lbl_geoCore_rayExtension = new Label {Text = "Extension", ToolTip = "Extension factor for keyhole raycast."};
-        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_geoCore_rayExtension) });
+        lbl_geoCore_keyHoleSizing = new Label {Text = "Keyhole Size", ToolTip = "Scale factor for keyhole width."};
+        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(lbl_geoCore_keyHoleSizing) });
 
-        num_geoCore_rayExtension = new NumericStepper
+        num_geoCore_keyHoleSizing = new NumericStepper
         {
-            MinValue = 1.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Line end extension."
+            MinValue = 1.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Size up the keyhole width in case keyholes are lost."
         };
-        setSize(num_geoCore_rayExtension, 55);
-        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_geoCore_rayExtension) });
+        setSize(num_geoCore_keyHoleSizing, 55);
+        tl2.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_geoCore_keyHoleSizing) });
 
     }
 
