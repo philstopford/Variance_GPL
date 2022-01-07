@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.6.1-ci-20211202.1529715902" />
+    <PackageReference Include="Eto.Forms" Version="2.6.1-ci-20220104.1651622530" />
   </ItemGroup>
 
 </Project>

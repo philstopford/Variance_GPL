@@ -7,9 +7,8 @@ Changelog for Variance
 	  - The larger 'cutter' was being included in the cut for inner parts, which obviously cut them away.
 	   - Now, we check for 'lost' area with the keyholer; in case of a change of exposed area, we know geometry has been lost and check for full coverage of outers. Those cutters will be dropped for the re-scan, allowing for continued subtractive processing of the outers.
 	  - As part of this rescan, some internal duplication of geometry is possible; this is now caught with a clean-up stage to avoid another cause of missed geometry.
-	   ! Still to diagnose where this duplication is coming from; expect it is coming from the re-screen mentioned above.
 	   - This fail case was seen with ILB using the ouput from the nested donut scenario.
-	 - Added ray extension property to geoCore layer, similar to that for the ILB UI.
+	 - Added keyhole width property to geoCore layer, to make the keyholes larger than the internal default, avoiding loss in sliver/gap sequences.
  	- GeoCore copy/paste fix.
 	- NET 6.0 migration.
 	- Fixed missing progress bar.
