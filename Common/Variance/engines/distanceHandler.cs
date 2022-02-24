@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using ClipperLib;
+using ClipperLib1;
 using Error;
 using geoLib;
 using geoWrangler;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using ClipperLib;
+using ClipperLib1;
 using geoWrangler;
 
 namespace Variance;
