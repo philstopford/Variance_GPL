@@ -11,7 +11,7 @@ public partial class MainForm
         if (aboutBox is not {Visible: true})
         {
             string creditText = "Version " + commonVars.version + ", " +
-                                "© " + commonVars.author + " 2014-2021" + "\r\n\r\n";
+                                "© " + commonVars.author + " 2014-2022" + "\r\n\r\n";
             creditText += varianceContext.vc.licenceName;
             creditText += "\r\n\r\n";
             creditText += "Libraries used:\r\n";
