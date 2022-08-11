@@ -27,7 +27,7 @@
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
     <PackageReference Include="System.Management" Version="6.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
