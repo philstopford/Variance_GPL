@@ -5,7 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClipperLib1;
+using Clipper2Lib;
+using EmailNS;
 using Error;
 using gds;
 using geoCoreLib;
@@ -17,8 +18,8 @@ using Timer = System.Timers.Timer; // for tile extraction
 
 namespace Variance;
 
-using Path = List<IntPoint>;
-using Paths = List<List<IntPoint>>;
+using Path = List<Point64>;
+using Paths = List<List<Point64>>;
 
 public partial class Entropy
 {
@@ -109,7 +110,7 @@ public partial class Entropy
         int numberOfResultsFields;
         switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
         {
-            case (int)CommonVars.calcModes.chord: // chord
+            case (int)geoAnalysis.supported.calcModes.chord: // chord
                 numberOfResultsFields = 4;
                 break;
             default: // area, angle, spacing
@@ -296,7 +297,7 @@ public partial class Entropy
         int numberOfResultsFields;
         switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
         {
-            case (int)CommonVars.calcModes.chord: // chord
+            case (int)geoAnalysis.supported.calcModes.chord: // chord
                 numberOfResultsFields = 4;
                 break;
             default: // area, angle, spacing
@@ -424,7 +425,7 @@ public partial class Entropy
                                                         break;
                                                 }
                                                 // Multi-result check.
-                                                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.chord)
+                                                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord)
                                                 {
                                                     // Is second result being filtered?
                                                     rf = 1;
@@ -502,7 +503,7 @@ public partial class Entropy
                                 // resultPackage has its own locking.
                                 resultPackage.Add(currentResult, 0); // disable retention of geometry given new write-during-run methodology.
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
                             }
 
@@ -566,11 +567,11 @@ public partial class Entropy
         long tileRightX = (long)(tileLeftX + tileXSize * CentralProperties.scaleFactorForOperation);
         long tileBottomY = (long)(tileYOffset + row * tileYSize) * CentralProperties.scaleFactorForOperation;
         long tileTopY = (long)(tileBottomY + tileYSize * CentralProperties.scaleFactorForOperation);
-        tileCutter.Add(new IntPoint(tileLeftX, tileBottomY));
-        tileCutter.Add(new IntPoint(tileLeftX, tileTopY));
-        tileCutter.Add(new IntPoint(tileRightX, tileTopY));
-        tileCutter.Add(new IntPoint(tileRightX, tileBottomY));
-        tileCutter.Add(new IntPoint(tileLeftX, tileBottomY));
+        tileCutter.Add(new Point64(tileLeftX, tileBottomY));
+        tileCutter.Add(new Point64(tileLeftX, tileTopY));
+        tileCutter.Add(new Point64(tileRightX, tileTopY));
+        tileCutter.Add(new Point64(tileRightX, tileBottomY));
+        tileCutter.Add(new Point64(tileLeftX, tileBottomY));
 
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
@@ -580,7 +581,6 @@ public partial class Entropy
                 continue;
             }
 
-            Paths result = new();
             // Get our layout for clipping.
             Paths layout = new(); // Use Paths since we have polygon islands to wrangle.
             // fileData contains all of our polygons
@@ -601,23 +601,19 @@ public partial class Entropy
             }
 
             // We now use a Union() to merge any partially overlapping polys.
-            Clipper c = new()
+            Clipper64 c = new()
             {
                 PreserveCollinear = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0
             };
-            c.AddPaths(layout, PolyType.ptSubject, true);
-            c.Execute(ClipType.ctUnion, result, PolyFillType.pftNonZero, PolyFillType.pftNonZero);
-            layout = result.ToList();
-            result.Clear();
+            c.AddSubject(layout);
+            c.Execute(ClipType.Union, FillRule.NonZero, layout);
 
             // Carve out our tile
-            c = new Clipper
-            {
-                PreserveCollinear = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0
-            };
-            c.AddPath(tileCutter, PolyType.ptClip, true);
-            c.AddPaths(layout, PolyType.ptSubject, true);
-            c.Execute(ClipType.ctIntersection, result);
+            c.Clear();
+            c.AddClip(tileCutter);
+            c.AddSubject(layout);
+            Paths result = new();
+            c.Execute(ClipType.Intersection, FillRule.EvenOdd, result);
 
             // Need to map output and downscale to floating points again.
             // We might have more than one polygon in the result, so be careful.
@@ -626,7 +622,7 @@ public partial class Entropy
 
             List<GeoLibPointF[]> extractedPolys = result.Select(t => GeoWrangler.pointFFromPath(t, CentralProperties.scaleFactorForOperation)).Select(tempPoly => GeoWrangler.move(tempPoly, -xCompensation, -yCompensation)).ToList();
 
-            commonVars.getNonSimulationSettings().extractedTile[layer] = extractedPolys.ToList();
+            commonVars.getNonSimulationSettings().extractedTile[layer] = extractedPolys;
         }
     }
 
@@ -727,9 +723,9 @@ public partial class Entropy
         configProgress?.Invoke(0, doneCases);
         // Create header for CSV output, if applicable
         string headerString = "Run,";
-        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.area) // area output
+        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.area) // area output
         {
-            if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.all)
+            if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.AreaHandler.areaCalcModes.all)
             {
                 headerString += "Total Area";
             }
@@ -738,25 +734,25 @@ public partial class Entropy
                 headerString += "Minimum Area";
             }
         }
-        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.enclosure_spacing_overlap) // spacing output
+        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap) // spacing output
         {
             switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode))
             {
-                case (int)CommonVars.spacingCalcModes.spacing:
-                case (int)CommonVars.spacingCalcModes.spacingOld:
+                case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing:
+                case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld:
                     headerString += "Spacing";
                     break;
-                case (int)CommonVars.spacingCalcModes.enclosure:
-                case (int)CommonVars.spacingCalcModes.enclosureOld:
+                case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure:
+                case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld:
                     headerString += "Enclosure";
                     break;
             }
         }
-        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.chord) // chord output
+        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord) // chord output
         {
             headerString += "AMinTopChord,AMinBottomChord,BMinLeftChord,BMinRightChord";
         }
-        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.angle) // angle output
+        if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.angle) // angle output
         {
             headerString += "MinIntersectionAngle";
         }
@@ -905,7 +901,7 @@ public partial class Entropy
         string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
         svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
-        SVGBuilder svg = new();
+        SVGBuilder.SVGBuilder svg = new();
 
         // Inputs
         for (int previewShapeIndex = 0; previewShapeIndex < currentResult.getPreviewShapes().Count; previewShapeIndex++)
@@ -994,7 +990,7 @@ public partial class Entropy
 
             foreach (GeoLibPoint[] ePoly in from t in polys let polyLength = t.Length where polyLength > 2 select GeoWrangler.resize_to_int(t, scale))
             {
-                gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
+                gcell_root.addPolygon(ePoly, layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
             }
         }
 
@@ -1013,7 +1009,7 @@ public partial class Entropy
 
             GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(rpolys[poly], scale);
 
-            gcell_root.addPolygon(ePoly.ToArray(), layerNum, 0); // layer is 1-index based for output, so need to offset value accordingly.
+            gcell_root.addPolygon(ePoly, layerNum, 0); // layer is 1-index based for output, so need to offset value accordingly.
         }
 
         g.setDrawing(drawing_);
@@ -1235,7 +1231,14 @@ public partial class Entropy
             // Assume user error if perJob is set and not onCompletion.
             if ((commonVars.getNonSimulationSettings().emailOnCompletion || commonVars.getNonSimulationSettings().emailPerJob) && numberOfCases > 1)
             {
-                Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                try
+                {
+                    Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                }
+                catch (Exception e)
+                {
+                    ErrorReporter.showMessage_OK(e.Message, "Error sending mail");
+                }
             }
         }
         else
@@ -1281,7 +1284,14 @@ public partial class Entropy
                     }
                     if (commonVars.getNonSimulationSettings().emailPerJob)
                     {
-                        Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                        try
+                        {
+                            Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                        }
+                        catch (Exception e)
+                        {
+                            ErrorReporter.showMessage_OK(e.Message, "Error sending mail");
+                        }
                     }
                 }
             }
@@ -1330,7 +1340,14 @@ public partial class Entropy
                         }
                         if (commonVars.getNonSimulationSettings().emailPerJob)
                         {
-                            Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                            try
+                            {
+                                Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+                            }
+                            catch (Exception e)
+                            {
+                                ErrorReporter.showMessage_OK(e.Message, "Error sending mail");
+                            }
                         }
                         col++;
                     }
@@ -1410,7 +1427,7 @@ public partial class Entropy
                 // Check whether we need to manually close our shape or not, also only for the area case.
                 int length = currentJobEngine.getPaths()[listMember].Count;
                 int arraySize = length;
-                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.area && currentJobEngine.getPaths()[listMember][currentJobEngine.getPaths()[listMember].Count - 1] != currentJobEngine.getPaths()[listMember][0])
+                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.area && currentJobEngine.getPaths()[listMember][currentJobEngine.getPaths()[listMember].Count - 1] != currentJobEngine.getPaths()[listMember][0])
                 {
                     arraySize++;
                 }
@@ -1430,7 +1447,7 @@ public partial class Entropy
                 );
 #endif
                 // Close the shape only if we have an area calculation; for other cases we expect lines.
-                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.area && points[^1] != points[0])
+                if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.area && points[^1] != points[0])
                 {
                     points[^1] = points[0];
                 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using shapeEngine;
 
 namespace Variance;
 
@@ -99,7 +100,7 @@ public class Headless
             {
                 try
                 {
-                    List<string> t = new();
+                    List<string> t;
                     if (varianceContext.implantMode)
                     {
                         Console.WriteLine("Converging on: " + entropyControl.getImplantResultPackage().getMeanAndStdDev());
@@ -137,7 +138,7 @@ public class Headless
 
     private void summary()
     {
-        List<string> t = new();
+        List<string> t;
         if (varianceContext.implantMode)
         {
             Console.WriteLine("Converged on: " + entropyControl.getImplantResultPackage().getMeanAndStdDev());
@@ -298,7 +299,7 @@ public class Headless
 
     private void updateSimUIMT()
     {
-        commonVars.m_timer.Elapsed += new System.Timers.ElapsedEventHandler(updateReadout);
+        commonVars.m_timer.Elapsed += updateReadout;
     }
 
     private void updateProgress(double val)
@@ -384,7 +385,7 @@ public class Headless
         {
         }
 
-        if (entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE &&
+        if (entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE &&
             varianceContext.geoCoreCDVariation == false)
         {
             ErrorReporter.showMessage_OK("Project uses Oasis/GDS CD variation.", "Overriding preference.");
@@ -399,7 +400,7 @@ public class Headless
         else
         {
             commonVars.getGeoCoreHandler(settingsIndex).setValid(false);
-            if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE && entropyLayerSettings.isReloaded())
+            if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE && entropyLayerSettings.isReloaded())
             {
                 commonVars.getGeoCoreHandler(settingsIndex).setFilename(entropyLayerSettings.getString(EntropyLayerSettings.properties_s.file));
                 commonVars.getGeoCoreHandler(settingsIndex).setValid(true);

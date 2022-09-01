@@ -17,7 +17,7 @@ public partial class MainForm : Form
     private CheckBox checkBox_EmailCompletion, checkBox_perJob, checkBox_SSL,
         checkBox_geoCore_enableCDVariation, checkBox_geoCore_tileLayerPreview,
         checkBox_OGLAA, checkBox_OGLFill, checkBox_OGLPoints,
-        checkBox_friendlyNumbers;
+        checkBox_friendlyNumbers, checkBox_expandUI;
 
     private Button button_emailTest, utilitiesBtn_Summary, btn_resetColors, btn_rngMapping_Add, btn_rngMapping_Edit, btn_rngMapping_Remove;
 
@@ -41,7 +41,8 @@ public partial class MainForm : Form
 
     private ListBox listBox_rngCustomMapping;
 
-    private GroupBox groupBox_utilities, groupBox_settings, groupBox_email, groupBox_openGL, prefs_geoCore, groupBox_rng, groupBox_misc;
+    private Expander expander_misc;
+    private GroupBox groupBox_utilities, groupBox_settings, groupBox_email, groupBox_openGL, prefs_geoCore, groupBox_rng, groupBox_misc ;
 
     private void utilsUISetup()
     {
@@ -146,9 +147,13 @@ public partial class MainForm : Form
     private void email_settings_utilsUISetup(TableCell tc)
     {
         TableLayout groupBox_email_table = new();
-        groupBox_email = new GroupBox {Text = "Email Settings", Content = groupBox_email_table};
+        groupBox_email = new GroupBox {Content = groupBox_email_table};
+        Expander expander_email = new() {Header = "Email Settings",
+            Content = groupBox_email,
+            Expanded = true
+        };
 
-        tc.Control = groupBox_email;
+        tc.Control = expander_email;
 
         groupBox_email_table.Rows.Add(new TableRow());
 
@@ -235,8 +240,12 @@ public partial class MainForm : Form
     private void geoCore_settings_utilsUISetup(TableCell tc)
     {
         TableLayout prefs_geoCore_table = new();
-        prefs_geoCore = new GroupBox {Text = "GDS/Oasis", Content = prefs_geoCore_table};
-        tc.Control = prefs_geoCore;
+        prefs_geoCore = new GroupBox {Content = prefs_geoCore_table};
+        Expander prefs_gc_exp = new Expander() {Header = "GDS/Oasis",
+            Content = prefs_geoCore,
+            Expanded = true
+        };
+        tc.Control = prefs_gc_exp;
 
         prefs_geoCore_table.Rows.Add(new TableRow());
         checkBox_geoCore_enableCDVariation = new CheckBox {Text = "Allow CD/bias variation"};
@@ -261,8 +270,12 @@ public partial class MainForm : Form
         tl.Rows.Add(new TableRow()); // padding
 
         TableLayout groupBox_misc_table = new();
-        groupBox_misc = new GroupBox {Text = "Misc", Content = groupBox_misc_table};
-        tc0.Control = groupBox_misc;
+        groupBox_misc = new () {Content = groupBox_misc_table};
+        expander_misc = new () {Header = "Misc",
+            Content = groupBox_misc,
+            Expanded = true
+        };
+        tc0.Control = expander_misc;
 
         groupBox_misc_table.Rows.Add(new TableRow());
         TableCell row0 = new();
@@ -276,6 +289,13 @@ public partial class MainForm : Form
         tl.Rows.Add(new TableRow());
         Panel p = new() {Content = tl};
         tc.Control = p;
+
+        tl.Rows.Add(new TableRow());
+
+        checkBox_expandUI = new CheckBox {Text = "Start with expanded interface"};
+        tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_expandUI });
+
+        tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
         tl.Rows.Add(new TableRow());
 

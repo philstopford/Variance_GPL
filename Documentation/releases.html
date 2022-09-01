@@ -198,57 +198,42 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
-    <li><a href="#releases_442">4.4.2</a>
-    <li><a href="#releases_441">4.4.1</a>
-    <li><a href="#releases_440">4.4</a>
+    <li><a href="#releases_500">5.0</a>
   </ul>
 
     <blockquote>
-      <a name="releases_442"></a>
-      <h2 class="western">New to 4.4.2 (Jan 7 2022)</h2>
+      <a name="releases_500"></a>
+      <h2 class="western">New to 5.0 (Aug 27 2022)</h2>
       <blockquote>
         <ul>
-          <li>Addressing keyholer limitation from nested donuts.</li>
+          <li>Shape engine updates.</li>
+          <li>Proximity biasing artifacts should now be eliminated due to geometry processing enhancements.</li>
+          <li>Major refinement to boolean and keyhole pipelines, moved also to the GeoWrangler library for re-use.</li>
           <ul>
-           <li>Fairly tricky problem to solve, with ongoing R&D here.</li>
-           <li>Added keyhole width property to geoCore layer, to scale the keyhole width and avoid loss in sliver/gap.</li>
+            <li>Keyholer no longer preferentially uses an orthogonal insertion candidate if the polygons are not orthogonal.</li>
+            <li>Keyholer now performs a reverse walk to check for any missed candidates in the original pass.</li>
           </ul>
-          <li>GeoCore copy/paste fix.</li>
-          <li>NET 6.0 migration.</li>
-          <li>Fixed missing progress bar.</li>
-          <li>DOE tile preview in layer now also crops 'drawn' to show just tile contents.</li>
-          <li>GTK fix for UI scrollable from Eto.Forms project.</li>
-          <li>Multithreading work.</li>
+          <li>Fixed an issue in the chord handler where rotations of the 'B' shape could break the edge extraction and fail the evaluation.</li>
+          <li>User interface enhancements : using expanders to allow sections to be collapsed or expanded as required, decluttering the view and reducing scrolling.</li>
+          <li>Layout handling enhancements.</li>
           <ul>
-            <li>5% performance gain with this and the .NET 6.0 migration.</li>
+            <li>Internal lists are updated with layout load, removing the need for the client to do this.</li>
+            <li>Registering layer names against layer:datatype would throw an error if the name was already registered.</li>
+            <li>Duplicated points are now removed during load, to allow for correct contouring behavior of otherwise-orthogonal geometry.</li>
+            <li>Resolved compatibility with certain flavors of OASIS (e.g. strict).</li>
+          	<li>Revised layout to tool handling, to make scaling behavior less opaque.</li>
+            <li>Fixed a defect in the OASIS file writer that yielded missing or broken geometry in some cases.</li>
           </ul>
-        </ul>
-      </blockquote>
-    </blockquote>
-
-    <blockquote>
-      <a name="releases_441"></a>
-      <h2 class="western">New to 4.4.1 (Apr 30 2021)</h2>
-      <blockquote>
-        <ul>
-          <li>Rare ChordHandler issues addressed</li>
+          <li>ClipperLib 2.</li>
           <ul>
-            <li>Resolved issue that caused truncated chord evaluation.</li>
-            <li>Reduced cut-off value for sub-resolution chords.</li>
+            <li>Next-generation polygon clipping library, bringing major performance and behavioral improvements.</li>
+            <li>Performance gains across the board compared to 4.4.2:</li>
+            <ul>
+              <li>Up to 15-20% improvement in simulation performance.</li>
+              <li>ILB performance even more improved.</li>
+              <li>Proximity biasing runs in around half the time.</li>
+            </ul>
           </ul>
-          <li>Cleaned-up internal code to improve readability.</li>
-        </ul>
-      </blockquote>
-    </blockquote>
-
-    <blockquote>
-      <a name="releases_440"></a>
-      <h2 class="western">New to 4.4 (Feb 8 2021)</h2>
-      <blockquote>
-        <ul>
-          <li>Export of case geometry to external files can now be controlled using critera on the results field(s).</li>
-          <li>UI refinements.</li>
-          <li>Bug fix to keyholer extension read from project file.</li>
         </ul>
       </blockquote>
     </blockquote>

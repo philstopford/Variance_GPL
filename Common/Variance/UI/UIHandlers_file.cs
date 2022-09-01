@@ -263,6 +263,7 @@ public partial class MainForm
             commonVars.setGCCDV(varianceContext.vc.geoCoreCDVariation);
             commonVars.setLayerPreviewDOETile(varianceContext.vc.layerPreviewDOETile);
             commonVars.setFriendly(varianceContext.vc.friendlyNumber);
+            commonVars.setExpandedUI(varianceContext.vc.expandUI);
             setupGUI();
             resetViewPorts();
             set2DSelectedIndex(storeIndex);
@@ -337,7 +338,8 @@ public partial class MainForm
             MultiSelect = false,
             Filters =
             {
-                new FileFilter("Layout Files (*.gds; *.gdsii; *.oas; *.oasis; *.gds.gz; *.gdsii.gz; *.oas.gz; *.oasis.gz)", ".gds", ".gdsii", "*.oas", "*.oasis", ".gds.gz", ".gdsii.gz", "*.oas.gz", "*.oasis.gz")
+                new FileFilter("Layout Files (*.gds; *.gdsii; *.oas; *.oasis; *.gds.gz; *.gdsii.gz; *.oas.gz; *.oasis.gz)", ".gds", ".gdsii", "*.oas", "*.oasis", ".gds.gz", ".gdsii.gz", "*.oas.gz", "*.oasis.gz"
+                , ".GDS", ".GDSII", "*.OAS", "*.OASIS", ".GDS.GZ", ".GDSII.GZ", "*.OAS.GZ", "*.OASIS.GZ")
             }
         };
 
@@ -387,13 +389,13 @@ public partial class MainForm
                     commonVars.getLayerSettings(settingsIndex).setString(EntropyLayerSettings.properties_s.file, commonVars.getGeoCoreHandler(settingsIndex).getFilename());
                     // Clear tracking for external point data.
                     commonVars.getLayerSettings(settingsIndex).setReloaded(false);
+
                     try
                     {
                         comboBox_structureList_geoCore.SelectedIndex = commonVars.getGeoCoreHandler(settingsIndex).getGeo().activeStructure;
                     }
                     catch (Exception)
                     {
-
                     }
                     try
                     {
@@ -471,7 +473,7 @@ public partial class MainForm
                 {
                     commonVars.getGeoCoreHandler(settingsIndex).updateGeoCoreHandler(filename, GeoCore.fileType.oasis);
                 }
-
+                
                 return commonVars.getGeoCoreHandler(settingsIndex).isValid();
             }
             default:
@@ -487,7 +489,7 @@ public partial class MainForm
             MultiSelect = false,
             Filters =
             {
-                new FileFilter("CSV Files (*.csv)", ".csv")
+                new FileFilter("CSV Files (*.csv)", ".csv", ".CSV")
             }
         };
         bool reading = false;
@@ -534,7 +536,7 @@ public partial class MainForm
             MultiSelect = false,
             Filters =
             {
-                new FileFilter("CSV Files (*.csv)", ".csv")
+                new FileFilter("CSV Files (*.csv)", ".csv", ".CSV")
             }
         };
         bool reading = false;

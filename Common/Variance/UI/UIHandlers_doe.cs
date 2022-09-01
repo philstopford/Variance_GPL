@@ -164,14 +164,16 @@ public partial class MainForm
                         int colorIndex = tile % varianceContext.vc.colors.resultColors.Length; // map our result into the available colors.
                         PointF[] currentTile = tilePoly.ToArray();
                         int length = currentTile.Length;
+                        int col1 = col;
+                        int row1 = row;
 #if !VARIANCESINGLETHREADED
                         Parallel.For(0, length, pt =>
 #else
                             for (int pt = 0; pt < length; pt++)
 #endif
                             {
-                                currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
-                                currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
+                                currentTile[pt].X += (float)(col1 * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
+                                currentTile[pt].Y += (float)(row1 * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
                             }
 #if !VARIANCESINGLETHREADED
                         );

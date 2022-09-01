@@ -310,7 +310,7 @@ public class EntropySettings
         }
     }
 
-    private static int default_outputType = (int)CommonVars.calcModes.area;
+    private static int default_outputType = (int)geoAnalysis.supported.calcModes.area;
     private static int default_numberOfCases = 25000;
     private static double default_resolution = 1.0;
     private static int default_cornerSegments = 90;

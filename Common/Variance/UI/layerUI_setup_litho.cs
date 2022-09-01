@@ -4,6 +4,9 @@ namespace Variance;
 
 public partial class MainForm
 {
+    private GroupBox gB_layer_lithography;
+    private Expander expander_lithography, expander_overlay, expander_overlayX, expander_overlayY, expander_rounding, expander_lwr, expander_LWR, expander_LWR2, expander_cdu, expander_SCDU, expander_TCDU, expander_litmisc;
+
     // 2D Layer Litho
     private NumericStepper num_lithoICRR, num_lithoOCRR, num_lithoCDUSide, num_lithoHorOverlay, num_lithoVerOverlay,
         num_lithoICV, num_lithoOCV, num_lithoCDUTips, num_lithoLWR, num_lithoLWRFreq, num_lithoLWR2, num_lithoLWR2Freq, num_lithoWobble, num_coeff1, num_coeff2;
@@ -28,16 +31,36 @@ public partial class MainForm
 
     private Panel pnl_overlayRefX, pnl_overlayRefY;
 
+    private void twoD_LayerUISetup_litho_expanders(bool toState)
+    {
+        expander_lithography.Expanded = toState;
+        expander_overlay.Expanded = toState;
+        expander_overlayX.Expanded = toState;
+        expander_overlayY.Expanded = toState;
+        expander_rounding.Expanded = toState;
+        expander_lwr.Expanded = toState;
+        expander_LWR.Expanded = toState;
+        expander_LWR2.Expanded = toState;
+        expander_cdu.Expanded = toState;
+        expander_SCDU.Expanded = toState;
+        expander_TCDU.Expanded = toState;
+        expander_litmisc.Expanded = toState;
+    }
+
     private void twoD_LayerUISetup_litho(TableCell tc)
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout lithography_table = new();
-            gB_layer_lithography = new GroupBox {Text = "Lithography Parameters", Content = lithography_table};
+            gB_layer_lithography = new GroupBox {Content = lithography_table};
+            expander_lithography = new() {Header = "Lithography Parameters",
+                Content = gB_layer_lithography,
+                Expanded = true
+            };
 
             TableLayout t = new();
             t.Rows.Add(new TableRow());
-            t.Rows[^1].Cells.Add(new TableCell { Control = gB_layer_lithography });
+            t.Rows[^1].Cells.Add(new TableCell { Control = expander_lithography });
             t.Rows[^1].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
             Panel p = new() {Content = t};
@@ -45,11 +68,8 @@ public partial class MainForm
 
             litho_icr_ocr(lithography_table);
             litho_lwr(lithography_table);
-            litho_lwr2(lithography_table);
-            litho_scdu(lithography_table);
-            litho_tcdu(lithography_table);
-            litho_xol(lithography_table);
-            litho_yol(lithography_table);
+            litho_cdu(lithography_table);
+            litho_ol(lithography_table);
         });
     }
 
@@ -73,9 +93,15 @@ public partial class MainForm
         lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer });
 
 
-        GroupBox groupBox_rounding = new() {Text = "Rounding"};
+        GroupBox groupBox_rounding = new();
+        expander_rounding = new()
+        {
+            Header = "Rounding",
+            Content = groupBox_rounding,
+            Expanded  = commonVars.getExpandedUI()
+        };
         // Table layout within cell.
-        TableCell leftCol_tc = new() {Control = groupBox_rounding};
+        TableCell leftCol_tc = new() {Control = expander_rounding};
         tl_leftCol.Rows[^1].Cells.Add(leftCol_tc);
 
         /*
@@ -97,9 +123,15 @@ public partial class MainForm
         };
         */
 
-        groupBox_misc = new GroupBox {Text = "Misc"};
+        groupBox_misc = new GroupBox();
+        expander_litmisc = new()
+        {
+            Header = "Misc",
+            Content = groupBox_misc,
+            Expanded  = commonVars.getExpandedUI()
+        };
 
-        TableCell rightCol_tc = new() {Control = groupBox_misc};
+        TableCell rightCol_tc = new() {Control = expander_litmisc};
         tl_rightCol.Rows[^1].Cells.Add(rightCol_tc);
 
 
@@ -132,7 +164,7 @@ public partial class MainForm
 
         lbl_lithoICV = new Label
         {
-            Text = "Var", ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation."
+            Text = "Variation", ToolTip = "3-sigma inner vertex (concave) corner rounding radius variation."
         };
         lbl_lithoICV.MouseDoubleClick += ICV_RNG;
         rounding_table.Rows[^1].Cells.Add(new TableCell());
@@ -171,7 +203,7 @@ public partial class MainForm
 
         lbl_lithoOCV = new Label
         {
-            Text = "Var", ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation."
+            Text = "Variation", ToolTip = "3-sigma outer vertex (concave) corner rounding radius variation."
         };
         lbl_lithoOCV.MouseDoubleClick += OCV_RNG;
         rounding_table.Rows[^1].Cells.Add(new TableCell());
@@ -255,6 +287,25 @@ public partial class MainForm
 
     private void litho_lwr(TableLayout lithography_table)
     {
+        TableLayout outer_tl = new();
+        Panel outer = new() {Content = outer_tl};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_lwr = new()
+        {
+            Header = "Line Width Roughness (LWR)",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
+        outer_tl.Rows.Add(new TableRow());
+        lithography_table.Rows.Add(new TableRow());
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_lwr });
+        
+        litho_lwr1(outer_tl);
+        litho_lwr2(outer_tl);
+    }
+
+    private void litho_lwr1(TableLayout lithography_table)
+    {
         TableRow lit_lwr = new();
         lithography_table.Rows.Add(lit_lwr);
 
@@ -262,9 +313,15 @@ public partial class MainForm
         tl.Rows.Add(new TableRow());
 
         Panel outer = new() {Content = tl};
-        GroupBox outer_gb = new() {Text = "LWR", Content = outer};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_LWR = new()
+        {
+            Header = "Line Width Roughess (LWR)",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
 
-        lit_lwr.Cells.Add(new TableCell { Control = outer_gb });
+        lit_lwr.Cells.Add(new TableCell { Control = expander_LWR });
 
         TableLayout left_tl = new();
         left_tl.Rows.Add(new TableRow());
@@ -300,7 +357,7 @@ public partial class MainForm
         setSize(num_lithoLWR, 55);
         upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWR) });
 
-        lbl_lithoLWRFreq = new Label {Text = "Freq", ToolTip = "Frequency of LWR"};
+        lbl_lithoLWRFreq = new Label {Text = "Frequency", ToolTip = "Frequency of LWR"};
         upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWRFreq });
 
         num_lithoLWRFreq = new NumericStepper
@@ -359,9 +416,15 @@ public partial class MainForm
         tl.Rows.Add(new TableRow());
         Panel outer = new() {Content = tl};
 
-        GroupBox outer_gb = new() {Content = outer, Text = "LWR2"};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_LWR2 = new()
+        {
+            Content = outer_gb,
+            Header = "Line Width Roughess (LWR) 2",
+            Expanded  = commonVars.getExpandedUI()
+        };
 
-        lit_lwr.Cells.Add(new TableCell { Control = outer_gb });
+        lit_lwr.Cells.Add(new TableCell { Control = expander_LWR2 });
 
         TableLayout left_tl = new();
         left_tl.Rows.Add(new TableRow());
@@ -397,7 +460,7 @@ public partial class MainForm
         setSize(num_lithoLWR2, 55);
         upper_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_lithoLWR2) });
 
-        lbl_lithoLWR2Freq = new Label {Text = "Freq", ToolTip = "Frequency of LWR"};
+        lbl_lithoLWR2Freq = new Label {Text = "Frequency", ToolTip = "Frequency of LWR"};
         upper_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_lithoLWR2Freq });
 
         num_lithoLWR2Freq = new NumericStepper
@@ -445,13 +508,38 @@ public partial class MainForm
         }
     }
 
+    private void litho_cdu(TableLayout lithography_table)
+    {
+        TableLayout outer_tl = new();
+        Panel outer = new() {Content = outer_tl};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_cdu = new()
+        {
+            Header = "Critical Dimension Uniformity (CDU)",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
+        outer_tl.Rows.Add(new TableRow());
+        lithography_table.Rows.Add(new TableRow());
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_cdu });
+        
+        litho_scdu(outer_tl);
+        litho_tcdu(outer_tl);
+    }
+
     // SCDU
     private void litho_scdu(TableLayout lithography_table)
     {
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
 
-        GroupBox outer_gb = new() {Text = "Side CDU", Content = outer};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_SCDU = new()
+        {
+            Header = "Side CD Uniformity",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
 
         TableLayout tc_tl = new();
         outer_tl.Rows.Add(new TableRow());
@@ -460,7 +548,7 @@ public partial class MainForm
 
         // Outer table, row 1
         lithography_table.Rows.Add(new TableRow());
-        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_SCDU });
 
         // Table layout within cell.
         TableCell tc_0 = new();
@@ -535,7 +623,13 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
 
-        GroupBox outer_gb = new() {Text = "Tips CDU", Content = outer};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_TCDU = new()
+        {
+            Header = "Tips CD Uniformity",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
         TableLayout tc_tl = new();
         outer_tl.Rows.Add(new TableRow());
         outer_tl.Rows[0].Cells.Add(new TableCell { Control = tc_tl });
@@ -543,7 +637,7 @@ public partial class MainForm
 
         // Outer table, row 1
         lithography_table.Rows.Add(new TableRow());
-        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_TCDU });
 
         // Table layout within cell.
         TableCell tc_0 = new();
@@ -610,11 +704,36 @@ public partial class MainForm
     }
 
     // XOL, XOLR, XCOL
+
+    private void litho_ol(TableLayout lithography_table)
+    {
+        TableLayout outer_tl = new();
+        Panel outer = new() {Content = outer_tl};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_overlay = new()
+        {
+            Header = "Overlay",
+            Content = outer_gb,
+            Expanded = commonVars.getExpandedUI()
+        };
+        outer_tl.Rows.Add(new TableRow());
+        lithography_table.Rows.Add(new TableRow());
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_overlay });
+        
+        litho_xol(outer_tl);
+        litho_yol(outer_tl);
+    }
     private void litho_xol(TableLayout lithography_table)
     {
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
-        GroupBox outer_gb = new() {Text = "Horizontal Overlay", Content = outer};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_overlayX = new()
+        {
+            Header = "Horizontal Overlay",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
         outer_tl.Rows.Add(new TableRow());
 
         TableLayout left_tl = new();
@@ -634,7 +753,7 @@ public partial class MainForm
 
         // Outer table, row 1
         lithography_table.Rows.Add(new TableRow());
-        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_overlayX });
 
         // Table layout within cell.
         TableCell sigma_tc = new();
@@ -769,7 +888,13 @@ public partial class MainForm
     {
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
-        GroupBox outer_gb = new() {Text = "Vertical Overlay", Content = outer};
+        GroupBox outer_gb = new() {Content = outer};
+        expander_overlayY = new()
+        {
+            Header = "Vertical Overlay",
+            Content = outer_gb,
+            Expanded  = commonVars.getExpandedUI()
+        };
         outer_tl.Rows.Add(new TableRow());
 
         TableLayout left_tl = new();
@@ -789,7 +914,7 @@ public partial class MainForm
 
         // Outer table, row 1
         lithography_table.Rows.Add(new TableRow());
-        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = outer_gb });
+        lithography_table.Rows[^1].Cells.Add(new TableCell { Control = expander_overlayY });
 
         // Table layout within cell.
         TableCell sigma_tc = new();

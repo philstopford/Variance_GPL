@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Eto.Drawing;
 using Eto.Forms;
@@ -58,7 +57,7 @@ public partial class MainForm
 
     private static void saveViewportSVG(ref OVPSettings vpSettings, string svgFileName)
     {
-        SVGBuilder svg = new();
+        SVGBuilder.SVGBuilder svg = new();
 
         // The polygons in the viewport are stored flipped due to drawing convention. We need to flip them here for SVG to match drawn viewport.
 
@@ -289,7 +288,7 @@ public partial class MainForm
 #if !SVGSINGLETHREADED
                 );
 #endif
-                gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
+                gcell_root.addPolygon(ePoly, layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
             }
         }
 
@@ -338,7 +337,7 @@ public partial class MainForm
 #if !SVGSINGLETHREADED
                 );
 #endif
-                gcell_root.addPath(ePoly.ToArray(), layerIndex + 1, 0);
+                gcell_root.addPath(ePoly, layerIndex + 1, 0);
             }
         }
 
@@ -387,7 +386,7 @@ public partial class MainForm
 #if !SVGSINGLETHREADED
                 );
 #endif
-                gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0);
+                gcell_root.addPolygon(ePoly, layerIndex + 1, 0);
             }
         }
 

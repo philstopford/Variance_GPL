@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using color;
 using keys;
@@ -29,6 +28,9 @@ public class VarianceContext
     public bool AA { get; set; }
     public bool FilledPolygons { get; set; }
     public bool drawPoints { get; set; }
+
+    public bool expandUI { get; set; }
+
     public Colors colors { get; private set; }
     public bool layerPreviewDOETile { get; set; }
     public bool geoCoreCDVariation { get; set; }
@@ -68,6 +70,7 @@ public class VarianceContext
         openGLZoomFactor = 1;
         FilledPolygons = false;
         drawPoints = false;
+        expandUI = true;
         AA = true;
         FGOpacity = 0.7;
         BGOpacity = 0.5;
@@ -77,6 +80,7 @@ public class VarianceContext
         HTCount = HTCount_;
         rngMappingEquations = new List<string>();
         friendlyNumber = false;
+        expandUI = false;
 
         string _msg = string.Empty;
 

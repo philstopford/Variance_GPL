@@ -240,7 +240,7 @@ public partial class MainForm
             {
                 cb_searchPA[layer, i].Checked = false;
             }
-            num_searchPA_UpperLimit[layer, i].Enabled = (bool)cb_searchPA[layer, i].Checked;
+            num_searchPA_UpperLimit[layer, i].Enabled = (bool)cb_searchPA[layer, i].Checked!;
             commonVars.getPASearch().setUpperLimit(layer, i, (decimal)num_searchPA_UpperLimit[layer, i].Value);
 
             commonVars.getPASearch().setPASearchable(layer, i, (bool)cb_searchPA[layer, i].Checked);
@@ -260,7 +260,7 @@ public partial class MainForm
 
         for (int i = 0; i < groupBox_passCaseValues.Length; i++)
         {
-            num_passCaseValues[i].Enabled = (bool)cb_passCaseValues[i].Checked;
+            num_passCaseValues[i].Enabled = (bool)cb_passCaseValues[i].Checked!;
             rb_passValueRadioButtons[i, 0].Enabled = (bool)cb_passCaseValues[i].Checked;
             rb_passValueRadioButtons[i, 1].Enabled = (bool)cb_passCaseValues[i].Checked;
 
@@ -268,7 +268,7 @@ public partial class MainForm
             commonVars.getPASearch().filterIsMaxValue[i] = rb_passValueRadioButtons[i, 1].Checked;
         }
 
-        bool chordMode = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.chord;
+        bool chordMode = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord;
         for (int i = 0; i < groupBox_passCaseValues.Length; i++)
         {
             if (!chordMode)
@@ -276,7 +276,7 @@ public partial class MainForm
                 groupBox_passCaseValues[i].Enabled = false;
                 cb_passCaseValues[i].Checked = false;
             }
-            commonVars.getPASearch().useFilter[i] = (bool)cb_passCaseValues[i].Checked;
+            commonVars.getPASearch().useFilter[i] = (bool)cb_passCaseValues[i].Checked!;
         }
         if (!chordMode)
         {

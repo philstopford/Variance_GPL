@@ -5,25 +5,35 @@ namespace Variance;
 public partial class MainForm
 {
     // 2D Layer Boolean
+    private Expander expander_layerBoolean;
     private GroupBox gB_layerBoolean;
     private DropDown comboBox_BooleanOpAB, comboBox_BooleanOpA, comboBox_BooleanOpB, comboBox_TipLocations_boolean;
     private RadioButton[] rB_BooleanA, rB_BooleanB;
     private Label lbl_TipLocations_boolean, lbl_rayExtension;
     private NumericStepper num_rayExtension;
 
+    private void twoD_LayerUISetup_boolean_expanders(bool toState)
+    {
+        expander_layerBoolean.Expanded = toState;
+    }
+
     private void twoD_LayerUISetup_boolean()
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layerBoolean_table = new();
-            gB_layerBoolean = new GroupBox {Content = groupBox_layerBoolean_table, Text = "Boolean"};
+            gB_layerBoolean = new() {Content = groupBox_layerBoolean_table};
+            expander_layerBoolean = new () {Content = gB_layerBoolean,
+                Header = "Boolean",
+                Expanded = true
+            };
 
             rB_BooleanA = new RadioButton[CentralProperties.maxLayersForMC];
             rB_BooleanB = new RadioButton[CentralProperties.maxLayersForMC];
 
             boolean_table(groupBox_layerBoolean_table);
 
-            layerShapeProperties_tcPanel.Content = gB_layerBoolean;
+            layerShapeProperties_tcPanel.Content = expander_layerBoolean;
 
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
         });

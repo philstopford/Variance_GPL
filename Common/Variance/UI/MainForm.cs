@@ -11,6 +11,7 @@ using Eto.Drawing;
 using Eto.Forms;
 using Eto.Veldrid;
 using geoWrangler;
+using shapeEngine;
 using Veldrid;
 using VeldridEto;
 using PixelFormat = Veldrid.PixelFormat;
@@ -29,6 +30,7 @@ public partial class MainForm
     private VarianceContextGUI varianceContext;
 
     private Command quitCommand, helpCommand, aboutCommand, clearLayer, copyLayer, pasteLayer, newSim, openSim, revertSim, saveSim, saveAsSim;
+    private Command expExpandersCommand, collExpandersCommand;
 
     private List<string> notList, booleanList;
 
@@ -42,10 +44,10 @@ public partial class MainForm
         DataContext = new UIStringLists
         {
             subShapeList = commonVars.subshapes,
-            shapes = commonVars.getAvailableShapes(),
-            noiseTypeList = commonVars.getNoiseTypes(),
-            subShapePos = commonVars.getAvailableSubShapePositions(),
-            tipLocs = commonVars.getAvailableTipsLocations(),
+            shapes = ShapeLibrary.getAvailableShapes(CentralProperties.shapeTable),
+            noiseTypeList = NoiseC.noiseTypes,
+            subShapePos = ShapeSettings.getAvailableSubShapePositions(),
+            tipLocs = ShapeSettings.getAvailableTipsLocations(),
             rngTypeList = commonRNG.rngTypes,
             externalTypeList = commonVars.getExternalTypes(),
             externalFilterList = commonVars.getExternalFilterList(),
@@ -54,7 +56,7 @@ public partial class MainForm
             openGLMode = commonVars.getOpenGLModeList(),
             notList = notList_,
             fallOffList = RayCast.fallOffList,
-            polyFillList = commonVars.getPolyFillTypes(),
+            polyFillList = ShapeSettings.getPolyFillTypes(),
             geoCoreStructureList = commonVars.structureList,
             geoCoreLDList = commonVars.activeStructure_LayerDataTypeList,
             geoCoreStructureList_exp = commonVars.structureList_exp,
@@ -196,6 +198,15 @@ public partial class MainForm
         catch (Exception)
         {
         }
+
+        try
+        {
+            varianceContext.vc.expandUI = Convert.ToBoolean(prefs.Descendants("expandUI").First().Value);
+        }
+        catch (Exception)
+        {
+        }
+
 
         varianceContext.vc.rngMappingEquations.Clear();
         varianceContext.vc.rngMappingEquations.Add("Box-Muller");
@@ -607,6 +618,8 @@ public partial class MainForm
 
             prefsXML.Root.Add(new XElement("friendlyNumber", varianceContext.vc.friendlyNumber));
 
+            prefsXML.Root.Add(new XElement("expandUI", varianceContext.vc.expandUI));
+
             string equationString = "";
             for (int i = 0; i < commonVars.rngCustomMapping.Count; i++)
             {
@@ -833,10 +846,7 @@ public partial class MainForm
         simulationSettingsGroupBoxHeight = 180;
         userGuidanceWidth = 395;
         userGuidanceHeight = simulationOutputGroupBoxHeight + simulationSettingsGroupBoxHeight + 22;
-
-        simButtonWidth = 64;
-        simButtonHeight = 55;
-
+        
         replayNumWidth = 80;
 
         multiThreadWarnWidth = 300;
@@ -1588,7 +1598,7 @@ public partial class MainForm
         tabPage_2D_PASearch_table = new TableLayout();
         tabPage_2D_PASearch_scrollable = new Scrollable {Content = tabPage_2D_PASearch_table};
 
-        tabPage_2D_PASearch = new TabPage {Text = "PA Search", Content = tabPage_2D_PASearch_scrollable};
+        tabPage_2D_PASearch = new TabPage {Text = "Process Assumptions Search", Content = tabPage_2D_PASearch_scrollable};
 
 
         tabControl_2D_simsettings.Pages.Add(tabPage_2D_PASearch);
@@ -1597,7 +1607,7 @@ public partial class MainForm
     private void setup_layout()
     {
         // mainPanel is tab UI.
-        Panel mainPanel = new() {Size = new Size(920, 800), Content = mainTable};
+        Panel mainPanel = new() {Size = new Size(920, 750), Content = mainTable};
         // force the UI out to contain the panel. Hope this will be redundant eventually with the table UI.
         // rightPanel will take viewport and controls.
         Panel rightPanel = new();
@@ -1717,6 +1727,12 @@ public partial class MainForm
 
         saveAsSim = new Command { MenuText = "Save As", ToolBarText = "Save As", Shortcut = Application.Instance.CommonModifier | Keys.Shift | Keys.S };
         saveAsSim.Executed += saveAsHandler;
+        
+        expExpandersCommand = new Command {MenuText = "Unfold All", ToolBarText = "Unfold All", Shortcut = Application.Instance.CommonModifier | Keys.Shift | Keys.X };
+        expExpandersCommand.Executed += expandExpanders;
+
+        collExpandersCommand = new Command {MenuText = "Fold All", ToolBarText = "Fold All", Shortcut = Application.Instance.CommonModifier | Keys.Shift | Keys.C };
+        collExpandersCommand.Executed += collapseExpanders;
 
         // create menu
         Menu = new MenuBar
@@ -1724,7 +1740,8 @@ public partial class MainForm
             Items = {
                 //File submenu
                 new ButtonMenuItem { Text = "&File", Items = { newSim, openSim, revertSim, saveSim, saveAsSim } },
-                new ButtonMenuItem { Text = "&Edit", Items = { copyLayer, pasteLayer, clearLayer } }
+                new ButtonMenuItem { Text = "&Edit", Items = { copyLayer, pasteLayer, clearLayer } },
+                new ButtonMenuItem { Text = "&View", Items = { expExpandersCommand, collExpandersCommand } },
             },
             QuitItem = quitCommand,
             HelpItems = {
@@ -1742,26 +1759,21 @@ public partial class MainForm
         tc.Control = TableLayout.AutoSized(p, centered: true);
 
         TableLayout buttons_table = new();
-        p.Content = buttons_table;
+        p.Content = TableLayout.AutoSized(buttons_table);
         buttons_table.Rows.Add(new TableRow());
-
-        btn_singleCPU = new Button {Text = "Single\r\nCPU"};
-        btn_singleCPU.Click += monteCarloSingleThreadEventHandler;
-        setSize(btn_singleCPU, simButtonWidth, simButtonHeight);
-        // buttons_table.Rows[0].Cells.Add(new TableCell() { Control = btn_singleCPU });
-
-        btn_multiCPU = new Button {Text = "Multi\r\nCPU"};
-        setSize(btn_multiCPU, simButtonWidth, simButtonHeight);
-        btn_multiCPU.Click += monteCarloMultipleThreadEventHandler;
-        buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_multiCPU });
+        
+        btn_Run = new Button {Text = "Run"};
+        //setSize(btn_Run, simButtonWidth, simButtonHeight);
+        btn_Run.Click += monteCarloMultipleThreadEventHandler;
+        buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Run });
 
         btn_Cancel = new Button {Text = "Cancel"};
-        setSize(btn_Cancel, simButtonWidth, simButtonHeight);
-        btn_Cancel.Click += btnCancel;
+        // setSize(btn_Cancel, simButtonWidth, simButtonHeight);
+        //btn_Cancel.Click += btnCancel;
         buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Cancel });
 
         btn_STOP = new Button {Text = "STOP"};
-        setSize(btn_STOP, simButtonWidth, simButtonHeight);
+        //setSize(btn_STOP, simButtonWidth, simButtonHeight);
         btn_STOP.Click += btnSTOP;
         buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_STOP });
     }

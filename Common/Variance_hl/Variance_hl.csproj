@@ -34,18 +34,6 @@
     <Compile Include="..\Variance\DOE\DOESettings.cs">
       <Link>DOE\DOESettings.cs</Link>
     </Compile>
-    <Compile Include="..\Variance\engines\angleHandler.cs">
-      <Link>engines\angleHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Variance\engines\areaHandler.cs">
-      <Link>engines\areaHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Variance\engines\chordHandler.cs">
-      <Link>engines\chordHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Variance\engines\distanceHandler.cs">
-      <Link>engines\distanceHandler.cs</Link>
-    </Compile>
     <Compile Include="..\Variance\entropy\entropy.cs">
       <Link>entropy\entropy.cs</Link>
     </Compile>
@@ -94,9 +82,6 @@
     <Compile Include="..\Variance\support\commonVars.cs">
       <Link>support\commonVars.cs</Link>
     </Compile>
-    <Compile Include="..\Variance\support\Email.cs">
-      <Link>support\Email.cs</Link>
-    </Compile>
     <Compile Include="..\Variance\support\nonSimulationSettings.cs">
       <Link>support\nonSimulationSettings.cs</Link>
     </Compile>
@@ -106,9 +91,6 @@
     <Compile Include="..\Variance\support\replay.cs">
       <Link>support\replay.cs</Link>
     </Compile>
-    <Compile Include="..\Variance\support\shapeLibrary.cs">
-      <Link>support\shapeLibrary.cs</Link>
-    </Compile>
     <Compile Include="..\Variance\support\simpleAES.cs">
       <Link>support\simpleAES.cs</Link>
     </Compile>
@@ -117,9 +99,6 @@
     </Compile>
     <Compile Include="..\Variance\support\Storage.cs">
       <Link>support\Storage.cs</Link>
-    </Compile>
-    <Compile Include="..\Variance\support\SVGBuilder.cs">
-      <Link>support\SVGBuilder.cs</Link>
     </Compile>
     <Compile Include="..\Variance\support\utilityFuncs.cs">
       <Link>support\utilityFuncs.cs</Link>
@@ -134,10 +113,12 @@
       <Project>{576cba59-f35e-4f45-905c-26927e2e441a}</Project>
       <Name>color</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Email\Email.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\entropyRNG\entropyRNG.csproj">
       <Project>{663a7d25-5255-4b85-b94d-53c431426339}</Project>
       <Name>entropyRNG</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoAnalysis\geoAnalysis.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoCore\geoCore.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\geoLib\geoLib.csproj">
       <Project>{87c2783d-ac80-4684-875c-f06237e9cc3f}</Project>
@@ -150,16 +131,17 @@
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\info.lundin.math\info.lundin.math.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\KDTree\KDTree.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\Noise\noise.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\shapeEngine\shapeEngine.csproj" />
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\SVGBuilder\SVGBuilder.csproj" />
     <ProjectReference Include="..\..\..\DesignLibs_GPL\Common\utility\utility.csproj">
       <Project>{c3255560-6437-4eff-8948-971a76c6e9ab}</Project>
       <Name>utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="3.0.0" />
     <PackageReference Include="System.Management" Version="6.0.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="6.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="6.0.1" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
     <PackageReference Include="System.Security.SecureString" Version="4.3.0" />

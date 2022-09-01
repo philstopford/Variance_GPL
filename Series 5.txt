@@ -1,0 +1,57 @@
+Changelog for Variance
+
+5.0
+
+	- Shake-down
+
+5.0a3
+
+	- Adding more fragmentation passes at various stages in the shape generation, to improve contouring.
+	- GeoCore fixes.
+	 - Library removes duplicate points for the layout when loading, to avoid potential contour issue in otherwise-orthogonal geometry.
+	 - Library avoids trying to add a layer name to the mapping dictionary when the key already exists.
+	 - Internal lists are updated when loading layout now, avoiding mismatches on the client side.
+	- Major refactoring of various systems to allow code re-use. No user impact expected.
+	 - SVGBuilder now a separate library.
+	 - GeoWrangler now owns:
+	  - Proximity biasing.
+	   - Added code to address issues when input geometry is not sequenced properly. This resulted in sawtooth edges.
+	  - Noise (LWR) application.
+	 - GeoAnalysis takes care of the analysis engines (area, chord, angle, spacing/enclosure).
+	 - ShapeEngine provides a common, extensible, base geometry reference.
+	  - ShapeSettings is extended by Variance with additional properties.
+	  - Various components then work together to output and modify shapes.
+	- Clipper2 updates and related code changed to avoid the need to reverse solutions.
+
+5.0a2
+
+	- Refactorings of code (no user impact expected).
+	 - Reducing copies, etc. based on code review.
+	- Keyholer enhancements.
+	 - No longer preferentially seek an orthogonal insertion for cases where there is a contributing non-orthogonal polygon.
+	  - Orthogonality preference is about retaining contouring abilities, but non-orthogonal contributors preclude that.
+	 - Reverse-walk second evaluation to catch more suitable insertion candidates not found from the initial pass.
+	- Resolved identified issues in overlap handling due to Clipper 2 changes.
+	 - Adjusted some of the internal methodology also to use Z tagging to find original source of overlap edges. This avoids KDTree usage which could sometimes produce false associations due to proximity effects.
+	- Certain OASIS files were causing trouble before. Now fixed.
+	- Refactoring to move boolean handlers from Variance core to GeoWrangler.
+	 - Enhancement for boolean sequencing to squelch keyholes in inputs and outputs.
+	- Revisions to internal handling of GeoCore data.
+	- Chord handler bug fix.
+	 - Previous implementation had an issue if rotation was applied such that the min-X,min-Y location in the 'B' path was located above the min-Y,min-X location. This caused the edge extraction to find the wrong edge. For the 'B' path, now re-order in min-Y,min-X sequence, which appears to work properly in all cases reviewed up to now.
+	- Updated to latest Clipper2 upstream.
+	- Fixed an issue with geometry exchange where premature terminator removal was breaking things.
+	- UI overhaul to introduce expanders for the various layer sections, and expand/collapse all menu and key combinations.
+
+5.0a1
+
+	- Bug fix to layout file saving that yielded broken or missing geometry in some cases.
+	- ClipperLib 2!
+	 - Many library changes to work with new systems.
+	  - Keyholer adjustments based on new behavior of ClipperLib 2.
+	  - Single polygon negation hack from ClipperLib1 is no longer needed, and actually brought new issues.
+	  - Sequential booleans work fine.
+	  - Minor tweaks to orthogonality checks to permit contouring from boolean sequence, due to not-quite-90 degree angles being observed.
+	  - Added a re-ordering call in the strip colinear code; avoids problems when the initial point is an edge midpoint.
+	  - Open path offsetting is much simpler; old approach retired to take advantage.
+	  - Various changes to raytracer to address some test fails; allow for inversion direction to be adjusted and work to better handle edge cases.

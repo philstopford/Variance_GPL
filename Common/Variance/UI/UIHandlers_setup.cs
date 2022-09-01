@@ -61,12 +61,10 @@ public partial class MainForm
 
             checkBox_aChord.Enabled = false;
             checkBox_bChord.Enabled = false;
-
-            btn_singleCPU.Enabled = false;
-
+            
             btn_Cancel.Enabled = false;
 
-            btn_multiCPU.Enabled = false;
+            btn_Run.Enabled = false;
             btn_STOP.Enabled = false;
             // statusProgressBar.Visible = false;
 

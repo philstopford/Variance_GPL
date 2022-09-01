@@ -5,7 +5,7 @@ namespace Variance;
 public partial class MainForm
 {
     // 2D Layer GeoCore
-    private GroupBox gB_layer_lithography;
+    private Expander expander_layer_geoCore;
     private GroupBox gB_layer_geoCore;
     private Button btn_chooseFile_geoCore, btn_globalApply_geoCore;
     private DropDown comboBox_lDList_geoCore, comboBox_structureList_geoCore, comboBox_polyFill_geoCore, comboBox_tipLocations_geoCore;
@@ -16,16 +16,25 @@ public partial class MainForm
     private NumericStepper num_geoCore_keyHoleSizing;
     private Label lbl_geoCore_keyHoleSizing;
 
+    private void twoD_LayerUISetup_geoCore_expanders(bool toState)
+    {
+        expander_layer_geoCore.Expanded = toState;
+    }
+
     private void twoD_LayerUISetup_geoCore()
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout geoCore_table = new();
-            gB_layer_geoCore = new GroupBox {Content = geoCore_table, Text = "Layout Controls"};
+            gB_layer_geoCore = new () {Content = geoCore_table};
+            expander_layer_geoCore = new () {Content = gB_layer_geoCore,
+                Header = "Layout Controls",
+                Expanded = true
+            };
 
             geocore_table(geoCore_table);
 
-            layerShapeProperties_tcPanel.Content = gB_layer_geoCore;
+            layerShapeProperties_tcPanel.Content = expander_layer_geoCore;
 
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
         });

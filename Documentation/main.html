@@ -183,7 +183,7 @@ li span {
 </style>
 </head>
 <body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
-<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(4.4.2)</font></font></p>
+<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(5.0)</font></font></p>
 <blockquote>
   <p style=" border-top: none; border-bottom: none; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#aaaaaa" face="Cambria, serif"><font color="#aaaaaa" size="6" style="font-size: 20pt"><font size="3" style="font-size: 12pt"><span style="letter-spacing: 0.8pt"><i>Phil Stopford</i></span></font></font></font></p>
 </blockquote>
@@ -223,7 +223,7 @@ li span {
         <li>Copy/paste layer settings, and background layer display make set-up very simple.</li>
         <li>External layout support is extensive:</li>
         <ul>
-          <li>GDS and Oasis, including GZIP-compressed.</li>
+          <li><span>IMPROVED:</span> GDS and OASIS, including GZIP-compressed. 5.0 brings improved support for OASIS, including strict files.</li>
           <li>Layout geometry can be used to drive contour generation.</li>
           <li>Layout geometry can be updated from the file on-disk when the project is loaded.</li>
           <li>Hierarchical layout is better supported in terms of nested cell references, and arrays of reference cells.</li>
@@ -231,7 +231,8 @@ li span {
         </ul>
         <li>Layer shape can be defined using a Boolean of two other layers, including the results of another Boolean.</li>
         <ul>
-          <li><span>IMPROVED: </span>Further enhanced support for keyholing (one or more cutters fully enclosed within another polygon), including handling of pre-existing keyholes.</li>
+          <li><span>IMPROVED:</span> Use of next-generation polygon clipping library brings performance improvements and better results.</li>
+          <li>Further enhanced support for keyholing (one or more cutters fully enclosed within another polygon), including handling of pre-existing keyholes.</li>
           <li>Auto-removal of interior walls (keyholes) at input to simulation engine pipeline.</li>
         </ul>
       </ul>
@@ -248,6 +249,7 @@ li span {
         <li>Edge tension model to reproduce line narrowing.</li>
         <li>Pitch effect biasing, including on keyholed geometry.</li>
         <ul>
+          <li><span>IMPROVED:</span> Use of next-generation polygon clipping library brings performance improvements and better results.</li>
           <li>Previously, side rays had a disproportionate effect on the computed visibility, leading to muted response. Now, customizable falloffs are available.</li>
         </ul>
       </ul>
@@ -266,19 +268,22 @@ li span {
         <li>Lens distortion : short and long range, pincushion/barrel distortion.</li>
         <li>Wobble (rotational variation)</li>
       </ul>
-      <li>Export of the layer contours to GDSII or Oasis is available, now also from within any viewport.</li>
+      <li><span>IMPROVED:</span> Export of the layer contours to GDSII or OASIS is available, now also from within any viewport.</li>
     </ul>
     <p class="western">Simulation Configuration:</p>
     <p class="western">If you know the variations and want to evaluate them:</p>
     <ul>
       <li>Choose your calculation mode : area, chords, overlap/spacing, intersection angle.</li>
+      <ul>
+        <li><span>IMPROVED:</span> Chord now handles rotated 'B' shape correctly.</li>
+      </ul>
       <li>Set up the number of cases to evaluate.</li>
       <li>Summary file is always showing inputs and outputs for a given simulation.</li>
       <li>Choose whether to output the full set of run data to CSV (important for replaying simulations).</li>
       <ul>
         <li>Export to CSV is fully multithreaded, so runs much faster than before.</li>
       </ul>
-      <li>Support for outputting simulation geometry to GDSII, Oasis, or SVG (SVG was only option prior to this release).</li>
+      <li>Support for outputting simulation geometry to GDSII, OASIS, or SVG (SVG was only option prior to this release).</li>
       <ul>
         <li>Export of the geometry happens during the run, eliminating the memory overhead (at the cost of runtime increase).</li>
         <li>Criteria can be set by result field to limit exports to cases of interest in the run.</li>
@@ -290,6 +295,7 @@ li span {
       <li>Run the simulation.</li>
       <ul>
         <li>Runtime is reduced (where possible) through adaptive geometry decimation.</li>
+          <li><span>IMPROVED:</span> Use of next-generation polygon clipping library brings performance improvements and better results.</li>
       </ul>
     </ul>
     <p class="western">If you want to review certain results in depth, use the replay system to look at specific cases.</p>
@@ -303,12 +309,17 @@ li span {
     <ul>
       <li>Consistent, multi-platform GUI (Windows, Mac, Linux).</li>
       <ul>
+        <li><span>IMPROVED:</span> Expanders to reduce scrolling, with options to expand/collapse all via menu and hotkey.</li>
+        <li><span>IMPROVED:</span> Refined layout.</li>
         <li>User interface is resizable.</li>
         <li>Native platform look-and-feel is preserved, rather than modified, on macOS and Linux (GTK).</li>
       </ul>
       <li>Large modern viewport used throughout:</li>
       <ul>
         <li>The optimal framework is automatically used on the platform being used (Vulkan, OpenGL, Direct3D, Metal). If desired, this can be overridden.</li>
+        <ul>
+          <li>NOTE : nVidia driver problems prevent OpenGL under Linux. Vulkan is fine.</li>
+        </ul>
         <li>Drag and cursor key navigation</li>
         <li>Wheel and key zoom</li>
         <li>Customizable preferences (colors, zoom, antialiasing, opacity, fill).</li>

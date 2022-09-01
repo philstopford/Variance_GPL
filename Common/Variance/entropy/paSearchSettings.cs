@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using shapeEngine;
 
 namespace Variance;
 
@@ -182,7 +183,7 @@ public class PASearch
                 bool enable = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;
                 if (enable)
                 {
-                    if (layerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE)
+                    if (layerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE)
                     {
                         // Disable for geoCore case, as appropriate.
                         if (layerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)

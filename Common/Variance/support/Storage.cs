@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using Error;
 using geoLib;
+using shapeEngine;
 using utility;
 
 namespace Variance;
@@ -59,6 +61,150 @@ public class Storage
     }
 
     // compatibility shim for old projects pre-3.0
+
+    private void modifyLayerRefs_forLayerChange_1xto21(ref EntropyLayerSettings readSettings,
+        int compatibilityLayerOffset)
+    {
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.CDU_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.xOL_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.yOL_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.xOL_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 2 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 3)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.yOL_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) + compatibilityLayerOffset);
+        }
+
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3, 0);
+
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3, 0);
+    }
+
+    private void modifyLayerRefs_forLayerChange_220(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
+    {
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.CDU_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.xOL_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.yOL_corr_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.xOL_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) + compatibilityLayerOffset);
+        }
+
+        if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 4 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 5 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 6 ||
+            readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 7)
+        {
+            readSettings.setInt(EntropyLayerSettings.properties_i.yOL_ref,
+                readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) + compatibilityLayerOffset);
+        }
+
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7, 0);
+
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7 + compatibilityLayerOffset,
+            readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7));
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6, 0);
+        readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7, 0);
+    }
+
     private void modifyLayerRefs_forLayerChange(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
     {
         switch (compatibilityLayerOffset)
@@ -66,92 +212,13 @@ public class Storage
             // v1.x-2.1 file
             case 6:
             {
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.CDU_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.xOL_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.yOL_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.xOL_ref, readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 2 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 3)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.yOL_ref, readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) + compatibilityLayerOffset);
-                }
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3, 0);
-
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3, 0);
+                modifyLayerRefs_forLayerChange_1xto21(ref readSettings, compatibilityLayerOffset);
                 break;
             }
             // v2.2 file
             case 4:
             {
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.CDU_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.xOL_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.yOL_corr_ref, readSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.xOL_ref, readSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) + compatibilityLayerOffset);
-                }
-                if (readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 4 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 5 ||
-                    readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 6 || readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) == 7)
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.yOL_ref, readSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) + compatibilityLayerOffset);
-                }
-
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7, 0);
-
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7 + compatibilityLayerOffset, readSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6, 0);
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7, 0);
+                modifyLayerRefs_forLayerChange_220(ref readSettings, compatibilityLayerOffset);
                 break;
             }
         }
@@ -240,15 +307,11 @@ public class Storage
         return pStoreSimulationSettings(filename, simulationSettings, simulationSettings_nonSim, listOfSettings, implantSimSettings, implantSettings_nonSim, implantSettings_, nonSimulationSettings_);
     }
 
-    private bool pStoreSimulationSettings(string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, List<EntropyLayerSettings> listOfSettings, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
+    private void pStoreSimulationSettings_layer(ref XDocument doc, List<EntropyLayerSettings> listOfSettings)
     {
-        double[] camParameters;
-        XDocument doc = new(new XElement("Variance"));
-        // ReSharper disable once PossibleNullReferenceException
-        doc.Root.Add(new XElement("version", nonSimulationSettings_.version));
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {
-            camParameters = viewportSave?.Invoke(i);
+            double[] camParameters = viewportSave?.Invoke(i);
             XElement xelement = new("layer" + (i + 1),
                 new XElement("name", listOfSettings[i].getString(EntropyLayerSettings.properties_s.name)),
                 new XElement("comment", listOfSettings[i].getString(EntropyLayerSettings.properties_s.comment)),
@@ -277,20 +340,20 @@ public class Storage
                 new XElement("alignGeomY", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignY)),
                 new XElement("shapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shapeIndex)),
                 new XElement("geoCoreShapeEngine", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.gCSEngine)),
-                new XElement("subShapeHorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength)),
-                new XElement("subShapeHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset)),
-                new XElement("subShapeVerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength)),
-                new XElement("subShapeVerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset)),
+                new XElement("subShapeHorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)),
+                new XElement("subShapeHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0)),
+                new XElement("subShapeVerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0)),
+                new XElement("subShapeVerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0)),
                 new XElement("subShapeTipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape0Tip)),
-                new XElement("subShape2HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength)),
-                new XElement("subShape2HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset)),
-                new XElement("subShape2VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength)),
-                new XElement("subShape2VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset)),
+                new XElement("subShape2HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1)),
+                new XElement("subShape2HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1)),
+                new XElement("subShape2VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1)),
+                new XElement("subShape2VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 1)),
                 new XElement("subShape2TipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape1Tip)),
-                new XElement("subShape3HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength)),
-                new XElement("subShape3HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset)),
-                new XElement("subShape3VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength)),
-                new XElement("subShape3VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset)),
+                new XElement("subShape3HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2)),
+                new XElement("subShape3HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 2)),
+                new XElement("subShape3VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2)),
+                new XElement("subShape3VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 2)),
                 new XElement("subShape3TipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape2Tip)),
                 new XElement("subShapeRefIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.subShapeIndex)),
                 new XElement("posInSubShapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.posIndex)),
@@ -420,8 +483,11 @@ public class Storage
             );
             doc.Root.Add(xelement);
         }
+    }
 
-        camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC);
+    private void pStoreSimulationSettings_simulation(ref XDocument doc, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim)
+    {
+        double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC);
         doc.Root.Add(new XElement("settings",
             new XElement("comment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.comment)),
             new XElement("paSearchComment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.paComment)),
@@ -483,8 +549,11 @@ public class Storage
             new XElement("layer1234_5678Operator", simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, 0)),
             new XElement("layer9101112_13141516Operator", simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, 1))
         ));
+    }
 
-        camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC + 1);
+    private void pStoreSimulationSettings_DOE(ref XDocument doc, EntropySettings simulationSettings)
+    {
+        double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC + 1);
         doc.Root.Add(new XElement("DOESettings",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
@@ -511,16 +580,24 @@ public class Storage
             new XElement("rows", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.rows)),
             new XElement("cols", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.cols)),
             new XElement("specificTile", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.sTile)),
-            new XElement("specificTile_Row", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.sTileRow)),
-            new XElement("specificTile_Col", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.sTileCol)),
-            new XElement("colOffset", simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colOffset)),
-            new XElement("rowOffset", simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowOffset)),
+            new XElement("specificTile_Row",
+                simulationSettings.getDOESettings().getInt(DOESettings.properties_i.sTileRow)),
+            new XElement("specificTile_Col",
+                simulationSettings.getDOESettings().getInt(DOESettings.properties_i.sTileCol)),
+            new XElement("colOffset",
+                simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.colOffset)),
+            new XElement("rowOffset",
+                simulationSettings.getDOESettings().getDouble(DOESettings.properties_d.rowOffset)),
             new XElement("listOfTiles", simulationSettings.getDOESettings().getInt(DOESettings.properties_i.uTileList)),
             new XElement("tileList_ColRow", simulationSettings.tileListToString(true)),
-            new XElement("iDRMConfigured", simulationSettings.getDOESettings().getBool(DOESettings.properties_b.iDRM) ? 1 : 0)
+            new XElement("iDRMConfigured",
+                simulationSettings.getDOESettings().getBool(DOESettings.properties_b.iDRM) ? 1 : 0)
         ));
+    }
 
-        camParameters = implantViewportSave?.Invoke();
+    private void pStoreSimulationSettings_implant(ref XDocument doc, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
+    {
+        double[] camParameters = implantViewportSave?.Invoke();
         doc.Root.Add(new XElement("implant",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
@@ -543,6 +620,18 @@ public class Storage
             new XElement("generateExternal", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.external)),
             new XElement("externalType", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalType))
         ));
+    }
+
+    private bool pStoreSimulationSettings(string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, List<EntropyLayerSettings> listOfSettings, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
+    {
+        XDocument doc = new(new XElement("Variance"));
+        // ReSharper disable once PossibleNullReferenceException
+        doc.Root.Add(new XElement("version", nonSimulationSettings_.version));
+        
+        pStoreSimulationSettings_layer(ref doc, listOfSettings);
+        pStoreSimulationSettings_simulation(ref doc, simulationSettings, simulationSettings_nonSim);
+        pStoreSimulationSettings_DOE(ref doc, simulationSettings);
+        pStoreSimulationSettings_implant(ref doc, implantSimSettings, implantSettings_nonSim, implantSettings_, nonSimulationSettings_);
 
         bool savedOK = true;
         try
@@ -561,41 +650,11 @@ public class Storage
         return pLoadSimulationSettings(currentVersion, filename, simulationSettings, simulationSettings_nonSim, implantSimSettings, implantSettings_nonSim, implantSettings_);
     }
 
-    private string pLoadSimulationSettings(string currentVersion, string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_)
+    private void pLoadSimulationSettings_layer(string[] tokenVersion, XElement simulationFromFile)
     {
-        loadedLayers = new bool[CentralProperties.maxLayersForMC];
-        string returnString = "";
-        bool error = false;
-        XElement simulationFromFile;
-        try
-        {
-            simulationFromFile = XElement.Load(filename);
-        }
-        catch (Exception ex)
-        {
-            return ex.Message;
-        }
-
-        // root is required for legacy projects.
-        if (simulationFromFile.Name != "Variance" && simulationFromFile.Name != "root")
-        {
-            return "This is not a " + CentralProperties.productName + " project file.";
-        }
-
-        EntropyLayerSettings readSettings = new();
-
-        string version = simulationFromFile.Descendants("version").First().Value;
-        string[] tokenVersion = version.Split(new[] { '.' });
-
-        if (version != currentVersion)
-        {
-            ErrorReporter.showMessage_OK("Settings file for version " + version, "Legacy import");
-        }
-
-        prepUI?.Invoke();
-
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
+            EntropyLayerSettings readSettings = new();
             // Tracking our loaded layers to avoid stomping over them.
             if (loadedLayers[layer])
             {
@@ -731,9 +790,9 @@ public class Storage
 
                 if (Convert.ToInt32(tokenVersion[0]) == 1 && Convert.ToInt32(tokenVersion[1]) < 9)
                 {
-                    if (readSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Sshape)
+                    if (readSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Sshape)
                     {
-                        readSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CommonVars.shapeNames.GEOCORE); //increment to map to the GDS setting in the 1.9 version.
+                        readSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.GEOCORE); //increment to map to the GDS setting in the 1.9 version.
                     }
                 }
             }
@@ -744,38 +803,38 @@ public class Storage
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorLength").First().Value), 0);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horLength, 0);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorOffset").First().Value), 0);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeVerLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeVerLength").First().Value), 0);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verLength, 0);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeVerOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeVerOffset").First().Value), 0);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0);
             }
 
             try
@@ -789,38 +848,38 @@ public class Storage
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorLength").First().Value), 1);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s1HorLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horLength, 1);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorOffset").First().Value), 1);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2VerLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2VerLength").First().Value), 1);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2VerOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2VerOffset").First().Value), 1);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verOffset, 1);
             }
 
             try
@@ -834,38 +893,38 @@ public class Storage
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3HorLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3HorLength").First().Value), 2);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s2HorLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horLength, 2);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3HorOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3HorOffset").First().Value), 2);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horOffset, 2);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3VerLength").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3VerLength").First().Value), 2);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s2VerLength);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verLength, 2);
             }
 
             try
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3VerOffset").First().Value));
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape3VerOffset").First().Value), 2);
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verOffset, 2);
             }
 
             try
@@ -1838,7 +1897,11 @@ public class Storage
             setLayerSettings?.Invoke(readSettings, layer, false, updateGeoCoreGeometryFromFile); // avoid resuming the UI
             loadedLayers[layer] = true;
         }
+    }
 
+    private bool pLoadSimulationSettings_simulation(string[] tokenVersion, XElement simulationFromFile, ref EntropySettings simulationSettings, ref EntropySettings_nonSim simulationSettings_nonSim)
+    {
+        bool error = false;
         try
         {
             suspendSettingsUI?.Invoke();
@@ -2216,6 +2279,13 @@ public class Storage
             error = true;
         }
 
+        return error;
+    }
+
+    private bool pLoadSimulationSettings_DOE(string[] tokenVersion, XElement simulationFromFile, ref EntropySettings simulationSettings)
+    {
+        bool error = false;
+
         try
         {
             string doeLabel = "DOESettings";
@@ -2408,6 +2478,13 @@ public class Storage
             error = true;
         }
 
+        return error;
+    }
+
+    private bool pLoadSimulationSettings_implant(XElement simulationFromFile, ref EntropySettings implantSimSettings, ref EntropySettings_nonSim implantSettings_nonSim, ref EntropyImplantSettings implantSettings_)
+    {
+        bool error = false;
+
         try
         {
             const string implantLabel = "implant";
@@ -2589,6 +2666,53 @@ public class Storage
         {
             ErrorReporter.showMessage_OK("Failed in implant loading: " + ex, "Error");
             error = true;
+        }
+
+        return error;
+    }
+    
+    private string pLoadSimulationSettings(string currentVersion, string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_)
+    {
+        loadedLayers = new bool[CentralProperties.maxLayersForMC];
+        string returnString = "";
+        bool error = false;
+        XElement simulationFromFile;
+        try
+        {
+            simulationFromFile = XElement.Load(filename);
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
+        }
+
+        // root is required for legacy projects.
+        if (simulationFromFile.Name != "Variance" && simulationFromFile.Name != "root")
+        {
+            return "This is not a " + CentralProperties.productName + " project file.";
+        }
+        
+        string version = simulationFromFile.Descendants("version").First().Value;
+        string[] tokenVersion = version.Split(new[] { '.' });
+
+        if (version != currentVersion)
+        {
+            ErrorReporter.showMessage_OK("Settings file for version " + version, "Legacy import");
+        }
+
+        prepUI?.Invoke();
+        
+        pLoadSimulationSettings_layer(tokenVersion, simulationFromFile);
+        error = pLoadSimulationSettings_simulation(tokenVersion, simulationFromFile, ref simulationSettings, ref simulationSettings_nonSim);
+        if (!error)
+        {
+            error = pLoadSimulationSettings_DOE(tokenVersion, simulationFromFile, ref simulationSettings);
+        }
+
+        if (!error)
+        {
+            error = pLoadSimulationSettings_implant(simulationFromFile, ref implantSimSettings,
+                ref implantSettings_nonSim, ref implantSettings_);
         }
 
         resumeUI?.Invoke();

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using color;
 using Eto.Drawing;
 using Eto.Forms;
 using geoLib;
+using shapeEngine;
 
 namespace Variance;
 
@@ -357,8 +357,8 @@ public partial class MainForm
 
             listBox_layers.SelectedIndex = selectedLayer;
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE &&
-                !(bool)cB_geoCore_shapeEngine.Checked)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE &&
+                !(bool)cB_geoCore_shapeEngine.Checked!)
             {
                 cB_FlipH.Checked = false;
                 cB_FlipV.Checked = false;
@@ -381,13 +381,13 @@ public partial class MainForm
                 cB_FlipV.Enabled = true;
 
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 0);
-                if ((bool)cB_FlipH.Checked)
+                if ((bool)cB_FlipH.Checked!)
                 {
                     commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 1);
                 }
 
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 0);
-                if ((bool)cB_FlipV.Checked)
+                if ((bool)cB_FlipV.Checked!)
                 {
                     commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 1);
                 }
@@ -435,10 +435,10 @@ public partial class MainForm
             // Enable control requires various checks to ensure it is appropriate. These complicated checks are below and commented.
             if (
                 num_subshape_hl.Value != 0 &&
-                num_subshape_vl.Value != 0 && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.GEOCORE && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.none ||
-                commonVars.getGeoCoreHandler(settingsIndex).isValid() && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE ||
-                commonVars.getLayerSettings(settingsIndex).isReloaded() && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE ||
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN
+                num_subshape_vl.Value != 0 && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.GEOCORE && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.none ||
+                commonVars.getGeoCoreHandler(settingsIndex).isValid() && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE ||
+                commonVars.getLayerSettings(settingsIndex).isReloaded() && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE ||
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN
             )
             {
                 // Also tweak 'show drawn' here.
@@ -508,7 +508,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setFileData(new List<GeoLibPointF[]> { defaultPointArray });
             }
 
-            if ((bool)cB_geoCore_shapeEngine.Checked)
+            if ((bool)cB_geoCore_shapeEngine.Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.gCSEngine, 1);
             }
@@ -517,7 +517,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.gCSEngine, 0);
             }
 
-            if ((bool)cB_geoCore_shapeEngine_perPoly.Checked)
+            if ((bool)cB_geoCore_shapeEngine_perPoly.Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.perPoly, 1);
             }
@@ -526,7 +526,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.perPoly, 0);
             }
 
-            if ((bool)cB_geoCore_layoutReference.Checked)
+            if ((bool)cB_geoCore_layoutReference.Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.refLayout, 1);
             }
@@ -535,12 +535,12 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.refLayout, 0);
             }
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE) // layout option selected.
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE) // layout option selected.
             {
                 do2DLayerUI_geoCore(settingsIndex);
             }
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN)
             {
                 do2DLayerUI_Boolean(settingsIndex);
             }
@@ -549,7 +549,7 @@ public partial class MainForm
 
             bool[] warnArray = { false, false, false };
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.none || commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.rect)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.none || commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.rect)
             {
                 layer_clampSubShape2(minHLength: 0, 
                     maxHLength: 1000000, 
@@ -570,7 +570,7 @@ public partial class MainForm
                     maxVOffset: 1000000
                 );
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.none)
+                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.none)
                 {
                     num_subshape_hl.Value = 0;
                     num_subshape_vl.Value = 0;
@@ -590,59 +590,59 @@ public partial class MainForm
 
             }
 
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape1Tip, comboBox_tipLocations2.SelectedIndex);
 
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape2Tip, comboBox_tipLocations3.SelectedIndex);
 
-            warnArray[0] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) == 0;
+            warnArray[0] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) == 0;
 
             // Boolean and geoCore have their own handling for this.
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.GEOCORE && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.BOOLEAN)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.GEOCORE && commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.BOOLEAN)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape0Tip, comboBox_tipLocations.SelectedIndex);
             }
 
             // Subshape 2 offsets contingent on shape selection choice
             if (
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.none &&
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.rect &&
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.GEOCORE &&
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.BOOLEAN
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.none &&
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.rect &&
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.GEOCORE &&
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.BOOLEAN
             )
             {
                 layer_clampSubShape(minHLength: 0.01, maxHLength: 1000000, minVLength: 0.01, maxVLength: 1000000, minHOffset: -1000000, maxHOffset: 1000000, minVOffset: -1000000, maxVOffset: 1000000);
 
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape1Tip, comboBox_tipLocations2.SelectedIndex);
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Xshape) // Limit offsets of subshape 2 for X-shape.
+                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Xshape) // Limit offsets of subshape 2 for X-shape.
                 {
                     do2DLayerUI_X(settingsIndex);
                 }
-                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Tshape) // Disabled horizontal offset of subshape 2 for T-shape.
+                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Tshape) // Disabled horizontal offset of subshape 2 for T-shape.
                 {
                     do2DLayerUI_T(settingsIndex);
                 }
-                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Lshape) // Disable horizontal and vertical offsets of subshape 2 for L-shape
+                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Lshape) // Disable horizontal and vertical offsets of subshape 2 for L-shape
                 {
                     do2DLayerUI_L(settingsIndex);
                 }
-                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Ushape) // U-shape
+                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Ushape) // U-shape
                 {
                     do2DLayerUI_U(settingsIndex);
                 }
-                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Sshape) // S-shape
+                else if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Sshape) // S-shape
                 {
                     do2DLayerUI_S(settingsIndex);
                 }
@@ -650,15 +650,15 @@ public partial class MainForm
                 {
                     num_subshape2_ho.Enabled = true;
                     num_subshape2_vo.Enabled = true;
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+                    commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
                 }
 
-                warnArray[1] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength) == 0;
+                warnArray[1] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1) == 0;
 
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Sshape)
+                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Sshape)
                 {
-                    warnArray[2] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength) == 0;
+                    warnArray[2] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2) == 0;
                 }
             }
 
@@ -694,7 +694,7 @@ public partial class MainForm
             do2DLayerUI_litho(settingsIndex, updateUI);
 
             // If we have a geoCore layer, and it's tagged for DOE, and we have the layer preview based on the DOE extraction, we need to trigger the tile extraction.
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE && commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1 && commonVars.getLayerPreviewDOETile())
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE && commonVars.getSimulationSettings().getDOESettings().getLayerAffected(settingsIndex) == 1 && commonVars.getLayerPreviewDOETile())
             {
                 // Need a tile extraction update
                 entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false);
@@ -733,9 +733,9 @@ public partial class MainForm
                 }
             }
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE ||
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN ||
-                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.none)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE ||
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN ||
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.none)
             {
                 warnNeeded = false;
             }
@@ -765,10 +765,10 @@ public partial class MainForm
     {
         // Any configuration beyond the first couple requires a second shape to be defined so we need to display that part of the interface.
         if (
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.none &&
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.rect &&
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.GEOCORE &&
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.BOOLEAN
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.none &&
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.rect &&
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.GEOCORE &&
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.BOOLEAN
         )
         {
             // Let's display the subshape 2 section if a shape configuration is chosen that requires it.
@@ -778,7 +778,7 @@ public partial class MainForm
             num_subshape2_vo.Enabled = true;
             comboBox_tipLocations2.Enabled = true;
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.Sshape)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Sshape)
             {
                 num_subshape3_hl.Enabled = true;
                 num_subshape3_vl.Enabled = true;
@@ -862,7 +862,7 @@ public partial class MainForm
         cB_edgeSlide.Enabled = true;
         num_edgeSlideTension.Enabled = true;
 
-        if ((bool)cB_edgeSlide.Checked)
+        if ((bool)cB_edgeSlide.Checked!)
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.edgeSlide, 1);
             num_edgeSlideTension.Enabled = true;
@@ -883,7 +883,7 @@ public partial class MainForm
     private void do2DLayerUI_Boolean(int settingsIndex)
     {
         comboBox_subShapeRef.SelectedIndex = 0;
-        comboBox_posSubShape.SelectedIndex = (int)CommonVars.subShapeLocations.BL;
+        comboBox_posSubShape.SelectedIndex = (int)ShapeSettings.subShapeLocations.BL;
         comboBox_subShapeRef.Enabled = false;
         comboBox_posSubShape.Enabled = false;
 
@@ -948,7 +948,7 @@ public partial class MainForm
 
         // Disable subshapes
         comboBox_subShapeRef.SelectedIndex = 0;
-        comboBox_posSubShape.SelectedIndex = (int)CommonVars.subShapeLocations.BL;
+        comboBox_posSubShape.SelectedIndex = (int)ShapeSettings.subShapeLocations.BL;
         comboBox_subShapeRef.Enabled = false;
         comboBox_posSubShape.Enabled = false;
 
@@ -979,7 +979,7 @@ public partial class MainForm
         commonVars.subshapes[settingsIndex].Clear();
         commonVars.subshapes[settingsIndex].Add("1");
         comboBox_subShapeRef.SelectedIndex = 0;
-        comboBox_posSubShape.SelectedIndex = (int)CommonVars.subShapeLocations.BL;
+        comboBox_posSubShape.SelectedIndex = (int)ShapeSettings.subShapeLocations.BL;
 
         if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)
         {
@@ -1111,7 +1111,7 @@ public partial class MainForm
         comboBox_lDList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_structureList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
 
-        commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, (bool)cB_DOE_geoCore.Checked ? 1 : 0);
+        commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, (bool)cB_DOE_geoCore.Checked! ? 1 : 0);
     }
 
     private void do2DLayerUI_X(int settingsIndex)
@@ -1127,10 +1127,10 @@ public partial class MainForm
             maxVOffset: 1000000
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
         num_subshape3_hl.Value = 0;
         num_subshape3_vl.Value = 0;
@@ -1138,13 +1138,13 @@ public partial class MainForm
         num_subshape3_vo.Value = 0;
 
         const decimal minSS2VOffset = 1;
-        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
 
-        decimal minSS2HOffset = -(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength));
+        decimal minSS2HOffset = -(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0));
         const decimal maxSS2HOffset = -1;
 
-        decimal minSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) + 2 * 0.01m;
-        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 2 * 0.01m;
+        decimal minSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) + 2 * 0.01m;
+        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - 2 * 0.01m;
         if (maxSS2VLength < 0)
         {
             maxSS2VLength = 0.02m;
@@ -1160,15 +1160,15 @@ public partial class MainForm
             maxVOffset: (double)maxSS2VOffset
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
 
         num_subshape2_ho.Enabled = true;
         num_subshape2_vo.Enabled = true;
@@ -1187,10 +1187,10 @@ public partial class MainForm
             maxVOffset: 1000000
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
         num_subshape3_hl.Value = 0;
         num_subshape3_vl.Value = 0;
@@ -1199,28 +1199,28 @@ public partial class MainForm
 
         const decimal minSS2HLength = 0.01m;
         const decimal minSS2VLength = 0.02m;
-        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 2 * 0.01m;
-        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - 2 * 0.01m;
+        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
 
         layer_clampSubShape2(minHLength: (double)minSS2HLength, 
             maxHLength: 1000000, 
             minVLength: (double)minSS2VLength, 
             maxVLength: (double)maxSS2VLength,
-            minHOffset: (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength),
-            maxHOffset: (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength),
+            minHOffset: (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0),
+            maxHOffset: (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0),
             minVOffset: 1, 
             maxVOffset: (double)maxSS2VOffset
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
 
         num_subshape2_ho.Enabled = false;
         num_subshape2_vo.Enabled = true;
@@ -1228,10 +1228,10 @@ public partial class MainForm
 
     private void do2DLayerUI_L(int settingsIndex)
     {
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
         num_subshape3_hl.Value = 0;
         num_subshape3_vl.Value = 0;
@@ -1240,10 +1240,10 @@ public partial class MainForm
 
         const decimal minSS2HLength = 0;
         const decimal minSS2VLength = 0;
-        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
+        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0);
 
-        decimal minSS2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
-        decimal maxSS2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
+        decimal minSS2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0);
+        decimal maxSS2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0);
         decimal minSS2VOffset = 0;
         decimal maxSS2VOffset = 0;
 
@@ -1257,15 +1257,15 @@ public partial class MainForm
             maxVOffset: (double)maxSS2VOffset
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
 
         num_subshape2_ho.Enabled = false;
         num_subshape2_vo.Enabled = false;
@@ -1284,10 +1284,10 @@ public partial class MainForm
             maxVOffset: 1000000
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
         num_subshape3_hl.Value = 0;
         num_subshape3_vl.Value = 0;
@@ -1296,11 +1296,11 @@ public partial class MainForm
 
         const decimal minSS2HLength = 0.02m;
         const decimal minSS2VLength = 0.02m;
-        decimal maxSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - 0.02m;
-        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 0.02m;
+        decimal maxSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) - 0.02m;
+        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - 0.02m;
 
-        decimal ss2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength) - 0.02m;
-        decimal ss2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+        decimal ss2HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1) - 0.02m;
+        decimal ss2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
 
         layer_clampSubShape2(minHLength: (double)minSS2HLength, 
             maxHLength: (double)maxSS2HLength, 
@@ -1312,15 +1312,15 @@ public partial class MainForm
             maxVOffset: (double)ss2VOffset
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
 
         num_subshape2_ho.Enabled = true;
         num_subshape2_vo.Enabled = false;
@@ -1339,18 +1339,18 @@ public partial class MainForm
             maxVOffset: 1000000
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(num_subshape_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset, Convert.ToDecimal(num_subshape_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(num_subshape_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset, Convert.ToDecimal(num_subshape_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape_hl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape_ho.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape_vl.Value), 0);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape_vo.Value), 0);
 
         const decimal minSS2HLength = 0.01m;
-        decimal maxSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - 0.01m;
+        decimal maxSS2HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) - 0.01m;
         const decimal minSS2VLength = 0.02m;
-        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 0.01m;
+        decimal maxSS2VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - 0.01m;
         const decimal ss2HOffset = 0;
         const decimal minSS2VOffset = 0.01m;
-        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
+        decimal maxSS2VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
         layer_clampSubShape2(minHLength: (double)minSS2HLength, 
             maxHLength: (double)maxSS2HLength, 
             minVLength: (double)minSS2VLength, 
@@ -1362,12 +1362,12 @@ public partial class MainForm
         );
 
         const decimal minSS3HLength = 0.01m;
-        decimal maxSS3HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - 0.01m;
+        decimal maxSS3HLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) - 0.01m;
         const decimal minSS3VLength = 0.02m;
-        decimal maxSS3VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - 0.01m;
-        decimal ss3HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength);
+        decimal maxSS3VLength = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - 0.01m;
+        decimal ss3HOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2);
         const decimal minSS3VOffset = 0.01m;
-        decimal maxSS3VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength);
+        decimal maxSS3VOffset = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) - commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2);
         layer_clampSubShape3(minHLength: (double)minSS3HLength, 
             maxHLength: (double)maxSS3HLength, 
             minVLength: (double)minSS3VLength, 
@@ -1378,15 +1378,15 @@ public partial class MainForm
             maxVOffset: (double)maxSS3VOffset
         );
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorLength, Convert.ToDecimal(num_subshape2_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerLength, Convert.ToDecimal(num_subshape2_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset, Convert.ToDecimal(num_subshape2_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset, Convert.ToDecimal(num_subshape2_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape2_hl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape2_vl.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape2_ho.Value), 1);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape2_vo.Value), 1);
 
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorLength, Convert.ToDecimal(num_subshape3_hl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerLength, Convert.ToDecimal(num_subshape3_vl.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset, Convert.ToDecimal(num_subshape3_ho.Value));
-        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset, Convert.ToDecimal(num_subshape3_vo.Value));
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(num_subshape3_hl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(num_subshape3_ho.Value), 2);
+        commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
 
         commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape2Tip, comboBox_tipLocations3.SelectedIndex);
 
@@ -1409,7 +1409,7 @@ public partial class MainForm
         commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.lwr2, Convert.ToDecimal(num_lithoLWR2.Value));
         commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq, Convert.ToDecimal(num_lithoLWR2Freq.Value));
         commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2Type, comboBox_LWR2NoiseType.SelectedIndex);
-        if ((bool)cB_layer_LWRPreview.Checked)
+        if ((bool)cB_layer_LWRPreview.Checked!)
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwrPreview, 1);
         }
@@ -1474,7 +1474,7 @@ public partial class MainForm
                 continue;
             }
 
-            if ((bool)cB_OLRX_Av[i].Checked)
+            if ((bool)cB_OLRX_Av[i].Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i, 1);
             }
@@ -1483,7 +1483,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i, 0);
             }
 
-            if ((bool)cB_layer_OLRY_Av[i].Checked)
+            if ((bool)cB_layer_OLRY_Av[i].Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, i, 1);
             }
@@ -1625,7 +1625,7 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_av, 0);
         }
 
-        if ((bool)cB_overlayYReference_Av.Checked)
+        if ((bool)cB_overlayYReference_Av.Checked!)
         {
             if (updateUI)
             {
@@ -1786,7 +1786,7 @@ public partial class MainForm
 
     private void showDrawn(int settingsIndex)
     {
-        bool showDrawn = (bool)cB_ShowDrawn.Checked;
+        bool showDrawn = (bool)cB_ShowDrawn.Checked!;
         commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.showDrawn, showDrawn ? 1 : 0);
         doShowDrawn(settingsIndex);
     }
@@ -1811,27 +1811,27 @@ public partial class MainForm
         booleanGBVisible[layer] = false;
 
         if (
-            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.none &&
-            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.GEOCORE &&
-            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CommonVars.shapeNames.BOOLEAN
+            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.none &&
+            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.GEOCORE &&
+            commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) != (int)CentralProperties.shapeNames.BOOLEAN
         )
         {
             subShapeGBVisible[layer] = true;
         }
 
-        if (commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE)
+        if (commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE)
         {
             geoGBVisible[layer] = true;
         }
 
-        if (commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN)
+        if (commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN)
         {
             booleanGBVisible[layer] = true;
         }
 
         if (subShapeGBVisible[layer])
         {
-            layerShapeProperties_tcPanel.Content = gB_subShapes;
+            layerShapeProperties_tcPanel.Content = expander_subShapes;
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             comboBox_tipLocations.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shape0Tip);
             comboBox_tipLocations2.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shape1Tip);
@@ -1839,7 +1839,7 @@ public partial class MainForm
         }
         else if (geoGBVisible[layer])
         {
-            layerShapeProperties_tcPanel.Content = gB_layer_geoCore;
+            layerShapeProperties_tcPanel.Content = expander_layer_geoCore;
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             comboBox_tipLocations_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shape0Tip);
             comboBox_polyFill_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.fill);
@@ -1863,7 +1863,7 @@ public partial class MainForm
         }
         else if (booleanGBVisible[layer])
         {
-            layerShapeProperties_tcPanel.Content = gB_layerBoolean;
+            layerShapeProperties_tcPanel.Content = expander_layerBoolean;
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
             comboBox_TipLocations_boolean.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.shape0Tip);
             comboBox_BooleanOpA.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.bLayerOpA);

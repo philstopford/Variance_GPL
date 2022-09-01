@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Eto.Forms;
@@ -28,10 +27,10 @@ public partial class MainForm
             Title = "Enter file to save",
             Filters =
             {
-                new FileFilter("GDS file", "*.gds", ".gdsii"),
-                new FileFilter("GDS file, GZIP compressed", "*.gds.gz", "*.gdsii.gz"),
-                new FileFilter("OAS file", "*.oas", "*.oasis"),
-                new FileFilter("OAS file. GZIP compressed", "*.oas.gz", "*.oasis.gz")
+                new FileFilter("GDS file", "*.gds", ".gdsii", "*.GDS", ".GDSII"),
+                new FileFilter("GDS file, GZIP compressed", "*.gds.gz", "*.gdsii.gz", "*.GDS.GZ", "*.GDSII.GZ"),
+                new FileFilter("OAS file", "*.oas", "*.oasis", "*.OAS", "*.OASIS"),
+                new FileFilter("OAS file. GZIP compressed", "*.oas.gz", "*.oasis.gz", "*.OAS.GZ", "*.OASIS.GZ")
             }
         };
         if (sfd.ShowDialog(ParentWindow) != DialogResult.Ok)
@@ -166,7 +165,7 @@ public partial class MainForm
 
                     GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
 
-                    gcell_root.addPolygon(ePoly.ToArray(), layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
+                    gcell_root.addPolygon(ePoly, layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                 }
             }
 

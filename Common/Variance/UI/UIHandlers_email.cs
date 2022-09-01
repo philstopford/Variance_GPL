@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using EmailNS;
+using Error;
 
 namespace Variance;
 
@@ -19,7 +21,7 @@ public partial class MainForm
         varianceContext.vc.host = commonVars.getNonSimulationSettings().host = text_server.Text;
         varianceContext.vc.emailPwd = commonVars.getNonSimulationSettings().emailPwd = varianceContext.vc.aes.EncryptToString(text_emailPwd.Text);
         varianceContext.vc.port = commonVars.getNonSimulationSettings().port = num_port.Value.ToString(CultureInfo.InvariantCulture);
-        varianceContext.vc.ssl = commonVars.getNonSimulationSettings().ssl = (bool)checkBox_SSL.Checked;
+        varianceContext.vc.ssl = commonVars.getNonSimulationSettings().ssl = (bool)checkBox_SSL.Checked!;
 
         bool emailOK = validateEmailSettings();
         checkBox_EmailCompletion.Enabled = emailOK;
@@ -32,7 +34,14 @@ public partial class MainForm
 
     private void emailTest(object sender, EventArgs e)
     {
-        Email.Send(varianceContext.vc.host, varianceContext.vc.port, varianceContext.vc.ssl, "Variance Email Test", "Testing 1 2 3", varianceContext.vc.emailAddress, varianceContext.vc.aes.DecryptString(varianceContext.vc.emailPwd));
+        try
+        {
+            Email.Send(varianceContext.vc.host, varianceContext.vc.port, varianceContext.vc.ssl, "Variance Email Test", "Testing 1 2 3", varianceContext.vc.emailAddress, varianceContext.vc.aes.DecryptString(varianceContext.vc.emailPwd));
+        }
+        catch (Exception ex)
+        {
+            ErrorReporter.showMessage_OK(ex.Message, "Error sending mail");
+        }
     }
 
 }

@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;CHAOSSINGLETHREADED</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.6.1-ci-20220104.1651622530" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.1" />
     <PackageReference Include="Eto.Veldrid.Wpf" Version="0.1.0" />
   </ItemGroup>
 

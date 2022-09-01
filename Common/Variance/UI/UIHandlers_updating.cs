@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Eto.Drawing;
 using Eto.Forms;
+using shapeEngine;
 
 namespace Variance;
 
@@ -40,12 +41,12 @@ public partial class MainForm
 #if !VARIANCESINGLETHREADED
         Parallel.For(0, limit, point =>
 #else
-            for (Int32 point = 0; point < tmpPoints.Count(); point++)
+        for (Int32 point = 0; point < tmpPoints.Count(); point++)
 #endif
-            {
-                tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].X,
-                    (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].Y);
-            }
+        {
+            tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].X,
+                (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].Y);
+        }
 #if !VARIANCESINGLETHREADED
         );
 #endif
@@ -74,12 +75,12 @@ public partial class MainForm
 #if !VARIANCESINGLETHREADED
         Parallel.For(0, limit, point =>
 #else
-            for (Int32 point = 0; point < tmpPoints.Count(); point++)
+        for (Int32 point = 0; point < tmpPoints.Count(); point++)
 #endif
-            {
-                tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].X,
-                    (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].Y);
-            }
+        {
+            tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].X,
+                (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].Y);
+        }
 #if !VARIANCESINGLETHREADED
         );
 #endif
@@ -224,20 +225,20 @@ public partial class MainForm
 
             switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
             {
-                case (int)CommonVars.calcModes.area:
+                case (int)geoAnalysis.supported.calcModes.area:
                     checkBox_perPoly.Enabled = true;
-                    checkBox_perPoly.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.perpoly;
+                    checkBox_perPoly.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.AreaHandler.areaCalcModes.perpoly;
 
                     break;
-                case (int)CommonVars.calcModes.enclosure_spacing_overlap:
+                case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
                     checkBox_withinMode.Enabled = true;
 
-                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacing || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacingOld)
+                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld)
                     {
                         checkBox_useShortestEdge.Enabled = true;
                     }
 
-                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosure || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosureOld)
+                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld)
                     {
                         checkBox_withinMode.Checked = true;
                     }
@@ -246,7 +247,7 @@ public partial class MainForm
                         checkBox_withinMode.Checked = false;
                     }
 
-                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.enclosure || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.spacingCalcModes.spacing)
+                    if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing)
                     {
                         checkBox_useShortestEdge.Checked = true;
                     }
@@ -255,13 +256,13 @@ public partial class MainForm
                         checkBox_useShortestEdge.Checked = false;
                     }
                     break;
-                case (int)CommonVars.calcModes.chord:
+                case (int)geoAnalysis.supported.calcModes.chord:
                     checkBox_aChord.Enabled = true;
                     checkBox_bChord.Enabled = true;
-                    checkBox_aChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) != (int)CommonVars.chordCalcElements.b;
-                    checkBox_bChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) >= (int)CommonVars.chordCalcElements.b;
+                    checkBox_aChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) != (int)geoAnalysis.ChordHandler.chordCalcElements.b;
+                    checkBox_bChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) >= (int)geoAnalysis.ChordHandler.chordCalcElements.b;
                     break;
-                case (int)CommonVars.calcModes.angle:
+                case (int)geoAnalysis.supported.calcModes.angle:
                     break;
             }
 
@@ -540,6 +541,7 @@ public partial class MainForm
             checkBox_perJob.Checked = varianceContext.vc.perJob;
             checkBox_EmailCompletion.Checked = varianceContext.vc.completion;
             checkBox_friendlyNumbers.Checked = varianceContext.vc.friendlyNumber;
+            checkBox_expandUI.Checked = varianceContext.vc.expandUI;
             num_zoomSpeed.Value = varianceContext.vc.openGLZoomFactor;
             num_bgOpacity.Value = varianceContext.vc.BGOpacity;
             num_fgOpacity.Value = varianceContext.vc.FGOpacity;
@@ -831,14 +833,16 @@ public partial class MainForm
 
                             int length = commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Length;
                             PointF[] tmpPoints = new PointF[length];
+                            int poly1 = poly;
+                            int layer1 = layer;
 #if !VARIANCESINGLETHREADED
                             Parallel.For(0, length, point =>
 #else
                             for (Int32 point = 0; point < length; point++)
 #endif
-                                {
-                                    tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly)[point].X, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly)[point].Y);
-                                }
+                            {
+                                tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].X, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].Y);
+                            }
 #if !VARIANCESINGLETHREADED
                             );
 #endif
@@ -877,7 +881,7 @@ public partial class MainForm
 
                         int colorIndex = poly % varianceContext.vc.colors.resultColors.Length; // map our result into the available colors.
                         totalPoints += commonVars.getSimPreview().getPoints(poly).Length;
-                        if (commonVars.getSimPreview().getPoints(poly).Length == 2 || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.chord || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.angle || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)CommonVars.calcModes.enclosure_spacing_overlap)
+                        if (commonVars.getSimPreview().getPoints(poly).Length == 2 || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.angle || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap)
                         {
                             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].addLine(
                                 line: UIHelper.myPointFArrayToPointFArray(commonVars.getSimPreview().getPoints(poly)),
@@ -1177,7 +1181,7 @@ public partial class MainForm
 
         // User has a shape chosen so we can draw a preview
         if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) ==
-            (int) CommonVars.shapeNames.none)
+            (int) CentralProperties.shapeNames.none)
         {
             return previewShapes;
         }
@@ -1192,9 +1196,9 @@ public partial class MainForm
         }
         // Get the drawn polygons.
         if (
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.rect ||
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE ||
-            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.rect ||
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE ||
+            commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN
         )
         {
             PreviewShape pShape1 = new(commonVars, settingsIndex, subShapeIndex: 0, mode: 0, doPASearch: false, previewMode: true, currentRow: 0, currentCol: 0);

@@ -53,7 +53,7 @@ public partial class MainForm
         public ObservableCollection<string> rngMapping { get; set; }
     }
 
-    private const int viewportSize = 484;
+    private const int viewportSize = 10;
 
     private bool[] geoGBVisible, subShapeGBVisible, booleanGBVisible;
 
@@ -120,7 +120,6 @@ public partial class MainForm
         resultFieldWidth,
         commentBoxWidth, commentBoxHeight,
         label_Height,
-        simButtonWidth, simButtonHeight,
         replayNumWidth
         ;
 
@@ -140,7 +139,7 @@ public partial class MainForm
     private CheckBox[] cB_omit;
     private NumericStepper num_viewportZoom, num_viewportX, num_viewportY;
 
-    private Button btn_singleCPU, btn_multiCPU, btn_STOP, btn_Cancel;
+    private Button btn_Run, btn_STOP, btn_Cancel;
 
     private TabControl tabControl_main, tabControl_2D_simsettings;
     private TabPage tab_1DCalc, tabPage2, tabPage_implant, tabPage_utilities, tabPage_2D_Settings, tabPage_2D_DOE, tabPage_2D_PASearch, tabPage_2D_experiment;

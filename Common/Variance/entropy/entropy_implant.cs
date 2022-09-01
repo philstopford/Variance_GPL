@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EmailNS;
 using Error;
 using gds;
 using geoCoreLib;
@@ -307,7 +308,16 @@ public partial class Entropy
         // We'll use simulationSettings here just because legacy put the settings there and it's the easiest option.
         if (commonVars.getNonSimulationSettings().emailOnCompletion && numberOfCases > 1)
         {
-            Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port, commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview, commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+            try
+            {
+                Email.Send(commonVars.getNonSimulationSettings().host, commonVars.getNonSimulationSettings().port,
+                    commonVars.getNonSimulationSettings().ssl, emailString, lastSimResultsOverview,
+                    commonVars.getNonSimulationSettings().emailAddress, commonVars.getNonSimulationSettings().emailPwd);
+            }
+            catch (Exception e)
+            {
+                ErrorReporter.showMessage_OK(e.Message, "Error sending mail");
+            }
         }
 
         if (numberOfCases > 1)
@@ -500,7 +510,7 @@ public partial class Entropy
         string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
         svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
-        SVGBuilder svg = new()
+        SVGBuilder.SVGBuilder svg = new()
         {
             style =
             {
@@ -577,7 +587,7 @@ public partial class Entropy
 
             foreach (GeoLibPoint[] ePoly in resistPolys.Select(t => GeoWrangler.resize_to_int(t, scale)))
             {
-                gcell_root.addPolygon(ePoly.ToArray(), i + 1, 0);
+                gcell_root.addPolygon(ePoly, i + 1, 0);
             }
         }
 
@@ -586,7 +596,7 @@ public partial class Entropy
         g.addLayerName("L2D0", "shadowLine");
         foreach (GeoLibPoint[] ePoly in shadowLine.Select(t => GeoWrangler.resize_to_int(t, scale)))
         {
-            gcell_root.addPolygon(ePoly.ToArray(), 2, 0);
+            gcell_root.addPolygon(ePoly, 2, 0);
         }
 
         g.setDrawing(drawing_);

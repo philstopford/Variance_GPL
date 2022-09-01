@@ -1,25 +1,36 @@
 ﻿using Eto.Forms;
+using shapeEngine;
 
 namespace Variance;
 
 public partial class MainForm
 {
     // 2D Layer Layout Origin Parameters
+    private Expander expander_LOP;
     private GroupBox groupBox_LOP;
     private DropDown comboBox_subShapeRef, comboBox_posSubShape;
     private Label lbl_subShapeRef, lbl_globalHorOffset, lbl_globalVerOffset, lbl_rotation, lbl_posSubShape;
     private NumericStepper num_globalHorOffset, num_globalVerOffset, num_rotation;
+
+    private void twoD_LayerUISetup_layoutOriginParameters_expanders(bool toState)
+    {
+        expander_LOP.Expanded = toState;
+    }
 
     private void twoD_LayerUISetup_layoutOriginParameters(TableCell tc)
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layer_LOP_table = new();
-            groupBox_LOP = new GroupBox {Text = "Layout Origin Parameters", Content = groupBox_layer_LOP_table};
+            groupBox_LOP = new() {Content = groupBox_layer_LOP_table};
+            expander_LOP = new () {Header = "Layout Origin Parameters",
+                Content = groupBox_LOP,
+                Expanded = true
+            };
 
             TableLayout t = new();
             t.Rows.Add(new TableRow());
-            t.Rows[0].Cells.Add(new TableCell { Control = groupBox_LOP });
+            t.Rows[0].Cells.Add(new TableCell { Control = expander_LOP });
             t.Rows[0].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
             Panel p = new() {Content = t};
@@ -81,7 +92,7 @@ public partial class MainForm
         comboBox_posSubShape = new DropDown
         {
             DataContext = DataContext,
-            SelectedIndex = (int) CommonVars.subShapeLocations.BL,
+            SelectedIndex = (int) ShapeSettings.subShapeLocations.BL,
             ToolTip = "Which element of the subshape to use for placement with respect to the world origin"
         };
         comboBox_posSubShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.subShapePos);
@@ -112,7 +123,7 @@ public partial class MainForm
 
         lbl_globalHorOffset = new Label
         {
-            Text = "Global Hor Offset", Width = 120, ToolTip = "Horizontal offset from the world origin"
+            Text = "Global Horizontal Offset", ToolTip = "Horizontal offset from the world origin"
         };
         tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_globalHorOffset });
 
@@ -123,7 +134,7 @@ public partial class MainForm
 
         lbl_globalVerOffset = new Label
         {
-            Text = "Global Ver Offset", Width = 120, ToolTip = "Horizontal offset from the world origin"
+            Text = "Global Vertical Offset", ToolTip = "Horizontal offset from the world origin"
         };
         tl_0.Rows[^1].Cells.Add(new TableCell { Control = lbl_globalVerOffset });
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace Variance;
 
 public class EntropySettings_nonSim

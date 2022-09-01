@@ -329,7 +329,7 @@ public partial class MainForm
         commonVars.getImplantSimulationSettings().setValue(EntropySettings.properties_i.nCases, Convert.ToInt32(num_implantNumOfCases.Value));
         commonVars.getImplantSimulationSettings().setValue(EntropySettings.properties_i.cSeg, Convert.ToInt32(num_implantCornerSegments.Value));
 
-        if ((bool)checkBox_CSV_implant.Checked)
+        if ((bool)checkBox_CSV_implant.Checked!)
         {
             commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.csv, 1);
         }
@@ -338,7 +338,7 @@ public partial class MainForm
             commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.csv, 0);
         }
 
-        if ((bool)checkBox_external_implant.Checked)
+        if ((bool)checkBox_external_implant.Checked!)
         {
             comboBox_externalTypes_implant.Enabled = true;
             commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.external, 1);

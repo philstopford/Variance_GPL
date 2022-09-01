@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
+using shapeEngine;
 
 namespace Variance;
 
@@ -8,6 +9,8 @@ public partial class MainForm
 {
     private TableLayout layerProperties_tl;
     private TableCell layerProperties_tc;
+    private GroupBox gadgets_gb;
+    private Expander gadgets_exp, expander_gadgets;
 
     private void twoD_LayerUISetup()
     {
@@ -104,6 +107,16 @@ public partial class MainForm
 
             layerUI_topRow_setup(tl_toprow);
 
+            tl.Rows.Add(new TableRow());
+            TableCell row2TC = new();
+            tl.Rows[^1].Cells.Add(row2TC);
+
+            TableLayout tl_2row = new();
+            Panel tl_2panel = new() { Content = tl_2row };
+            row2TC.Control = tl_2panel;
+
+            layerUI_row2_setup(tl_2row);
+
             // Need to inject another table here for the LOP content.
 
             tl.Rows.Add(new TableRow());
@@ -141,20 +154,6 @@ public partial class MainForm
             tl.Rows[^1].Cells.Add(lithoTC);
             twoD_LayerUISetup_litho(lithoTC);
 
-            // Button export
-            tl.Rows.Add(new TableRow());
-            TableCell exportTC = new();
-            tl.Rows[^1].Cells.Add(exportTC);
-
-            TableLayout exportTL = new();
-            Panel pExportTL = new() {Content = exportTL};
-            exportTC.Control = pExportTL;
-            exportTL.Rows.Add(new TableRow());
-
-            Button exportToLayout = new() {Text = "Export to Layout"};
-            exportTL.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
-            exportToLayout.Click += exportActiveLayerToLayout;
-
             tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true }); // padding.
         });
     }
@@ -170,13 +169,13 @@ public partial class MainForm
             geoGBVisible[settingsIndex] = false;
             booleanGBVisible[settingsIndex] = false;
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.BOOLEAN)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN)
             {
                 booleanGBVisible[settingsIndex] = true;
                 subShapeGBVisible[settingsIndex] = false;
             }
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE)
             {
                 geoGBVisible[settingsIndex] = true;
                 subShapeGBVisible[settingsIndex] = false;
@@ -230,18 +229,18 @@ public partial class MainForm
             }
             cB_omit[settingsIndex].Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.omit) == 1;
             cB_ShowDrawn.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.showDrawn) == 1;
-            num_subshape_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength);
-            num_subshape_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength);
-            num_subshape_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset);
-            num_subshape_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset);
-            num_subshape2_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength);
-            num_subshape2_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength);
-            num_subshape2_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset);
-            num_subshape2_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset);
-            num_subshape3_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength);
-            num_subshape3_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength);
-            num_subshape3_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset);
-            num_subshape3_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset);
+            num_subshape_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0);
+            num_subshape_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0);
+            num_subshape_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0);
+            num_subshape_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0);
+            num_subshape2_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1);
+            num_subshape2_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
+            num_subshape2_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1);
+            num_subshape2_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 1);
+            num_subshape3_hl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2);
+            num_subshape3_vl.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2);
+            num_subshape3_ho.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 2);
+            num_subshape3_vo.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 2);
             try
             {
                 comboBox_layerShape.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex);
@@ -267,7 +266,7 @@ public partial class MainForm
 
             // Layout handling
             textBox_fileLocation_geoCore.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.file);
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CommonVars.shapeNames.GEOCORE)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE)
             {
                 if (commonVars.isCopyPrepped())
                 {
@@ -474,23 +473,32 @@ public partial class MainForm
 
     private void layerUI_topRow_setup(TableLayout tl)
     {
-        layerShapeProperties = new Panel();
-        layerShapeProperties_tcPanel = new Panel();
-
         tl.Rows.Add(new TableRow());
         TableCell tc0 = new();
-        tl.Rows[0].Cells.Add(tc0);
+        tl.Rows[^1].Cells.Add(tc0);
 
         layerGadgets_setup(tc0);
 
+        tl.Rows[^1].Cells.Add(new TableCell() {ScaleWidth = true});
+    }
+
+    private void layerUI_row2_setup(TableLayout tl)
+    {
+        layerShapeProperties = new Panel();
+        layerShapeProperties_tcPanel = new Panel();
+
         TableCell tc1 = new();
 
-        tl.Rows[0].Cells.Add(tc1);
+        tl.Rows.Add(new TableRow());
+        
+        tl.Rows[^1].Cells.Add(tc1);
+
+        tl.Rows[^1].Cells.Add(new TableCell() {ScaleWidth = true});
 
         layerProperties_tl = new TableLayout();
         layerProperties_tc = new TableCell();
         layerProperties_tl.Rows.Add(new TableRow());
-        layerProperties_tl.Rows[0].Cells.Add(layerProperties_tc);
+        layerProperties_tl.Rows[^1].Cells.Add(layerProperties_tc);
 
         layerShapeProperties.Content = layerProperties_tl;
 
@@ -510,12 +518,12 @@ public partial class MainForm
         layerGadgets_table.Rows.Add(new TableRow());
 
         layerGadgets_row1(layerGadgets_table);
-        layerGadgets_row2(layerGadgets_table);
 
         layerGadgets_table.Rows.Add(new TableRow());
 
-        GroupBox gadgets_gb = new() {Text = "Layer", Content = TableLayout.AutoSized(layerGadgets_table)};
-        tc.Control = gadgets_gb;
+        gadgets_gb = new() {Content = TableLayout.AutoSized(layerGadgets_table)};
+        gadgets_exp = new() {Header = "Layer", Content = gadgets_gb, Expanded = true };
+        tc.Control = gadgets_exp;
     }
 
     private void layerGadgets_row1(TableLayout layerGadgets_table)
@@ -527,12 +535,12 @@ public partial class MainForm
 
         // Table layout within row 1
         TableLayout row0_tl = new();
-        gadgets_tr0.Cells[0].Control = row0_tl;
+        gadgets_tr0.Cells[^1].Control = row0_tl;
         row0_tl.Rows.Add(new TableRow());
 
         // Table layout within cell.
         TableCell gadgets_tr0_0 = new();
-        row0_tl.Rows[0].Cells.Add(gadgets_tr0_0);
+        row0_tl.Rows[^1].Cells.Add(gadgets_tr0_0);
 
         TableLayout gadgets_tr0_0_tl = new();
         gadgets_tr0_0.Control = gadgets_tr0_0_tl;
@@ -540,42 +548,22 @@ public partial class MainForm
         gadgets_tr0_0_tl.Rows.Add(new TableRow());
 
         cB_Layer = new CheckBox {Text = "Enabled", ToolTip = "If checked, include the layer in the simulation"};
-        gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = cB_Layer });
+        gadgets_tr0_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_Layer });
 
         text_layerName = new TextBox {ToolTip = "Layer name. If blank, the layer number will be used"};
-        gadgets_tr0_0_tl.Rows[0].Cells.Add(new TableCell { Control = text_layerName });
-        gadgets_tr0_0_tl.Rows[0].Cells[^1].ScaleWidth = true;
-    }
-
-    private void layerGadgets_row2(TableLayout layerGadgets_table)
-    {
-        // Outer table, row 2
-        TableRow gadgets_tr1 = new();
-        layerGadgets_table.Rows.Add(gadgets_tr1);
-        gadgets_tr1.Cells.Add(new TableCell());
-
-        // Table layout within row 2
-        TableLayout row1_tl = new();
-        gadgets_tr1.Cells[0].Control = row1_tl;
-        row1_tl.Rows.Add(new TableRow());
-
-        // Table layout within cell.
-        TableCell gadgets_tr1_0 = new();
-        row1_tl.Rows[0].Cells.Add(gadgets_tr1_0);
-
-        TableLayout gadgets_tr1_0_tl = new();
-        gadgets_tr1_0.Control = gadgets_tr1_0_tl;
-
-        gadgets_tr1_0_tl.Rows.Add(new TableRow());
+        gadgets_tr0_0_tl.Rows[^1].Cells.Add(new TableCell { Control = text_layerName });
 
         comboBox_layerShape = new DropDown
         {
             DataContext = DataContext, SelectedIndex = 0, ToolTip = "Type of shape to generate"
         };
         comboBox_layerShape.BindDataContext(c => c.DataStore, (UIStringLists m) => m.shapes);
-        gadgets_tr1_0_tl.Rows[0].Cells.Add(new TableCell { Control = comboBox_layerShape });
-    }
+        gadgets_tr0_0_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_layerShape });
 
+        gadgets_tr0_0_tl.Rows[^1].Cells[^1].ScaleWidth = true;
+        gadgets_tr0.Cells.Add(new TableCell() {ScaleWidth = true});
+    }
+    
     private void layerGadgets2(TableCell tc)
     {
         TableLayout layerGadgets2_table = new();
@@ -584,8 +572,14 @@ public partial class MainForm
         layerGadgets2_row1(layerGadgets2_table);
 
         Panel p = new() {Content = layerGadgets2_table};
-        GroupBox gadgets_gb = new() {Text = "Misc", Content = p};
-        tc.Control = gadgets_gb;
+        gadgets_gb = new() {Content = p};
+        expander_gadgets = new()
+        {
+            Header = "Misc",
+            Content = gadgets_gb,
+            Expanded = true
+        };
+        tc.Control = expander_gadgets;
     }
 
     private void layerGadgets2_row1(TableLayout layerGadgets2_table)
@@ -642,5 +636,12 @@ public partial class MainForm
 
         cB_layer_LWRPreview = new CheckBox {Text = "Show LWR", ToolTip = "Preview of LWR"};
         gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_layer_LWRPreview });
+        
+        gadgets_tr1_0_tl.Rows.Add(new TableRow());
+
+        Button exportToLayout = new() {Text = "Export to Layout"};
+        gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
+        exportToLayout.Click += exportActiveLayerToLayout;
+
     }
 }

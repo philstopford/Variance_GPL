@@ -199,9 +199,8 @@ img {
       	<p class="western" style=" line-height: 100%"><img src="images/ilb_noOmit12.png" alt=""/> </p>
       	<p class="western" style=" line-height: 100%"><img src="images/ilb_omit12.png" alt=""/> </p>
 
-        <p class="western" style=" line-height: 100%">To be consistent with the contouring pipeline, keyholes are inserted to connect holes to the outer edges. Keyholes are found using a raycast, biased towards the shortest, and ideally orthogonal, edge. This edge is used to cut a path, connecting the hole to the outer geometry. To minimize potential error, a minimal quadrangle is constructed from this edge. It can be that numeric error prevents this fully cutting a path, leading to a failed keyhole. In these situations, increase the ray extension value. This makes the cutter for the path longer (not wider). If you make it too long, artifacts can be created.</p>
+        <p class="western" style=" line-height: 100%">To be consistent with the contouring pipeline, keyholes are inserted to connect holes to the outer edges. Keyholes are found using a raycast, biased towards the shortest, and ideally orthogonal, edge. This edge is used to cut a path, connecting the hole to the outer geometry. To minimize potential error, a minimal quadrangle is constructed from this edge. Very rarely, numeric error prevents this fully cutting a path, leading to a failed keyhole. In these situations, increase the ray extension value. This makes the cutter for the path longer (not wider). If you make it too long, artifacts can be created.</p>
 
-      	<p class="western" style=" line-height: 100%"><img src="images/keyhole_fail.png" alt=""/> </p>
       	<p class="western" style=" line-height: 100%"><img src="images/keyhole_fix.png" alt=""/> </p>
 
     </blockquote>

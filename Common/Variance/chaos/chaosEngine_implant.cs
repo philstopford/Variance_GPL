@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using ClipperLib1;
+using Clipper2Lib;
 using geoLib;
 using geoWrangler;
+using shapeEngine;
 using utility;
 
 namespace Variance;
 
-using Path = List<IntPoint>;
-using Paths = List<List<IntPoint>>;
+using Path = List<Point64>;
+using Paths = List<List<Point64>>;
 
 internal class ChaosEngine_implant
 {
@@ -123,13 +124,13 @@ internal class ChaosEngine_implant
             List<EntropyLayerSettings> implant_MLS = new();
             EntropyLayerSettings mls = new();
             mls.setInt(EntropyLayerSettings.properties_i.edgeSlide, 0); // we don't want the edge slide in this situation.
-            mls.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CommonVars.shapeNames.rect);
+            mls.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.rect);
             double resistWidth = implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.w) + implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.wV) * chaosSettings.getValue(ChaosSettings_implant.properties.resistCDVar);
-            mls.setDecimal(EntropyLayerSettings.properties_decimal.s0HorLength, Convert.ToDecimal(resistWidth));
+            mls.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(resistWidth), 0);
             double resistHeight = implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.h) + implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.hV) * chaosSettings.getValue(ChaosSettings_implant.properties.resistHeightVar);
-            mls.setDecimal(EntropyLayerSettings.properties_decimal.s0VerLength, Convert.ToDecimal(resistHeight) * 2.0m); // double since we're making an ellipse and clipping later.
+            mls.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(resistHeight) * 2.0m, 0); // double since we're making an ellipse and clipping later.
             mls.setDecimal(EntropyLayerSettings.properties_decimal.oCR, Convert.ToDecimal(implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.cRR) + implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.cV) * chaosSettings.getValue(ChaosSettings_implant.properties.resistTopCRRVar)));
-            mls.setInt(EntropyLayerSettings.properties_i.posIndex, (int)CommonVars.subShapeLocations.C);
+            mls.setInt(EntropyLayerSettings.properties_i.posIndex, (int)ShapeSettings.subShapeLocations.C);
             mls.setInt(EntropyLayerSettings.properties_i.enabled, 1);
             implant_MLS.Add(mls);
 
@@ -144,31 +145,32 @@ internal class ChaosEngine_implant
             Path sourcePath = new();
             for (int pt = 0; pt < ms.getPoints().Length; pt++)
             {
-                double x = ms.getPoints()[pt].X - Convert.ToDouble(mls.getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength)) / 2.0f;
+                double x = ms.getPoints()[pt].X - Convert.ToDouble(mls.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)) / 2.0f;
                 double y = ms.getPoints()[pt].Y - resistHeight;
-                sourcePath.Add(new IntPoint((long)(x * CentralProperties.scaleFactorForOperation),
+                sourcePath.Add(new Point64((long)(x * CentralProperties.scaleFactorForOperation),
                     (long)(y * CentralProperties.scaleFactorForOperation)));
             }
 
             Paths source = new() {sourcePath};
 
             // Build our mask polygon from the bounds and 0,0 reference. Curiously, Clipper's top/bottom bounds are flipped from what might be expected.
-            IntRect bounds = ClipperBase.GetBounds(source);
+            Rect64 bounds = Clipper.GetBounds(source);
             Path maskPoly = new()
             {
-                new IntPoint(0, 0),
-                new IntPoint(0, bounds.bottom),
-                new IntPoint(bounds.right, bounds.bottom),
-                new IntPoint(bounds.right, 0),
-                new IntPoint(0, 0)
+                new Point64(0, 0),
+                new Point64(0, bounds.bottom),
+                new Point64(bounds.right, bounds.bottom),
+                new Point64(bounds.right, 0),
+                new Point64(0, 0)
             };
 
             // Get our region extracted using the mask.
-            Clipper c = new() {PreserveCollinear = false};
-            c.AddPath(sourcePath, PolyType.ptSubject, true);
-            c.AddPath(maskPoly, PolyType.ptClip, true);
+            Clipper64 c = new() {PreserveCollinear = false};
+            c.AddSubject(sourcePath);
+            c.AddClip(maskPoly);
             Paths solution = new();
-            c.Execute(ClipType.ctIntersection, solution, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
+            c.Execute(ClipType.Intersection, FillRule.EvenOdd, solution);
+            solution = GeoWrangler.reOrderXY(solution);
 
             if (solution.Count == 0)
             {

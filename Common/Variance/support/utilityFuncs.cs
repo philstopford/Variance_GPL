@@ -280,7 +280,7 @@ public static class UtilityFuncs
                 {
                     // Assuming Pass/Fail,Column,Row,Co-ord X,Co-ord Y,,,,,,,,,,,,,
                     tempString = sr.ReadLine();
-                    parsedString = tempString.Split(csvSeparators);
+                    parsedString = tempString!.Split(csvSeparators);
                     if (parsedString[0] == "" || parsedString[0] == "Occupy matrix")
                     {
                         break;
@@ -337,7 +337,7 @@ public static class UtilityFuncs
                 }
                 // Now we have the meat of the data we need.
                 string tempString = sr.ReadLine();
-                string[] parsedString = tempString.Split(csvSeparators);
+                string[] parsedString = tempString!.Split(csvSeparators);
                 if (parsedString.Length >= 6)
                 {
                     // We have 6 values to extract from this line.

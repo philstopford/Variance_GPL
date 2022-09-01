@@ -5,7 +5,8 @@ namespace Variance;
 public partial class MainForm
 {
     // 2D Layer Shapes
-    private GroupBox gB_subShapes;
+    private Expander expander_subShapes;
+    private GroupBox groupBox_subShapes;
 
     private NumericStepper num_subshape_hl, num_subshape2_hl, num_subshape3_hl,
         num_subshape_ho, num_subshape2_ho, num_subshape3_ho,
@@ -15,19 +16,27 @@ public partial class MainForm
     private Label lbl_subshape_hl, lbl_subshape_ho, lbl_subshape_vl, lbl_subshape_vo, lbl_tipLocations;
     private DropDown comboBox_tipLocations, comboBox_tipLocations2, comboBox_tipLocations3;
 
+    private void twoD_LayerUISetup_subShape_expanders(bool toState)
+    {
+        expander_subShapes.Expanded = toState;
+    }
+
     private void twoD_LayerUISetup_subShape()
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layerSubShapes_table = new();
-            gB_subShapes = new GroupBox
+            groupBox_subShapes = new() {Content = TableLayout.AutoSized(groupBox_layerSubShapes_table)};
+            expander_subShapes = new ()
             {
-                Content = TableLayout.AutoSized(groupBox_layerSubShapes_table), Text = "SubShapes"
+                Content = groupBox_subShapes,
+                Header = "SubShapes",
+                Expanded = true
             };
 
             subshapes_row1(groupBox_layerSubShapes_table);
 
-            layerShapeProperties_tcPanel.Content = gB_subShapes;
+            layerShapeProperties_tcPanel.Content = expander_subShapes;
 
             setLayerPropertiesContent(ref layerShapeProperties_tcPanel);
         });

@@ -167,8 +167,8 @@ public partial class MainForm
     private void omitLayerCheckboxChanged(object sender, EventArgs e)
     {
         // Establish which sender raised the event so that we can push the value to the correct layer.
-        int index = Array.IndexOf(cB_omit, sender);
-        setOmitLayer(index, (bool)((CheckBox)sender).Checked);
+        int index = Array.IndexOf(cB_omit, (CheckBox)sender);
+        setOmitLayer(index, (bool)((CheckBox)sender).Checked!);
     }
 
     private void setOmitLayer(int index, bool status)
@@ -196,7 +196,7 @@ public partial class MainForm
     {
         for (int i = 0; i < cB_bg.Length; i++)
         {
-            if ((bool)cB_bg[i].Checked && cB_bg[i].Enabled)
+            if ((bool)cB_bg[i].Checked! && cB_bg[i].Enabled)
             {
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, i, 1);
             }

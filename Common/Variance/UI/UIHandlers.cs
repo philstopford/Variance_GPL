@@ -15,15 +15,15 @@ public partial class MainForm
             creditText += varianceContext.vc.licenceName;
             creditText += "\r\n\r\n";
             creditText += "Libraries used:\r\n";
-            creditText += "  Eto.Forms : UI framework\r\n\thttps://github.com/picoe/Eto/wiki\r\n";
+            creditText += "  Eto.Forms : UI framework\r\n\thttps://github.com/picoe/Eto\r\n";
             creditText += "  Eto.Veldrid : Eto Veldrid viewport\r\n\thttps://github.com/picoe/Eto.Veldrid\r\n";
             creditText += "  DesignLibs : Design libraries\r\n\thttps://github.com/philstopford/DesignLibs_GPL\r\n";
-            creditText += "  clipperLib : geometry processing, area, SVG output reference\r\n\thttp://sourceforge.net/projects/polyclipping/\r\n";
+            creditText += "  Clipper2 : geometry processing\r\n\thttps://github.com/AngusJohnson/Clipper2\r\n";
             creditText += "  KD-Sharp : for spacing/enclosure\r\n\thttps://code.google.com/p/kd-sharp/\r\n";
             creditText += "  LibTessDotNet : for Delauney triangulation (tone inversion of n polygons)\r\n\thttps://github.com/speps/LibTessDotNet\r\n";
             creditText += "  Mersenne Twister : \r\n\thttp://www.centerspace.net/resources/free-stuff/mersenne-twister\r\n";
-            creditText += "  ExpressionParser : \r\n\thttp://lundin.info/mathparser\r\n";
-            creditText += "  MiscUtil : \r\n\thttp://yoda.arachsys.com/csharp/miscutil/\r\n";
+            creditText += "  ExpressionParser : \r\n\thttps://github.com/plundin/Mathparser\r\n";
+            creditText += "  MiscUtil : \r\n\thttps://github.com/loory/MiscUtil\r\n";
             aboutBox = new CreditsScreen(this, creditText);
         }
         Point location = new(Location.X + (Width - aboutBox.Width) / 2,
@@ -93,9 +93,7 @@ public partial class MainForm
 
     private void mainTabChanged(object sender, EventArgs e)
     {
-        btn_singleCPU.Enabled = false;
-
-        btn_multiCPU.Enabled = false;
+        btn_Run.Enabled = false;
         btn_STOP.Enabled = false;
 
         // statusProgressBar.Visible = false;
@@ -422,5 +420,27 @@ public partial class MainForm
 
             globalUIFrozen = false;
         });
+    }
+
+    private void collapseExpanders(object sender, EventArgs e)
+    {
+        changeExpanders(false);
+    }
+
+    private void expandExpanders(object sender, EventArgs e)
+    {
+        changeExpanders(true);
+    }
+
+    private void changeExpanders(bool toState)
+    {
+        gadgets_exp.Expanded = toState;
+        expander_gadgets.Expanded = toState;
+        twoD_LayerUISetup_biasEtch_expanders(toState);
+        twoD_LayerUISetup_boolean_expanders(toState);
+        twoD_LayerUISetup_geoCore_expanders(toState);
+        twoD_LayerUISetup_litho_expanders(toState);
+        twoD_LayerUISetup_layoutOriginParameters_expanders(toState);
+        twoD_LayerUISetup_subShape_expanders(toState);
     }
 }

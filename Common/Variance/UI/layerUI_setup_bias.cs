@@ -6,7 +6,8 @@ namespace Variance;
 public partial class MainForm
 {
     // 2D Layer Bias Etch
-    private GroupBox groupBox_etchandbias, groupBox_etchandbias_reg, groupBox_etchandbias_prox;
+    private Expander expander_etchandbias, expander_etchandbias_reg, expander_etchandbias_prox;
+    private GroupBox groupBox_etchandbias , groupBox_etchandbias_reg, groupBox_etchandbias_prox;
 
     private NumericStepper num_sidebias, num_hTipbias, num_vTipbias, num_hTipNVar, num_vTipNVar, num_hTipPVar, num_vTipPVar,
         num_pitchDepBias, num_pitchDepBiasIsoDistance, num_pitchDepBiasSideRays, num_proxBiasFallOffMultiplier;
@@ -16,19 +17,32 @@ public partial class MainForm
 
     private DropDown comboBox_proxBiasFallOff;
 
+    private void twoD_LayerUISetup_biasEtch_expanders(bool toState)
+    {
+        expander_etchandbias.Expanded = toState;
+        expander_etchandbias_reg.Expanded = toState;
+        expander_etchandbias_prox.Expanded = toState;
+    }
+
     private void twoD_LayerUISetup_biasEtch(TableCell tc)
     {
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layer_etchandbias_table = new();
-            groupBox_etchandbias = new GroupBox
+            groupBox_etchandbias = new GroupBox()
             {
-                Text = "Bias and Etch Parameters", Content = groupBox_layer_etchandbias_table
+                Content = groupBox_layer_etchandbias_table
+            };
+            expander_etchandbias = new()
+            {
+                Header = "Bias and Etch Parameters",
+                Content = groupBox_etchandbias,
+                Expanded = true
             };
 
             TableLayout t = new();
             t.Rows.Add(new TableRow());
-            t.Rows[0].Cells.Add(new TableCell { Control = groupBox_etchandbias });
+            t.Rows[0].Cells.Add(new TableCell { Control = expander_etchandbias });
             t.Rows[0].Cells.Add(new TableCell { Control = new Panel(), ScaleWidth = true });
 
             Panel p = new() {Content = t};
@@ -43,10 +57,19 @@ public partial class MainForm
     private void bias_row1(TableLayout etchandbias_table)
     {
         TableLayout regBias_table = new();
-        groupBox_etchandbias_reg = new GroupBox {Text = "Regular", Content = regBias_table};
+        groupBox_etchandbias_reg = new ()
+        {
+            Content = regBias_table
+        };
+        expander_etchandbias_reg = new ()
+        {
+            Header = "Regular",
+            Content = groupBox_etchandbias_reg,
+            Expanded = true
+        };
         TableRow tr = new();
         etchandbias_table.Rows.Add(tr);
-        tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_reg });
+        tr.Cells.Add(new TableCell { Control = expander_etchandbias_reg });
         tr.Cells.Add(new TableCell { Control = null });
             
         // Outer table, row 1
@@ -114,7 +137,7 @@ public partial class MainForm
         setSize(num_hTipbias, 55);
         nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_hTipbias) });
 
-        lbl_hTipPVar = new Label {Text = "Var +", ToolTip = "Positive 3-sigma bias variation for left/right tips."};
+        lbl_hTipPVar = new Label {Text = "Variation: +", ToolTip = "Positive 3-sigma bias variation for left/right tips."};
         lbl_hTipPVar.MouseDoubleClick += hTipPVar_RNG;
         nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_hTipPVar });
 
@@ -162,7 +185,7 @@ public partial class MainForm
         setSize(num_vTipbias, 55);
         nestedTable.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_vTipbias) });
 
-        lbl_vTipPVar = new Label {Text = "Var +", ToolTip = "Positive 3-sigma bias variation for top/bottom tips."};
+        lbl_vTipPVar = new Label {Text = "Variation: +", ToolTip = "Positive 3-sigma bias variation for top/bottom tips."};
         lbl_vTipPVar.MouseDoubleClick += vTipPVar_RNG;
         nestedTable.Rows[^1].Cells.Add(new TableCell { Control = lbl_vTipPVar });
 
@@ -196,10 +219,16 @@ public partial class MainForm
     private void bias_row2(TableLayout etchandbias_table)
     {
         TableLayout proxBias_table = new();
-        groupBox_etchandbias_prox = new GroupBox {Text = "Proximity", Content = proxBias_table};
+        groupBox_etchandbias_prox = new () {Content = proxBias_table};
+        expander_etchandbias_prox = new()
+        {
+            Header = "Proximity",
+            Content = groupBox_etchandbias_prox,
+            Expanded  = commonVars.getExpandedUI()
+        };
         TableRow tr = new();
         etchandbias_table.Rows.Add(tr);
-        tr.Cells.Add(new TableCell { Control = groupBox_etchandbias_prox });
+        tr.Cells.Add(new TableCell { Control = expander_etchandbias_prox });
         tr.Cells.Add(new TableCell { Control = null });
 
         // Outer table, row 2

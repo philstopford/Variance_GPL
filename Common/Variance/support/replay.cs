@@ -324,8 +324,8 @@ public class Replay
         // Result parsing.
         switch (commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
         {
-            case (int)CommonVars.calcModes.area:
-                searchString = commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)CommonVars.areaCalcModes.all ? "Total Area" : "Minimum Area";
+            case (int)geoAnalysis.supported.calcModes.area:
+                searchString = commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.AreaHandler.areaCalcModes.all ? "Total Area" : "Minimum Area";
 
                 colIndex = Array.IndexOf(parsed[0], searchString);
                 result = parsed[index][colIndex];
@@ -339,15 +339,15 @@ public class Replay
                 }
                 break;
 
-            case (int)CommonVars.calcModes.enclosure_spacing_overlap:
+            case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
                 switch (commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode))
                 {
-                    case (int)CommonVars.spacingCalcModes.spacing:
-                    case (int)CommonVars.spacingCalcModes.spacingOld:
+                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing:
+                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld:
                         searchString = "Spacing";
                         break;
-                    case (int)CommonVars.spacingCalcModes.enclosure:
-                    case (int)CommonVars.spacingCalcModes.enclosureOld:
+                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure:
+                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld:
                         searchString = "Enclosure";
                         break;
                 }
@@ -364,7 +364,7 @@ public class Replay
                 }
                 break;
 
-            case (int)CommonVars.calcModes.chord: // chord output
+            case (int)geoAnalysis.supported.calcModes.chord: // chord output
                 string[] searchStrings = { "AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord" };
                 string[] resultValues = new string[searchStrings.Length];
                 for (int i = 0; i < searchStrings.Length; i++)
@@ -388,7 +388,7 @@ public class Replay
                 }
                 break;
 
-            case (int)CommonVars.calcModes.angle: // angle output
+            case (int)geoAnalysis.supported.calcModes.angle: // angle output
                 searchString = "MinIntersectionAngle";
                 colIndex = Array.IndexOf(parsed[0], searchString);
                 result = parsed[index][colIndex];

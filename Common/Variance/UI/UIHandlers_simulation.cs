@@ -242,8 +242,7 @@ public partial class MainForm
             // Activate stop button to enable run abort.
             btn_STOP.Enabled = true;
             // Deactivate run button(s) since we're running a batch task.
-            btn_singleCPU.Enabled = false;
-            btn_multiCPU.Enabled = false;
+            btn_Run.Enabled = false;
             // Block out UI elements
             groupBox_setOutput.Enabled = false;
             groupBox_simSettings.Enabled = false;
@@ -389,13 +388,11 @@ public partial class MainForm
     {
         Application.Instance.Invoke(() =>
         {
-            btn_multiCPU.Enabled = false;
-            btn_singleCPU.Enabled = false;
+            btn_Run.Enabled = false;
 
             if (getMainSelectedIndex() == (int)CommonVars.upperTabNames.Implant)
             {
-                btn_multiCPU.Enabled = true;
-                btn_singleCPU.Enabled = true;
+                btn_Run.Enabled = true;
             }
             else
             {
@@ -417,13 +414,11 @@ public partial class MainForm
 
                 if (aEqtn && bEqtn)
                 {
-                    btn_singleCPU.Enabled = true;
-                    btn_multiCPU.Enabled = true;
+                    btn_Run.Enabled = true;
                 }
                 else
                 {
-                    btn_singleCPU.Enabled = false;
-                    btn_multiCPU.Enabled = false;
+                    btn_Run.Enabled = false;
                 }
             }
         });
@@ -523,6 +518,7 @@ public partial class MainForm
             checkBox_SSL.CheckedChanged += emailSettingsChanged;
 
             checkBox_friendlyNumbers.CheckedChanged += miscSettingsChanged;
+            checkBox_expandUI.CheckedChanged += miscSettingsChanged;
 
             button_replay.Click += replayLoadCSV;
             checkBox_replay.CheckedChanged += replayChanged;
@@ -607,7 +603,7 @@ public partial class MainForm
         {
             if (comboBox_calcModes.SelectedIndex < 0)
             {
-                comboBox_calcModes.SelectedIndex = (int)CommonVars.calcModes.area;
+                comboBox_calcModes.SelectedIndex = (int)geoAnalysis.supported.calcModes.area;
             }
         }
         catch (Exception)
@@ -616,17 +612,15 @@ public partial class MainForm
         }
         if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) < 0)
         {
-            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.area);
+            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.area);
         }
 
         if (commonVars.getReplayMode() == 0)
         {
             int mainIndex = getMainSelectedIndex();
             int twoDIndex = getSubTabSelectedIndex();
-
-            btn_singleCPU.Enabled = false;
-
-            btn_multiCPU.Enabled = false;
+            
+            btn_Run.Enabled = false;
             btn_STOP.Enabled = false;
             // statusProgressBar.Visible = false;
             if (mainIndex != (int)CommonVars.upperTabNames.twoD)
@@ -699,7 +693,7 @@ public partial class MainForm
             }
 
             // Retrieve our settings.
-            checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.area;
+            checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.area;
 
             checkBox_withinMode.Enabled = false;
             checkBox_useShortestEdge.Enabled = false;
@@ -717,28 +711,28 @@ public partial class MainForm
                 commonVars.getSimulationSettings().debugCalc = false;
             }
 
-            if (comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.enclosure_spacing_overlap)
+            if (comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap)
             {
                 if ((bool)checkBox_withinMode.Checked)
                 {
                     if ((bool)checkBox_useShortestEdge.Checked)
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.enclosure);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure);
                     }
                     else
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.enclosureOld);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld);
                     }
                 }
                 else
                 {
                     if ((bool)checkBox_useShortestEdge.Checked)
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.spacing);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing);
                     }
                     else
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.spacingCalcModes.spacingOld);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld);
                     }
                 }
             }
@@ -748,64 +742,64 @@ public partial class MainForm
 
             switch (comboBox_calcModes.SelectedIndex)
             {
-                case (int)CommonVars.calcModes.chord:
+                case (int)geoAnalysis.supported.calcModes.chord:
                 {
                     checkBox_aChord.Enabled = true;
                     checkBox_bChord.Enabled = true;
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.chordCalcElements.a + (int)CommonVars.chordCalcElements.b);
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.ChordHandler.chordCalcElements.a + (int)geoAnalysis.ChordHandler.chordCalcElements.b);
                     if (!(bool)checkBox_aChord.Checked && !(bool)checkBox_bChord.Checked)
                     {
                         checkBox_aChord.Checked = true; // force a default if the user is being silly.
                     }
                     if (!(bool)checkBox_aChord.Checked)
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)CommonVars.chordCalcElements.a);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)geoAnalysis.ChordHandler.chordCalcElements.a);
 
                     }
                     if (!(bool)checkBox_bChord.Checked)
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)CommonVars.chordCalcElements.b);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) - (int)geoAnalysis.ChordHandler.chordCalcElements.b);
                     }
 
                     break;
                 }
-                case (int)CommonVars.calcModes.area:
+                case (int)geoAnalysis.supported.calcModes.area:
                 {
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.area);
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.area);
                     if ((bool)checkBox_perPoly.Checked)
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.areaCalcModes.perpoly);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.AreaHandler.areaCalcModes.perpoly);
                         textBox_userGuidance.Text = "The minimum overlap area will be calculated and reported.";
                     }
                     else
                     {
-                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)CommonVars.areaCalcModes.all);
+                        commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.AreaHandler.areaCalcModes.all);
                         textBox_userGuidance.Text = "The total overlap area of all polygons in the layers will be calculated and reported.";
                     }
                     label_AB.Text = "AND";
                     break;
                 }
-                case (int)CommonVars.calcModes.enclosure_spacing_overlap:
+                case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
                 {
                     comboBox_calcModes.SelectedIndexChanged -= entropySettingsChanged;
                     checkBox_withinMode.Enabled = true;
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.enclosure_spacing_overlap);
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap);
                     string t;
                     if ((bool)checkBox_withinMode.Checked)
                     {
                         checkBox_useShortestEdge.Enabled = false;
-                        commonVars.calcMode_names[(int)CommonVars.calcModes.enclosure_spacing_overlap] = "Compute Enclosure Distribution";
+                        commonVars.calcMode_names[(int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap] = "Compute Enclosure Distribution";
                         label_AB.Text = "Min Enclosure To";
                         t = "enclosure";
                     }
                     else
                     {
                         checkBox_useShortestEdge.Enabled = true;
-                        commonVars.calcMode_names[(int)CommonVars.calcModes.enclosure_spacing_overlap] = "Compute Spacing Distribution";
+                        commonVars.calcMode_names[(int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap] = "Compute Spacing Distribution";
                         label_AB.Text = "Min Space To";
                         t = "spacing";
                     }
-                    comboBox_calcModes.SelectedIndex = (int)CommonVars.calcModes.enclosure_spacing_overlap;
+                    comboBox_calcModes.SelectedIndex = (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap;
                     comboBox_calcModes.SelectedIndexChanged += entropySettingsChanged;
                     textBox_userGuidance.Text = "The system will report the minimum " + t + " value between the shapes, as a single value per case.\r\nNote that overlap cases will report a negative value to indicate that they are opposite to the case being evaluated";
                     break;
@@ -814,13 +808,13 @@ public partial class MainForm
 
             switch (comboBox_calcModes.SelectedIndex)
             {
-                case (int)CommonVars.calcModes.chord:
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.chord);
+                case (int)geoAnalysis.supported.calcModes.chord:
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.chord);
                     label_AB.Text = "Min Chord With";
                     textBox_userGuidance.Text = "The system will report multiple chord lengths as : \"AMinTopChord,AMinBottomChord,BMinLeftChord,BMinRightChord\".\r\n\r\nMissing chords or invalid cases for evaluation are reported as 0.0\r\nChords not requested by the user are shown as N/A in the output file.\r\n\r\nShape A is defined by geometric equation A; B is geometric equation B.\r\n\r\nMajor axis : Orient shape A horizontally and B vertically else results will be reversed (top/bottom <> left/right)";
                     break;
-                case (int)CommonVars.calcModes.angle:
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)CommonVars.calcModes.angle);
+                case (int)geoAnalysis.supported.calcModes.angle:
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.angle);
                     label_AB.Text = "Min Angle With";
                     textBox_userGuidance.Text = "The minimum intersection angle will be reported, in degrees. A lack of intersection will yield a 180-degree value in the output";
                     break;
@@ -922,7 +916,7 @@ public partial class MainForm
 
             commonVars.getSimulationSettings_nonSim().setDecimal(EntropySettings_nonSim.properties_d.externalCritCond1, Convert.ToDecimal(num_externalCriteria1.Value));
 
-            bool multiFieldResult = comboBox_calcModes.SelectedIndex == (int)CommonVars.calcModes.chord;
+            bool multiFieldResult = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.chord;
 
             comboBox_externalCriteria2.Enabled = extCriteriaActive && multiFieldResult;
             int extCrit2 = comboBox_externalCriteria2.SelectedIndex;
@@ -965,8 +959,7 @@ public partial class MainForm
             // Ensure we set controls according to run state
             if (commonVars.isSimRunning())
             {
-                btn_singleCPU.Enabled = false;
-                btn_multiCPU.Enabled = false;
+                btn_Run.Enabled = false;
                 btn_STOP.Enabled = true;
             }
         }

@@ -7,6 +7,8 @@ using color;
 using entropyRNG;
 using Error;
 using geoCoreLib;
+using geoWrangler;
+using shapeEngine;
 using utility;
 using Timer = System.Timers.Timer;
 
@@ -113,6 +115,7 @@ public class CommonVars
     private bool drawPoints;
 
     private bool friendlyNumber;
+    private bool expandedUI;
 
     public void setFriendly(bool val)
     {
@@ -132,6 +135,26 @@ public class CommonVars
     private bool pGetFriendly()
     {
         return friendlyNumber;
+    }
+
+    public void setExpandedUI(bool val)
+    {
+        pSetExpandedUI(val);
+    }
+
+    private void pSetExpandedUI(bool val)
+    {
+        expandedUI = val;
+    }
+
+    public bool getExpandedUI()
+    {
+        return pGetExpandedUI();
+    }
+
+    private bool pGetExpandedUI()
+    {
+        return expandedUI;
     }
 
     public void setOpenGLProp(properties_gl p, bool val)
@@ -369,14 +392,10 @@ public class CommonVars
     public string projectFileName = "";
     private bool geoCoreCDUWarningShown;
         
-    public enum calcModes { area, enclosure_spacing_overlap, chord, angle }
-    public enum areaCalcModes { all, perpoly }
-    public enum spacingCalcModes { spacing, enclosure, spacingOld, enclosureOld } // exp triggers projection from shortest edge for overlap evaluation.
-    public enum chordCalcElements { none, a, b }
     public enum upperTabNames { twoD, Implant, oneD, Utilities }
     public enum twoDTabNames { layer, settings, DOE, paSearch }
 
-    public static string[] csvHeader = { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
+    public static readonly string[] csvHeader = { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
 
     public enum external_Type { svg, gds, oas }
 
@@ -561,7 +580,7 @@ public class CommonVars
         {
         }
 
-        if (entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)shapeNames.GEOCORE &&
+        if (entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE &&
             geoCoreCDVariation == false)
         {
             if (!geoCoreCDUWarningShown)
@@ -580,7 +599,7 @@ public class CommonVars
         else
         {
             getGeoCoreHandler(index).setValid(false);
-            if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)shapeNames.GEOCORE && entropyLayerSettings.isReloaded())
+            if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE && entropyLayerSettings.isReloaded())
             {
                 getGeoCoreHandler(index).setFilename(entropyLayerSettings.getString(EntropyLayerSettings.properties_s.file));
                 getGeoCoreHandler(index).setValid(true);
@@ -767,73 +786,7 @@ public class CommonVars
     }
 
     public ObservableCollection<string> calcMode_names { get; private set; }
-
-    private List<string> availableShapes;
-    public List<string> getAvailableShapes()
-    {
-        return pGetAvailableShapes();
-    }
-
-    private List<string> pGetAvailableShapes()
-    {
-        return availableShapes;
-    }
-
-    public enum shapeNames { none, rect, Lshape, Tshape, Xshape, Ushape, Sshape, GEOCORE, BOOLEAN }
-
-    private List<string> availableTipsLocations;
-    public List<string> getAvailableTipsLocations()
-    {
-        return pGetAvailableTipsLocations();
-    }
-
-    private List<string> pGetAvailableTipsLocations()
-    {
-        return availableTipsLocations;
-    }
-
-    public enum tipLocations { none, L, R, LR, T, B, TB, TL, TR, TLR, BL, BR, BLR, TBL, TBR, all }
-
-    private List<string> availableSubShapePositions;
-
-    public List<string> getAvailableSubShapePositions()
-    {
-        return pGetAvailableSubShapePositions();
-    }
-
-    private List<string> pGetAvailableSubShapePositions()
-    {
-        return availableSubShapePositions;
-    }
-
-    public enum subShapeLocations { TL, TR, BL, BR, TS, RS, BS, LS, C }
-
-    private List<string> noiseTypes;
-    public List<string> getNoiseTypes()
-    {
-        return pGetNoiseTypes();
-    }
-
-    private List<string> pGetNoiseTypes()
-    {
-        return noiseTypes;
-    }
-
-    public enum noiseIndex { perlin, simplex, opensimplex }
-
-    private List<string> polyFillTypes;
-    public List<string> getPolyFillTypes()
-    {
-        return pGetPolyFillTypes();
-    }
-
-    private List<string> pGetPolyFillTypes()
-    {
-        return polyFillTypes;
-    }
-
-    public enum PolyFill { pftEvenOdd, pftNonZero, pftPositive, pftNegative }
-
+    
     private List<string> openGLModeList;
 
     public List<string> getOpenGLModeList()
@@ -968,6 +921,7 @@ public class CommonVars
         layerPreviewDOETile = varianceContext.layerPreviewDOETile;
 
         friendlyNumber = varianceContext.friendlyNumber;
+        expandedUI = varianceContext.expandUI;
 
         HTCount = varianceContext.HTCount;
 
@@ -1024,30 +978,13 @@ public class CommonVars
         {
             rngCustomMapping.Add(t);
         }
-
-        noiseTypes = new List<string> { "Perlin", "Simplex", "OpenSimplex" };
-
-        availableSubShapePositions = new List<string>
-        { "Corner: Top Left", "Corner: Top Right", "Corner: Bottom Left", "Corner: Bottom Right",
-            "Middle: Top Side", "Middle: Right Side", "Middle: Bottom Side", "Middle: Left Side",
-            "Center"};
-
-        availableTipsLocations = new List<string>
-        { "None", "Left", "Right", "Left & Right",
-            "Top", "Bottom", "Top & Bottom",
-            "Top & Left", "Top & Right", "Top & Left & Right",
-            "Bottom & Left", "Bottom & Right", "Bottom & Left & Right",
-            "Top & Bottom & Left", "Top & Bottom & Right",
-            "All"};
-
-        availableShapes = new List<string> { "(None)", "Rectangle/Square", "L-shape", "T-shape", "X-shape", "U-shape", "S-shape", "GDS/Oasis", "Boolean" };
+        
         calcMode_names = new ObservableCollection<string>
         { "Compute Area Distribution",
             "Compute Spacing/Overlap Distribution",
             "Compute Chord Distribution",
             "Compute Angle Distribution"
         };
-        polyFillTypes = new List<string> { "Even/Odd", "Non-zero", "Positive", "Negative" };
 
         openGLModeList = new List<string> { "VBO", "Immediate" };
 
@@ -1422,16 +1359,16 @@ public class CommonVars
 
         switch (simulationSettings.getValue(EntropySettings.properties_i.oType))
         {
-            case (int)calcModes.area: // area
+            case (int)geoAnalysis.supported.calcModes.area: // area
                 boolString += "AND";
                 break;
-            case (int)calcModes.enclosure_spacing_overlap: // spacing
+            case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap: // spacing
                 boolString += "MIN SPACE/OVERLAP/ENCL TO/WITH";
                 break;
-            case (int)calcModes.chord: // chords
+            case (int)geoAnalysis.supported.calcModes.chord: // chords
                 boolString += "MIN CHORDS WITH";
                 break;
-            case (int)calcModes.angle: // angle
+            case (int)geoAnalysis.supported.calcModes.angle: // angle
                 boolString += "MIN INTERSECTION ANGLE WITH";
                 break;
         }
@@ -1793,25 +1730,25 @@ public class CommonVars
         string shapeType = layerRefString + " Shape: ";
         int shapeParts = 1;
         bool externalShape = false;
-        linesToWrite.Add(shapeType + availableShapes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shapeIndex)]);
+        linesToWrite.Add(shapeType + ShapeLibrary.getAvailableShapes(CentralProperties.shapeTable)[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shapeIndex)]);
         switch (listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shapeIndex))
         {
-            case (int)CentralProperties.typeShapes.L:
+            case (int)ShapeSettings.typeShapes_mode0.L:
                 shapeParts = 2;
                 break;
-            case (int)CentralProperties.typeShapes.T:
+            case (int)ShapeSettings.typeShapes_mode0.T:
                 shapeParts = 2;
                 break;
-            case (int)CentralProperties.typeShapes.U:
+            case (int)ShapeSettings.typeShapes_mode0.U:
                 shapeParts = 2;
                 break;
-            case (int)CentralProperties.typeShapes.X:
+            case (int)ShapeSettings.typeShapes_mode0.X:
                 shapeParts = 2;
                 break;
-            case (int)CentralProperties.typeShapes.S:
+            case (int)ShapeSettings.typeShapes_mode0.S:
                 shapeParts = 3;
                 break;
-            case (int)CentralProperties.typeShapes.GEOCORE:
+            case (int)ShapeSettings.typeShapes_mode0.GEOCORE:
                 externalShape = true;
                 break;
         }
@@ -1823,7 +1760,7 @@ public class CommonVars
             linesToWrite.Add("Layout Layer/Datatype: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lD));
             linesToWrite.Add("Contouring: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.gCSEngine));
             linesToWrite.Add("Per-Poly: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.perPoly));
-            linesToWrite.Add("Poly Fill Type: " + polyFillTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.fill)]);
+            linesToWrite.Add("Poly Fill Type: " + ShapeSettings.getPolyFillTypes()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.fill)]);
             linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
             linesToWrite.Add("Vertical Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset));
             linesToWrite.Add("Horizontal Overlay: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.xOL));
@@ -1842,28 +1779,20 @@ public class CommonVars
             for (int part = 0; part < shapeParts; part++)
             {
                 linesToWrite.Add("Subshape " + part + ": ");
+                linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.horLength, part));
+                linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.verLength, part));
+                linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, part));
+                linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, part));
                 switch (part)
                 {
                     case 0:
-                        linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorLength));
-                        linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerLength));
-                        linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0HorOffset));
-                        linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s0VerOffset));
-                        linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape0Tip)]);
+                        linesToWrite.Add("  TipLocations: " + ShapeSettings.getAvailableTipsLocations()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape0Tip)]);
                         break;
                     case 1:
-                        linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorLength));
-                        linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerLength));
-                        linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1HorOffset));
-                        linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s1VerOffset));
-                        linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape1Tip)]);
+                        linesToWrite.Add("  TipLocations: " + ShapeSettings.getAvailableTipsLocations()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape1Tip)]);
                         break;
                     case 2:
-                        linesToWrite.Add("  HLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorLength));
-                        linesToWrite.Add("  VLength: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerLength));
-                        linesToWrite.Add("  HOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2HorOffset));
-                        linesToWrite.Add("  VOffset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.s2VerOffset));
-                        linesToWrite.Add("  TipLocations: " + availableTipsLocations[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape2Tip)]);
+                        linesToWrite.Add("  TipLocations: " + ShapeSettings.getAvailableTipsLocations()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.shape2Tip)]);
                         break;
                 }
             }
@@ -1871,7 +1800,7 @@ public class CommonVars
             // Subshape reference
             linesToWrite.Add("SubshapeReference: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.subShapeIndex));
             // Subshape positioning
-            linesToWrite.Add("PositionInSubshape: " + availableSubShapePositions[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.posIndex)]);
+            linesToWrite.Add("PositionInSubshape: " + ShapeSettings.getAvailableSubShapePositions()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.posIndex)]);
 
             // Global offsets.
             linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));
@@ -1911,11 +1840,11 @@ public class CommonVars
             linesToWrite.Add("LWR: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr));
             linesToWrite.Add("LWR RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lwr_RNG));
             linesToWrite.Add("LWR Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq));
-            linesToWrite.Add("LWR Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwrType)]);
+            linesToWrite.Add("LWR Noise: " + NoiseC.noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwrType)]);
             linesToWrite.Add("LWR2: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2));
             linesToWrite.Add("LWR2 RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lwr2_RNG));
             linesToWrite.Add("LWR2 Frequency: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq));
-            linesToWrite.Add("LWR2 Noise: " + noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwr2Type)]);
+            linesToWrite.Add("LWR2 Noise: " + NoiseC.noiseTypes[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.lwr2Type)]);
             linesToWrite.Add("Side CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.sCDU));
             linesToWrite.Add("Side CDU RNG Mapping: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.sCDU_RNG));
             linesToWrite.Add("Tips CDU: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.tCDU));
