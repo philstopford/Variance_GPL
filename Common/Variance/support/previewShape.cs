@@ -59,7 +59,7 @@ public class PreviewShape
 
     private void pSetPoints(List<GeoLibPointF[]> newPoints)
     {
-        previewPoints = newPoints;
+        previewPoints = newPoints.ToList();
     }
 
     public void clearPoints()

@@ -1,5 +1,10 @@
 Changelog for Variance
 
+5.0.1
+
+	- Fixed lost lines in implant preview pipeline.
+	- Fixed GTK crash when setting combobox boxes for reloaded layout case (structure, LD).
+
 5.0
 
 	- Shake-down

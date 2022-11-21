@@ -274,15 +274,32 @@ public partial class MainForm
                 }
                 try
                 {
-                    comboBox_structureList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure);
-                }
+                    int cbIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure);
+                    if (commonVars.getLayerSettings(settingsIndex).isReloaded())
+                    {
+                        if (cbIndex >= commonVars.getGeoCoreHandler(settingsIndex).getGeo().getStructureList()
+                                .Count)
+                        {
+                            cbIndex = 0;
+                        }
+                    }
+                    comboBox_structureList_geoCore.SelectedIndex = cbIndex;                }
                 catch (Exception)
                 {
                     // Don't care.
                 }
                 try
                 {
-                    comboBox_lDList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD);
+                    int cbIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD);
+                    if (commonVars.getLayerSettings(settingsIndex).isReloaded())
+                    {
+                        if (cbIndex >= commonVars.getGeoCoreHandler(settingsIndex).getGeo().getActiveStructureLDList()
+                                .Count)
+                        {
+                            cbIndex = 0;
+                        }
+                    }
+                    comboBox_lDList_geoCore.SelectedIndex = cbIndex;
                 }
                 catch (Exception)
                 {

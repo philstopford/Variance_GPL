@@ -1846,15 +1846,32 @@ public partial class MainForm
             num_geoCore_keyHoleSizing.Value = Convert.ToDouble(commonVars.getLayerSettings(layer).getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor));
             try
             {
-                comboBox_structureList_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.structure);
-            }
+                int cbIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.structure);
+                if (commonVars.getLayerSettings(layer).isReloaded())
+                {
+                    if (cbIndex >= commonVars.getGeoCoreHandler(layer).getGeo().getStructureList()
+                            .Count)
+                    {
+                        cbIndex = 0;
+                    }
+                }
+                comboBox_structureList_geoCore.SelectedIndex = cbIndex;            }
             catch (Exception)
             {
 
             }
             try
             {
-                comboBox_lDList_geoCore.SelectedIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lD);
+                int cbIndex = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.lD);
+                if (commonVars.getLayerSettings(layer).isReloaded())
+                {
+                    if (cbIndex >= commonVars.getGeoCoreHandler(layer).getGeo().getActiveStructureLDList()
+                            .Count)
+                    {
+                        cbIndex = 0;
+                    }
+                }
+                comboBox_lDList_geoCore.SelectedIndex = cbIndex;
             }
             catch (Exception)
             {
