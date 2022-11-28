@@ -18,8 +18,8 @@ using Timer = System.Timers.Timer; // for tile extraction
 
 namespace Variance;
 
-using Path = List<Point64>;
-using Paths = List<List<Point64>>;
+using Path = Path64;
+using Paths = Paths64;
 
 public partial class Entropy
 {
@@ -596,7 +596,7 @@ public partial class Entropy
                 // Hash not found - assuming unique polygon. This is done to avoid impact of copy/paste fails in layout where
                 // totally coincident duplicate polygons cause the extracted tile to be empty.
                 // This avoids full overlaps causing complications in the Union used below to resolve partial overlaps.
-                layout.Add(polyPath.ToList());
+                layout.Add(new(polyPath));
                 polyHashCodes.Add(polyHash);
             }
 

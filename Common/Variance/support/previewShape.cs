@@ -13,8 +13,8 @@ using shapeEngine;
 
 namespace Variance;
 
-using Path = List<Point64>;
-using Paths = List<List<Point64>>;
+using Path = Path64;
+using Paths = Paths64;
 
 public class PreviewShape
 {
@@ -339,7 +339,7 @@ public class PreviewShape
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier),
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension),
                 commonVars.getSimulationSettings().getResolution(),
-                CentralProperties.scaleFactorForOperation
+                CentralProperties.scaleFactorForOperation, false, 0
                 );
 
             previewPoints = ret.geometry.ToList();
