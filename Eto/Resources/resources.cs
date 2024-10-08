@@ -2,7 +2,7 @@
 
 namespace resources
 {
-    public static class images
+    public static class Images
     {
         public static Bitmap oneDImage()
         {

@@ -5,22 +5,18 @@ using System.Threading.Tasks;
 using Clipper2Lib;
 using geoAnalysis;
 using geoWrangler;
-using shapeEngine;
 
 namespace Variance;
 
-using Path = Path64;
-using Paths = Paths64;
-
 internal class ChaosEngine
 {
-    private Paths listOfOutputPoints;
-    public Paths getPaths()
+    private PathsD listOfOutputPoints;
+    public PathsD getPaths()
     {
         return pGetPaths();
     }
 
-    private Paths pGetPaths()
+    private PathsD pGetPaths()
     {
         return listOfOutputPoints;
     }
@@ -48,10 +44,10 @@ internal class ChaosEngine
     }
 
     private List<PreviewShape> simShapes;
-    private Paths[] booleanPaths;
+    private PathsD[] booleanPaths;
     private bool[] inputLayerEnabled;
 
-    private List<Paths> preFlight(Paths aPath, Paths bPath)
+    private List<PathsD> preFlight(PathsD aPath, PathsD bPath)
     {
         // Put 0-index point at minX (see method for more notes)
         int aCount = aPath.Count;
@@ -79,12 +75,12 @@ internal class ChaosEngine
 #if !CHAOSSINGLETHREADED
         );
 #endif
-        List<Paths> returnPaths = new() {aPath, bPath};
+        List<PathsD> returnPaths = new() {aPath, bPath};
 
         return returnPaths;
     }
 
-    private Path reOrderPath(string shapeRef, int pathIndex)
+    private PathD reOrderPath(string shapeRef, int pathIndex)
     {
         if (shapeRef.ToUpper() != "A" && shapeRef.ToUpper() != "B")
         {
@@ -92,26 +88,26 @@ internal class ChaosEngine
             throw new Exception("reOrderPath: No shapeRef supplied!");
         }
 
-        Path sourcePath = shapeRef.ToUpper() == "A" ? booleanPaths[0][pathIndex] : booleanPaths[1][pathIndex];
+        PathD sourcePath = shapeRef.ToUpper() == "A" ? booleanPaths[0][pathIndex] : booleanPaths[1][pathIndex];
 
-        Path returnPath = GeoWrangler.clockwiseAndReorderXY(sourcePath);
+        PathD returnPath = GeoWrangler.clockwiseAndReorderXY(sourcePath);
         return returnPath;
     }
 
 
-    private Paths pLayerBoolean(EntropySettings simulationSettings, int firstLayer, int secondLayer, int booleanFlag, bool preserveColinear = true)
+    private PathsD pLayerBoolean(EntropySettings simulationSettings, int firstLayer, int secondLayer, int booleanFlag, bool preserveColinear = true)
     {
-        Paths firstLayerPaths = GeoWrangler.pathsFromPointFs(simShapes[firstLayer].getPoints(), CentralProperties.scaleFactorForOperation);
+        PathsD firstLayerPaths = new(simShapes[firstLayer].getPoints());
 
-        Paths secondLayerPaths = GeoWrangler.pathsFromPointFs(simShapes[secondLayer].getPoints(), CentralProperties.scaleFactorForOperation);
+        PathsD secondLayerPaths = new(simShapes[secondLayer].getPoints());
 
-        Paths ret = GeoWrangler.LayerBoolean(simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, firstLayer), firstLayerPaths,
+        PathsD ret = GeoWrangler.LayerBoolean(simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, firstLayer), firstLayerPaths,
             simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, secondLayer), secondLayerPaths, booleanFlag, preserveColinear);
 
         return ret;
     }
     
-    private Paths[] pLayerBoolean(CommonVars commonVars, bool preserveColinear = true)
+    private PathsD[] pLayerBoolean(CommonVars commonVars, bool preserveColinear = true)
     {
         // Boolean is structured as:
         // Process two layers to get the interaction of two layers.
@@ -124,11 +120,11 @@ internal class ChaosEngine
         int limit4 = limit2 / 2;
         int limit8 = limit4 / 2;
 
-        Paths[] twoLayerResults = new Paths[limit2];
-        Paths[] fourLayerResults = new Paths[limit4];
-        Paths[] eightLayerResults = new Paths[limit8];
+        PathsD[] twoLayerResults = new PathsD[limit2];
+        PathsD[] fourLayerResults = new PathsD[limit4];
+        PathsD[] eightLayerResults = new PathsD[limit8];
 
-        Path tPath = new();
+        PathD tPath = new();
 
 #if !CHAOSSINGLETHREADED
         Parallel.For(0, limit2, i =>
@@ -148,7 +144,7 @@ internal class ChaosEngine
                         twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1, 0, preserveColinear: preserveColinear);
                         break;
                     default:
-                        twoLayerResults[i] = new Paths();
+                        twoLayerResults[i] = new ();
                         break;
                 }
             }
@@ -225,7 +221,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.fourLayer, i) == 0)
                                 {
-                                    fourLayerResults[i] = new Paths();
+                                    fourLayerResults[i] = new ();
                                 }
                                 else
                                 {
@@ -236,7 +232,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.fourLayer, i) == 0)
                                 {
-                                    fourLayerResults[i] = new Paths();
+                                    fourLayerResults[i] = new ();
                                 }
                                 else
                                 {
@@ -245,11 +241,11 @@ internal class ChaosEngine
                             }
                             else
                             {
-                                fourLayerResults[i] = new Paths();
+                                fourLayerResults[i] = new ();
                             }
                             break;
                         default:
-                            fourLayerResults[i] = new Paths();
+                            fourLayerResults[i] = new ();
                             break;
                     }
                 }
@@ -340,7 +336,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new Paths {tPath};
+                                    eightLayerResults[i] = new () {tPath};
                                 }
                                 else
                                 {
@@ -351,7 +347,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new Paths {tPath};
+                                    eightLayerResults[i] = new () {tPath};
                                 }
                                 else
                                 {
@@ -360,11 +356,11 @@ internal class ChaosEngine
                             }
                             else
                             {
-                                eightLayerResults[i] = new Paths {tPath};
+                                eightLayerResults[i] = new () {tPath};
                             }
                             break;
                         default:
-                            eightLayerResults[i] = new Paths {tPath};
+                            eightLayerResults[i] = new () {tPath};
                             break;
                     }
                 }
@@ -386,7 +382,7 @@ internal class ChaosEngine
         outputValid = false;
         simShapes = simShapes_;
 
-        listOfOutputPoints = new Paths();
+        listOfOutputPoints = new ();
 
         EntropySettings simulationSettings = commonVars.getSimulationSettings();
 
@@ -418,7 +414,7 @@ internal class ChaosEngine
             }
         }
 
-        bool preserveColinear = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)supported.calcModes.enclosure_spacing_overlap;
+        bool preserveColinear = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)Supported.calcModes.enclosure_spacing_overlap;
 
         booleanPaths = pLayerBoolean(commonVars, preserveColinear);
 
@@ -441,11 +437,11 @@ internal class ChaosEngine
         {
             switch (simulationSettings.getValue(EntropySettings.properties_i.oType))
             {
-                case (int)supported.calcModes.area: // area
+                case (int)Supported.calcModes.area: // area
                     try
                     {
                         bool perPoly = simulationSettings.getValue(EntropySettings.properties_i.subMode) == (int)AreaHandler.areaCalcModes.perpoly;
-                        AreaHandler aH = new(aPaths: booleanPaths[0], bPaths: booleanPaths[1], maySimplify: true, perPoly, CentralProperties.scaleFactorForOperation);
+                        AreaHandler aH = new(aPaths: booleanPaths[0], bPaths: booleanPaths[1], maySimplify: true, perPoly);
                         // Sum the areas by polygon returned.
                         result = (Convert.ToDouble(result) + aH.area).ToString(CultureInfo.InvariantCulture);
                         listOfOutputPoints.AddRange(aH.listOfOutputPoints);
@@ -457,12 +453,11 @@ internal class ChaosEngine
                     }
                     break;
 
-                case (int)supported.calcModes.enclosure_spacing_overlap: // spacing (or enclosure)
+                case (int)Supported.calcModes.enclosure_spacing_overlap: // spacing (or enclosure)
                     DistanceHandler dH = new(simulationSettings.debugCalc,
                         aPaths: booleanPaths[0],
                         bPaths: booleanPaths[1],
                         simulationSettings.getValue(EntropySettings.properties_i.subMode),
-                        CentralProperties.scaleFactorForOperation,
                         previewMode ); // in preview mode, raycaster inside this engine will run threaded along the emit edge.
 
                     // Store minimum case for the per polygon system.
@@ -484,12 +479,12 @@ internal class ChaosEngine
                     // Viewport needs a polygon - lines aren't handled properly, so let's double up our line.
                     try
                     {
-                        foreach (Path t in listOfOutputPoints)
+                        foreach (PathD t in listOfOutputPoints)
                         {
                             int pt = t.Count - 1;
                             while (pt > 0)
                             {
-                                t.Add(new Point64(t[pt]));
+                                t.Add(new (t[pt]));
                                 pt--;
                             }
                         }
@@ -502,7 +497,7 @@ internal class ChaosEngine
 
                     break;
 
-                case (int)supported.calcModes.chord: // chord
+                case (int)Supported.calcModes.chord: // chord
                     // ReSharper disable once ConvertIfStatementToNullCoalescingAssignment
                     if (result == null)
                     {
@@ -512,7 +507,7 @@ internal class ChaosEngine
                     double[] fraggedResult = new double[4];
                     fraggedResult[0] = fraggedResult[1] = fraggedResult[2] = fraggedResult[3] = 0.0;
 
-                    Path tmpPath = new() {new Point64(0, 0)};
+                    PathD tmpPath = new() {new (0, 0)};
                     listOfOutputPoints.Add(tmpPath);
                     listOfOutputPoints.Add(tmpPath);
                     listOfOutputPoints.Add(tmpPath);
@@ -520,12 +515,12 @@ internal class ChaosEngine
 
                     try
                     {
-                        Paths aPath = booleanPaths[0];
-                        Paths bPath = booleanPaths[1];
-                        List<Paths> cleanedPaths = preFlight(aPath, bPath);
+                        PathsD aPath = booleanPaths[0];
+                        PathsD bPath = booleanPaths[1];
+                        List<PathsD> cleanedPaths = preFlight(aPath, bPath);
                         aPath = cleanedPaths[0];
                         bPath = cleanedPaths[1];
-                        ChordHandler cH = new(aPath, bPath, simulationSettings.getResolution(), CentralProperties.scaleFactorForOperation, simulationSettings.getValue(EntropySettings.properties_i.subMode));
+                        ChordHandler cH = new(aPath, bPath, simulationSettings.getResolution(), simulationSettings.getValue(EntropySettings.properties_i.subMode));
 
                         // Fragment our result.
                         char[] resultSeparators = { ',' }; // CSV separator for splitting results for comparison.
@@ -541,13 +536,13 @@ internal class ChaosEngine
 #if !CHAOSSINGLETHREADED
                         );
 #endif
-                        fraggedResult[0] = cH.aChordLengths[0] / CentralProperties.scaleFactorForOperation;
+                        fraggedResult[0] = cH.aChordLengths[0];
                         listOfOutputPoints[0] = cH.a_chordPaths[0];
-                        fraggedResult[1] = cH.aChordLengths[1] / CentralProperties.scaleFactorForOperation;
+                        fraggedResult[1] = cH.aChordLengths[1];
                         listOfOutputPoints[1] = cH.a_chordPaths[1];
-                        fraggedResult[2] = cH.bChordLengths[0] / CentralProperties.scaleFactorForOperation;
+                        fraggedResult[2] = cH.bChordLengths[0];
                         listOfOutputPoints[2] = cH.b_chordPaths[0];
-                        fraggedResult[3] = cH.bChordLengths[1] / CentralProperties.scaleFactorForOperation;
+                        fraggedResult[3] = cH.bChordLengths[1];
                         listOfOutputPoints[3] = cH.b_chordPaths[1];
 
                         if (simulationSettings.getValue(EntropySettings.properties_i.subMode) != (int)ChordHandler.chordCalcElements.b)
@@ -575,14 +570,14 @@ internal class ChaosEngine
                     }
                     break;
 
-                case (int)supported.calcModes.angle: // angle
+                case (int)Supported.calcModes.angle: // angle
                     for (int layerAPoly = 0; layerAPoly < layerAPathCount_orig; layerAPoly++)
                     {
                         for (int layerBPoly = 0; layerBPoly < layerBPathCount_orig; layerBPoly++)
                         {
                             try
                             {
-                                angleHandler agH = new(layerAPath: booleanPaths[0], layerBPath: booleanPaths[1], CentralProperties.scaleFactorForOperation);
+                                angleHandler agH = new(layerAPath: booleanPaths[0], layerBPath: booleanPaths[1]);
                                 if (result == null)
                                 {
                                     result = agH.minimumIntersectionAngle.ToString(CultureInfo.InvariantCulture);

@@ -268,7 +268,7 @@ public partial class MainForm
             commonVars.getPASearch().filterIsMaxValue[i] = rb_passValueRadioButtons[i, 1].Checked;
         }
 
-        bool chordMode = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord;
+        bool chordMode = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.Supported.calcModes.chord;
         for (int i = 0; i < groupBox_passCaseValues.Length; i++)
         {
             if (!chordMode)

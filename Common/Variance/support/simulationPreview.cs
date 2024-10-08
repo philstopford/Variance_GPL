@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using geoLib;
+using Clipper2Lib;
 
 namespace Variance;
 
@@ -21,56 +21,56 @@ public class SimulationPreview
         return simShapes;
     }
 
-    private List<List<GeoLibPointF[]>> previewShapes;
+    private List<PathsD> previewShapes;
 
-    public List<List<GeoLibPointF[]>> getPreviewShapes()
+    public List<PathsD> getPreviewShapes()
     {
         return pGetPreviewShapes();
     }
 
-    private List<List<GeoLibPointF[]>> pGetPreviewShapes()
+    private List<PathsD> pGetPreviewShapes()
     {
         return previewShapes;
     }
 
-    public List<GeoLibPointF[]> getLayerPreviewShapes(int layer)
+    public PathsD getLayerPreviewShapes(int layer)
     {
         return pGetLayerPreviewShapes(layer);
     }
 
-    private List<GeoLibPointF[]> pGetLayerPreviewShapes(int layer)
+    private PathsD pGetLayerPreviewShapes(int layer)
     {
         return previewShapes[layer];
     }
 
-    public GeoLibPointF[] getLayerPreviewShapePoly(int layer, int poly)
+    public PathD getLayerPreviewShapePoly(int layer, int poly)
     {
         return pGetLayerPreviewShapePoly(layer, poly);
     }
 
-    private GeoLibPointF[] pGetLayerPreviewShapePoly(int layer, int poly)
+    private PathD pGetLayerPreviewShapePoly(int layer, int poly)
     {
         return previewShapes[layer][poly];
     }
 
-    private List<GeoLibPointF[]> points;
+    private PathsD points;
 
-    public List<GeoLibPointF[]> getPoints()
+    public PathsD getPoints()
     {
         return pGetPoints();
     }
 
-    private List<GeoLibPointF[]> pGetPoints()
+    private PathsD pGetPoints()
     {
         return points;
     }
 
-    public GeoLibPointF[] getPoints(int index)
+    public PathD getPoints(int index)
     {
         return pGetPoints(index);
     }
 
-    private GeoLibPointF[] pGetPoints(int index)
+    private PathD pGetPoints(int index)
     {
         return points[index];
     }
@@ -96,8 +96,8 @@ public class SimulationPreview
     {
         varianceContext = _varianceContext;
         simShapes = new List<PreviewShape>();
-        previewShapes = new List<List<GeoLibPointF[]>>();
-        points = new List<GeoLibPointF[]> {new GeoLibPointF[1]};
+        previewShapes = new List<PathsD>();
+        points = new () {Helper.initedPathD(1)};
     }
 
     private void updatePreview(List<PreviewShape> simShapes_)
@@ -136,12 +136,12 @@ public class SimulationPreview
         }
     }
 
-    public void updatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_, string resultText_)
+    public void updatePreview(List<PreviewShape> simShapes_, List<PathsD> previewShapes_, PathsD points_, string resultText_)
     {
         pUpdatePreview(simShapes_, previewShapes_, points_, resultText_);
     }
 
-    private void pUpdatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_, string resultText_)
+    private void pUpdatePreview(List<PreviewShape> simShapes_, List<PathsD> previewShapes_, PathsD points_, string resultText_)
     {
         try
         {
@@ -161,7 +161,7 @@ public class SimulationPreview
         }
     }
 
-    private void updatePreview(List<PreviewShape> simShapes_, List<List<GeoLibPointF[]>> previewShapes_, List<GeoLibPointF[]> points_)
+    private void updatePreview(List<PreviewShape> simShapes_, List<PathsD> previewShapes_, PathsD points_)
     {
         updatePreview(simShapes_);
         try
@@ -174,7 +174,7 @@ public class SimulationPreview
         }
         try
         {
-            points = points_.ToList();
+            points = new (points_);
         }
         catch (Exception)
         {

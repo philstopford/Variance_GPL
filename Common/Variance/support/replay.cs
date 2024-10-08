@@ -279,43 +279,43 @@ public class Replay
                 switch (t)
                 {
                     case "CDUSVar":
-                        chaosSettings.setValue(ChaosSettings.properties.CDUSVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.CDUSVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "CDUTVar":
-                        chaosSettings.setValue(ChaosSettings.properties.CDUTVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.CDUTVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "LWRVar":
-                        chaosSettings.setValue(ChaosSettings.properties.LWRVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.LWRVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "LWRSeed":
-                        chaosSettings.setInt(ChaosSettings.ints.lwrSeed, i, Convert.ToInt32(parsed[index][colIndex]));
+                        chaosSettings.setInt(ChaosSettings.Ints.lwrSeed, i, Convert.ToInt32(parsed[index][colIndex]));
                         break;
                     case "LWR2Var":
-                        chaosSettings.setValue(ChaosSettings.properties.LWR2Var, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.LWR2Var, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "LWR2Seed":
-                        chaosSettings.setInt(ChaosSettings.ints.lwr2Seed, i, Convert.ToInt32(parsed[index][colIndex]));
+                        chaosSettings.setInt(ChaosSettings.Ints.lwr2Seed, i, Convert.ToInt32(parsed[index][colIndex]));
                         break;
                     case "horTipBiasVar":
-                        chaosSettings.setValue(ChaosSettings.properties.hTipBiasVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.hTipBiasVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "verTipBiasVar":
-                        chaosSettings.setValue(ChaosSettings.properties.vTipBiasVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.vTipBiasVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "iCVar":
-                        chaosSettings.setValue(ChaosSettings.properties.icVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.icVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "oCVar":
-                        chaosSettings.setValue(ChaosSettings.properties.ocVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.ocVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "overlayX":
-                        chaosSettings.setValue(ChaosSettings.properties.overlayX, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.overlayX, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "overlayY":
-                        chaosSettings.setValue(ChaosSettings.properties.overlayY, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.overlayY, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                     case "wobbleVar":
-                        chaosSettings.setValue(ChaosSettings.properties.wobbleVar, i, Convert.ToDouble(parsed[index][colIndex]));
+                        chaosSettings.setValue(ChaosSettings.Properties.wobbleVar, i, Convert.ToDouble(parsed[index][colIndex]));
                         break;
                 }
             }
@@ -324,7 +324,7 @@ public class Replay
         // Result parsing.
         switch (commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
         {
-            case (int)geoAnalysis.supported.calcModes.area:
+            case (int)geoAnalysis.Supported.calcModes.area:
                 searchString = commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.AreaHandler.areaCalcModes.all ? "Total Area" : "Minimum Area";
 
                 colIndex = Array.IndexOf(parsed[0], searchString);
@@ -339,7 +339,7 @@ public class Replay
                 }
                 break;
 
-            case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
+            case (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap:
                 switch (commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode))
                 {
                     case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing:
@@ -364,7 +364,7 @@ public class Replay
                 }
                 break;
 
-            case (int)geoAnalysis.supported.calcModes.chord: // chord output
+            case (int)geoAnalysis.Supported.calcModes.chord: // chord output
                 string[] searchStrings = { "AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord" };
                 string[] resultValues = new string[searchStrings.Length];
                 for (int i = 0; i < searchStrings.Length; i++)
@@ -388,7 +388,7 @@ public class Replay
                 }
                 break;
 
-            case (int)geoAnalysis.supported.calcModes.angle: // angle output
+            case (int)geoAnalysis.Supported.calcModes.angle: // angle output
                 searchString = "MinIntersectionAngle";
                 colIndex = Array.IndexOf(parsed[0], searchString);
                 result = parsed[index][colIndex];

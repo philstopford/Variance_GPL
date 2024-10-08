@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>osx.10.15-x64</RuntimeIdentifiers>
+    <LangVersion>11</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 
@@ -25,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.1" />
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.7.5" />
     <PackageReference Include="Eto.Veldrid.Mac64" Version="0.1.0" />
   </ItemGroup>
 

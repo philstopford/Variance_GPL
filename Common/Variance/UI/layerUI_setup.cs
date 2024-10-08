@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
-using shapeEngine;
 
 namespace Variance;
 
@@ -11,6 +10,7 @@ public partial class MainForm
     private TableCell layerProperties_tc;
     private GroupBox gadgets_gb;
     private Expander gadgets_exp, expander_gadgets;
+    private Button exportToLayout;
 
     private void twoD_LayerUISetup()
     {
@@ -245,8 +245,9 @@ public partial class MainForm
             {
                 comboBox_layerShape.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
 
             try
@@ -283,7 +284,8 @@ public partial class MainForm
                             cbIndex = 0;
                         }
                     }
-                    comboBox_structureList_geoCore.SelectedIndex = cbIndex;                }
+                    comboBox_structureList_geoCore.SelectedIndex = cbIndex;
+                }
                 catch (Exception)
                 {
                     // Don't care.
@@ -301,8 +303,9 @@ public partial class MainForm
                     }
                     comboBox_lDList_geoCore.SelectedIndex = cbIndex;
                 }
-                catch (Exception)
+                catch
                 {
+                    // ignored
                 }
 
                 // Enable UI elements if layout is valid/loaded.
@@ -322,46 +325,51 @@ public partial class MainForm
                 comboBox_tipLocations_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
                 comboBox_TipLocations_boolean.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape0Tip);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
 
             try
             {
                 num_rayExtension.Value = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
 
             try
             {
                 comboBox_tipLocations2.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape1Tip);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
             try
             {
                 comboBox_tipLocations3.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shape2Tip);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
             try
             {
                 comboBox_subShapeRef.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.subShapeIndex);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
             try
             {
                 comboBox_posSubShape.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.posIndex);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
             num_globalHorOffset.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset);
             num_globalVerOffset.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset);
@@ -379,6 +387,8 @@ public partial class MainForm
             num_pitchDepBiasSideRays.Value = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxRays);
             comboBox_proxBiasFallOff.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff);
             num_proxBiasFallOffMultiplier.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier);
+            cb_removeArtifacts.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.removeArtifacts) == 1;
+            num_removeArtifactsEps.Value = (double)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon);
             num_lithoICRR.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCR);
             num_lithoOCRR.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.oCR);
             num_lithoICV.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.iCV);
@@ -392,15 +402,18 @@ public partial class MainForm
             {
                 comboBox_LWRNoiseType.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwrType);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
+
             try
             {
                 comboBox_LWR2NoiseType.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lwr2Type);
             }
-            catch (Exception)
+            catch
             {
+                // ignored
             }
 
             num_coeff1.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC1);
@@ -466,6 +479,8 @@ public partial class MainForm
                     cB_DOE_geoCore.Checked = true;
                 }
             }
+            
+            
 
             do2DLayerUI(settingsIndex, updateUI: true);
             updateGroupBoxVisibility(settingsIndex);
@@ -483,8 +498,9 @@ public partial class MainForm
         {
             layerProperties_tc.Control = _control;
         }
-        catch (Exception)
+        catch
         {
+            // ignored
         }
     }
 
@@ -656,9 +672,10 @@ public partial class MainForm
         
         gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-        Button exportToLayout = new() {Text = "Export to Layout"};
+        exportToLayout = new() {Text = "Export to Layout"};
         gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
         exportToLayout.Click += exportActiveLayerToLayout;
+        exportToLayout.Enabled = false;
 
     }
 }

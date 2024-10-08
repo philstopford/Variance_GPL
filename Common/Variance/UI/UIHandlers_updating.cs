@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Eto.Drawing;
 using Eto.Forms;
-using shapeEngine;
+using VeldridEto;
 
 namespace Variance;
 
@@ -19,89 +19,19 @@ public partial class MainForm
         otkVPSettings_implant.bgPolyList.Clear();
         otkVPSettings_implant.lineList.Clear();
         // Evaluated resist side. We know there's a single polygon in previewShapes and we know the resist evaluation is the first entry in the resistShapes list.
-        int limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0].Length;
-        PointF[] tmpPoints = new PointF[limit];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, limit, point =>
-#else
-            for (Int32 point = 0; point < tmpPoints.Length; point++)
-#endif
-            {
-                tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0][point].X,
-                    (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0][point].Y);
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
-        otkVPSettings_implant.addPolygon(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), false, 0);
+        otkVPSettings_implant.addPolygon(OVPSettings.convertToClosedPointF(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getPoints()[0]), Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[0].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), false, 0);
 
         // Background - second item in the resistShapes, but again a single polygon.
-        limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0].Length;
-        tmpPoints = new PointF[limit];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, limit, point =>
-#else
-        for (Int32 point = 0; point < tmpPoints.Count(); point++)
-#endif
-        {
-            tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].X,
-                (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0][point].Y);
-        }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
-        otkVPSettings_implant.addBGPolygon(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.bg), 1);
+        otkVPSettings_implant.addBGPolygon(OVPSettings.convertToClosedPointF(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getPoints()[0]), Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getResistShapes()[1].getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.bg), 1);
 
         // Now add our shadowing line. Single polygon in the shadowLine's previewPoints.
-        limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0].Length;
-        tmpPoints = new PointF[limit];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, limit, point =>
-#else
-            for (Int32 point = 0; point < tmpPoints.Count(); point++)
-#endif
-            {
-                tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0][point].X,
-                    (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getPoints()[0][point].Y);
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
-        otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.shadow).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 2);
+        otkVPSettings_implant.addLine(OVPSettings.convertToClosedPointF(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.shadow).getPoints()[0]), Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.shadow).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 2);
 
         // Now add our min shadowing line. Single polygon in the shadowLine's previewPoints.
-        limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0].Length;
-        tmpPoints = new PointF[limit];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, limit, point =>
-#else
-        for (Int32 point = 0; point < tmpPoints.Count(); point++)
-#endif
-        {
-            tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].X,
-                (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getPoints()[0][point].Y);
-        }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
-        otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.min).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 3);
+        otkVPSettings_implant.addLine(OVPSettings.convertToClosedPointF(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.min).getPoints()[0]), Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.min).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 3);
 
         // Now add our max shadowing line. Single polygon in the shadowLine's previewPoints.
-        limit = entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0].Length;
-        tmpPoints = new PointF[limit];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, limit, point =>
-#else
-            for (Int32 point = 0; point < tmpPoints.Count(); point++)
-#endif
-            {
-                tmpPoints[point] = new PointF((float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0][point].X,
-                    (float)entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getPoints()[0][point].Y);
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
-        otkVPSettings_implant.addLine(tmpPoints, Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.lines.max).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 4);
+        otkVPSettings_implant.addLine(OVPSettings.convertToClosedPointF(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.max).getPoints()[0]), Color.FromArgb(entropyControl.getImplantResultPackage().getImplantPreviewResult().getLine(Results_implant.Lines.max).getColor().toArgb()), (float)commonVars.getOpacity(CommonVars.opacity_gl.fg), 4);
 
         Application.Instance.Invoke(updateViewport);
     }
@@ -225,12 +155,12 @@ public partial class MainForm
 
             switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
             {
-                case (int)geoAnalysis.supported.calcModes.area:
+                case (int)geoAnalysis.Supported.calcModes.area:
                     checkBox_perPoly.Enabled = true;
                     checkBox_perPoly.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.AreaHandler.areaCalcModes.perpoly;
 
                     break;
-                case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
+                case (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap:
                     checkBox_withinMode.Enabled = true;
 
                     if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) == (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld)
@@ -256,13 +186,13 @@ public partial class MainForm
                         checkBox_useShortestEdge.Checked = false;
                     }
                     break;
-                case (int)geoAnalysis.supported.calcModes.chord:
+                case (int)geoAnalysis.Supported.calcModes.chord:
                     checkBox_aChord.Enabled = true;
                     checkBox_bChord.Enabled = true;
                     checkBox_aChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) != (int)geoAnalysis.ChordHandler.chordCalcElements.b;
                     checkBox_bChord.Checked = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) >= (int)geoAnalysis.ChordHandler.chordCalcElements.b;
                     break;
-                case (int)geoAnalysis.supported.calcModes.angle:
+                case (int)geoAnalysis.Supported.calcModes.angle:
                     break;
             }
 
@@ -826,12 +756,12 @@ public partial class MainForm
                     {
                         for (int poly = 0; poly < commonVars.getSimPreview().getLayerPreviewShapes(layer).Count; poly++)
                         {
-                            if (commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Length < 2)
+                            if (commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Count < 2)
                             {
                                 continue;
                             }
 
-                            int length = commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Length;
+                            int length = commonVars.getSimPreview().getLayerPreviewShapePoly(layer, poly).Count;
                             PointF[] tmpPoints = new PointF[length];
                             int poly1 = poly;
                             int layer1 = layer;
@@ -841,7 +771,7 @@ public partial class MainForm
                             for (Int32 point = 0; point < length; point++)
 #endif
                             {
-                                tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].X, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].Y);
+                                tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].x, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].y);
                             }
 #if !VARIANCESINGLETHREADED
                             );
@@ -874,14 +804,14 @@ public partial class MainForm
                     for (int poly = 0; poly < commonVars.getSimPreview().getPoints().Count; poly++)
                     {
                         // Only draw if we can make a polygon.
-                        if (commonVars.getSimPreview().getPoints(poly).Length < 2)
+                        if (commonVars.getSimPreview().getPoints(poly).Count < 2)
                         {
                             continue;
                         }
 
                         int colorIndex = poly % varianceContext.vc.colors.resultColors.Length; // map our result into the available colors.
-                        totalPoints += commonVars.getSimPreview().getPoints(poly).Length;
-                        if (commonVars.getSimPreview().getPoints(poly).Length == 2 || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.chord || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.angle || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap)
+                        totalPoints += commonVars.getSimPreview().getPoints(poly).Count;
+                        if (commonVars.getSimPreview().getPoints(poly).Count == 2 || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.Supported.calcModes.chord || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.Supported.calcModes.angle || commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap)
                         {
                             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].addLine(
                                 line: UIHelper.myPointFArrayToPointFArray(commonVars.getSimPreview().getPoints(poly)),

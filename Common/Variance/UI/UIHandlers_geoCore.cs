@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Clipper2Lib;
 using Eto.Forms;
 using gds;
 using geoCoreLib;
-using geoLib;
 using geoWrangler;
 using oasis;
 
@@ -154,7 +154,7 @@ public partial class MainForm
 
             foreach (PreviewShape t in previewShapes)
             {
-                List<GeoLibPointF[]> polys = t.getPoints();
+                PathsD polys = t.getPoints();
                 for (int poly = 0; poly < polys.Count; poly++)
                 {
                     // No drawn polygons desired.
@@ -163,7 +163,7 @@ public partial class MainForm
                         continue;
                     }
 
-                    GeoLibPoint[] ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
+                    Path64 ePoly = GeoWrangler.resize_to_int(polys[poly], scale);
 
                     gcell_root.addPolygon(ePoly, layerIndex + 1, 0); // layer is 1-index based for output, so need to offset value accordingly.
                 }

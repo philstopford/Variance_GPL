@@ -4,62 +4,57 @@ using System.Linq;
 using Clipper2Lib;
 using color;
 using Error;
-using geoLib;
 using geoWrangler;
-using Noise;
-using utility; // tiled layout handling, Layout biasing/CDU.
+// tiled layout handling, Layout biasing/CDU.
 using System.Threading.Tasks;
 using shapeEngine;
 
 namespace Variance;
-
-using Path = Path64;
-using Paths = Paths64;
 
 public class PreviewShape
 {
     private bool DOEDependency; // due to the DOE grid, we need this to sort out offsets. This includes buried references in Booleans. The min X/Y values for this case need to be at least the col/row offset.
 
     // Class for our preview shapes.
-    private List<GeoLibPointF[]> previewPoints; // list of polygons defining the shape(s) that will be drawn. In the complex case, we populate this from complexPoints.
-    public List<GeoLibPointF[]> getPoints()
+    private PathsD previewPoints; // list of polygons defining the shape(s) that will be drawn. In the complex case, we populate this from complexPoints.
+    public PathsD getPoints()
     {
         return pGetPoints();
     }
 
-    private List<GeoLibPointF[]> pGetPoints()
+    private PathsD pGetPoints()
     {
         return previewPoints;
     }
 
-    public GeoLibPointF[] getPoints(int index)
+    public PathD getPoints(int index)
     {
         return pGetPoints(index);
     }
 
-    private GeoLibPointF[] pGetPoints(int index)
+    private PathD pGetPoints(int index)
     {
         return previewPoints[index];
     }
 
-    public void addPoints(GeoLibPointF[] poly)
+    public void addPoints(PathD poly)
     {
         pAddPoints(poly);
     }
 
-    private void pAddPoints(GeoLibPointF[] poly)
+    private void pAddPoints(PathD poly)
     {
         previewPoints.Add(poly);
     }
 
-    public void setPoints(List<GeoLibPointF[]> newPoints)
+    public void setPoints(PathsD newPoints)
     {
         pSetPoints(newPoints);
     }
 
-    private void pSetPoints(List<GeoLibPointF[]> newPoints)
+    private void pSetPoints(PathsD newPoints)
     {
-        previewPoints = newPoints.ToList();
+        previewPoints = new(newPoints);
     }
 
     public void clearPoints()
@@ -130,7 +125,7 @@ public class PreviewShape
     private void init()
     {
         // Stub to enable direct drive of preview data, primarily for the implant system.
-        previewPoints = new List<GeoLibPointF[]>();
+        previewPoints = new ();
         drawnPoly = new List<bool>();
         geoCoreOrthogonalPoly = new List<bool>();
         color = MyColor.Black;
@@ -144,7 +139,7 @@ public class PreviewShape
     private void init(PreviewShape source)
     {
         _settingsIndex = source._settingsIndex;
-        previewPoints = source.previewPoints.ToList();
+        previewPoints = new (source.previewPoints);
         drawnPoly = source.drawnPoly.ToList();
         geoCoreOrthogonalPoly = source.geoCoreOrthogonalPoly.ToList();
         color = new MyColor(source.color);
@@ -179,12 +174,12 @@ public class PreviewShape
             if (!previewMode && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1 && !jobSettings.getPreviewMode())
             {
                 // This used to be easier, but now we have the case of a non-preview mode, but the layer setting calls for a preview.
-                jitterScale *= jobSettings.getValue(ChaosSettings.properties.LWRVar, settingsIndex);
+                jitterScale *= jobSettings.getValue(ChaosSettings.Properties.LWRVar, settingsIndex);
             }
 
             previewPoints = NoiseC.doNoise(previewPoints,drawnPoly,
                 noiseType: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwrType),
-                seed: jobSettings.getInt(ChaosSettings.ints.lwrSeed, settingsIndex),
+                seed: jobSettings.getInt(ChaosSettings.Ints.lwrSeed, settingsIndex),
                 freq: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq)),
                 jitterScale: jitterScale
             );
@@ -197,12 +192,12 @@ public class PreviewShape
             if (!previewMode && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1 && !jobSettings.getPreviewMode())
             {
                 // This used to be easier, but now we have the case of a non-preview mode, but the layer setting calls for a preview.
-                jitterScale *= jobSettings.getValue(ChaosSettings.properties.LWR2Var, settingsIndex);
+                jitterScale *= jobSettings.getValue(ChaosSettings.Properties.LWR2Var, settingsIndex);
             }
 
             previewPoints = NoiseC.doNoise(previewPoints,drawnPoly,
                 noiseType: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwr2Type),
-                seed: jobSettings.getInt(ChaosSettings.ints.lwr2Seed, settingsIndex),
+                seed: jobSettings.getInt(ChaosSettings.Ints.lwr2Seed, settingsIndex),
                 freq: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq)),
                 jitterScale: jitterScale
             );
@@ -221,7 +216,7 @@ public class PreviewShape
         try
         {
             DOEDependency = false;
-            previewPoints = new List<GeoLibPointF[]>();
+            previewPoints = new ();
             drawnPoly = new List<bool>();
             geoCoreOrthogonalPoly = new List<bool>();
             color = MyColor.Black; // overridden later.
@@ -242,9 +237,9 @@ public class PreviewShape
                     commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset);
                     commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
                 }
-                GeoLibPointF offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
-                xOffset = offset.X;
-                yOffset = offset.Y;
+                PointD offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
+                xOffset = offset.x;
+                yOffset = offset.y;
             }
             else // not geoCore related.
             {
@@ -284,9 +279,9 @@ public class PreviewShape
                             commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
                         }
 
-                        GeoLibPointF offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
-                        xOffset = offset.X;
-                        yOffset = offset.Y;
+                        PointD offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
+                        xOffset = offset.x;
+                        yOffset = offset.y;
                     }
                     catch (Exception)
                     {
@@ -305,13 +300,14 @@ public class PreviewShape
             }
 
             // Fragment by resolution
-            Fragmenter fragment = new Fragmenter(commonVars.getSimulationSettings().getResolution(), CentralProperties.scaleFactorForOperation);
+            Fragmenter fragment = new Fragmenter(commonVars.getSimulationSettings().getResolution());
 
             Parallel.For(0, previewPoints.Count, i =>
             {
                 if (!drawnPoly[i])
                 {
-                    previewPoints[i] = fragment.fragmentPath(GeoWrangler.stripColinear(previewPoints[i]));
+                    PathD tmp = GeoWrangler.stripCollinear(previewPoints[i]);
+                    previewPoints[i] = fragment.fragmentPath(tmp);
                 }
             });
 
@@ -319,13 +315,13 @@ public class PreviewShape
             previewPoints = distortShape.distortion(previewPoints, drawnPoly.ToArray(),
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC1),
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.lDC2),
-                commonVars.getSimulationSettings().getResolution(), CentralProperties.scaleFactorForOperation);
+                commonVars.getSimulationSettings().getResolution());
 
             Parallel.For(0, previewPoints.Count, i =>
             {
                 if (!drawnPoly[i])
                 {
-                    previewPoints[i] = fragment.fragmentPath(GeoWrangler.stripColinear(previewPoints[i]));
+                    previewPoints[i] = fragment.fragmentPath(GeoWrangler.stripCollinear(previewPoints[i]));
                 }
             });
 
@@ -339,16 +335,17 @@ public class PreviewShape
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier),
                 commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rayExtension),
                 commonVars.getSimulationSettings().getResolution(),
-                CentralProperties.scaleFactorForOperation, false, 0
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.removeArtifacts) == 1,
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon) * 10
                 );
 
-            previewPoints = ret.geometry.ToList();
+            previewPoints = new (ret.geometry);
             drawnPoly = ret.drawn.ToList();
             Parallel.For(0, previewPoints.Count, i =>
             {
                 if (!drawnPoly[i])
                 {
-                    previewPoints[i] = fragment.fragmentPath(GeoWrangler.stripColinear(previewPoints[i]));
+                    previewPoints[i] = fragment.fragmentPath(GeoWrangler.stripCollinear(previewPoints[i]));
                 }
             });
         }
@@ -362,7 +359,7 @@ public class PreviewShape
         if (mode == 0)
         {
             // Basic shape - 5 points to make a closed preview. 5th is identical to 1st.
-            GeoLibPointF[] tempArray = new GeoLibPointF[5];
+            PathD tempArray = Helper.initedPathD(5);
 
             // Need exception handling here for overflow cases?
             decimal bottom_leftX = 0, bottom_leftY = 0;
@@ -409,22 +406,21 @@ public class PreviewShape
             }
 
             // Populate array.
-            tempArray[0] = new GeoLibPointF((double)bottom_leftX, (double)bottom_leftY);
-            tempArray[1] = new GeoLibPointF((double)top_leftX, (double)top_leftY);
-            tempArray[2] = new GeoLibPointF((double)top_rightX, (double)top_rightY);
-            tempArray[3] = new GeoLibPointF((double)bottom_rightX, (double)bottom_rightY);
-            tempArray[4] = new GeoLibPointF(tempArray[0]);
+            tempArray[0] = new ((double)bottom_leftX, (double)bottom_leftY);
+            tempArray[1] = new ((double)top_leftX, (double)top_leftY);
+            tempArray[2] = new ((double)top_rightX, (double)top_rightY);
+            tempArray[3] = new ((double)bottom_rightX, (double)bottom_rightY);
+            tempArray[4] = new (tempArray[0]);
 
             // Apply our deltas
-            int tLength = tempArray.Length;
+            int tLength = tempArray.Count;
 #if !VARIANCESINGLETHREADED
             Parallel.For(0, tLength, i => 
 #else
                 for (Int32 i = 0; i < tLength; i++)
 #endif
                 {
-                    tempArray[i].X += xOffset;
-                    tempArray[i].Y += yOffset;
+                    tempArray[i] = new (tempArray[i].x + xOffset, tempArray[i].y + yOffset);
                 }
 #if !VARIANCESINGLETHREADED
             );
@@ -437,8 +433,9 @@ public class PreviewShape
             // Complex shape
             try
             {
-                EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings);
-                previewPoints.Add(complexPoints.getPoints());
+                PointD pivot_unused = new PointD(double.NaN, double.NaN);
+                EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, pivot_unused);
+                previewPoints.Add(new(complexPoints.getPoints()));
                 drawnPoly.Add(false);
             }
             catch (Exception)
@@ -447,14 +444,14 @@ public class PreviewShape
             }
         }
         // Get our offsets configured.
-        GeoLibPointF offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
-        xOffset = offset.X;
-        yOffset = offset.Y;
+        PointD offset = shapeOffsets.doOffsets(0, entropyLayerSettings);
+        xOffset = offset.x;
+        yOffset = offset.y;
 
         int pCount = previewPoints.Count;
         for (int poly = 0; poly < pCount; poly++)
         {
-            int ptCount = previewPoints[poly].Length;
+            int ptCount = previewPoints[poly].Count;
             int poly1 = poly;
 #if !VARIANCESINGLETHREADED
             Parallel.For(0, ptCount, point =>
@@ -462,16 +459,16 @@ public class PreviewShape
                 for (Int32 point = 0; point < ptCount; point++)
 #endif
                 {
-                    double px = previewPoints[poly1][point].X + xOffset;
-                    double py = previewPoints[poly1][point].Y - yOffset;
+                    double px = previewPoints[poly1][point].x + xOffset;
+                    double py = previewPoints[poly1][point].y - yOffset;
 
-                    previewPoints[poly1][point] = new GeoLibPointF(px, py);
+                    previewPoints[poly1][point] = new (px, py);
                 }
 #if !VARIANCESINGLETHREADED
             );
 #endif
-            if (Math.Abs(previewPoints[poly][0].X - previewPoints[poly][previewPoints[poly].Length - 1].X) > double.Epsilon ||
-                Math.Abs(previewPoints[poly][0].Y - previewPoints[poly][previewPoints[poly].Length - 1].Y) > double.Epsilon)
+            if (Math.Abs(previewPoints[poly][0].x - previewPoints[poly][previewPoints[poly].Count - 1].x) > Constants.tolerance ||
+                Math.Abs(previewPoints[poly][0].y - previewPoints[poly][previewPoints[poly].Count - 1].y) > Constants.tolerance)
             {
                 ErrorReporter.showMessage_OK("Start and end not the same - previewShape", "Oops");
             }
@@ -479,7 +476,7 @@ public class PreviewShape
     }
     private void init_geoCore(CommonVars commonVars, ChaosSettings chaosSettings, int settingsIndex, EntropyLayerSettings entropyLayerSettings, int mode, bool doPASearch, bool previewMode, bool process_overlaps, bool forceClockwise)
     {
-        Fragmenter fragment = new Fragmenter(commonVars.getSimulationSettings().getResolution(), CentralProperties.scaleFactorForOperation);
+        Fragmenter fragment = new Fragmenter(commonVars.getSimulationSettings().getResolution());
 
         // We'll use these to shift the points around.
         double xOverlayVal = 0.0f;
@@ -499,10 +496,10 @@ public class PreviewShape
             // Instead we just make a zero area polygon (to avoid issues downstream) and return early.
             if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 0)
             {
-                previewPoints.Add(new GeoLibPointF[4]);
+                previewPoints.Add(Helper.initedPathD(4));
                 for (int i = 0; i < 4; i++)
                 {
-                    previewPoints[0][i] = new GeoLibPointF(0, 0);
+                    previewPoints[0][i] = new (0, 0);
                 }
                 drawnPoly.Add(false);
                 geoCoreOrthogonalPoly.Add(true);
@@ -523,8 +520,8 @@ public class PreviewShape
                 // Get overlay figured out.
                 case false:
                 {
-                    xOverlayVal = chaosSettings.getValue(ChaosSettings.properties.overlayX, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.xOL));
-                    yOverlayVal = chaosSettings.getValue(ChaosSettings.properties.overlayY, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.yOL));
+                    xOverlayVal = chaosSettings.getValue(ChaosSettings.Properties.overlayX, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.xOL));
+                    yOverlayVal = chaosSettings.getValue(ChaosSettings.Properties.overlayY, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.yOL));
 
                     // Handle overlay reference setting
                     if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_av) == 1) // overlay average
@@ -534,7 +531,7 @@ public class PreviewShape
                         {
                             if (entropyLayerSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, avgolref_x) == 1)
                             {
-                                overlayValues.Add(chaosSettings.getValue(ChaosSettings.properties.overlayX, avgolref_x) * Convert.ToDouble(commonVars.getLayerSettings(avgolref_x).getDecimal(EntropyLayerSettings.properties_decimal.xOL))); // Overlay shift
+                                overlayValues.Add(chaosSettings.getValue(ChaosSettings.Properties.overlayX, avgolref_x) * Convert.ToDouble(commonVars.getLayerSettings(avgolref_x).getDecimal(EntropyLayerSettings.properties_decimal.xOL))); // Overlay shift
                             }
                         }
 
@@ -544,7 +541,7 @@ public class PreviewShape
                     {
                         if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref) != -1)
                         {
-                            xOverlayVal += chaosSettings.getValue(ChaosSettings.properties.overlayX, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref)) * Convert.ToDouble(commonVars.getLayerSettings(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref)).getDecimal(EntropyLayerSettings.properties_decimal.xOL));
+                            xOverlayVal += chaosSettings.getValue(ChaosSettings.Properties.overlayX, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref)) * Convert.ToDouble(commonVars.getLayerSettings(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_ref)).getDecimal(EntropyLayerSettings.properties_decimal.xOL));
                         }
                     }
 
@@ -555,7 +552,7 @@ public class PreviewShape
                         {
                             if (entropyLayerSettings.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, avgolref_y) == 1)
                             {
-                                overlayValues.Add(chaosSettings.getValue(ChaosSettings.properties.overlayY, avgolref_y) * Convert.ToDouble(commonVars.getLayerSettings(avgolref_y).getDecimal(EntropyLayerSettings.properties_decimal.yOL))); // Overlay shift
+                                overlayValues.Add(chaosSettings.getValue(ChaosSettings.Properties.overlayY, avgolref_y) * Convert.ToDouble(commonVars.getLayerSettings(avgolref_y).getDecimal(EntropyLayerSettings.properties_decimal.yOL))); // Overlay shift
                             }
                         }
 
@@ -565,7 +562,7 @@ public class PreviewShape
                     {
                         if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref) != -1)
                         {
-                            yOverlayVal += chaosSettings.getValue(ChaosSettings.properties.overlayY, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref)) * Convert.ToDouble(commonVars.getLayerSettings(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref)).getDecimal(EntropyLayerSettings.properties_decimal.yOL));
+                            yOverlayVal += chaosSettings.getValue(ChaosSettings.Properties.overlayY, entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref)) * Convert.ToDouble(commonVars.getLayerSettings(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_ref)).getDecimal(EntropyLayerSettings.properties_decimal.yOL));
                         }
                     }
 
@@ -574,29 +571,29 @@ public class PreviewShape
             }
 
             // Decouple the geometry here to avoid manipulation going back to original source.
-            List<GeoLibPointF[]> tempPolyList;
+            PathsD tempPolyList;
             switch (tileHandlingNeeded)
             {
                 case true:
-                    tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
+                    tempPolyList = new (commonVars.getNonSimulationSettings().extractedTile[settingsIndex]);
                     break;
                 default:
-                    tempPolyList = entropyLayerSettings.getFileData().ToList();
+                    tempPolyList = new (entropyLayerSettings.getFileData());
                     break;
             }
             try
             {
-                double minx = tempPolyList[0][0].X;
-                double miny = tempPolyList[0][0].Y;
-                double maxx = tempPolyList[0][0].X;
-                double maxy = tempPolyList[0][0].Y;
+                double minx = tempPolyList[0][0].x;
+                double miny = tempPolyList[0][0].y;
+                double maxx = tempPolyList[0][0].x;
+                double maxy = tempPolyList[0][0].y;
                 int tPCount = tempPolyList.Count;
                 for (int poly = 0; poly < tPCount; poly++)
                 {
-                    double min_x = tempPolyList[poly].Min(p => p.X);
-                    double min_y = tempPolyList[poly].Min(p => p.Y);
-                    double max_x = tempPolyList[poly].Max(p => p.X);
-                    double max_y = tempPolyList[poly].Max(p => p.Y);
+                    double min_x = tempPolyList[poly].Min(p => p.x);
+                    double min_y = tempPolyList[poly].Min(p => p.y);
+                    double max_x = tempPolyList[poly].Max(p => p.x);
+                    double max_y = tempPolyList[poly].Max(p => p.y);
 
                     if (min_x < minx)
                     {
@@ -616,34 +613,35 @@ public class PreviewShape
                     }
                 }
 
-                GeoLibPointF bb_mid = new(minx + (maxx - minx) / 2.0f, miny + (maxy - miny) / 2.0f);
-                bb_mid.X += xOverlayVal + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset) + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0);
-                bb_mid.Y += yOverlayVal + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset) + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0);
+                PointD bb_mid = new(minx + (maxx - minx) / 2.0f, miny + (maxy - miny) / 2.0f);
+                bb_mid.x += xOverlayVal + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset) + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0);
+                bb_mid.y += yOverlayVal + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset) + (double)entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0);
 
                 if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.perPoly) == 1)
                 {
-                    bb_mid = null;
+                    bb_mid.x = double.NaN;
+                    bb_mid.y = double.NaN;
                 }
 
                 for (int poly = 0; poly < tPCount; poly++)
                 {
-                    GeoLibPointF[] tempPoly;
+                    PathD tempPoly;
 
                     if (tileHandlingNeeded)
                     {
                         // Poly is already closed - presents a problem if we use contouring.
-                        int arraySize = tempPolyList[poly].Length;
+                        int arraySize = tempPolyList[poly].Count;
 
                         if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
                         {
-                            if (Math.Abs(tempPolyList[poly][0].X - tempPolyList[poly][tempPolyList[poly].Length - 1].X) < double.Epsilon && Math.Abs(tempPolyList[poly][0].Y - tempPolyList[poly][tempPolyList[poly].Length - 1].Y) < double.Epsilon)
+                            if (Math.Abs(tempPolyList[poly][0].x - tempPolyList[poly][tempPolyList[poly].Count - 1].x) < Constants.tolerance && Math.Abs(tempPolyList[poly][0].y - tempPolyList[poly][tempPolyList[poly].Count - 1].y) < Constants.tolerance)
                             {
                                 arraySize--;
                             }
                         }
 
-                        tempPoly = new GeoLibPointF[arraySize];
-                        GeoLibPointF[] poly1 = tempPoly;
+                        tempPoly = Helper.initedPathD(arraySize);
+                        PathD poly1 = tempPoly;
                         int poly2 = poly;
 
 #if !VARIANCESINGLETHREADED
@@ -652,7 +650,7 @@ public class PreviewShape
                             for (int pt = 0; pt < arraySize; pt++)
 #endif
                             {
-                                poly1[pt] = new GeoLibPointF(tempPolyList[poly2][pt].X + xOffset, tempPolyList[poly2][pt].Y + yOffset);
+                                poly1[pt] = new (tempPolyList[poly2][pt].x + xOffset, tempPolyList[poly2][pt].y + yOffset);
                             }
 #if !VARIANCESINGLETHREADED
                         );
@@ -660,11 +658,11 @@ public class PreviewShape
                     }
                     else
                     {
-                        int polySize = entropyLayerSettings.getFileData()[poly].Length;
+                        int polySize = entropyLayerSettings.getFileData()[poly].Count;
 
-                        tempPoly = new GeoLibPointF[polySize];
+                        tempPoly = Helper.initedPathD(polySize);
 
-                        GeoLibPointF[] poly1 = tempPoly;
+                        PathD poly1 = tempPoly;
                         int poly2 = poly;
 #if !VARIANCESINGLETHREADED
                         Parallel.For(0, polySize, pt => 
@@ -672,7 +670,7 @@ public class PreviewShape
                             for (Int32 pt = 0; pt < polySize; pt++)
 #endif
                             {
-                                poly1[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly2][pt].X + xOffset, entropyLayerSettings.getFileData()[poly2][pt].Y + yOffset);
+                                poly1[pt] = new (entropyLayerSettings.getFileData()[poly2][pt].x + xOffset, entropyLayerSettings.getFileData()[poly2][pt].y + yOffset);
                             }
 #if !VARIANCESINGLETHREADED
                         );
@@ -702,7 +700,7 @@ public class PreviewShape
                         ShapeLibrary shape = new(CentralProperties.shapeTable, entropyLayerSettings);
 
                         shape.setShape(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex), tempPoly); // feed the shape engine with the geometry using our optional parameter.
-                        EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, shape, bb_mid);
+                        EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, bb_mid, shape);
                         // Add resulting shape to the previewPoints.
                         previewPoints.Add(complexPoints.getPoints());
                         // This list entry does matter - we need to choose the right expansion method in case contouring has been chosen, but the
@@ -727,7 +725,7 @@ public class PreviewShape
                         continue;
                     }
 
-                    int ptCount = previewPoints[poly].Length;
+                    int ptCount = previewPoints[poly].Count;
 #if !VARIANCESINGLETHREADED
                     var poly1 = poly;
                     Parallel.For(0, ptCount, pt =>
@@ -735,8 +733,7 @@ public class PreviewShape
                             for (int pt = 0; pt < ptCount; pt++)
 #endif
                         {
-                            previewPoints[poly1][pt].X += xOverlayVal;
-                            previewPoints[poly1][pt].Y += yOverlayVal;
+                            previewPoints[poly1][pt] = new (previewPoints[poly1][pt].x + xOverlayVal, previewPoints[poly1][pt].y + yOverlayVal);
                         }
 #if !VARIANCESINGLETHREADED
                     );
@@ -749,11 +746,11 @@ public class PreviewShape
             // We do not want to re-bias contoured geoCore data - it's been done already.
             // Additionally, we don't want to assume an overlap for processing where none exists : we'll get back an empty polygon.
             double globalBias_Sides = Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sBias));
-            globalBias_Sides += chaosSettings.getValue(ChaosSettings.properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2;
-            List<GeoLibPointF[]> resizedLayoutData = new();
+            globalBias_Sides += chaosSettings.getValue(ChaosSettings.Properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2;
+            PathsD resizedLayoutData = new();
             try
             {
-                if (globalBias_Sides > double.Epsilon)
+                if (globalBias_Sides > Constants.tolerance)
                 {
                     List<bool> new_Drawn = new();
 
@@ -766,18 +763,19 @@ public class PreviewShape
                         if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0 ||
                             !geoCoreOrthogonalPoly[poly] && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
                         {
-                            Paths resizedPolyData;
-                            Path gdsPointData = GeoWrangler.pathFromPointF(previewPoints[poly], CentralProperties.scaleFactorForOperation);
+                            Path64 gdsPointData = GeoWrangler.path64FromPathD(previewPoints[poly], Constants.scalar_1E2);
                             ClipperOffset co = new() {PreserveCollinear = true, ReverseSolution = true};
                             co.AddPath(gdsPointData, JoinType.Miter, EndType.Polygon);
-                            resizedPolyData = co.Execute(Convert.ToDouble(globalBias_Sides * CentralProperties.scaleFactorForOperation));
+                            Paths64 tmp = new();
+                            co.Execute(Convert.ToDouble(globalBias_Sides * Constants.scalar_1E2), tmp);
+                            var resizedPolyData = GeoWrangler.pathsDFromPaths64(tmp, Constants.scalar_1E2_inv);
                             resizedPolyData = GeoWrangler.reOrderXY(resizedPolyData);
                             resizedPolyData = GeoWrangler.close(resizedPolyData);
 
                             // Store our polygon data (note that we could have ended up with two or more polygons due to reduction)
                             try
                             {
-                                foreach (GeoLibPointF[] rPolyData in resizedPolyData.Select(t => GeoWrangler.pointFFromPath(t, CentralProperties.scaleFactorForOperation)))
+                                foreach (PathD rPolyData in resizedPolyData)
                                 {
                                     resizedLayoutData.Add(rPolyData);
 
@@ -826,9 +824,9 @@ public class PreviewShape
                 double extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
                     .getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
                 
-                GeometryResult ret = ProcessOverlaps.processOverlaps(previewPoints, drawnPoly, extension:extension , resolution:resolution, scaleFactorForOperation:CentralProperties.scaleFactorForOperation, customSizing:customSizing, forceOverride: false, (FillRule)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
+                GeometryResult ret = ProcessOverlaps.processOverlaps(previewPoints, drawnPoly, extension:extension , resolution:resolution, customSizing:customSizing, forceOverride: false, (FillRule)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
 
-                previewPoints = ret.geometry.ToList();
+                previewPoints = new (ret.geometry);
                 drawnPoly = ret.drawn.ToList();
             }
         }
@@ -842,8 +840,8 @@ public class PreviewShape
             switch (tileHandlingNeeded)
             {
                 case true:
-                    List<GeoLibPointF[]> tempPolyList = commonVars.getNonSimulationSettings().extractedTile[settingsIndex].ToList();
-                    foreach (GeoLibPointF[] t in tempPolyList)
+                    PathsD tempPolyList = new (commonVars.getNonSimulationSettings().extractedTile[settingsIndex]);
+                    foreach (PathD t in tempPolyList)
                     {
                         previewPoints.Add(GeoWrangler.close(t));
                         drawnPoly.Add(true);
@@ -852,8 +850,8 @@ public class PreviewShape
                 default:
                     for (int poly = 0; poly < entropyLayerSettings.getFileData().Count; poly++)
                     {
-                        int arraySize = entropyLayerSettings.getFileData()[poly].Length;
-                        GeoLibPointF[] tmp = new GeoLibPointF[arraySize];
+                        int arraySize = entropyLayerSettings.getFileData()[poly].Count;
+                        PathD tmp = Helper.initedPathD(arraySize);
 #if !VARIANCESINGLETHREADED
                         var poly1 = poly;
                         Parallel.For(0, arraySize, pt => 
@@ -861,8 +859,8 @@ public class PreviewShape
                     for (Int32 pt = 0; pt < arraySize; pt++)
 #endif
                             {
-                                tmp[pt] = new GeoLibPointF(entropyLayerSettings.getFileData()[poly1][pt].X + xOffset,
-                                    entropyLayerSettings.getFileData()[poly1][pt].Y + yOffset);
+                                tmp[pt] = new (entropyLayerSettings.getFileData()[poly1][pt].x + xOffset,
+                                    entropyLayerSettings.getFileData()[poly1][pt].y + yOffset);
                             }
 #if !VARIANCESINGLETHREADED
                         );
@@ -896,20 +894,19 @@ public class PreviewShape
         PreviewShape b_pShape = new(commonVars, layerBIndex, layerB.getInt(EntropyLayerSettings.properties_i.subShapeIndex), mode: 1, doPASearch, previewMode, currentRow, currentCol);
 
         // We need to map the geometry into Paths for use in the Boolean
-        Paths layerAPaths = GeoWrangler.pathsFromPointFs(a_pShape.getPoints(), CentralProperties.scaleFactorForOperation);
-        Paths layerBPaths = GeoWrangler.pathsFromPointFs(b_pShape.getPoints(), CentralProperties.scaleFactorForOperation);
-
+        PathsD layerAPaths = new(a_pShape.getPoints());
+        PathsD layerBPaths = new(b_pShape.getPoints());
         
         // Now this gets interesting. We leverage the Boolean engine in GeoWrangler to get the result we want.
         // This should probably be relocated at some point, but for now, it's an odd interaction.
-        Paths booleanPaths = GeoWrangler.customBoolean(
+        PathsD booleanPaths = GeoWrangler.customBoolean(
             firstLayerOperator: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpA),
             firstLayer: layerAPaths, 
             secondLayerOperator: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpB), 
             secondLayer: layerBPaths, 
             booleanFlag: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpAB),
             resolution: commonVars.getSimulationSettings().getResolution(),
-            extension: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)), CentralProperties.scaleFactorForOperation
+            extension: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.rayExtension))
             // fragmenter:new Fragmenter(fragment, CentralProperties.scaleFactorForOperation)
         );
 
@@ -933,8 +930,6 @@ public class PreviewShape
 #if !VARIANCESINGLETHREADED
         );
 #endif
-        // Scale back down again.
-        List<GeoLibPointF[]> booleanGeo = GeoWrangler.pointFsFromPaths(booleanPaths, CentralProperties.scaleFactorForOperation);
 
         // Process the geometry according to mode, etc.
         // We do this by treating our geometry as a geocore source and calling init with this to set up our instance properties.
@@ -943,7 +938,7 @@ public class PreviewShape
         tempSettings.adjustSettings(entropyLayerSettings, gdsOnly: false);
         tempSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.GEOCORE);
         tempSettings.setInt(EntropyLayerSettings.properties_i.gCSEngine, 1);
-        tempSettings.setFileData(booleanGeo.ToList());
+        tempSettings.setFileData(new (booleanPaths));
         drawnPoly.Clear();
         previewPoints.Clear();
         init(commonVars, chaosSettings, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol, tempSettings, doClockwiseGeoFix: true, process_overlaps: false); // Avoid the baked-in point order reprocessing which breaks our representation.
@@ -960,9 +955,9 @@ public class PreviewShape
         double extension = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
             .getDecimal(EntropyLayerSettings.properties_decimal.rayExtension));
                 
-        GeometryResult ret = ProcessOverlaps.processOverlaps(previewPoints, drawnPoly, extension:extension , resolution:resolution, scaleFactorForOperation:CentralProperties.scaleFactorForOperation, customSizing:customSizing,  forceOverride:false, (FillRule)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
+        GeometryResult ret = ProcessOverlaps.processOverlaps(previewPoints, drawnPoly, extension:extension , resolution:resolution, customSizing:customSizing,  forceOverride:false, (FillRule)commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.fill));
 
-        previewPoints = ret.geometry.ToList();
+        previewPoints = new (ret.geometry);
         drawnPoly = ret.drawn.ToList();
     }
 }

@@ -6,11 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Clipper2Lib;
 using EmailNS;
 using Error;
 using gds;
 using geoCoreLib;
-using geoLib;
 using geoWrangler;
 using oasis;
 using utility;
@@ -273,11 +273,11 @@ public partial class Entropy
         evalResults.setResult(currentJobEngine.getResult());
         evalResults.setMin(currentJobEngine.getMin());
         evalResults.setMax(currentJobEngine.getMax());
-        evalResults.resistWidthVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistCDVar);
-        evalResults.resistHeightVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistHeightVar);
-        evalResults.resistCRRVar = currentJobSettings.getValue(ChaosSettings_implant.properties.resistTopCRRVar);
-        evalResults.tiltVar = currentJobSettings.getValue(ChaosSettings_implant.properties.tiltVar);
-        evalResults.twistVar = currentJobSettings.getValue(ChaosSettings_implant.properties.twistVar);
+        evalResults.resistWidthVar = currentJobSettings.getValue(ChaosSettings_implant.Properties.resistCDVar);
+        evalResults.resistHeightVar = currentJobSettings.getValue(ChaosSettings_implant.Properties.resistHeightVar);
+        evalResults.resistCRRVar = currentJobSettings.getValue(ChaosSettings_implant.Properties.resistTopCRRVar);
+        evalResults.tiltVar = currentJobSettings.getValue(ChaosSettings_implant.Properties.tiltVar);
+        evalResults.twistVar = currentJobSettings.getValue(ChaosSettings_implant.Properties.twistVar);
         evalResults.setResistShapes(commonVars.getColors(), currentJobEngine.getGeom(), currentJobEngine.getBGGeom(), currentJobEngine.getShadow(), currentJobEngine.getMinShadow(), currentJobEngine.getMaxShadow());
         evalResults.setValid(currentJobEngine.isValid());
         return evalResults;
@@ -510,27 +510,25 @@ public partial class Entropy
         string paddingString = "D" + numberOfCases.ToString().Length; // count chars in the number of cases as a string, use that to define padding.
         svgFileName += "_run" + resultEntry.ToString(paddingString) + ".svg";
 
-        SVGBuilder.SVGBuilder svg = new()
-        {
-            style =
-            {
-                brushClr = currentResult.getResistShapes()[0].getColor(),
-                penClr = currentResult.getResistShapes()[0].getColor()
-            }
-        };
-
+        SvgWriter svg = new();
+        
         // Active resist contour
-        svg.AddPolygons(currentResult.getResistShapes()[0].getPoints());
+        svg.AddClosedPaths(currentResult.getResistShapes()[0].getPoints(),
+            (uint)currentResult.getResistShapes()[0].getColor().toArgb(),
+            (uint)currentResult.getResistShapes()[0].getColor().toArgb(),
+            1.0, false);
 
         // Background resist contour
-        svg.style.brushClr = currentResult.getResistShapes()[1].getColor();
-        svg.style.penClr = currentResult.getResistShapes()[1].getColor();
-        svg.AddPolygons(currentResult.getResistShapes()[1].getPoints());
+        svg.AddClosedPaths(currentResult.getResistShapes()[1].getPoints(),
+            (uint)currentResult.getResistShapes()[1].getColor().toArgb(),
+            (uint)currentResult.getResistShapes()[1].getColor().toArgb(),
+            1.0, false);
 
         // Shadow
-        svg.style.brushClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
-        svg.style.penClr = currentResult.getLine(Results_implant.lines.shadow).getColor();
-        svg.AddPolygons(currentResult.getLine(Results_implant.lines.shadow).getPoints());
+        svg.AddClosedPaths(currentResult.getLine(Results_implant.Lines.shadow).getPoints(),
+            (uint)currentResult.getLine(Results_implant.Lines.shadow).getColor().toArgb(),
+            (uint)currentResult.getLine(Results_implant.Lines.shadow).getColor().toArgb(),
+            1.0, false);
 
         svg.SaveToFile(svgFileName);
     }
@@ -582,19 +580,19 @@ public partial class Entropy
         // Resist
         for (int i = 0; i < 2; i++)
         {
-            List<GeoLibPointF[]> resistPolys = currentResult.getResistShapes()[i].getPoints();
+            PathsD resistPolys = currentResult.getResistShapes()[i].getPoints();
             g.addLayerName("L" + (i + 1) + "D0", "resistPolys" + i);
 
-            foreach (GeoLibPoint[] ePoly in resistPolys.Select(t => GeoWrangler.resize_to_int(t, scale)))
+            foreach (Path64 ePoly in resistPolys.Select(t => GeoWrangler.resize_to_int(t, scale)))
             {
                 gcell_root.addPolygon(ePoly, i + 1, 0);
             }
         }
 
         // Shadowing line
-        List<GeoLibPointF[]> shadowLine = currentResult.getLine(Results_implant.lines.shadow).getPoints();
+        PathsD shadowLine = currentResult.getLine(Results_implant.Lines.shadow).getPoints();
         g.addLayerName("L2D0", "shadowLine");
-        foreach (GeoLibPoint[] ePoly in shadowLine.Select(t => GeoWrangler.resize_to_int(t, scale)))
+        foreach (Path64 ePoly in shadowLine.Select(t => GeoWrangler.resize_to_int(t, scale)))
         {
             gcell_root.addPolygon(ePoly, 2, 0);
         }
@@ -644,9 +642,9 @@ public partial class Entropy
         }
 
         linesToWrite.Add("");
-        for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.properties.mean).Length; resultGroup++)
+        for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.Properties.mean).Length; resultGroup++)
         {
-            linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count + " cases: x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, resultGroup).ToString("0.##"));
+            linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count + " cases: x: " + implantResultPackage.getValue(SimResultPackage.Properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.Properties.stdDev, resultGroup).ToString("0.##"));
         }
 
         linesToWrite.Add("");

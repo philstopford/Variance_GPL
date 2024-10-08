@@ -4,7 +4,7 @@ namespace Variance;
 
 internal class ChaosSettings_implant
 {
-    public enum properties { resistCDVar, resistHeightVar, resistTopCRRVar, tiltVar, twistVar }
+    public enum Properties { resistCDVar, resistHeightVar, resistTopCRRVar, tiltVar, twistVar }
 
     private static int dimensions = 5; // number of variations.
 
@@ -18,7 +18,7 @@ internal class ChaosSettings_implant
         return dimensions;
     }
 
-    public double getValue(properties p)
+    public double getValue(Properties p)
     {
         return pGetValue((int)p);
     }
@@ -28,19 +28,19 @@ internal class ChaosSettings_implant
         double retVal = 0;
         switch (p)
         {
-            case (int)properties.resistCDVar:
+            case (int)Properties.resistCDVar:
                 retVal = implant_resistCDVar;
                 break;
-            case (int)properties.resistHeightVar:
+            case (int)Properties.resistHeightVar:
                 retVal = implant_resistHeightVar;
                 break;
-            case (int)properties.resistTopCRRVar:
+            case (int)Properties.resistTopCRRVar:
                 retVal = implant_resistTopCRRVar;
                 break;
-            case (int)properties.tiltVar:
+            case (int)Properties.tiltVar:
                 retVal = implant_tiltVar;
                 break;
-            case (int)properties.twistVar:
+            case (int)Properties.twistVar:
                 retVal = implant_twistVar;
                 break;
         }

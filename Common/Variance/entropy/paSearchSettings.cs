@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using shapeEngine;
+using geoWrangler;
 
 namespace Variance;
 
@@ -481,7 +481,7 @@ public class PASearch
                 rawValues.Add(Math.Abs(factor) * Convert.ToDouble(upperLimit[layer, pa]));
             }
             double meanVal = mean(rawValues);
-            if (Math.Abs(meanVal - -1) > double.Epsilon)
+            if (Math.Abs(meanVal - -1) > Constants.tolerance)
             {
                 meanValues[layer, pa] = meanVal.ToString("0.##");
                 if (!resultPackage.nonGaussianInput)
@@ -554,71 +554,71 @@ public class PASearch
                         case (int)paEnum.XOL:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.overlayX, layer, jobSettings.getValue(ChaosSettings.properties.overlayX, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.overlayX, layer, jobSettings.getValue(ChaosSettings.Properties.overlayX, layer) * 3);
                             }
                             break;
                         case (int)paEnum.YOL:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.overlayY, layer, jobSettings.getValue(ChaosSettings.properties.overlayY, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.overlayY, layer, jobSettings.getValue(ChaosSettings.Properties.overlayY, layer) * 3);
                             }
                             break;
                         case (int)paEnum.SCDU:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.CDUSVar, layer, jobSettings.getValue(ChaosSettings.properties.CDUSVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.CDUSVar, layer, jobSettings.getValue(ChaosSettings.Properties.CDUSVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.TCDU:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.CDUTVar, layer, jobSettings.getValue(ChaosSettings.properties.CDUTVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.CDUTVar, layer, jobSettings.getValue(ChaosSettings.Properties.CDUTVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.LWR:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.LWRVar, layer, jobSettings.getValue(ChaosSettings.properties.LWRVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.LWRVar, layer, jobSettings.getValue(ChaosSettings.Properties.LWRVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.LWR2:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.LWR2Var, layer, jobSettings.getValue(ChaosSettings.properties.LWR2Var, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.LWR2Var, layer, jobSettings.getValue(ChaosSettings.Properties.LWR2Var, layer) * 3);
                             }
                             break;
                         case (int)paEnum.HTIPNVAR:
                         case (int)paEnum.HTIPPVAR:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.hTipBiasVar, layer, jobSettings.getValue(ChaosSettings.properties.hTipBiasVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.hTipBiasVar, layer, jobSettings.getValue(ChaosSettings.Properties.hTipBiasVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.VTIPPVAR:
                         case (int)paEnum.VTIPNVAR:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.vTipBiasVar, layer, jobSettings.getValue(ChaosSettings.properties.vTipBiasVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.vTipBiasVar, layer, jobSettings.getValue(ChaosSettings.Properties.vTipBiasVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.ICR:
-                            jobSettings.setBool(ChaosSettings.bools.icPA, layer, true);
+                            jobSettings.setBool(ChaosSettings.Bools.icPA, layer, true);
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.icVar, layer, jobSettings.getValue(ChaosSettings.properties.icVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.icVar, layer, jobSettings.getValue(ChaosSettings.Properties.icVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.OCR:
-                            jobSettings.setBool(ChaosSettings.bools.ocPA, layer, true);
+                            jobSettings.setBool(ChaosSettings.Bools.ocPA, layer, true);
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.ocVar, layer, jobSettings.getValue(ChaosSettings.properties.ocVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.ocVar, layer, jobSettings.getValue(ChaosSettings.Properties.ocVar, layer) * 3);
                             }
                             break;
                         case (int)paEnum.WOB:
                             if (!jobSettings.getCustomRNGMapping())
                             {
-                                jobSettings.setValue(ChaosSettings.properties.wobbleVar, layer, jobSettings.getValue(ChaosSettings.properties.wobbleVar, layer) * 3);
+                                jobSettings.setValue(ChaosSettings.Properties.wobbleVar, layer, jobSettings.getValue(ChaosSettings.Properties.wobbleVar, layer) * 3);
                             }
                             break;
                     }

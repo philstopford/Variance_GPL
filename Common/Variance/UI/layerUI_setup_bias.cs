@@ -17,6 +17,9 @@ public partial class MainForm
 
     private DropDown comboBox_proxBiasFallOff;
 
+    private CheckBox cb_removeArtifacts;
+    private NumericStepper num_removeArtifactsEps;
+
     private void twoD_LayerUISetup_biasEtch_expanders(bool toState)
     {
         expander_etchandbias.Expanded = toState;
@@ -325,5 +328,24 @@ public partial class MainForm
         };
         setSize(num_proxBiasFallOffMultiplier, 55);
         biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_proxBiasFallOffMultiplier) });
+        
+        biasEtch_tr1_0_tl.Rows.Add(new TableRow());
+        cb_removeArtifacts = new CheckBox
+        {
+            Text = "Remove artifacts", ToolTip = "Attempt to remove artifacts from surface after biasing."
+        };
+        biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(cb_removeArtifacts) });
+
+        num_removeArtifactsEps = new NumericStepper
+        {
+            Increment = 1,
+            MinValue = 0,
+            Value = 100,
+            DecimalPlaces = 0,
+            ToolTip = "Epsilon value for artifact removal."
+        };
+        setSize(num_removeArtifactsEps, 55);
+        biasEtch_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_removeArtifactsEps) });
+
     }
 }

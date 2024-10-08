@@ -205,34 +205,34 @@ public class SimResultPackage
     private double[] summedSquarevalues;
     private int[] numberOfValues;
 
-    public enum properties { mean, lastMean, stdDev, lastStdDev }
+    public enum Properties { mean, lastMean, stdDev, lastStdDev }
 
     private double[] meanValues;
     private double[] lastMeanValues;
     private double[] stdDevValues;
     private double[] lastStdDevValues;
 
-    public double[] getValues(properties p)
+    public double[] getValues(Properties p)
     {
         return pGetValues(p);
     }
 
-    private double[] pGetValues(properties p)
+    private double[] pGetValues(Properties p)
     {
         double[] ret = { };
 
         switch (p)
         {
-            case properties.mean:
+            case Properties.mean:
                 ret = meanValues;
                 break;
-            case properties.lastMean:
+            case Properties.lastMean:
                 ret = lastMeanValues;
                 break;
-            case properties.stdDev:
+            case Properties.stdDev:
                 ret = stdDevValues;
                 break;
-            case properties.lastStdDev:
+            case Properties.lastStdDev:
                 ret = lastStdDevValues;
                 break;
         }
@@ -240,27 +240,27 @@ public class SimResultPackage
         return ret;
     }
 
-    public double getValue(properties p, int index)
+    public double getValue(Properties p, int index)
     {
         return pGetValue(p, index);
     }
 
-    private double pGetValue(properties p, int index)
+    private double pGetValue(Properties p, int index)
     {
         double ret = 0;
 
         switch (p)
         {
-            case properties.mean:
+            case Properties.mean:
                 ret = meanValues[index];
                 break;
-            case properties.lastMean:
+            case Properties.lastMean:
                 ret = lastMeanValues[index];
                 break;
-            case properties.stdDev:
+            case Properties.stdDev:
                 ret = stdDevValues[index];
                 break;
-            case properties.lastStdDev:
+            case Properties.lastStdDev:
                 ret = lastStdDevValues[index];
                 break;
         }

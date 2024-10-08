@@ -11,7 +11,7 @@ public partial class MainForm
         if (aboutBox is not {Visible: true})
         {
             string creditText = "Version " + commonVars.version + ", " +
-                                "© " + commonVars.author + " 2014-2022" + "\r\n\r\n";
+                                "© " + commonVars.author + " 2014-2023" + "\r\n\r\n";
             creditText += varianceContext.vc.licenceName;
             creditText += "\r\n\r\n";
             creditText += "Libraries used:\r\n";
@@ -323,9 +323,9 @@ public partial class MainForm
                     num_viewportY.Value = vals[1];
                 }
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
             globalUIFrozen = false;
         });

@@ -603,7 +603,7 @@ public partial class MainForm
         {
             if (comboBox_calcModes.SelectedIndex < 0)
             {
-                comboBox_calcModes.SelectedIndex = (int)geoAnalysis.supported.calcModes.area;
+                comboBox_calcModes.SelectedIndex = (int)geoAnalysis.Supported.calcModes.area;
             }
         }
         catch (Exception)
@@ -612,7 +612,7 @@ public partial class MainForm
         }
         if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) < 0)
         {
-            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.area);
+            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.Supported.calcModes.area);
         }
 
         if (commonVars.getReplayMode() == 0)
@@ -693,7 +693,7 @@ public partial class MainForm
             }
 
             // Retrieve our settings.
-            checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.area;
+            checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.Supported.calcModes.area;
 
             checkBox_withinMode.Enabled = false;
             checkBox_useShortestEdge.Enabled = false;
@@ -711,7 +711,7 @@ public partial class MainForm
                 commonVars.getSimulationSettings().debugCalc = false;
             }
 
-            if (comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap)
+            if (comboBox_calcModes.SelectedIndex == (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap)
             {
                 if ((bool)checkBox_withinMode.Checked)
                 {
@@ -742,7 +742,7 @@ public partial class MainForm
 
             switch (comboBox_calcModes.SelectedIndex)
             {
-                case (int)geoAnalysis.supported.calcModes.chord:
+                case (int)geoAnalysis.Supported.calcModes.chord:
                 {
                     checkBox_aChord.Enabled = true;
                     checkBox_bChord.Enabled = true;
@@ -763,9 +763,9 @@ public partial class MainForm
 
                     break;
                 }
-                case (int)geoAnalysis.supported.calcModes.area:
+                case (int)geoAnalysis.Supported.calcModes.area:
                 {
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.area);
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.Supported.calcModes.area);
                     if ((bool)checkBox_perPoly.Checked)
                     {
                         commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.subMode, (int)geoAnalysis.AreaHandler.areaCalcModes.perpoly);
@@ -779,27 +779,27 @@ public partial class MainForm
                     label_AB.Text = "AND";
                     break;
                 }
-                case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap:
+                case (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap:
                 {
                     comboBox_calcModes.SelectedIndexChanged -= entropySettingsChanged;
                     checkBox_withinMode.Enabled = true;
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap);
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap);
                     string t;
                     if ((bool)checkBox_withinMode.Checked)
                     {
                         checkBox_useShortestEdge.Enabled = false;
-                        commonVars.calcMode_names[(int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap] = "Compute Enclosure Distribution";
+                        commonVars.calcMode_names[(int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap] = "Compute Enclosure Distribution";
                         label_AB.Text = "Min Enclosure To";
                         t = "enclosure";
                     }
                     else
                     {
                         checkBox_useShortestEdge.Enabled = true;
-                        commonVars.calcMode_names[(int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap] = "Compute Spacing Distribution";
+                        commonVars.calcMode_names[(int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap] = "Compute Spacing Distribution";
                         label_AB.Text = "Min Space To";
                         t = "spacing";
                     }
-                    comboBox_calcModes.SelectedIndex = (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap;
+                    comboBox_calcModes.SelectedIndex = (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap;
                     comboBox_calcModes.SelectedIndexChanged += entropySettingsChanged;
                     textBox_userGuidance.Text = "The system will report the minimum " + t + " value between the shapes, as a single value per case.\r\nNote that overlap cases will report a negative value to indicate that they are opposite to the case being evaluated";
                     break;
@@ -808,13 +808,13 @@ public partial class MainForm
 
             switch (comboBox_calcModes.SelectedIndex)
             {
-                case (int)geoAnalysis.supported.calcModes.chord:
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.chord);
+                case (int)geoAnalysis.Supported.calcModes.chord:
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.Supported.calcModes.chord);
                     label_AB.Text = "Min Chord With";
                     textBox_userGuidance.Text = "The system will report multiple chord lengths as : \"AMinTopChord,AMinBottomChord,BMinLeftChord,BMinRightChord\".\r\n\r\nMissing chords or invalid cases for evaluation are reported as 0.0\r\nChords not requested by the user are shown as N/A in the output file.\r\n\r\nShape A is defined by geometric equation A; B is geometric equation B.\r\n\r\nMajor axis : Orient shape A horizontally and B vertically else results will be reversed (top/bottom <> left/right)";
                     break;
-                case (int)geoAnalysis.supported.calcModes.angle:
-                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.supported.calcModes.angle);
+                case (int)geoAnalysis.Supported.calcModes.angle:
+                    commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.oType, (int)geoAnalysis.Supported.calcModes.angle);
                     label_AB.Text = "Min Angle With";
                     textBox_userGuidance.Text = "The minimum intersection angle will be reported, in degrees. A lack of intersection will yield a 180-degree value in the output";
                     break;
@@ -916,7 +916,7 @@ public partial class MainForm
 
             commonVars.getSimulationSettings_nonSim().setDecimal(EntropySettings_nonSim.properties_d.externalCritCond1, Convert.ToDecimal(num_externalCriteria1.Value));
 
-            bool multiFieldResult = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.supported.calcModes.chord;
+            bool multiFieldResult = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.Supported.calcModes.chord;
 
             comboBox_externalCriteria2.Enabled = extCriteriaActive && multiFieldResult;
             int extCrit2 = comboBox_externalCriteria2.SelectedIndex;

@@ -18,7 +18,7 @@ public sealed class CreditsScreen : Form
 
         Panel imageHolder = new();
         ImageView image = new();
-        image.Image = images.mcImage();
+        image.Image = Images.mcImage();
         imageHolder.Size = image.Image.Size;
         imageHolder.Content = image;
         content.Rows.Add(new TableRow());

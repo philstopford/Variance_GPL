@@ -110,7 +110,7 @@ public partial class MainForm
         minIns_table.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding.
 
         // Image
-        ImageView oneDImage = new() {Image = images.oneDImage()};
+        ImageView oneDImage = new() {Image = Images.oneDImage()};
         Panel oneDImagePanel = new() {Size = oneDImage.Image.Size, Content = oneDImage};
         tab_1DCalc_table.Rows.Add(new TableRow());
         tab_1DCalc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(oneDImagePanel, centered: true) });

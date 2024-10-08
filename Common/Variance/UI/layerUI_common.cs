@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
+using Clipper2Lib;
 using color;
 using Eto.Drawing;
 using Eto.Forms;
-using geoLib;
 using shapeEngine;
 
 namespace Variance;
@@ -332,6 +331,9 @@ public partial class MainForm
 
         cB_overlayXReference_Av.CheckedChanged += twoDLayerEventHandler_exp;
         cB_overlayYReference_Av.CheckedChanged += twoDLayerEventHandler_exp;
+
+        cb_removeArtifacts.CheckedChanged += twoDLayerEventHandler_exp;
+        num_removeArtifactsEps.LostFocus += twoDLayerEventHandler_exp;
     }
 
     private void do2DLayerUI(int settingsIndex, bool updateUI = false)
@@ -503,9 +505,9 @@ public partial class MainForm
             if (!commonVars.getLayerSettings(settingsIndex).isReloaded())
             {
                 // We do this to avoid any misfires later. Might not be needed, but seems safer.
-                GeoLibPointF[] defaultPointArray = new GeoLibPointF[1];
-                defaultPointArray[0] = new GeoLibPointF(0, 0);
-                commonVars.getLayerSettings(settingsIndex).setFileData(new List<GeoLibPointF[]> { defaultPointArray });
+                PathD defaultPointArray = Helper.initedPathD(1);
+                defaultPointArray[0] = new (0, 0);
+                commonVars.getLayerSettings(settingsIndex).setFileData(new () { defaultPointArray });
             }
 
             if ((bool)cB_geoCore_shapeEngine.Checked!)
@@ -686,6 +688,9 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff, Convert.ToInt32(comboBox_proxBiasFallOff.SelectedIndex));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier, Convert.ToDecimal(num_proxBiasFallOffMultiplier.Value));
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.proxRays, Convert.ToInt32(num_pitchDepBiasSideRays.Value));
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.removeArtifacts, (bool)cb_removeArtifacts.Checked ? 1 : 0);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon, Convert.ToInt32(num_removeArtifactsEps.Value));
+
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.iCR, Convert.ToDecimal(num_lithoICRR.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.oCR, Convert.ToDecimal(num_lithoOCRR.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.iCV, Convert.ToDecimal(num_lithoICV.Value));
@@ -757,6 +762,7 @@ public partial class MainForm
             customRNGMappingHighlight(settingsIndex);
             updateGroupBoxVisibility(settingsIndex);
             bgLayerCheckboxChanged(settingsIndex);
+            exportToLayout.Enabled = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
             uiFollowChanges();
         });
     }
@@ -1044,9 +1050,9 @@ public partial class MainForm
                     {
                         comboBox_lDList_geoCore.SelectedIndex = 0; // reset selection.
                     }
-                    catch (Exception)
+                    catch
                     {
-
+                        // ignored
                     }
                 }
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.structure, comboBox_structureList_geoCore.SelectedIndex);
@@ -1082,18 +1088,18 @@ public partial class MainForm
             {
                 comboBox_structureList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.structure);
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
 
             try
             {
                 comboBox_lDList_geoCore.SelectedIndex = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.lD);
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
 
         }
@@ -1737,9 +1743,9 @@ public partial class MainForm
                 }
             }
         }
-        catch (Exception)
+        catch
         {
-
+            // ignored
         }
         if (!alreadyFrozen)
         {
@@ -1855,10 +1861,11 @@ public partial class MainForm
                         cbIndex = 0;
                     }
                 }
-                comboBox_structureList_geoCore.SelectedIndex = cbIndex;            }
-            catch (Exception)
+                comboBox_structureList_geoCore.SelectedIndex = cbIndex;
+            }
+            catch
             {
-
+                // ignored
             }
             try
             {
@@ -1873,9 +1880,9 @@ public partial class MainForm
                 }
                 comboBox_lDList_geoCore.SelectedIndex = cbIndex;
             }
-            catch (Exception)
+            catch
             {
-
+                // ignored
             }
         }
         else if (booleanGBVisible[layer])

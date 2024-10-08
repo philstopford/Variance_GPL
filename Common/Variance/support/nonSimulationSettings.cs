@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using geoLib;
+using Clipper2Lib;
 
 namespace Variance;
 
@@ -14,7 +14,7 @@ public class NonSimulationSettings
     public bool emailOnCompletion { get; set; }
     public bool emailPerJob { get; set; }
     public bool ssl { get; set; }
-    public List<List<GeoLibPointF[]>> extractedTile { get; set; } // put this here because we don't want to track this directly.
+    public List<PathsD> extractedTile { get; set; } // put this here because we don't want to track this directly.
 
     public NonSimulationSettings(string _version)
     {
@@ -24,10 +24,10 @@ public class NonSimulationSettings
     private void pNonSimulationSettings(string _version)
     {
         version = _version;
-        extractedTile = new List<List<GeoLibPointF[]>>(); // to hold extracted tile List<PointF[]> for each layer.
+        extractedTile = new List<PathsD>(); // to hold extracted tile List<PointF[]> for each layer.
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {
-            extractedTile.Add(new List<GeoLibPointF[]>());
+            extractedTile.Add(new ());
         }
     }
 }

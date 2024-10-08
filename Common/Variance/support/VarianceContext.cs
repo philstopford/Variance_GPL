@@ -36,15 +36,11 @@ public class VarianceContext
     public bool geoCoreCDVariation { get; set; }
     public int HTCount { get; private set; }
     public List<string> rngMappingEquations { get; private set; }
-    public string licenseLocation { get; set; }
-    public byte[] _certPubicKeyData { get; set; }
     public bool friendlyNumber { get; set; }
 
     // License data.
     public SimpleAES aes { get; set; }
     public string licenceName { get; set; }
-    public string licenceType { get; set; }
-    public string licenceExpiration { get; set; }
 
     public VarianceContext(bool implantMode_, string xmlFileArg_, int numberOfThreads_,
         int HTCount, string refName = "Variance")
@@ -82,11 +78,8 @@ public class VarianceContext
         friendlyNumber = false;
         expandUI = false;
 
-        string _msg = string.Empty;
-
+        licenceName = "internal";
+        
         aes = new SimpleAES(Arrays.nameKey, Arrays.nameVector);
-        licenceExpiration = "";
-        licenceType = "advanced_permanent";
-        licenceName = "GPLv3";
     }
 }

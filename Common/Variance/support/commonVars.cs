@@ -38,7 +38,7 @@ public class CommonVars
         return changed;
     }
 
-    public enum hashes { gc, settings, entropy, implant, entropyImplant }
+    public enum Hashes { gc, settings, entropy, implant, entropyImplant }
 
     private string geoCoreHash;
 
@@ -49,29 +49,29 @@ public class CommonVars
     private string implantHash;
     private string entropyImplantHash;
 
-    public string getHash(hashes p)
+    public string getHash(Hashes p)
     {
         return pGetHash(p);
     }
 
-    private string pGetHash(hashes p)
+    private string pGetHash(Hashes p)
     {
         string ret = "";
         switch (p)
         {
-            case hashes.gc:
+            case Hashes.gc:
                 ret = geoCoreHash;
                 break;
-            case hashes.settings:
+            case Hashes.settings:
                 ret = listOfSettingsHash;
                 break;
-            case hashes.entropy:
+            case Hashes.entropy:
                 ret = entropyGeoHash;
                 break;
-            case hashes.implant:
+            case Hashes.implant:
                 ret = implantHash;
                 break;
-            case hashes.entropyImplant:
+            case Hashes.entropyImplant:
                 ret = entropyImplantHash;
                 break;
         }
@@ -1008,7 +1008,6 @@ public class CommonVars
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
             geoCore_Handlers.Add(new GeoCoreHandler());
-            geoCore_Handlers[layer].getGeo().baseScale = 1000;
             structureList[layer] = geoCore_Handlers[layer].getGeo().structureList_;
             activeStructure_LayerDataTypeList[layer] = geoCore_Handlers[layer].getGeo().activeStructure_LayerDataTypeList_;
             layerNames.Add((layer + 1).ToString());
@@ -1359,16 +1358,16 @@ public class CommonVars
 
         switch (simulationSettings.getValue(EntropySettings.properties_i.oType))
         {
-            case (int)geoAnalysis.supported.calcModes.area: // area
+            case (int)geoAnalysis.Supported.calcModes.area: // area
                 boolString += "AND";
                 break;
-            case (int)geoAnalysis.supported.calcModes.enclosure_spacing_overlap: // spacing
+            case (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap: // spacing
                 boolString += "MIN SPACE/OVERLAP/ENCL TO/WITH";
                 break;
-            case (int)geoAnalysis.supported.calcModes.chord: // chords
+            case (int)geoAnalysis.Supported.calcModes.chord: // chords
                 boolString += "MIN CHORDS WITH";
                 break;
-            case (int)geoAnalysis.supported.calcModes.angle: // angle
+            case (int)geoAnalysis.Supported.calcModes.angle: // angle
                 boolString += "MIN INTERSECTION ANGLE WITH";
                 break;
         }

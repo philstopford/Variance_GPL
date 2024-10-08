@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using geoLib;
+using Clipper2Lib;
 
 namespace Variance;
 
 public class Results
 {
-    private List<List<GeoLibPointF[]>> previewShapes;
+    private List<PathsD> previewShapes;
     private List<PreviewShape> simShapes;
 
     public int getLayerIndex(int shapeIndex)
@@ -18,12 +18,12 @@ public class Results
     {
         return simShapes[shapeIndex].getIndex();
     }
-    public List<List<GeoLibPointF[]>> getPreviewShapes()
+    public List<PathsD> getPreviewShapes()
     {
         return pGetPreviewShapes();
     }
 
-    private List<List<GeoLibPointF[]>> pGetPreviewShapes()
+    private List<PathsD> pGetPreviewShapes()
     {
         return previewShapes;
     }
@@ -38,12 +38,12 @@ public class Results
         previewShapes.Clear();
     }
 
-    public void setPreviewShapes(List<List<GeoLibPointF[]>> newPreviewShapes)
+    public void setPreviewShapes(List<PathsD> newPreviewShapes)
     {
         pSetPreviewShapes(newPreviewShapes);
     }
 
-    private void pSetPreviewShapes(List<List<GeoLibPointF[]>> newPreviewShapes)
+    private void pSetPreviewShapes(List<PathsD> newPreviewShapes)
     {
         previewShapes = newPreviewShapes.ToList();
     }
@@ -100,26 +100,26 @@ public class Results
         result = val;
     }
 
-    private List<GeoLibPointF[]> points; // result points.
+    private PathsD points; // result points.
 
-    public List<GeoLibPointF[]> getPoints()
+    public PathsD getPoints()
     {
         return pGetPoints();
     }
 
-    private List<GeoLibPointF[]> pGetPoints()
+    private PathsD pGetPoints()
     {
         return points;
     }
 
-    public void setPoints(List<GeoLibPointF[]> newPoints)
+    public void setPoints(PathsD newPoints)
     {
         pSetPoints(newPoints);
     }
 
-    private void pSetPoints(List<GeoLibPointF[]> newPoints)
+    private void pSetPoints(PathsD newPoints)
     {
-        points = newPoints.ToList();
+        points = new (newPoints);
     }
 
     public void clearPoints()
@@ -349,7 +349,7 @@ public class Results
         LWRSeed = new int[] { };
         LWR2Seed = new int[] { };
 
-        previewShapes = new List<List<GeoLibPointF[]>>();
+        previewShapes = new List<PathsD>();
         valid = false;
     }
 
@@ -363,7 +363,7 @@ public class Results
         previewShapes.Clear();
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
-            previewShapes.Add(simShapes[layer].getPoints().ToList());
+            previewShapes.Add(new (simShapes[layer].getPoints()));
         }
     }
 }

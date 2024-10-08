@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using geoLib;
+using Clipper2Lib;
 using shapeEngine;
 
 namespace Variance;
@@ -41,7 +40,7 @@ public class EntropyLayerSettings : ShapeSettings
     private static int[] default_overlayYReferenceLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     private static int default_fileType = 0; // layout (now exposed by geoCore - could be redundant)
-    private static List<GeoLibPointF[]> default_fileData = new() { new [] { new GeoLibPointF(0, 0) } };
+    private static PathsD default_fileData = new() { new () { new (0, 0) } };
     private static string default_fileToLoad = "";
     private static string default_ldNameFromFile = "";
     private static string default_structureNameFromFile = "";
@@ -63,6 +62,9 @@ public class EntropyLayerSettings : ShapeSettings
     private static int default_omitLayer = 0;
 
     private static int default_LWRNoisePreview = 0;
+
+    private static int default_removeArtifacts = 0;
+    private static int default_removeArtifactsEpsilon = 100;
     
     [NonSerialized] private int[] bgLayers;
 
@@ -228,6 +230,8 @@ public class EntropyLayerSettings : ShapeSettings
     private int booleanLayerOpA;
     private int booleanLayerOpB;
     private int booleanLayerOpAB;
+    private int removeArtifacts;
+    private int removeArtifactsEpsilon;
     
     public new enum properties_i
     {
@@ -236,7 +240,8 @@ public class EntropyLayerSettings : ShapeSettings
         xOL_corr, xOL_corr_ref, yOL_corr, yOL_corr_ref, CDU_corr, CDU_corr_ref, tCDU_corr, tCDU_corr_ref,
         xOL_ref, yOL_ref, xOL_av, yOL_av,
         flipH, flipV, alignX, alignY, structure, lD, fill, fileType, perPoly, refLayout,
-        bLayerA, bLayerB, bLayerOpA, bLayerOpB, bLayerOpAB
+        bLayerA, bLayerB, bLayerOpA, bLayerOpB, bLayerOpAB,
+        removeArtifacts, removeArtifactsEpsilon
     }
 
     public int getInt(properties_i p)
@@ -389,6 +394,12 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.bLayerOpAB:
                 ret = booleanLayerOpAB;
+                break;
+            case properties_i.removeArtifacts:
+                ret = removeArtifacts;
+                break;
+            case properties_i.removeArtifactsEpsilon:
+                ret = removeArtifactsEpsilon;
                 break;
         }
 
@@ -545,6 +556,12 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.bLayerOpAB:
                 booleanLayerOpAB = val;
                 break;
+            case properties_i.removeArtifacts:
+                removeArtifacts = val;
+                break;
+            case properties_i.removeArtifactsEpsilon:
+                removeArtifactsEpsilon = val;
+                break;
         }
     }
 
@@ -698,6 +715,12 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.bLayerOpAB:
                 booleanLayerOpAB = default_booleanLayerA;
                 break;
+            case properties_i.removeArtifacts:
+                removeArtifacts = default_removeArtifacts;
+                break;
+            case properties_i.removeArtifactsEpsilon:
+                removeArtifactsEpsilon = default_removeArtifactsEpsilon;
+                break;
         }
     }
 
@@ -845,6 +868,12 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.bLayerOpAB:
                 ret = default_booleanLayerOpAB;
+                break;
+            case properties_i.removeArtifacts:
+                ret = default_removeArtifacts;
+                break;
+            case properties_i.removeArtifactsEpsilon:
+                ret = default_removeArtifactsEpsilon;
                 break;
         }
 
@@ -1148,7 +1177,7 @@ public class EntropyLayerSettings : ShapeSettings
         sCDU, tCDU,
         xOL, yOL,
         proxSideRaysMultiplier,
-        rayExtension, keyhole_factor
+        rayExtension, keyhole_factor,
     }
 
     public decimal getDecimal(properties_decimal p, int _subShapeRef = -1)
@@ -1642,26 +1671,26 @@ public class EntropyLayerSettings : ShapeSettings
         reloadedFileData = val;
     }
 
-    private List<GeoLibPointF[]> fileData; // holds the parsed point data of our level, for file-based content. Allows for multiple polys in layer
+    private PathsD fileData; // holds the parsed point data of our level, for file-based content. Allows for multiple polys in layer
 
-    public List<GeoLibPointF[]> getFileData()
+    public PathsD getFileData()
     {
         return pGetFileData();
     }
 
-    private List<GeoLibPointF[]> pGetFileData()
+    private PathsD pGetFileData()
     {
         return fileData;
     }
 
-    public void setFileData(List<GeoLibPointF[]> newdata)
+    public void setFileData(PathsD newdata)
     {
         pSetFileData(newdata);
     }
 
-    private void pSetFileData(List<GeoLibPointF[]> newdata)
+    private void pSetFileData(PathsD newdata)
     {
-        fileData = newdata.ToList();
+        fileData = new(newdata);
     }
 
     public void defaultFileData()
@@ -1671,7 +1700,7 @@ public class EntropyLayerSettings : ShapeSettings
 
     private void pDefaultFileData()
     {
-        fileData = default_fileData.ToList();
+        fileData = new(default_fileData);
     }
 
     public EntropyLayerSettings()
@@ -1753,6 +1782,9 @@ public class EntropyLayerSettings : ShapeSettings
         booleanLayerOpAB = default_booleanLayerOpAB;
 
         omitFromSim = default_omitLayer;
+
+        removeArtifacts = default_removeArtifacts;
+        removeArtifactsEpsilon = default_removeArtifactsEpsilon;
     }
 
     public void adjustSettings(EntropyLayerSettings source, bool gdsOnly)
@@ -1884,6 +1916,9 @@ public class EntropyLayerSettings : ShapeSettings
             setDecimal(ShapeSettings.properties_decimal.rayExtension, source.getDecimal(properties_decimal.rayExtension));
 
             omitFromSim = source.omitFromSim;
+            
+            setInt(properties_i.removeArtifacts, source.getInt(properties_i.removeArtifacts));
+            setInt(properties_i.removeArtifactsEpsilon, source.getInt(properties_i.removeArtifactsEpsilon));
         }
 
         // layout stuff
@@ -1894,7 +1929,7 @@ public class EntropyLayerSettings : ShapeSettings
         ldFromFile = source.ldFromFile;
         ldNameFromFile = source.ldNameFromFile;
         polyFill = source.polyFill;
-        fileData = source.fileData.ToList();
+        fileData = new (source.fileData);
         referenceLayout = source.referenceLayout;
         fileType = source.fileType;
 

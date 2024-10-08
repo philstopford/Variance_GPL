@@ -3,6 +3,7 @@ using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
 using System.Threading.Tasks;
+using VeldridEto;
 
 namespace Variance;
 
@@ -61,7 +62,7 @@ public partial class MainForm
                 for (int poly = 0; poly < commonVars.getLayerSettings(i).getFileData().Count; poly++)
                 {
                     mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addBGPolygon(
-                        poly: UIHelper.myPointFArrayToPointFArray(commonVars.getLayerSettings(i).getFileData()[poly]),
+                        poly: OVPSettings.convertToClosedPointF(commonVars.getLayerSettings(i).getFileData()[poly]),
                         polyColor: Color.FromArgb(commonVars.getColors().simPreviewColors[i].toArgb()),
                         alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.bg),
                         layerIndex: i

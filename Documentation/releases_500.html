@@ -198,27 +198,41 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
-    <li><a href="#releases_600">6.0</a>
+    <li><a href="#releases_500">5.0</a>
   </ul>
 
     <blockquote>
-      <a name="releases_600"></a>
-      <h2 class="western">New to 6.0 (Mar 23 2023)</h2>
+      <a name="releases_500"></a>
+      <h2 class="western">New to 5.0 (Aug 27 2022)</h2>
       <blockquote>
-        <p class="western">Amongst other major changes, 5.0 moved from the Clipper 1.0 library to Clipper 2.0. This migration was performed within the existing representations, as the upgraded library was still seeing engineering and validation work for floating point values. With this tool update, 
-        we can now take advantage of this support to greatly simplify our code and system design, gaining major performance enhancements.</p>
         <ul>
-          <li>Moved to .NET 7.</li>
-          <li>Migration from GeoLib geometry to Clipper-native double precision representations.</li>
+          <li>Shape engine updates.</li>
+          <li>Proximity biasing artifacts should now be eliminated due to geometry processing enhancements.</li>
+          <li>Major refinement to boolean and keyhole pipelines, moved also to the GeoWrangler library for re-use.</li>
           <ul>
-            <li>Massive refactoring effort, across multiple stable, complex systems and their interactions.</li>
-            <li>Gains of up to 40% in performance by:</li>
+            <li>Keyholer no longer preferentially uses an orthogonal insertion candidate if the polygons are not orthogonal.</li>
+            <li>Keyholer now performs a reverse walk to check for any missed candidates in the original pass.</li>
+          </ul>
+          <li>Fixed an issue in the chord handler where rotations of the 'B' shape could break the edge extraction and fail the evaluation.</li>
+          <li>User interface enhancements : using expanders to allow sections to be collapsed or expanded as required, decluttering the view and reducing scrolling.</li>
+          <li>Layout handling enhancements.</li>
+          <ul>
+            <li>Internal lists are updated with layout load, removing the need for the client to do this.</li>
+            <li>Registering layer names against layer:datatype would throw an error if the name was already registered.</li>
+            <li>Duplicated points are now removed during load, to allow for correct contouring behavior of otherwise-orthogonal geometry.</li>
+            <li>Resolved compatibility with certain flavors of OASIS (e.g. strict).</li>
+          	<li>Revised layout to tool handling, to make scaling behavior less opaque.</li>
+            <li>Fixed a defect in the OASIS file writer that yielded missing or broken geometry in some cases.</li>
+          </ul>
+          <li>ClipperLib 2.</li>
+          <ul>
+            <li>Next-generation polygon clipping library, bringing major performance and behavioral improvements.</li>
+            <li>Performance gains across the board compared to 4.4.2:</li>
             <ul>
-              <li>Use of Clipper-native data structures throughout, avoiding conversions.</li>
-              <li>Avoidance of copying data between representations.</li>
-              <li>Avoidance of computational overhead by scaling geometry between representations.</li>
+              <li>Up to 15-20% improvement in simulation performance.</li>
+              <li>ILB performance even more improved.</li>
+              <li>Proximity biasing runs in around half the time.</li>
             </ul>
-            <li>Code simplification and readability by single representation.</li>
           </ul>
         </ul>
       </blockquote>

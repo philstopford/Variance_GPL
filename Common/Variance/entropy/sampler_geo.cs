@@ -135,9 +135,9 @@ internal class Sampler_Geo
             return currentJobSettings;
         }
 
-        currentJobSettings.setValues(ChaosSettings.properties.CDUTVar, currentJobSettings.getValues(ChaosSettings.properties.CDUSVar));
-        currentJobSettings.setValues(ChaosSettings.properties.hTipBiasVar, currentJobSettings.getValues(ChaosSettings.properties.vTipBiasVar));
-        currentJobSettings.setValues(ChaosSettings.properties.hTipBiasType, currentJobSettings.getValues(ChaosSettings.properties.vTipBiasType));
+        currentJobSettings.setValues(ChaosSettings.Properties.CDUTVar, currentJobSettings.getValues(ChaosSettings.Properties.CDUSVar));
+        currentJobSettings.setValues(ChaosSettings.Properties.hTipBiasVar, currentJobSettings.getValues(ChaosSettings.Properties.vTipBiasVar));
+        currentJobSettings.setValues(ChaosSettings.Properties.hTipBiasType, currentJobSettings.getValues(ChaosSettings.Properties.vTipBiasType));
 
         return currentJobSettings;
 
@@ -167,8 +167,8 @@ internal class Sampler_Geo
                 for (int s = 0; s < CentralProperties.maxLayersForMC; s++)
                 {
                     // Get value from the new index in for our dimension
-                    double newValue = samples[sampleIndices[i]].getValue((ChaosSettings.properties) dimension, s); 
-                    newSettings[i].setValue((ChaosSettings.properties) dimension, s, newValue);
+                    double newValue = samples[sampleIndices[i]].getValue((ChaosSettings.Properties) dimension, s); 
+                    newSettings[i].setValue((ChaosSettings.Properties) dimension, s, newValue);
                 }
             }
         }

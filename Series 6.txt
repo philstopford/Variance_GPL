@@ -1,0 +1,45 @@
+Changelog for Variance
+
+6.0
+
+	- Moved to NET 7.
+	- Performance overall is +25-35% compared to Variance 5.0, with no change in results reported.
+
+6.0a2
+
+	- Moved ClipperD to set precision based on a constant for 4 decimal places (internal scaling inside Clipper).
+	- Moved various offsetting approaches to use InflatePaths() with a precision value of 4, to scale with enough resolution.
+	 - The precision changes should address the donut proximity issue where one point is not showing a bias, where the default precision in Clipper was insufficient and caused the ray to be offset from its original location after clipping. Started with a value of 4 compared to the default value of 2.
+	- Moving to avoid all conversion/scaling that isn't needed.
+	- Significant re-engineering across the systems due to move to doubles from a mixed pipeline.
+	- Review ongoing:
+	 - No apparent compatibility breakage with project files.
+	 - Basic shape engine appears to work. Ongoing review:
+	  - Shape construction internals all work.
+	  - Corner rouding works.
+	  - Rotation works.
+	  - Noise works.
+	  - Resolved proximity biasing and keyhole issues.
+	  - Resolved an issue where extra geometry was being added in the customShape_orthogonal pipeline.
+	  - Resolved an issue and added clarification within the keyhole removal sequence (insufficient biasing).
+	 - All calculations appear to work and give sensible results.
+	- Runtime benchmarking shows performance gain of up to 35%, with no change in results.
+	- GeoCore output/input seems to be fine.
+	- Disabled export button for not-enabled, as this will result in empty layout files and cause user confusion.
+	- Enhancements and fixes in GeoCore
+	 - Fixed circle detection/creation.
+	 - Fixed polygon output in GDSII.
+
+	! Need to review all explicit copy-via-new usage in the new code. This was a defensive-first approach, but is likely excessive.
+	! Need to review potential double transforms for boolean/geoCore data. Not pinned down yet.
+
+6.0a1
+
+	- Moving all geometry to work from Clipper primitives (Point64, PointD, Path64, PathD, Paths64, PathsD).
+	 - This is intended to test the initial plan to consolidate geometry and allow for all representations to be Clipper-ready at any point.
+	  - End goal is to eliminate conversions/scalings that are not absolutely necessary.
+	 - Debugged analysis and viewport interactions with new data representations.
+	  - Shows a decent gain in performance already with this change (~490 seconds to 435 seconds)
+
+	! a2 will work to drop PointD <-> Point64 transitions via scaling to see what we can gain there.
+

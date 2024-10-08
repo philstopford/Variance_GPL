@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using color;
-using geoLib;
+using Clipper2Lib;
 
 namespace Variance;
 
@@ -19,12 +18,12 @@ public class Results_implant
         return resistShapes;
     }
 
-    public void setResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min_, GeoLibPointF[] max_)
+    public void setResistShapes(color.Colors colors, PathD geom, PathD bgGeom, PathD shadow, PathD min_, PathD max_)
     {
         pSetResistShapes(colors, geom, bgGeom, shadow, min_, max_);
     }
 
-    private void pSetResistShapes(Colors colors, GeoLibPointF[] geom, GeoLibPointF[] bgGeom, GeoLibPointF[] shadow, GeoLibPointF[] min_, GeoLibPointF[] max_)
+    private void pSetResistShapes(color.Colors colors, PathD geom, PathD bgGeom, PathD shadow, PathD min_, PathD max_)
     {
         resistShapes.Clear();
 
@@ -90,27 +89,27 @@ public class Results_implant
         valid = newResult.valid;
     }
 
-    public enum lines { shadow, min, max }
+    public enum Lines { shadow, min, max }
 
     private PreviewShape shadowLine, minShadowLine, maxShadowLine;
 
-    public PreviewShape getLine(lines l)
+    public PreviewShape getLine(Lines l)
     {
         return pGetLine(l);
     }
 
-    private PreviewShape pGetLine(lines l)
+    private PreviewShape pGetLine(Lines l)
     {
         PreviewShape ret = new();
         switch (l)
         {
-            case lines.shadow:
+            case Lines.shadow:
                 ret = shadowLine;
                 break;
-            case lines.min:
+            case Lines.min:
                 ret = minShadowLine;
                 break;
-            case lines.max:
+            case Lines.max:
                 ret = maxShadowLine;
                 break;
         }

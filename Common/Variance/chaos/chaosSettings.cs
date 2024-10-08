@@ -5,9 +5,9 @@ namespace Variance;
 
 public class ChaosSettings
 {
-    public enum properties { overlayX, overlayY, hTipBiasType, vTipBiasType, hTipBiasVar, vTipBiasVar, icVar, ocVar, LWRVar, LWR2Var, CDUTVar, CDUSVar, wobbleVar }
-    public enum ints { lwrSeed, lwr2Seed }
-    public enum bools { icPA, ocPA }
+    public enum Properties { overlayX, overlayY, hTipBiasType, vTipBiasType, hTipBiasVar, vTipBiasVar, icVar, ocVar, LWRVar, LWR2Var, CDUTVar, CDUSVar, wobbleVar }
+    public enum Ints { lwrSeed, lwr2Seed }
+    public enum Bools { icPA, ocPA }
 
     private const int dimensions = 15; // number of variations.
 
@@ -82,7 +82,7 @@ public class ChaosSettings
         customRNGMapping = p;
     }
 
-    public void setValue(properties p, int index, double value)
+    public void setValue(Properties p, int index, double value)
     {
         pSetValue((int)p, index, value);
     }
@@ -91,49 +91,49 @@ public class ChaosSettings
     {
         switch (p)
         {
-            case (int)properties.overlayX:
+            case (int)Properties.overlayX:
                 overlayX[index] = value;
                 break;
-            case (int)properties.overlayY:
+            case (int)Properties.overlayY:
                 overlayY[index] = value;
                 break;
-            case (int)properties.hTipBiasType:
+            case (int)Properties.hTipBiasType:
                 hTipBiasType[index] = value;
                 break;
-            case (int)properties.vTipBiasType:
+            case (int)Properties.vTipBiasType:
                 vTipBiasType[index] = value;
                 break;
-            case (int)properties.hTipBiasVar:
+            case (int)Properties.hTipBiasVar:
                 horTipBiasVar[index] = value;
                 break;
-            case (int)properties.vTipBiasVar:
+            case (int)Properties.vTipBiasVar:
                 verTipBiasVar[index] = value;
                 break;
-            case (int)properties.icVar:
+            case (int)Properties.icVar:
                 iCVar[index] = value;
                 break;
-            case (int)properties.ocVar:
+            case (int)Properties.ocVar:
                 oCVar[index] = value;
                 break;
-            case (int)properties.LWRVar:
+            case (int)Properties.LWRVar:
                 LWRVar[index] = value;
                 break;
-            case (int)properties.LWR2Var:
+            case (int)Properties.LWR2Var:
                 LWR2Var[index] = value;
                 break;
-            case (int)properties.CDUTVar:
+            case (int)Properties.CDUTVar:
                 CDUTVar[index] = value;
                 break;
-            case (int)properties.CDUSVar:
+            case (int)Properties.CDUSVar:
                 CDUSVar[index] = value;
                 break;
-            case (int)properties.wobbleVar:
+            case (int)Properties.wobbleVar:
                 wobbleVar[index] = value;
                 break;
         }
     }
 
-    public double getValue(properties p, int index)
+    public double getValue(Properties p, int index)
     {
         return pGetValue((int)p, index);
     }
@@ -143,43 +143,43 @@ public class ChaosSettings
         double retVal = 0;
         switch (p)
         {
-            case (int)properties.overlayX:
+            case (int)Properties.overlayX:
                 retVal = overlayX[index];
                 break;
-            case (int)properties.overlayY:
+            case (int)Properties.overlayY:
                 retVal = overlayY[index];
                 break;
-            case (int)properties.hTipBiasType:
+            case (int)Properties.hTipBiasType:
                 retVal = hTipBiasType[index];
                 break;
-            case (int)properties.vTipBiasType:
+            case (int)Properties.vTipBiasType:
                 retVal = vTipBiasType[index];
                 break;
-            case (int)properties.hTipBiasVar:
+            case (int)Properties.hTipBiasVar:
                 retVal = horTipBiasVar[index];
                 break;
-            case (int)properties.vTipBiasVar:
+            case (int)Properties.vTipBiasVar:
                 retVal = verTipBiasVar[index];
                 break;
-            case (int)properties.icVar:
+            case (int)Properties.icVar:
                 retVal = iCVar[index];
                 break;
-            case (int)properties.ocVar:
+            case (int)Properties.ocVar:
                 retVal = oCVar[index];
                 break;
-            case (int)properties.LWRVar:
+            case (int)Properties.LWRVar:
                 retVal = LWRVar[index];
                 break;
-            case (int)properties.LWR2Var:
+            case (int)Properties.LWR2Var:
                 retVal = LWR2Var[index];
                 break;
-            case (int)properties.CDUTVar:
+            case (int)Properties.CDUTVar:
                 retVal = CDUTVar[index];
                 break;
-            case (int)properties.CDUSVar:
+            case (int)Properties.CDUSVar:
                 retVal = CDUSVar[index];
                 break;
-            case (int)properties.wobbleVar:
+            case (int)Properties.wobbleVar:
                 retVal = wobbleVar[index];
                 break;
         }
@@ -187,7 +187,7 @@ public class ChaosSettings
         return retVal;
     }
 
-    public double[] getValues(properties p)
+    public double[] getValues(Properties p)
     {
         return pGetValues((int)p);
     }
@@ -197,43 +197,43 @@ public class ChaosSettings
         double[] retVal = { };
         switch (p)
         {
-            case (int)properties.overlayX:
+            case (int)Properties.overlayX:
                 retVal = overlayX;
                 break;
-            case (int)properties.overlayY:
+            case (int)Properties.overlayY:
                 retVal = overlayY;
                 break;
-            case (int)properties.hTipBiasType:
+            case (int)Properties.hTipBiasType:
                 retVal = hTipBiasType;
                 break;
-            case (int)properties.vTipBiasType:
+            case (int)Properties.vTipBiasType:
                 retVal = vTipBiasType;
                 break;
-            case (int)properties.hTipBiasVar:
+            case (int)Properties.hTipBiasVar:
                 retVal = horTipBiasVar;
                 break;
-            case (int)properties.vTipBiasVar:
+            case (int)Properties.vTipBiasVar:
                 retVal = verTipBiasVar;
                 break;
-            case (int)properties.icVar:
+            case (int)Properties.icVar:
                 retVal = iCVar;
                 break;
-            case (int)properties.ocVar:
+            case (int)Properties.ocVar:
                 retVal = oCVar;
                 break;
-            case (int)properties.LWRVar:
+            case (int)Properties.LWRVar:
                 retVal = LWRVar;
                 break;
-            case (int)properties.LWR2Var:
+            case (int)Properties.LWR2Var:
                 retVal = LWR2Var;
                 break;
-            case (int)properties.CDUTVar:
+            case (int)Properties.CDUTVar:
                 retVal = CDUTVar;
                 break;
-            case (int)properties.CDUSVar:
+            case (int)Properties.CDUSVar:
                 retVal = CDUSVar;
                 break;
-            case (int)properties.wobbleVar:
+            case (int)Properties.wobbleVar:
                 retVal = wobbleVar;
                 break;
         }
@@ -241,7 +241,7 @@ public class ChaosSettings
         return retVal;
     }
 
-    public void setValues(properties p, double[] values)
+    public void setValues(Properties p, double[] values)
     {
         pSetValues((int)p, values);
     }
@@ -250,49 +250,49 @@ public class ChaosSettings
     {
         switch (p)
         {
-            case (int)properties.overlayX:
+            case (int)Properties.overlayX:
                 overlayX = values;
                 break;
-            case (int)properties.overlayY:
+            case (int)Properties.overlayY:
                 overlayY = values;
                 break;
-            case (int)properties.hTipBiasType:
+            case (int)Properties.hTipBiasType:
                 hTipBiasType = values;
                 break;
-            case (int)properties.vTipBiasType:
+            case (int)Properties.vTipBiasType:
                 vTipBiasType = values;
                 break;
-            case (int)properties.hTipBiasVar:
+            case (int)Properties.hTipBiasVar:
                 horTipBiasVar = values;
                 break;
-            case (int)properties.vTipBiasVar:
+            case (int)Properties.vTipBiasVar:
                 verTipBiasVar = values;
                 break;
-            case (int)properties.icVar:
+            case (int)Properties.icVar:
                 iCVar = values;
                 break;
-            case (int)properties.ocVar:
+            case (int)Properties.ocVar:
                 oCVar = values;
                 break;
-            case (int)properties.LWRVar:
+            case (int)Properties.LWRVar:
                 LWRVar = values;
                 break;
-            case (int)properties.LWR2Var:
+            case (int)Properties.LWR2Var:
                 LWR2Var = values;
                 break;
-            case (int)properties.CDUTVar:
+            case (int)Properties.CDUTVar:
                 CDUTVar = values;
                 break;
-            case (int)properties.CDUSVar:
+            case (int)Properties.CDUSVar:
                 CDUSVar = values;
                 break;
-            case (int)properties.wobbleVar:
+            case (int)Properties.wobbleVar:
                 wobbleVar = values;
                 break;
         }
     }
 
-    public void setInt(ints i, int index, int value)
+    public void setInt(Ints i, int index, int value)
     {
         pSetInt((int)i, index, value);
     }
@@ -301,16 +301,16 @@ public class ChaosSettings
     {
         switch (i)
         {
-            case (int)ints.lwrSeed:
+            case (int)Ints.lwrSeed:
                 LWRSeed[index] = value;
                 break;
-            case (int)ints.lwr2Seed:
+            case (int)Ints.lwr2Seed:
                 LWR2Seed[index] = value;
                 break;
         }
     }
 
-    public int getInt(ints i, int index)
+    public int getInt(Ints i, int index)
     {
         return pGetInt((int)i, index);
     }
@@ -320,17 +320,17 @@ public class ChaosSettings
         int retVal = 0;
         switch (i)
         {
-            case (int)ints.lwrSeed:
+            case (int)Ints.lwrSeed:
                 retVal = LWRSeed[index];
                 break;
-            case (int)ints.lwr2Seed:
+            case (int)Ints.lwr2Seed:
                 retVal = LWR2Seed[index];
                 break;
         }
         return retVal;
     }
 
-    public int[] getInts(ints i)
+    public int[] getInts(Ints i)
     {
         return pGetInts((int)i);
     }
@@ -340,17 +340,17 @@ public class ChaosSettings
         int[] retVal = { };
         switch (i)
         {
-            case (int)ints.lwrSeed:
+            case (int)Ints.lwrSeed:
                 retVal = LWRSeed;
                 break;
-            case (int)ints.lwr2Seed:
+            case (int)Ints.lwr2Seed:
                 retVal = LWR2Seed;
                 break;
         }
         return retVal;
     }
 
-    public void setBool(bools b, int index, bool value)
+    public void setBool(Bools b, int index, bool value)
     {
         pSetBool((int)b, index, value);
     }
@@ -359,16 +359,16 @@ public class ChaosSettings
     {
         switch (b)
         {
-            case (int)bools.icPA:
+            case (int)Bools.icPA:
                 iC_PAsearch[index] = value;
                 break;
-            case (int)bools.ocPA:
+            case (int)Bools.ocPA:
                 oC_PAsearch[index] = value;
                 break;
         }
     }
 
-    public bool getBool(bools b, int index)
+    public bool getBool(Bools b, int index)
     {
         return pGetBool((int)b, index);
     }
@@ -378,17 +378,17 @@ public class ChaosSettings
         bool retVal = false;
         switch (b)
         {
-            case (int)bools.icPA:
+            case (int)Bools.icPA:
                 retVal = iC_PAsearch[index];
                 break;
-            case (int)bools.ocPA:
+            case (int)Bools.ocPA:
                 retVal = oC_PAsearch[index];
                 break;
         }
         return retVal;
     }
 
-    public bool[] getBools(bools b)
+    public bool[] getBools(Bools b)
     {
         return pGetBools((int)b);
     }
@@ -398,10 +398,10 @@ public class ChaosSettings
         bool[] retVal = { };
         switch (b)
         {
-            case (int)bools.icPA:
+            case (int)Bools.icPA:
                 retVal = iC_PAsearch;
                 break;
-            case (int)bools.ocPA:
+            case (int)Bools.ocPA:
                 retVal = oC_PAsearch;
                 break;
         }

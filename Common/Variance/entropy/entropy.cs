@@ -168,16 +168,16 @@ public partial class Entropy
 
                     // Post-calc readout
 
-                    for (int i = 0; i < resultPackage.getValues(SimResultPackage.properties.mean).Length; i++)
+                    for (int i = 0; i < resultPackage.getValues(SimResultPackage.Properties.mean).Length; i++)
                     {
                         if (i > 0)
                         {
                             lastSimResultsOverview += ", ";
                         }
-                        lastSimResultsOverview += "x: " + resultPackage.getValue(SimResultPackage.properties.mean, i).ToString("0.##") + " (" + (resultPackage.getValue(SimResultPackage.properties.mean, i) - resultPackage.getValue(SimResultPackage.properties.lastMean, i)).ToString("0.##") + ")";
+                        lastSimResultsOverview += "x: " + resultPackage.getValue(SimResultPackage.Properties.mean, i).ToString("0.##") + " (" + (resultPackage.getValue(SimResultPackage.Properties.mean, i) - resultPackage.getValue(SimResultPackage.Properties.lastMean, i)).ToString("0.##") + ")";
                         if (!resultPackage.nonGaussianInput)
                         {
-                            lastSimResultsOverview += ", s: " + resultPackage.getValue(SimResultPackage.properties.stdDev, i).ToString("0.##") + " (" + (resultPackage.getValue(SimResultPackage.properties.stdDev, i) - resultPackage.getValue(SimResultPackage.properties.lastStdDev, i)).ToString("0.##") + ")";
+                            lastSimResultsOverview += ", s: " + resultPackage.getValue(SimResultPackage.Properties.stdDev, i).ToString("0.##") + " (" + (resultPackage.getValue(SimResultPackage.Properties.stdDev, i) - resultPackage.getValue(SimResultPackage.Properties.lastStdDev, i)).ToString("0.##") + ")";
                         }
                         simJustDone = true;
                     }
@@ -234,10 +234,10 @@ public partial class Entropy
                 }
             }
 
-            lastSimResultsOverview = "x: " + implantResultPackage.getValue(SimResultPackage.properties.mean, 0).ToString("0.##");
+            lastSimResultsOverview = "x: " + implantResultPackage.getValue(SimResultPackage.Properties.mean, 0).ToString("0.##");
             if (!implantResultPackage.nonGaussianInput)
             {
-                lastSimResultsOverview += ", s: " + implantResultPackage.getValue(SimResultPackage.properties.stdDev, 0).ToString("0.##");
+                lastSimResultsOverview += ", s: " + implantResultPackage.getValue(SimResultPackage.Properties.stdDev, 0).ToString("0.##");
             }
             simJustDone = true;
             multiCaseSim = false;

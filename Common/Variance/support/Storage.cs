@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
+using Clipper2Lib;
 using Error;
-using geoLib;
-using shapeEngine;
 using utility;
 
 namespace Variance;
@@ -224,9 +222,9 @@ public class Storage
         }
     }
 
-    private List<GeoLibPointF[]> fileDataFromString(string fileDataString)
+    private PathsD fileDataFromString(string fileDataString)
     {
-        List<GeoLibPointF[]> returnList = new();
+        PathsD returnList = new();
 
         char[] polySep = { ';' };
         char[] coordSep = { ',' };
@@ -239,11 +237,11 @@ public class Storage
             foreach (string t in polyStringArray)
             {
                 string[] pointStringArray = t.Split(coordSep);
-                GeoLibPointF[] polyData = new GeoLibPointF[pointStringArray.Length / 2]; // since we have two coord values per point (X,Y)
+                PathD polyData = Helper.initedPathD(pointStringArray.Length / 2); // since we have two coord values per point (X,Y)
                 int pt = 0;
                 while (pt < pointStringArray.Length)
                 {
-                    polyData[pt / 2] = new GeoLibPointF((float)Convert.ToDouble(pointStringArray[pt]), (float)Convert.ToDouble(pointStringArray[pt + 1]));
+                    polyData[pt / 2] = new (Convert.ToDouble(pointStringArray[pt]), Convert.ToDouble(pointStringArray[pt + 1]));
                     pt += 2;
                 }
 
@@ -260,14 +258,14 @@ public class Storage
         }
         else
         {
-            returnList.Add(new[] { new GeoLibPointF(0, 0) });
-            returnList.Add(new[] { new GeoLibPointF(0, 0) });
-            returnList.Add(new[] { new GeoLibPointF(0, 0) });
+            returnList.Add(new() { new (0, 0) });
+            returnList.Add(new() { new (0, 0) });
+            returnList.Add(new() { new (0, 0) });
         }
         return returnList;
     }
 
-    private string stringFromFileData(List<GeoLibPointF[]> fileData)
+    private string stringFromFileData(PathsD fileData)
     {
         string returnString = "";
         if (fileData == null)
@@ -277,11 +275,11 @@ public class Storage
 
         int poly = 0;
         int pt = 0;
-        returnString += fileData[poly][pt].X + "," + fileData[poly][pt].Y;
+        returnString += fileData[poly][pt].x + "," + fileData[poly][pt].y;
         pt++;
-        while (pt < fileData[poly].Length)
+        while (pt < fileData[poly].Count)
         {
-            returnString += "," + fileData[poly][pt].X + "," + fileData[poly][pt].Y;
+            returnString += "," + fileData[poly][pt].x + "," + fileData[poly][pt].y;
             pt++;
         }
         poly++;
@@ -289,11 +287,11 @@ public class Storage
         {
             returnString += ";";
             pt = 0;
-            returnString += fileData[poly][0].X + "," + fileData[poly][0].Y;
+            returnString += fileData[poly][0].x + "," + fileData[poly][0].y;
             pt++;
-            while (pt < fileData[poly].Length)
+            while (pt < fileData[poly].Count)
             {
-                returnString += "," + fileData[poly][pt].X + "," + fileData[poly][pt].Y;
+                returnString += "," + fileData[poly][pt].x + "," + fileData[poly][pt].y;
                 pt++;
             }
             poly++;
@@ -378,6 +376,10 @@ public class Storage
                 new XElement("proximitySideRays", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxRays)),
                 new XElement("proximitySideRayFallOff", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff)),
                 new XElement("proximitySideRayFallOffMultiplier", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)),
+
+                new XElement("removeArtifacts", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifacts)),
+                new XElement("removeArtifactsEpsilon", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon)),
+
                 new XElement("innerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCR)),
                 new XElement("outerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.oCR)),
                 new XElement("innerCV", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCV)),
@@ -478,6 +480,7 @@ public class Storage
                 new XElement("geoCoreShapeEnginePerPoly", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.perPoly)),
                 new XElement("geoCoreReferenceLayout", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.refLayout)),
                 new XElement("geoCoreKeyholeSizing", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor)),
+                
                 // fileData is List<PointF[]> where each list entry is a polygon.
                 new XElement("fileData", stringFromFileData(listOfSettings[i].getFileData()))
             );
@@ -1140,9 +1143,27 @@ public class Storage
             }
             catch (Exception)
             {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.iCR);
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier);
             }
 
+            try
+            {
+                readSettings.setInt(EntropyLayerSettings.properties_i.removeArtifacts, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("removeArtifacts").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultInt(EntropyLayerSettings.properties_i.removeArtifacts);
+            }
+
+            try
+            {
+                readSettings.setInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("removeArtifactsEpsilon").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon);
+            }
+            
             try
             {
                 readSettings.setDecimal(EntropyLayerSettings.properties_decimal.iCR, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("innerCRR").First().Value));

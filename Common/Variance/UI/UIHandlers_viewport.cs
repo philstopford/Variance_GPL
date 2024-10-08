@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Clipper2Lib;
 using Eto.Drawing;
 using Eto.Forms;
 using gds;
 using geoCoreLib;
-using geoLib;
 using oasis;
 using VeldridEto;
 
@@ -57,70 +57,76 @@ public partial class MainForm
 
     private static void saveViewportSVG(ref OVPSettings vpSettings, string svgFileName)
     {
-        SVGBuilder.SVGBuilder svg = new();
+        SvgWriter svg = new();
 
         // The polygons in the viewport are stored flipped due to drawing convention. We need to flip them here for SVG to match drawn viewport.
 
         // polys
         foreach (ovp_Poly t in vpSettings.polyList)
         {
-            svg.style.brushClr = UIHelper.colorToMyColor(t.color);
-            svg.style.penClr = UIHelper.colorToMyColor(t.color);
-            GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
-            int count = temp.Length;
+            PathD temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
+            int count = temp.Count;
 #if !SVGSINGLETHREADED
             Parallel.For(0, count, pt =>
 #else
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt].Y = -temp[pt].Y;
+                    temp[pt] = new (temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
 #endif
-            svg.AddPolygons(temp);
+            svg.AddClosedPath(temp,
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                1.0,
+                false);
         }
 
         foreach (ovp_Poly t in vpSettings.bgPolyList)
         {
-            svg.style.brushClr = UIHelper.colorToMyColor(t.color);
-            svg.style.penClr = UIHelper.colorToMyColor(t.color);
-            GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
-            int count = temp.Length;
+            PathD temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
+            int count = temp.Count;
 #if !SVGSINGLETHREADED
             Parallel.For(0, count, pt =>
 #else
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt].Y = -temp[pt].Y;
+                    temp[pt] = new (temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
 #endif
-            svg.AddPolygons(temp);
+            svg.AddClosedPath(temp,
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                1.0,
+                false);
         }
 
         // lines
         foreach (ovp_Poly t in vpSettings.lineList)
         {
-            svg.style.brushClr = UIHelper.colorToMyColor(t.color);
-            svg.style.penClr = UIHelper.colorToMyColor(t.color);
-            GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
-            int count = temp.Length;
+            PathD temp = UIHelper.pointFArrayTomyPointFArray(t.poly);
+            int count = temp.Count;
 #if !SVGSINGLETHREADED
             Parallel.For(0, count, pt =>
 #else
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt].Y = -temp[pt].Y;
+                    temp[pt] = new (temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
 #endif
-            svg.AddPolygons(temp);
+            svg.AddClosedPath(temp,
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                (uint)UIHelper.colorToMyColor(t.color).toArgb(),
+                1.0,
+                false);
         }
 
         svg.SaveToFile(svgFileName);
@@ -240,15 +246,15 @@ public partial class MainForm
 
         for (int poly = 0; poly < vpSettings.polyList.Count; poly++)
         {
-            GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
-            int count = temp.Length;
+            PathD temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.polyList[poly].poly);
+            int count = temp.Count;
 #if !SVGSINGLETHREADED
             Parallel.For(0, count, pt =>
 #else
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt].Y = -temp[pt].Y;
+                    temp[pt] = new (temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
@@ -268,14 +274,14 @@ public partial class MainForm
                 }
             }
 
-            int polyLength = temp.Length;
+            int polyLength = temp.Count;
             if (polyLength <= 2)
             {
                 continue;
             }
 
             {
-                GeoLibPoint[] ePoly = new GeoLibPoint[polyLength];
+                Path64 ePoly = Helper.initedPath64(polyLength);
 #if !SVGSINGLETHREADED
                 Parallel.For(0, polyLength, pt =>
 #else
@@ -283,7 +289,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
+                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -296,15 +302,15 @@ public partial class MainForm
         {
             for (int line = 0; line < vpSettings.lineList.Count; line++)
             {
-                GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
-                int count = temp.Length;
+                PathD temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.lineList[line].poly);
+                int count = temp.Count;
 #if !SVGSINGLETHREADED
                 Parallel.For(0, count, pt =>
 #else
                     for (int pt = 0; pt < count; pt++)
 #endif
                     {
-                        temp[pt].Y = -temp[pt].Y;
+                        temp[pt] = new (temp[pt].x, -temp[pt].y);
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -324,7 +330,7 @@ public partial class MainForm
                     }
                 }
 
-                GeoLibPoint[] ePoly = new GeoLibPoint[count];
+                Path64 ePoly = Helper.initedPath64(count);
 #if !SVGSINGLETHREADED
                 Parallel.For(0, count, pt =>
 #else
@@ -332,7 +338,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
+                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -345,15 +351,15 @@ public partial class MainForm
         {
             for (int poly = 0; poly < vpSettings.bgPolyList.Count; poly++)
             {
-                GeoLibPointF[] temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
-                int count = temp.Length;
+                PathD temp = UIHelper.pointFArrayTomyPointFArray(vpSettings.bgPolyList[poly].poly);
+                int count = temp.Count;
 #if !SVGSINGLETHREADED
                 Parallel.For(0, count, pt =>
 #else
                     for (int pt = 0; pt < count; pt++)
 #endif
                     {
-                        temp[pt].Y = -temp[pt].Y;
+                        temp[pt] = new (temp[pt].x, -temp[pt].y);
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -373,7 +379,7 @@ public partial class MainForm
                     }
                 }
 
-                GeoLibPoint[] ePoly = new GeoLibPoint[count];
+                Path64 ePoly = Helper.initedPath64(count);
 #if !SVGSINGLETHREADED
                 Parallel.For(0, count, pt =>
 #else
@@ -381,7 +387,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new GeoLibPoint((int)(temp[pt].X * scale), (int)(-temp[pt].Y * scale));
+                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );
