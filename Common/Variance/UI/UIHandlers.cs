@@ -11,7 +11,7 @@ public partial class MainForm
         if (aboutBox is not {Visible: true})
         {
             string creditText = "Version " + commonVars.version + ", " +
-                                "© " + commonVars.author + " 2014-2023" + "\r\n\r\n";
+                                "© " + commonVars.author + " 2014-2024" + "\r\n\r\n";
             creditText += varianceContext.vc.licenceName;
             creditText += "\r\n\r\n";
             creditText += "Libraries used:\r\n";
@@ -95,9 +95,7 @@ public partial class MainForm
     {
         btn_Run.Enabled = false;
         btn_STOP.Enabled = false;
-
-        // statusProgressBar.Visible = false;
-
+        
         upperGadgets_panel.Content = new Panel();
 
         commentBox.Enabled = false;
@@ -109,8 +107,6 @@ public partial class MainForm
             updateImplantUIFromSettings();
 
             upperGadgets_panel.Content = simPreviewBox;
-
-            // statusProgressBar.Visible = true;
 
             commentBox.Enabled = true;
 
@@ -128,31 +124,38 @@ public partial class MainForm
             commentBox.Enabled = true;
         }
 
-        if (mainIndex == (int)CommonVars.upperTabNames.Utilities)
+        bool showSomeUIStuff = mainIndex is (int)CommonVars.upperTabNames.Utilities or (int)CommonVars.upperTabNames.oneD;
+        showSomeUIStuff = !showSomeUIStuff;
+
+        // Hide right splitter in specific tabs.
+        rightSplitter.Visible = showSomeUIStuff;
+
+        int subTabIndex = getSubTabSelectedIndex();
+        if (subTabIndex == (int)CommonVars.twoDTabNames.DOE)
         {
-            lbl_simPreviewZoom.Visible = false;
-            lbl_viewportPos.Visible = false;
-            num_viewportZoom.Visible = false;
-            num_viewportX.Visible = false;
-            num_viewportY.Visible = false;
-            commentBox.Enabled = false;
-            if (vp != null)
-            {
-                vp.Visible = false;
-            }
+            showSomeUIStuff = false;
         }
-        else
+
+        if (mainIndex == (int)CommonVars.upperTabNames.Implant)
         {
-            lbl_simPreviewZoom.Visible = true;
-            lbl_viewportPos.Visible = true;
-            num_viewportZoom.Visible = true;
-            num_viewportX.Visible = true;
-            num_viewportY.Visible = true;
-            if (vp != null)
-            {
-                vp.Visible = true;
-            }
+            showSomeUIStuff = true;
         }
+        statusProgressBar.Visible = showSomeUIStuff;
+        commentBox.Visible = showSomeUIStuff;
+        commentBox.Enabled = showSomeUIStuff;
+
+        if (subTabIndex == (int)CommonVars.twoDTabNames.layer)
+        {
+            showSomeUIStuff = false;
+        }
+        if (mainIndex == (int)CommonVars.upperTabNames.Implant)
+        {
+            showSomeUIStuff = true;
+        }
+        btn_STOP.Visible = showSomeUIStuff;
+        btn_Run.Visible = showSomeUIStuff;
+        btn_Cancel.Visible = showSomeUIStuff;
+
         if (mainIndex == (int)CommonVars.upperTabNames.Utilities)
         {
             updateUtilsValues();
@@ -169,6 +172,8 @@ public partial class MainForm
     private void subTabChanged()
     {
         int subTabIndex = getSubTabSelectedIndex();
+
+        
         switch (subTabIndex)
         {
             case (int)CommonVars.twoDTabNames.layer:
@@ -182,6 +187,30 @@ public partial class MainForm
                 updateDOESettingsUIFromSettings();
                 break;
         }
+        
+        bool showSomeUIStuff = true;
+        lbl_simPreviewZoom.Visible = showSomeUIStuff;
+        lbl_viewportPos.Visible = showSomeUIStuff;
+        num_viewportZoom.Visible = showSomeUIStuff;
+        num_viewportX.Visible = showSomeUIStuff;
+        num_viewportY.Visible = showSomeUIStuff;
+
+        if (subTabIndex == (int)CommonVars.twoDTabNames.DOE)
+        {
+            showSomeUIStuff = false;
+        }
+        statusProgressBar.Visible = showSomeUIStuff;
+        commentBox.Visible = showSomeUIStuff;
+        commentBox.Enabled = showSomeUIStuff;
+
+        if (subTabIndex == (int)CommonVars.twoDTabNames.layer)
+        {
+            showSomeUIStuff = false;
+        }
+        btn_STOP.Visible = showSomeUIStuff;
+        btn_Run.Visible = showSomeUIStuff;
+        btn_Cancel.Visible = showSomeUIStuff;
+        
         doeSettingsChanged();
         entropySettingsChanged(null);
         mcPreviewSettingsChanged(null, EventArgs.Empty);
@@ -299,8 +328,19 @@ public partial class MainForm
 
                 if (showCheckboxes)
                 {
-                    upperGadgets_panel.Content = upperGadgets_table;
-                    setBGLayerCheckboxes(settingsIndex);
+                    switch (getSubTabSelectedIndex())
+                    {
+                        case (int)CommonVars.twoDTabNames.layer:
+                            upperGadgets_panel.Content = upperGadgets_table;
+                            setBGLayerCheckboxes(settingsIndex);
+                            break;
+                        case (int)CommonVars.twoDTabNames.DOE:
+                            upperGadgets_panel.Content = new Panel();
+                            break;
+                        default:
+                            upperGadgets_panel.Content = simPreviewBox;
+                            break;
+                    }
                 }
                 else
                 {

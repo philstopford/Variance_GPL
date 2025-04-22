@@ -259,8 +259,6 @@ public partial class MainForm
                 // Don't care.
             }
 
-            cB_geoCore_shapeEngine.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1;
-
             cB_geoCore_shapeEngine_perPoly.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.perPoly) == 1;
 
             cB_geoCore_layoutReference.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.refLayout) == 1;
@@ -376,6 +374,10 @@ public partial class MainForm
             num_rotation.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.rot);
             num_lithoWobble.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
             num_sidebias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.sBias);
+            num_unidirectionalbias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.uniBias);
+            rB_unidirectional_x.Checked = commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.uniBiasAxis) == 0;
+            cb_unidirectionalbias_after_rotation.Checked = commonVars.getLayerSettings(settingsIndex)
+                .getInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation) == 1;
             num_hTipbias.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTBias);
             num_hTipPVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTPVar);
             num_hTipNVar.Value = (double)commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.hTNVar);
@@ -479,8 +481,6 @@ public partial class MainForm
                     cB_DOE_geoCore.Checked = true;
                 }
             }
-            
-            
 
             do2DLayerUI(settingsIndex, updateUI: true);
             updateGroupBoxVisibility(settingsIndex);

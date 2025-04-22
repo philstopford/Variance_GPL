@@ -71,45 +71,34 @@ public class EntropyShape
     private PathD makeShape(bool returnEarly, bool cornerCheck, EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, int settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape)
     {
         // Define our biases. We will use these later.
-        double globalBias_Sides = Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sBias));
-        globalBias_Sides += chaosSettings.getValue(ChaosSettings.Properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2;
-        double globalBias_Tips = chaosSettings.getValue(ChaosSettings.Properties.CDUTVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.tCDU)) / 2;
+        double sideBiasVar = chaosSettings.getValue(ChaosSettings.Properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2;
 
         PathD mcPoints = new(); // overall points container. We'll use this to populate and send back our Point array later. Int only...
 
-        double vTipBias = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.vTBias));
+        double vTipBiasVar = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar));
         double vTipBiasType = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasType, settingsIndex);
-        double vTipBiasNegVar = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.vTNVar));
-        double vTipBiasPosVar = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar));
+        if (vTipBiasType < 0.5)
+        {
+            vTipBiasVar = -chaosSettings.getValue(ChaosSettings.Properties.vTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.vTNVar));
+        }
 
-        double hTipBias = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.hTBias));
+        double hTipBiasVar = chaosSettings.getValue(ChaosSettings.Properties.hTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.hTPVar));
+
         double hTipBiasType = chaosSettings.getValue(ChaosSettings.Properties.hTipBiasType, settingsIndex);
-        double hTipBiasNegVar = chaosSettings.getValue(ChaosSettings.Properties.hTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.hTNVar));
-        double hTipBiasPosVar = chaosSettings.getValue(ChaosSettings.Properties.hTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.hTPVar));
+        if (hTipBiasType < 0.5)
+        {
+            hTipBiasVar = -chaosSettings.getValue(ChaosSettings.Properties.hTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.hTNVar));
+        }
 
-        shape.computeTips(globalBias_Tips, hTipBias,hTipBiasType, hTipBiasNegVar, hTipBiasPosVar, vTipBias, vTipBiasType, vTipBiasNegVar, vTipBiasPosVar);
-
-        shape.computeBias(globalBias_Sides);
-
-        shape.biasCorners();
-
-        int edgeSlide = (entropyLayerSettingsList[settingsIndex].getInt(ShapeSettings.properties_i.edgeSlide));
-        double eTension = Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(ShapeSettings.properties_decimal.eTension));
-        shape.edgeMidpoints(edgeSlide, eTension);
-
+        shape.computeCage(vTipBiasVar, hTipBiasVar, sideBiasVar);
+        
         if (returnEarly)
         {
             mcPoints.Clear();
             mcPoints.AddRange(shape.Vertex.Select(t => new PointD(t.X, t.Y)));
             return mcPoints;
         }
-
-        double iCR = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.iCR));
-        double oCR = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.oCR));
+        
         double iCV = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
             .getDecimal(EntropyLayerSettings.properties_decimal.iCV));
         double oCV = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
@@ -121,13 +110,9 @@ public class EntropyShape
         double resolution = entropySettings.getResolution();
         bool icPA = chaosSettings.getBool(ChaosSettings.Bools.icPA, settingsIndex);
         bool ocPA = chaosSettings.getBool(ChaosSettings.Bools.ocPA, settingsIndex);
-        double s0HO = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0));
-        double s0VO = Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
-            .getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0));
 
-        mcPoints = shape.processCorners(previewMode, cornerCheck, doPASearch, s0HO, s0VO, iCR, iCV, iCVariation, icPA, oCR, oCV,
-            oCVariation, ocPA, cornerSegments, optimizeCorners, resolution);
+        mcPoints = shape.processCorners(previewMode,cornerCheck, cornerSegments, optimizeCorners, resolution, icPA, ocPA,
+            iCV, iCVariation, oCV, oCVariation);
 
         return mcPoints;
 
@@ -266,7 +251,10 @@ public class EntropyShape
             pivot = GeoWrangler.midPoint(mcPoints);
         }
         
-        mcPoints = shape.rotateShape(mcPoints, entropyLayerSettingsList[settingsIndex], rotationVar, rotationDirection, pivot);
+        ShapeLibrary.RotateOutput ret = shape.rotateShape(mcPoints, entropyLayerSettingsList[settingsIndex], rotationVar, rotationDirection, pivot);
+
+        mcPoints = ret.output;
+        entropyLayerSettingsList[settingsIndex].setDecimal(EntropyLayerSettings.properties_decimal.totalRotation, (decimal)ret.totalRotation, 0);
 
         // Error handling (failSafe) for no points or no subshape  - safety measure.
         if (!mcPoints.Any())

@@ -1757,7 +1757,6 @@ public class CommonVars
 
             linesToWrite.Add("Layout Cell: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.structure));
             linesToWrite.Add("Layout Layer/Datatype: " + listOfSettings[layer].getString(EntropyLayerSettings.properties_s.lD));
-            linesToWrite.Add("Contouring: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.gCSEngine));
             linesToWrite.Add("Per-Poly: " + listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.perPoly));
             linesToWrite.Add("Poly Fill Type: " + ShapeSettings.getPolyFillTypes()[listOfSettings[layer].getInt(EntropyLayerSettings.properties_i.fill)]);
             linesToWrite.Add("Horizontal Offset: " + listOfSettings[layer].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset));

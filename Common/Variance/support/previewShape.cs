@@ -210,6 +210,20 @@ public class PreviewShape
         init(commonVars, jobSettings_, settingsIndex, subShapeIndex, mode, doPASearch, previewMode, currentRow, currentCol);
     }
 
+    // Unidirectional biasing can yield more polygons than the original source. We need this class to allow adjustment.
+    class uniBiasOut
+    {
+        // Original index in the source geometry
+        public int sourceIndex { get; set; }
+        // Output from unidirectional biasing of the source geometry.
+        public PathsD geometry { get; set; }
+
+        public uniBiasOut(int index, PathsD geo)
+        {
+            sourceIndex = index;
+            geometry = new(geo);
+        }
+    }
     private void init(CommonVars commonVars, ChaosSettings chaosSettings, int settingsIndex, int subShapeIndex, int mode, bool doPASearch, bool previewMode, int currentRow, int currentCol, EntropyLayerSettings entropyLayerSettings = null, bool doClockwiseGeoFix = true, bool process_overlaps = true)
     {
         _settingsIndex = settingsIndex;
@@ -297,6 +311,101 @@ public class PreviewShape
             if (exitEarly || mode != 1)
             {
                 return;
+            }
+
+            double uniBias = Convert.ToDouble(commonVars.getLayerSettings(settingsIndex)
+                .getDecimal(EntropyLayerSettings.properties_decimal.uniBias, 0));
+            if (uniBias > 0)
+            {
+                PathD vector0 = new() { new(0, 0) };
+                PathD vector1 = new() { new(0, 0) };
+                PointD v = new(uniBias, 0);
+                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.uniBiasAxis) == 1)
+                {
+                    (v.x, v.y) = (v.y, v.x);
+                }
+
+                vector0.Add(v);
+                v.x = -v.x;
+                v.y = -v.y;
+
+                vector1.Add(v);
+
+                if (commonVars.getLayerSettings(settingsIndex)
+                        .getInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation) == 1)
+                {
+                    // Handle rotation.
+                    double rotation = Convert.ToDouble(commonVars
+                        .getLayerSettings(settingsIndex)
+                        .getDecimal(EntropyLayerSettings.properties_decimal.totalRotation, 0));
+
+                    vector0 = GeoWrangler.Rotate(vector0[0], vector0, rotation);
+
+                    vector1 = GeoWrangler.Rotate(vector1[0], vector1, rotation);
+                }
+
+                // Collect all paths return from Minkowski Sum for all input paths. We'll union and keyhole later.
+                uniBiasOut[] uniret = new uniBiasOut[previewPoints.Count];
+                
+                Parallel.For(0, previewPoints.Count, i =>
+                // for (int i = 0; i < previewPoints.Count; i++)
+                {
+                    if (!drawnPoly[i])
+                    {
+                        PathsD p1 = Clipper.MinkowskiSum(previewPoints[i], vector0, true);
+                        
+                        PathsD p2 = Clipper.MinkowskiSum(previewPoints[i], vector1, true);
+                        
+                        PathsD p3 = Clipper.Union(new () {previewPoints[i]}, p1, FillRule.Positive);
+                        PathsD p4 = Clipper.Union(p3, p2, FillRule.Positive);
+                        
+                        // Run the keyholer in case of issues.
+                        uniret[i] = new(i, GeoWrangler.makeKeyHole(p4, reverseEval: false, biDirectionalEval: true));
+                    }
+                });
+
+                // Pop our original geometry from the list of preview points - we'll sort it out shortly.
+                // We need to union our new geometry in case of overlaps, etc.
+                PathsD toUnion = new();
+                FillRule tf = FillRule.Negative;
+                for (int i = uniret.Length - 1; i > -1; i--)
+                {
+                    if (Clipper.IsPositive(previewPoints[i]) != Clipper.IsPositive(uniret[i].geometry[0]))
+                    {
+                        tf = FillRule.Positive;
+                    }
+
+                    toUnion.Add(previewPoints[i]);
+
+                    previewPoints.RemoveAt(i);
+                    drawnPoly.RemoveAt(i);
+                    
+                    toUnion.AddRange(uniret[i].geometry);
+                }
+
+                PathsD unioned = Clipper.Union(toUnion, tf);
+                unioned = GeoWrangler.close(unioned);
+
+                // Re-orient.
+                unioned = GeoWrangler.clockwise(unioned);
+                
+                // Run the keyholer again.
+                try
+                {
+                    unioned = GeoWrangler.makeKeyHole(unioned, false, true);
+                }
+                catch
+                {
+                }
+
+                // Sanitize.
+                unioned = GeoWrangler.clockwiseAndReorderXY(unioned);
+                
+                foreach (PathD union in unioned)
+                {
+                    previewPoints.Add(union);
+                    drawnPoly.Add(false);
+                }
             }
 
             // Fragment by resolution
@@ -632,12 +741,9 @@ public class PreviewShape
                         // Poly is already closed - presents a problem if we use contouring.
                         int arraySize = tempPolyList[poly].Count;
 
-                        if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
+                        if (Math.Abs(tempPolyList[poly][0].x - tempPolyList[poly][tempPolyList[poly].Count - 1].x) < Constants.tolerance && Math.Abs(tempPolyList[poly][0].y - tempPolyList[poly][tempPolyList[poly].Count - 1].y) < Constants.tolerance)
                         {
-                            if (Math.Abs(tempPolyList[poly][0].x - tempPolyList[poly][tempPolyList[poly].Count - 1].x) < Constants.tolerance && Math.Abs(tempPolyList[poly][0].y - tempPolyList[poly][tempPolyList[poly].Count - 1].y) < Constants.tolerance)
-                            {
-                                arraySize--;
-                            }
+                            arraySize--;
                         }
 
                         tempPoly = Helper.initedPathD(arraySize);
@@ -689,24 +795,17 @@ public class PreviewShape
                     // Strip termination points. Set shape will take care of additional clean-up if needed.
                     // tempPoly = GeoWrangler.stripTerminators(tempPoly, false);
 
-                    if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)
-                    {
-                        previewPoints.Add(fragment.fragmentPath(tempPoly));
-                        geoCoreOrthogonalPoly.Add(false); // We need to populate the list, but in this non-contoured case, the value doesn't matter.
-                    }
-                    else
-                    {
-                        // Feed tempPoly to shape engine.
-                        ShapeLibrary shape = new(CentralProperties.shapeTable, entropyLayerSettings);
+                    // Feed tempPoly to shape engine.
+                    ShapeLibrary shape = new(CentralProperties.shapeTable, entropyLayerSettings);
 
-                        shape.setShape(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex), tempPoly); // feed the shape engine with the geometry using our optional parameter.
-                        EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, bb_mid, shape);
-                        // Add resulting shape to the previewPoints.
-                        previewPoints.Add(complexPoints.getPoints());
-                        // This list entry does matter - we need to choose the right expansion method in case contouring has been chosen, but the
-                        // polygon is not orthogonal.
-                        geoCoreOrthogonalPoly.Add(shape.geoCoreShapeOrthogonal);
-                    }
+                    shape.setShape(entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex), tempPoly); // feed the shape engine with the geometry using our optional parameter.
+                    EntropyShape complexPoints = new(commonVars.getSimulationSettings(), commonVars.getListOfSettings(), settingsIndex, doPASearch, previewMode, chaosSettings, bb_mid, shape);
+                    // Add resulting shape to the previewPoints.
+                    previewPoints.Add(complexPoints.getPoints());
+                    // This list entry does matter - we need to choose the right expansion method in case contouring has been chosen, but the
+                    // polygon is not orthogonal.
+                    geoCoreOrthogonalPoly.Add(shape.geoCoreShapeOrthogonal);
+
                     drawnPoly.Add(drawn);
                 }
             }
@@ -760,8 +859,7 @@ public class PreviewShape
                         // Need to iterate across all polygons and only bias in this manner either:
                         // non-contoured mode
                         // contoured, but non-orthogonal polygons.
-                        if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0 ||
-                            !geoCoreOrthogonalPoly[poly] && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
+                        if (!geoCoreOrthogonalPoly[poly])
                         {
                             Path64 gdsPointData = GeoWrangler.path64FromPathD(previewPoints[poly], Constants.scalar_1E2);
                             ClipperOffset co = new() {PreserveCollinear = true, ReverseSolution = true};
@@ -793,7 +891,7 @@ public class PreviewShape
                         }
 
                         // In case of contoured mode, with orthogonal polygon, we need to store this:
-                        if (geoCoreOrthogonalPoly[poly] && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
+                        if (geoCoreOrthogonalPoly[poly])
                         {
                             // Decouple out of paranoia.
                             resizedLayoutData.Add(previewPoints[poly]);
@@ -907,7 +1005,6 @@ public class PreviewShape
             booleanFlag: entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.bLayerOpAB),
             resolution: commonVars.getSimulationSettings().getResolution(),
             extension: Convert.ToDouble(entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.rayExtension))
-            // fragmenter:new Fragmenter(fragment, CentralProperties.scaleFactorForOperation)
         );
 
         // This is set later, if needed, to force an early return from the overlap processing path.
@@ -937,7 +1034,6 @@ public class PreviewShape
         EntropyLayerSettings tempSettings = new();
         tempSettings.adjustSettings(entropyLayerSettings, gdsOnly: false);
         tempSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.GEOCORE);
-        tempSettings.setInt(EntropyLayerSettings.properties_i.gCSEngine, 1);
         tempSettings.setFileData(new (booleanPaths));
         drawnPoly.Clear();
         previewPoints.Clear();

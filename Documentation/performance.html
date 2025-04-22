@@ -171,31 +171,7 @@ img {
 
 <a name="performance"></a>
 <h1 class="western">Performance</h1>
-	<p class="western">Different calculation modes have different levels of performance. They all scale with the number of runs and threading resource available.</p>
-	<blockquote>
-		<img src="images/calculation_time_by_type.png" alt=""/>
-	</blockquote>
-	<p class="western">The implant Monte Carlo engine is derived from the multi-layer system, but works slightly differently. On a quad-core i7-6700k, it processes 25000 iterations/second (250k cases in ~ 10 seconds, for 90 corner segments), on Windows.</p>
-
-	<p class="western">Performance on Mac and Linux/GTK is generally comparable with that on Windows (at most, 10% worse). The performance gap was closed with the move to .NET Core 3.1, avoiding the performance issues apparent in the Mono framework used in earlier releases.</p>
-
-	<h2 class="western">Benchmark</h2>
-	<p class="western">Runtime is essentially linear with the number of cases, for both single and multi-threaded modes. Multithreaded provides a significant boost in performance and is the only mode enabled in the GUI.</p>
-	<blockquote>
-		<img src="images/comparison_multithread.png" alt=""/>
-	</blockquote>
-
-	<p class="western">Runtime also scales linearly with the number of layers involved in the calculation, independent of the layer configuration. Area runtimes are below for 250k cases using the average overlay project.</p>
-	<ul>
-		<li>2 Layers : 3 seconds</li>
-		<li>3 Layers : 3 seconds</li>
-		<li>4 Layers : 4 seconds</li>
-		<li>5 Layers : 6 seconds</li>
-		<li>6 Layers : 7 seconds</li>
-		<li>7 Layers : 9 seconds</li>
-		<li>8 Layers : 9 seconds</li>
-		<li>16 Layers : 20 seconds</li>
-	</ul>
+	<p class="western">Different calculation modes have their own performance baseline. They all scale linearly with the number of layers, and then with the number of runs. The overall runtime will be reduced linearly with increasing CPU thread count.</p>
 
 	<h2 class="western">Memory</h2>
 	<p class="western">Memory is aggressively held under control through the Garbage Collector. Each result, assuming no SVG is created, needs 1.5 KB RAM to be stored during a run. SVG greatly increases this.</p>

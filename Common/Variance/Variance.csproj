@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <LangVersion>11</LangVersion>
-    <Nullable>enable</Nullable>
+    <LangVersion>12</LangVersion>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,13 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.7.5" />
+    <PackageReference Include="Eto.Forms" Version="2.8.3" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="7.0.2" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
-    <PackageReference Include="System.Management" Version="7.0.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="7.0.1" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

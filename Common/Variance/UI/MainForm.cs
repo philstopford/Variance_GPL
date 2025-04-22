@@ -32,6 +32,8 @@ public partial class MainForm
     private Command quitCommand, helpCommand, aboutCommand, clearLayer, copyLayer, pasteLayer, newSim, openSim, revertSim, saveSim, saveAsSim;
     private Command expExpandersCommand, collExpandersCommand;
 
+    private TableLayout simPreviewBox_table;
+
     private List<string> notList, booleanList;
 
     private Replay simReplay;
@@ -924,7 +926,6 @@ public partial class MainForm
         do2DLayerUI(index);
     }
 
-
     public MainForm(VarianceContextGUI _varianceContext)
     {
         pMainForm(_varianceContext);
@@ -972,10 +973,9 @@ public partial class MainForm
             return;
         }
 
-        viewPort.SetUpVeldrid();
+        createVPContextMenu();
 
         viewPort.Clock.Start();
-        createVPContextMenu();
     }
 
     private void UI(VarianceContextGUI _varianceContext)
@@ -1024,56 +1024,28 @@ public partial class MainForm
             ResourceBindingModel.Improved);
 
         vSurface = new VeldridSurface(varianceContext.backend, options);
-        vSurface.VeldridInitialized += (_, _) => VeldridReady = true;
 
         commonVars.titleText += " " + vSurface.Backend;
 
         Title = commonVars.titleText;
-
-        string exeDirectory;
-        string shaders;
-        if (Platform.IsMac)
-        {
-            // AppContext.BaseDirectory is too simple for the case of the Mac
-            // projects. When building an app bundle that depends on the Mono
-            // framework being installed, it properly returns the path of the
-            // executable in Eto.Veldrid.app/Contents/MacOS. When building an
-            // app bundle that instead bundles Mono by way of mkbundle, on the
-            // other hand, it returns the directory containing the .app.
-
-            // ReSharper disable once PossibleNullReferenceException
-            exeDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            shaders = Path.Combine("..", "Resources", "shaders");
-        }
-        else
-        {
-            exeDirectory = AppContext.BaseDirectory;
-            shaders = "shaders";
-        }
-
+        
         viewPort = new VeldridDriver(ref mcVPSettings[0], ref vSurface)
         {
             Surface = vSurface,
-            ExecutableDirectory = exeDirectory,
-            ShaderSubdirectory = shaders
         };
 
-        vSurface.Size = new Size(viewportSize, viewportSize);
+        vSurface.VeldridInitialized += (_, _) =>
+        {
+            viewPort.SetUpVeldrid();
+            VeldridReady = true;
+        };
+
         viewPort.updateHostFunc = viewportUpdateHost;
 
         const string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw\r\n(x) to zoom extents";
         vp = new Panel();
-        if (!Platform.IsMac) // This color setting causes issues on Mac where the viewport doesn't show until the mouse passes over.
-        {
-            vp.BackgroundColor = Colors.Black;
-        }
-        TableLayout vp_content = new();
-        vp_content.Rows.Add(new TableRow());
-        vp_content.Rows[0].Cells.Add(new TableCell { Control = vSurface });
-        vp.Content = vp_content;
-        vp.ToolTip = viewportToolTipText;
-
         vp.Content = vSurface;
+        vp.ToolTip = viewportToolTipText;
 
         // Splitter and the like.
         setup_layout();
@@ -1603,7 +1575,6 @@ public partial class MainForm
 
         tabControl_2D_simsettings.Pages.Add(tabPage_2D_PASearch);
     }
-
     private void setup_layout()
     {
         // mainPanel is tab UI.
@@ -1625,14 +1596,15 @@ public partial class MainForm
         // Controls
         controls = new Scrollable();
 
-        rightPanel.Content = new Splitter
+        rightSplitter = new Splitter
         {
             Orientation = Orientation.Vertical,
             FixedPanel = SplitterFixedPanel.Panel1,
             Panel1 = controls,
             Panel2 = vp
         };
-
+        rightPanel.Content = rightSplitter;
+        
         // We need an additional level here to take the status label and progress bar in the lower portion of the UI.
         Panel outerPanel_upper = new() {Content = mainSplitter};
         TableLayout outerPanel_lower_content = new();
@@ -1763,18 +1735,18 @@ public partial class MainForm
         buttons_table.Rows.Add(new TableRow());
         
         btn_Run = new Button {Text = "Run"};
-        //setSize(btn_Run, simButtonWidth, simButtonHeight);
         btn_Run.Click += monteCarloMultipleThreadEventHandler;
+        btn_Run.Visible = false;
         buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Run });
 
         btn_Cancel = new Button {Text = "Cancel"};
-        // setSize(btn_Cancel, simButtonWidth, simButtonHeight);
-        //btn_Cancel.Click += btnCancel;
+        btn_Cancel.Click += btnCancel;
+        btn_Cancel.Visible = false;
         buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_Cancel });
 
         btn_STOP = new Button {Text = "STOP"};
-        //setSize(btn_STOP, simButtonWidth, simButtonHeight);
         btn_STOP.Click += btnSTOP;
+        btn_STOP.Visible = false;
         buttons_table.Rows[0].Cells.Add(new TableCell { Control = btn_STOP });
     }
 
@@ -1782,7 +1754,7 @@ public partial class MainForm
     {
         TableLayout viewport_gadgets_tl = new();
         Panel p = new() {Content = viewport_gadgets_tl};
-        tc.Control = p; // TableLayout.AutoSized(p, centered: true);
+        tc.Control = p;
 
         viewport_gadgets_tl.Rows.Add(new TableRow());
 
@@ -1907,7 +1879,7 @@ public partial class MainForm
 
     private void setup_simPreviewBox()
     {
-        TableLayout simPreviewBox_table = new();
+        simPreviewBox_table = new();
         simPreviewBox_table.Rows.Add(new TableRow());
 
         simPreviewBox = new GroupBox {Text = "Simulation Elements", Content = simPreviewBox_table};

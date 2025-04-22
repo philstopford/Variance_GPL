@@ -124,6 +124,7 @@ public partial class MainForm
 
     private int simRunningTabToFreeze;
 
+    private Splitter rightSplitter;
     private Scrollable controls;
     private Scrollable tabPage_2D_PASearch_scrollable;
     private TableLayout mainTable, tabPage2_table, tab_1DCalc_table, tabPage_2D_DOE_table, tabPage_implant_table, tabPage_utilities_table, tabPage_2D_PASearch_table;

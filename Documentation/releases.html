@@ -198,8 +198,59 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
+    <li><a href="#releases_610">6.1</a>
     <li><a href="#releases_600">6.0</a>
   </ul>
+
+    <blockquote>
+      <a name="releases_610"></a>
+      <h2 class="western">New to 6.1 (Jun 12 2024)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/6.1_layer.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/6.1_linux.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Moved to .NET 8.</li>
+          <li>Updated viewport.</li>
+          <ul>
+            <li>Data preparation also sees major gains (> 10x) from broad and deep use of multithreading across all areas.</li>
+            <li>Increased performance (> 2x) from moving data preparation into tasks and only updating buffers when required. More efficient drawing strategies were also deployed.</li>
+            <li>With assistance from the Veldrid maintainer, new approach resolves issues with mesa/GTK under newer Linux environments.</li>
+            <ul>
+              <li>Currently, Vulkan does not seem to work well on Linux.</li>
+            </ul>
+          </ul>
+          <li>GeoCore refinements:</li>
+          <ul>
+            <li>Improved handling of complex layouts.</li>
+            <ul>
+              <li>Previous code would read in irregular arrays, but would write a flattened representation, which was not ideal.</li>
+              <ul>
+                <li>New approach centralizes the handling of array data to make the code less complex.</li>
+              </ul>
+              <li>Repetition handling has been greatly improved and subject to extensive validation.</li>
+            </ul>
+            <li>Improved handling of compressed layout data following some runtime changes in the platform.</li>
+            <li>Obscure bug in the box handling was found and addressed.</li>
+            <li>Correctness review across the code.</li>
+          </ul>
+          <li>Migration and expansion of test coverage.</li>
+          <ul>
+            <li>Enhancements for overlap/enclosure handling.</li>
+          </ul>
+          <li>Fixed numerous UI irritations, including lingering UI elements on tabs where they are not relevant.</li>
+          <li>Unidirectional bias available, using Minkowski Sum, with before/after rotation option.</li>
+          <li>The Mac platform is no longer supported due to no user interest and no hardware.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
 
     <blockquote>
       <a name="releases_600"></a>

@@ -183,7 +183,7 @@ li span {
 </style>
 </head>
 <body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
-<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(6.0)</font></font></p>
+<p style=" border-top: none; border-bottom: 1.00pt solid #4f81bd; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#ffffff" face="Cambria, serif"><font size="6" style="font-size: 20pt">Variance </font><font size="6" style="font-size: 12pt">(6.1)</font></font></p>
 <blockquote>
   <p style=" border-top: none; border-bottom: none; border-left: none; border-right: none; padding-top: 0in; padding-bottom: 0.06in; padding-left: 0in; padding-right: 0in; letter-spacing: 0.3pt; line-height: 100%"> <font color="#aaaaaa" face="Cambria, serif"><font color="#aaaaaa" size="6" style="font-size: 20pt"><font size="3" style="font-size: 12pt"><span style="letter-spacing: 0.8pt"><i>Phil Stopford</i></span></font></font></font></p>
 </blockquote>
@@ -224,6 +224,8 @@ li span {
         <li>External layout support is extensive:</li>
         <ul>
           <li>GDS and OASIS, including GZIP-compressed. 5.0 brings improved support for OASIS, including strict files.</li>
+          <li><span>IMPROVED: </span>Improved handling of complex layouts (irregular arrays) and compressed layout data.</li>
+          <li><span>IMPROVED: </span>Bug fixes following code review.</li>
           <li>Layout geometry can be used to drive contour generation.</li>
           <li>Layout geometry can be updated from the file on-disk when the project is loaded.</li>
           <li>Hierarchical layout is better supported in terms of nested cell references, and arrays of reference cells.</li>
@@ -257,6 +259,7 @@ li span {
       <ul>
         <li>Independent tip and side CDU variation.</li>
         <li>Independent tip and side bias variation.</li>
+        <li><span>NEW: </span>Unidirectional bias, before or after rotation.</li>
         <li>Independent horizontal and vertical tip variation, including asymmetry.</li>
         <li>Independently link variation sources together between any input layers, if desired.</li>
         <ul>
@@ -307,7 +310,7 @@ li span {
     </ul>
     <p class="western">User interface:</p>
     <ul>
-      <li>Consistent, multi-platform GUI (Windows, Mac, Linux).</li>
+      <li>Consistent, multi-platform GUI (Windows, Linux). Mac support has been discontinued.</li>
       <ul>
         <li>Expanders to reduce scrolling, with options to expand/collapse all via menu and hotkey.</li>
         <li>Refined layout.</li>
@@ -318,13 +321,15 @@ li span {
       <ul>
         <li>The optimal framework is automatically used on the platform being used (Vulkan, OpenGL, Direct3D, Metal). If desired, this can be overridden.</li>
         <ul>
-          <li>NOTE : hybrid graphics can be problematic under Linux; recent Arch distributions also show issues.</li>
+          <li>NOTE : Vulkan under Linux may be problematic at this moment in time.</li>
         </ul>
         <li>Drag and cursor key navigation</li>
         <li>Wheel and key zoom</li>
         <li>Customizable preferences (colors, zoom, antialiasing, opacity, fill).</li>
         <li>Save the view to SVG file.</li>
         <li>Background layers : see your other layers' contours in the current layer.</li>
+        <li><span>IMPROVED: </span>Compatible with newer desktop environments using recent GTK and mesa libraries.</li>
+        <li><span>IMPROVED: </span>Performance enhancements (> 20x) from multithreading, background processing and drawing methodology changes.</li>
       </ul>
       <li>Add comments to layers, DOE and simulation settings for documentation.</li>
     </ul>
@@ -346,8 +351,8 @@ li span {
   <h2 class="western">Code</h2>
   <blockquote>
     <ul>
-      <li>Avoidance of home-brew code for fundamentals, where possible - rely on proven systems.</li>
-      <li>Runs under NET 7 on all platforms, shipped as standalone packages that include the runtime.</li>
+      <li>Avoidance of home-brew code for fundamentals. Where possible, rely on proven systems.</li>
+      <li>Runs under NET 8 on all platforms, shipped as standalone packages that include the runtime.</li>
     </ul>
   </blockquote>
 </blockquote>

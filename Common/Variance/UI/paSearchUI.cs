@@ -70,7 +70,7 @@ public partial class MainForm
         num_passCase = new NumericStepper {Increment = 1, MinValue = 1, Value = 25000};
         num_passCase.LostFocus += paSearchUI_Handler;
         num_passCase.ToolTip = "Minimum number of pass cases to find.";
-        setSize(num_passCase, 80);
+        setSize(num_passCase, 160);
         row0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCase) });
 
         lbl_paSearch_readOut = new Label {Text = "Last result:"};

@@ -2,10 +2,10 @@
 	
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -22,11 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.7.5" />
-    <PackageReference Include="Eto.Veldrid.Gtk" Version="0.1.0" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.8.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Gtk\Eto.Veldrid.Gtk.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
   </ItemGroup>
   

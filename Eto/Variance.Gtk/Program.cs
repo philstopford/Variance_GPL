@@ -22,7 +22,7 @@ public static class MainClass
 
             if (oneThreadIndex != -1)
             {
-                numberOfThreads = -1;
+                numberOfThreads = 1;
             }
             else
             {

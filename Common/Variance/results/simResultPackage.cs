@@ -175,26 +175,33 @@ public class SimResultPackage
     private static List<string> pGetHistograms(List<double>[] values, int buckets)
     {
         List<string> histograms = new();
-        try
+        // Generate histograms for each set, unless there are no results in that set.
+        for (int i = 0; i < values.Length; i++)
         {
-            // Generate histograms for each set, unless there are no results in that set.
-            for (int i = 0; i < values.Length; i++)
+            if (values[i].Count == 0)
             {
-                if (values[i].Count == 0)
+                histograms.Add("No data for result " + i + "\r\n");
+            }
+            else
+            {
+                try
                 {
-                    histograms.Add("No data for result " + i + "\r\n");
-                }
-                else
-                {
-                    histograms.Add("Histogram for result " + i + ":\r\n");
                     Histo h = new(10, values[i].ToArray());
-                    histograms.Add(h.StemLeaf(true, buckets));
+                    string temp = (h.StemLeaf(true, buckets));
+                    if (string.IsNullOrWhiteSpace(temp))
+                    {
+                        throw new();
+                    }
+
+                    histograms.Add("Histogram for result " + i + ":\r\n");
+                    histograms.Add(temp);
+                }
+                catch
+                {
+                    // Histogram can fail in case of insufficient variation - i.e. all values are the same.
+                    histograms.Add("No histogram available for result " + i + " - were all results the same?");
                 }
             }
-        }
-        catch (Exception)
-        {
-            // Histogram can fail in case of insufficient variation - i.e. all values are the same.
         }
 
         return histograms;

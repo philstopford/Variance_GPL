@@ -5,7 +5,7 @@ namespace Variance;
 public static class CentralProperties
 {
     public const string productName = "Variance";
-    public const string version = "6.0.0";
+    public const string version = "6.1";
     public const int maxLayersForMC = 16; // maximum number of supported layers in MC system
 
     public enum shapeNames

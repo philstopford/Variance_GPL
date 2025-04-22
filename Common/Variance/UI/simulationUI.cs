@@ -44,7 +44,8 @@ public partial class MainForm
 
     private NumericStepper num_replay;
 
-    private TableLayout tabPage_2D_Settings_table;
+    private TableLayout tabPage_2D_Settings_table, tl_externalCriteria;
+    private Panel pnl_externalCriteria;
 
     private void twoD_SettingsUISetup()
     {
@@ -193,6 +194,11 @@ public partial class MainForm
         row1TL.Rows[^1].Cells.Add(checkBox_perPoly);
     }
 
+    private void twoD_SettingsUI_extCrit()
+    {
+        
+    }
+
     private void twoD_SettingsUI_sim()
     {
         TableLayout groupBox_simSettings_table = new();
@@ -229,6 +235,12 @@ public partial class MainForm
         };
         tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_CSV });
 
+        checkBox_debugCalc = new CheckBox
+        {
+            Text = "Debug", ToolTip = "Enable debug (calculation engine support depending)."
+        };
+        tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_debugCalc });
+        
         tc1_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
         groupBox_simSettings_table.Rows.Add(new TableRow());
@@ -269,57 +281,68 @@ public partial class MainForm
 
         tce2_tl.Rows.Add(new TableRow());
 
+        pnl_externalCriteria = new();
+        
+        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = pnl_externalCriteria });
+
+        tl_externalCriteria = new();
+        pnl_externalCriteria.Content = tl_externalCriteria;
+        tl_externalCriteria.Rows.Add(new());
+
         checkBox_externalCriteria = new CheckBox
         {
             Text = "if ",
             ToolTip =
                 "Write out a file containing the result for each case and its inputs. Will require significantly more memory."
         };
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_externalCriteria });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = checkBox_externalCriteria });
 
         comboBox_externalCriteria1 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
         comboBox_externalCriteria1.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria1 });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria1 });
 
         num_externalCriteria1 = new NumericStepper
         {
             Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
         };
         setSize(num_externalCriteria1, 55);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria1) });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria1) });
 
         comboBox_externalCriteria2 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
         comboBox_externalCriteria2.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria2 });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria2 });
 
         num_externalCriteria2 = new NumericStepper
         {
             Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
         };
         setSize(num_externalCriteria2, 55);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria2) });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria2) });
+
+        tl_externalCriteria.Rows.Add(new TableRow());
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = null });
 
         comboBox_externalCriteria3 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
         comboBox_externalCriteria3.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria3 });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria3 });
 
         num_externalCriteria3 = new NumericStepper
         {
             Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
         };
         setSize(num_externalCriteria3, 55);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria3) });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria3) });
 
         comboBox_externalCriteria4 = new DropDown {DataContext = DataContext, ToolTip = "Choose filter"};
         comboBox_externalCriteria4.BindDataContext(c => c.DataStore, (UIStringLists m) => m.externalFilterList);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria4 });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = comboBox_externalCriteria4 });
 
         num_externalCriteria4 = new NumericStepper
         {
             Value = 0.0, Increment = 0.1, DecimalPlaces = 2, ToolTip = "Define value"
         };
         setSize(num_externalCriteria4, 55);
-        tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria4) });
+        tl_externalCriteria.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_externalCriteria4) });
 
         tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
@@ -348,31 +371,11 @@ public partial class MainForm
         comboBox_RNG.BindDataContext(c => c.DataStore, (UIStringLists m) => m.rngTypeList);
         tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_RNG });
 
-        groupBox_simSettings_table.Rows.Add(new TableRow());
-        TableCell tc3 = new();
-        groupBox_simSettings_table.Rows[^1].Cells.Add(tc3);
-
-        groupBox_simSettings_table.Rows[^1].Cells.Add(new TableCell { Control = null });
-
-        TableLayout tc3_tl = new();
-        Panel tc3_p = new() {Content = tc3_tl};
-        tc3.Control = tc3_p;
-
-        tc3_tl.Rows.Add(new TableRow());
-
-        checkBox_debugCalc = new CheckBox
-        {
-            Text = "Debug", ToolTip = "Enable debug (calculation engine support depending)."
-        };
-        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = checkBox_debugCalc });
-
-        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = null, ScaleWidth = true });
-
         lbl_ssTotalPoints = new Label {Text = "Total # points"};
-        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_ssTotalPoints });
+        tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_ssTotalPoints });
 
         text_ssTotalPoints = new TextBox {ReadOnly = true};
-        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = text_ssTotalPoints });
+        tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = text_ssTotalPoints });
 
 
         groupBox_simSettings_table.Rows.Add(new TableRow()); // padding
@@ -393,7 +396,7 @@ public partial class MainForm
         {
             Value = 25000, Increment = 1, MinValue = 1, ToolTip = "Total number of cases to evaluate."
         };
-        setSize(num_ssNumOfCases, 80);
+        setSize(num_ssNumOfCases, 160);
         r0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_ssNumOfCases) });
 
         r0_tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding

@@ -888,11 +888,13 @@ public partial class MainForm
 
             if (extActive)
             {
+                pnl_externalCriteria.Content = tl_externalCriteria;
                 commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.external, 1);
                 commonVars.getImplantSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.externalType, (int)CommonVars.external_Type.svg);
             }
             else
             {
+                pnl_externalCriteria.Content = null;
                 commonVars.getSimulationSettings_nonSim().setInt(EntropySettings_nonSim.properties_i.external, 0);
             }
 

@@ -180,31 +180,7 @@ public class PASearch
             for (int i = 0; i < length; i++)
 #endif
             {
-                bool enable = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;
-                if (enable)
-                {
-                    if (layerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE)
-                    {
-                        // Disable for geoCore case, as appropriate.
-                        if (layerSettings.getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)
-                        {
-                            switch (i)
-                            {
-                                case (int)paEnum.XOL:
-                                case (int)paEnum.YOL:
-                                    // case (int)paEnum.LWR:
-                                    // case (int)paEnum.SBIAS:
-                                    // case (int)paEnum.PBIAS:
-                                    enable = true;
-                                    break;
-                                default:
-                                    enable = false;
-                                    break;
-                            }
-                        }
-                    }
-                }
-                enabled[i] = enable;
+                enabled[i] = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;;
             }
 #if !VARIANCESINGLETHREADED
         );

@@ -29,7 +29,7 @@ internal static class VHeadless
             implantMode = implantIndex != -1;
             if (oneThreadIndex != -1)
             {
-                numberOfThreads = -1;
+                numberOfThreads = 1;
             }
             else
             {

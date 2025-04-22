@@ -337,7 +337,6 @@ public class Storage
                 new XElement("alignGeomX", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignX)),
                 new XElement("alignGeomY", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignY)),
                 new XElement("shapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shapeIndex)),
-                new XElement("geoCoreShapeEngine", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.gCSEngine)),
                 new XElement("subShapeHorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)),
                 new XElement("subShapeHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0)),
                 new XElement("subShapeVerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0)),
@@ -377,6 +376,10 @@ public class Storage
                 new XElement("proximitySideRayFallOff", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff)),
                 new XElement("proximitySideRayFallOffMultiplier", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)),
 
+                new XElement("uniBiasAxis", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
+                new XElement("uniBiasAfterRotation", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation)),
+                new XElement("uniBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
+                
                 new XElement("removeArtifacts", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifacts)),
                 new XElement("removeArtifactsEpsilon", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon)),
 
@@ -400,6 +403,8 @@ public class Storage
                 new XElement("LWR2NoiseType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2Type)),
                 new XElement("correlatedLWR2", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr)),
                 new XElement("correlatedLWR2LayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)),
+                new XElement("uniBiasAxis", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
+                new XElement("uniBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
                 new XElement("LWRNoisePreview", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwrPreview)),
                 new XElement("sideCDU", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)),
                 new XElement("sideCDURNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.sCDU_RNG)),
@@ -476,7 +481,6 @@ public class Storage
                 new XElement("ldNameFromFile", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lD)),
                 new XElement("fileType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.fileType)),
                 new XElement("polyFill", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.fill)),
-                new XElement("geoCoreShapeEngine", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.gCSEngine)),
                 new XElement("geoCoreShapeEnginePerPoly", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.perPoly)),
                 new XElement("geoCoreReferenceLayout", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.refLayout)),
                 new XElement("geoCoreKeyholeSizing", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor)),
@@ -1148,6 +1152,33 @@ public class Storage
 
             try
             {
+                readSettings.setInt(EntropyLayerSettings.properties_i.uniBiasAxis, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("uniBiasAxis").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultInt(EntropyLayerSettings.properties_i.uniBiasAxis);
+            }
+
+            try
+            {
+                readSettings.setInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("uniBiasAfterRotation").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation);
+            }
+
+            try
+            {
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.uniBias, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("uniBias").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.uniBias);
+            }
+
+            try
+            {
                 readSettings.setInt(EntropyLayerSettings.properties_i.removeArtifacts, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("removeArtifacts").First().Value));
             }
             catch (Exception)
@@ -1532,6 +1563,23 @@ public class Storage
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.xOL_av);
             }
 
+            try
+            {
+                readSettings.setInt(EntropyLayerSettings.properties_i.uniBiasAxis, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("uniBiasAxis").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultInt(EntropyLayerSettings.properties_i.uniBiasAxis);
+            }
+
+            try
+            {
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.uniBias, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("uniBias").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.uniBias);
+            }
 
             // We do this piecewise because 2.0 files have these entries, but only for four layers.
             // We want to capture the settings without clobbering them in a one-size-fits-all exception handler.
@@ -1831,16 +1879,7 @@ public class Storage
             {
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.fill);
             }
-
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.gCSEngine, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("geoCoreShapeEngine").First().Value));
-            }
-            catch (Exception)
-            {
-                readSettings.defaultInt(EntropyLayerSettings.properties_i.gCSEngine);
-            }
-
+            
             try
             {
                 readSettings.setInt(EntropyLayerSettings.properties_i.perPoly, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("geoCoreShapeEnginePerPoly").First().Value));

@@ -95,19 +95,19 @@ internal class ChaosEngine
     }
 
 
-    private PathsD pLayerBoolean(EntropySettings simulationSettings, int firstLayer, int secondLayer, int booleanFlag, bool preserveColinear = true)
+    private PathsD pLayerBoolean(EntropySettings simulationSettings, int firstLayer, int secondLayer, int booleanFlag, bool preserveCollinear = true)
     {
         PathsD firstLayerPaths = new(simShapes[firstLayer].getPoints());
 
         PathsD secondLayerPaths = new(simShapes[secondLayer].getPoints());
 
         PathsD ret = GeoWrangler.LayerBoolean(simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, firstLayer), firstLayerPaths,
-            simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, secondLayer), secondLayerPaths, booleanFlag, preserveColinear);
+            simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, secondLayer), secondLayerPaths, booleanFlag, preserveCollinear);
 
         return ret;
     }
     
-    private PathsD[] pLayerBoolean(CommonVars commonVars, bool preserveColinear = true)
+    private PathsD[] pLayerBoolean(CommonVars commonVars, bool preserveCollinear = true)
     {
         // Boolean is structured as:
         // Process two layers to get the interaction of two layers.
@@ -135,13 +135,13 @@ internal class ChaosEngine
                 switch (inputLayerEnabled[i * 2])
                 {
                     case true when inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2 + 1, simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i), preserveColinear: preserveColinear);
+                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2 + 1, simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i), preserveCollinear: preserveCollinear);
                         break;
                     case true when !inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2, 0, preserveColinear: preserveColinear);
+                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2, 0, preserveCollinear: preserveCollinear);
                         break;
                     case false when inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1, 0, preserveColinear: preserveColinear);
+                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1, 0, preserveCollinear: preserveCollinear);
                         break;
                     default:
                         twoLayerResults[i] = new ();
@@ -203,7 +203,7 @@ internal class ChaosEngine
                         firstPaths: twoLayerResults[i * 2],
                         secondPaths: twoLayerResults[i * 2 + 1],
                         booleanFlag: simulationSettings.getOperatorValue(EntropySettings.properties_o.fourLayer, i),
-                        preserveColinear: preserveColinear
+                        preserveCollinear: preserveCollinear
                     );
                 }
                 else
@@ -318,7 +318,7 @@ internal class ChaosEngine
                         firstPaths: fourLayerResults[i * 2],
                         secondPaths: fourLayerResults[i * 2 + 1],
                         booleanFlag: simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i),
-                        preserveColinear: preserveColinear
+                        preserveCollinear: preserveCollinear
                     );
                 }
                 else
@@ -414,9 +414,9 @@ internal class ChaosEngine
             }
         }
 
-        bool preserveColinear = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)Supported.calcModes.enclosure_spacing_overlap;
+        bool preserveCollinear = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)Supported.calcModes.enclosure_spacing_overlap;
 
-        booleanPaths = pLayerBoolean(commonVars, preserveColinear);
+        booleanPaths = pLayerBoolean(commonVars, preserveCollinear);
 
         if (sgRemove_a)
         {

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <ApplicationIcon>Monte_Carlo_2550495b_ico.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
@@ -21,6 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Wpf\Eto.Veldrid.Wpf.csproj" />
     <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
   </ItemGroup>
 
@@ -29,8 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Wpf" Version="2.7.5" />
-    <PackageReference Include="Eto.Veldrid.Wpf" Version="0.1.0" />
+    <PackageReference Include="Eto.Platform.Wpf" Version="2.8.3" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,68 @@
 Changelog for Variance
 
+6.1
+
+	- Avoided hang-on-quit issue with GTK when file dialogs have been shown.
+	- Fixed viewport drawing of lines (it would close them to make polygons).
+	- Fixed viewport keyboard handling.
+
+6.1b5
+
+	- GeoCore enhancements.
+	 - Repetition evaluation system was overhauled, to properly retain and evaluate repetition data (e.g. irregular arrays) and to avoid baking repetitions in its internal representation.
+	 ! There is work planned for internal de-duplication, or compaction, in a later update.
+
+6.1b4
+
+	- Completed optimization work to speed up the viewport drawing.
+	 - Changed drawing methodology to be much more efficient.
+	  - Moved data generation into independent tasks so we can efficiently queue the work onto threads (axes, gridlines, polylines, points, filled geometry).
+	  - Geometry computation now fully multi-threaded to allow peak performance for few/many polygons and sparse/dense point count.
+	  - Generate/update buffers only when needed (i.e. when the viewport draws).
+	  - Use more efficient draw calls based on a tweaked buffer strategy.
+	- Thanks to Veldrid developer TechPizzaDev, we have a working viewport now on GTK, including for Wayland.
+	 - This works with mesa threading as well, and current versions of mesa.
+	 ! Vulkan is not usable under Wayland due to the need for X11 to override the contents.
+	 ! Keyboard input into the viewport is not available at the moment.
+
+6.1b3
+
+	- GeoCore overhaul for (ir)regular array handling.
+	- Working to resolve compatibility with newer mesa versions
+
+6.1b2
+
+	- Removed geoCore contour option: contouring is now always available.
+	- Fixes to shape engine handling of orthogonal custom geometry.
+	- Fix for box output in OASIS files.
+	! Linux requires mesa no later than 23.1.8 to avoid crashes.
+
+6.1b1
+
+	- Applied a set of fixes related to issues with the viewport and recent combinations of GTK/mesa.
+	 - Workaround prior to these fixes was to turn off mesa_glthread.
+	- Applied a fix for a behavorial change in gap removal, where gaps/holes could be left.
+	 - Seems to be related to numerical precision.
+
+6.1a1
+
+	- Fixed numerous UI irritations.
+	 - Addressed lingering UI elements on tabs where they are not relevant.
+	- Unidirectional biasing.
+	 - Initial implementation.
+	 - Uses Minkowski Sum via Clipper 2.
+	 - Supports either axis.
+	 - Supports application before or after rotation.
+	 - Validated wobble on top of rotation, before and after rotation.
+	 - Validated with keyholed geometry.
+
+	 ! Testing areas:
+	  - Save/load, copy/paste.
+	  - n-poly output from biasing.
+	   - Works fine with per-poly rotation and before/after rotation.
+	   ! Sort of works overall, but union is only seen on one pair, oddly.
+	  ! Need to ensure the total rotation is set with any rotation/wobble change.
+
 6.0
 
 	- Moved to NET 7.

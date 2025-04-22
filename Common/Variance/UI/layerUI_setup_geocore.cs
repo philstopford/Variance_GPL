@@ -11,7 +11,7 @@ public partial class MainForm
     private DropDown comboBox_lDList_geoCore, comboBox_structureList_geoCore, comboBox_polyFill_geoCore, comboBox_tipLocations_geoCore;
     private Label lbl_lD_geoCore, lbl_cell_geoCore, lbl_tipLocations_geoCore;
     private TextBox textBox_fileLocation_geoCore;
-    private CheckBox cB_DOE_geoCore, cB_geoCore_shapeEngine, cB_geoCore_shapeEngine_perPoly, cB_geoCore_layoutReference;
+    private CheckBox cB_DOE_geoCore, cB_geoCore_shapeEngine_perPoly, cB_geoCore_layoutReference;
 
     private NumericStepper num_geoCore_keyHoleSizing;
     private Label lbl_geoCore_keyHoleSizing;
@@ -94,13 +94,7 @@ public partial class MainForm
             Text = "DOE", Width = 60, ToolTip = "This is a DOE layout, to be used with tile extraction."
         };
         tl0.Rows[^1].Cells.Add(new TableCell { Control = cB_DOE_geoCore });
-
-        cB_geoCore_shapeEngine = new CheckBox
-        {
-            Text = "Contour", Width = 75, ToolTip = "Use layout polygons as inputs for contour generation"
-        };
-        tl0.Rows[^1].Cells.Add(new TableCell { Control = cB_geoCore_shapeEngine });
-
+        
         cB_geoCore_shapeEngine_perPoly = new CheckBox
         {
             Text = "Per-Poly", Width = 75, ToolTip = "Rotation per-polyon"

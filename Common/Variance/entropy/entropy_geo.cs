@@ -80,7 +80,7 @@ public partial class Entropy
     {
         sampler = new Sampler_Geo(numberOfCases, previewMode, doPASearch, ref commonVars);
         string tmp = commonVars.getFriendly() ? Utils.friendlyNumber(sampler.getDimensions() * CentralProperties.maxLayersForMC * numberOfCases) : (sampler.getDimensions() * CentralProperties.maxLayersForMC * numberOfCases).ToString();
-        updateStatus?.Invoke("Computing " + tmp + " samples.");
+        updateStatus?.Invoke("Reticulating splines."); //("Computing " + tmp + " samples.");
         sampler.updateProgressBarFunc = uiProgressBarWrapper;
     }
 
@@ -599,7 +599,7 @@ public partial class Entropy
             // We now use a Union() to merge any partially overlapping polys.
             ClipperD c = new()
             {
-                PreserveCollinear = commonVars.getLayerSettings(layer).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0
+                PreserveCollinear = false
             };
             c.AddSubject(layout);
             c.Execute(ClipType.Union, FillRule.NonZero, layout);

@@ -459,7 +459,7 @@ public class Headless
                 // Loaded fine.
                 Console.WriteLine("OK");
                 commonVars.projectFileName = varianceContext.xmlFileArg;
-                string csvFile = varianceContext.xmlFileArg.Substring(0, varianceContext.xmlFileArg.Length - 3) + "csv";
+                string csvFile = varianceContext.xmlFileArg.Substring(0, varianceContext.xmlFileArg.Length - tokens[^1].Length) + "csv";
                 Console.WriteLine("Results will be written to: " + csvFile);
                 Console.WriteLine("Initializing settings for simulation");
                 try

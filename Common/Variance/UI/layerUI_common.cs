@@ -259,6 +259,10 @@ public partial class MainForm
         cB_layer_LWRPreview.CheckedChanged += twoDLayerEventHandler_exp;
 
         num_sidebias.LostFocus += twoDLayerEventHandler_exp;
+        num_unidirectionalbias.LostFocus += twoDLayerEventHandler_exp;
+        rB_unidirectional_x.CheckedChanged += twoDLayerEventHandler_exp;
+        rB_unidirectional_y.CheckedChanged += twoDLayerEventHandler_exp;
+        cb_unidirectionalbias_after_rotation.CheckedChanged += twoDLayerEventHandler_exp;
 
         num_lithoCDUTips.LostFocus += twoDLayerEventHandler_exp;
         num_lithoCDUSide.LostFocus += twoDLayerEventHandler_exp;
@@ -297,7 +301,6 @@ public partial class MainForm
         comboBox_lDList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_structureList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_polyFill_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
-        cB_geoCore_shapeEngine.CheckedChanged += twoDLayerEventHandler_exp;
         cB_geoCore_shapeEngine_perPoly.CheckedChanged += twoDLayerEventHandler_exp;
         comboBox_tipLocations_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         cB_geoCore_layoutReference.CheckedChanged += twoDLayerEventHandler_exp;
@@ -359,61 +362,40 @@ public partial class MainForm
 
             listBox_layers.SelectedIndex = selectedLayer;
 
-            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE &&
-                !(bool)cB_geoCore_shapeEngine.Checked!)
+            cB_FlipH.Enabled = true;
+            cB_FlipV.Enabled = true;
+
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 0);
+            if ((bool)cB_FlipH.Checked!)
             {
-                cB_FlipH.Checked = false;
-                cB_FlipV.Checked = false;
-                cB_alignGeometryX.Checked = false;
-                cB_alignGeometryY.Checked = false;
-
-                cB_FlipH.Enabled = false;
-                cB_FlipV.Enabled = false;
-                cB_alignGeometryX.Enabled = false;
-                cB_alignGeometryY.Enabled = false;
-
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 0);
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 0);
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignX, 0);
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignY, 0);
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 1);
             }
-            else
+
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 0);
+            if ((bool)cB_FlipV.Checked!)
             {
-                cB_FlipH.Enabled = true;
-                cB_FlipV.Enabled = true;
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 1);
+            }
 
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 0);
-                if ((bool)cB_FlipH.Checked!)
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignX, 0);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignY, 0);
+            cB_alignGeometryX.Enabled = false;
+            cB_alignGeometryY.Enabled = false;
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1)
+            {
+                cB_alignGeometryX.Enabled = true;
+                if (cB_alignGeometryX.Checked == true)
                 {
-                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 1);
+                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignX, 1);
                 }
+            }
 
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 0);
-                if ((bool)cB_FlipV.Checked!)
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
+            {
+                cB_alignGeometryY.Enabled = true;
+                if (cB_alignGeometryY.Checked == true)
                 {
-                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 1);
-                }
-
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignX, 0);
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignY, 0);
-                cB_alignGeometryX.Enabled = false;
-                cB_alignGeometryY.Enabled = false;
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipH) == 1)
-                {
-                    cB_alignGeometryX.Enabled = true;
-                    if (cB_alignGeometryX.Checked == true)
-                    {
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignX, 1);
-                    }
-                }
-
-                if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
-                {
-                    cB_alignGeometryY.Enabled = true;
-                    if (cB_alignGeometryY.Checked == true)
-                    {
-                        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignY, 1);
-                    }
+                    commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.alignY, 1);
                 }
             }
 
@@ -509,16 +491,7 @@ public partial class MainForm
                 defaultPointArray[0] = new (0, 0);
                 commonVars.getLayerSettings(settingsIndex).setFileData(new () { defaultPointArray });
             }
-
-            if ((bool)cB_geoCore_shapeEngine.Checked!)
-            {
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.gCSEngine, 1);
-            }
-            else
-            {
-                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.gCSEngine, 0);
-            }
-
+            
             if ((bool)cB_geoCore_shapeEngine_perPoly.Checked!)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.perPoly, 1);
@@ -677,6 +650,9 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.rot, Convert.ToDecimal(num_rotation.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.wobble, Convert.ToDecimal(num_lithoWobble.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.sBias, Convert.ToDecimal(num_sidebias.Value));
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.uniBias, Convert.ToDecimal(num_unidirectionalbias.Value));
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.uniBiasAxis, rB_unidirectional_x.Checked ? 0 : 1 );
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation, (bool)cb_unidirectionalbias_after_rotation.Checked ? 1 : 0 );
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.hTBias, Convert.ToDecimal(num_hTipbias.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.hTPVar, Convert.ToDecimal(num_hTipPVar.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.hTNVar, Convert.ToDecimal(num_hTipNVar.Value));
@@ -926,7 +902,7 @@ public partial class MainForm
 
     private void do2DLayerUI_geoCore(int settingsIndex)
     {
-        if (varianceContext.vc.geoCoreCDVariation || commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
+        if (varianceContext.vc.geoCoreCDVariation)
         {
             gB_CDUCorrelation.Enabled = true; // CDU variation permitted.
             gB_TipCDUCorrelation.Enabled = true;
@@ -957,68 +933,14 @@ public partial class MainForm
         comboBox_posSubShape.SelectedIndex = (int)ShapeSettings.subShapeLocations.BL;
         comboBox_subShapeRef.Enabled = false;
         comboBox_posSubShape.Enabled = false;
-
-        if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)
-        {
-            comboBox_tipLocations_geoCore.Enabled = false;
-            // Disable other features. Assuming PV bands are being used.
-            num_hTipbias.Enabled = false;
-            num_vTipbias.Enabled = false;
-            num_hTipNVar.Enabled = false;
-            num_hTipPVar.Enabled = false;
-            num_vTipNVar.Enabled = false;
-            num_vTipPVar.Enabled = false;
-
-            num_lithoICRR.Enabled = false;
-            num_lithoICV.Enabled = false;
-            num_lithoCDUSide.Enabled = commonVars.getGCCDV();
-            gB_CDUCorrelation.Enabled = commonVars.getGCCDV();
-            num_lithoCDUTips.Enabled = false;
-            gB_TipCDUCorrelation.Enabled = false;
-            num_lithoOCRR.Enabled = false;
-            num_lithoOCV.Enabled = false;
-            num_rotation.Enabled = false;
-            num_lithoWobble.Enabled = false;
-        }
-
+        
         // Fix subshape menu to meet our needs:
         commonVars.subshapes[settingsIndex].Clear();
         commonVars.subshapes[settingsIndex].Add("1");
         comboBox_subShapeRef.SelectedIndex = 0;
         comboBox_posSubShape.SelectedIndex = (int)ShapeSettings.subShapeLocations.BL;
-
-        if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 0)
-        {
-            // Force all values for unsupported properties to 0. Simplifies runtime code.
-            num_lithoICRR.Value = 0.0;
-            num_lithoICV.Value = 0.0;
-            num_lithoOCRR.Value = 0.0;
-            num_lithoOCV.Value = 0.0;
-            if (!commonVars.getGCCDV())
-            {
-                num_lithoCDUSide.Value = 0.0;
-            }
-            num_lithoCDUTips.Value = 0.0;
-            num_hTipbias.Value = 0.0;
-            num_hTipNVar.Value = 0.0;
-            num_hTipPVar.Value = 0.0;
-            num_vTipbias.Value = 0.0;
-            num_vTipNVar.Value = 0.0;
-            num_vTipPVar.Value = 0.0;
-            num_rotation.Value = 0.0;
-            num_lithoWobble.Value = 0.0;
-            num_subshape_ho.Value = 0.0;
-            num_subshape2_ho.Value = 0.0;
-            num_subshape3_ho.Value = 0.0;
-            num_subshape_vo.Value = 0.0;
-            num_subshape2_vo.Value = 0.0;
-            num_subshape3_vo.Value = 0.0;
-        }
-
-        if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.gCSEngine) == 1)
-        {
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape0Tip, comboBox_tipLocations_geoCore.SelectedIndex);
-        }
+        
+        commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape0Tip, comboBox_tipLocations_geoCore.SelectedIndex);
 
         // Force update of comboboxes
         if (!commonVars.getGeoCoreHandler(settingsIndex).isValid())

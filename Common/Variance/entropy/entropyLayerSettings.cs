@@ -65,6 +65,10 @@ public class EntropyLayerSettings : ShapeSettings
 
     private static int default_removeArtifacts = 0;
     private static int default_removeArtifactsEpsilon = 100;
+
+    private static decimal default_uniBias = 0;
+    private static int default_uniBiasAxis = 0;
+    private static int default_uniBiasAfterRotation = 0;
     
     [NonSerialized] private int[] bgLayers;
 
@@ -232,16 +236,19 @@ public class EntropyLayerSettings : ShapeSettings
     private int booleanLayerOpAB;
     private int removeArtifacts;
     private int removeArtifactsEpsilon;
+    private int uniBiasAxis;
+    private int uniBiasAfterRotation;
     
     public new enum properties_i
     {
-        enabled, omit, gCSEngine, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, proxSideRaysFallOff, edgeSlide, 
+        enabled, omit, showDrawn, shapeIndex, shape0Tip, shape1Tip, shape2Tip, subShapeIndex, posIndex, proxRays, proxSideRaysFallOff, edgeSlide, 
         lwrType, lwr2Type, lwrPreview, lwr_corr, lwr_corr_ref, lwr2_corr, lwr2_corr_ref,
         xOL_corr, xOL_corr_ref, yOL_corr, yOL_corr_ref, CDU_corr, CDU_corr_ref, tCDU_corr, tCDU_corr_ref,
         xOL_ref, yOL_ref, xOL_av, yOL_av,
         flipH, flipV, alignX, alignY, structure, lD, fill, fileType, perPoly, refLayout,
         bLayerA, bLayerB, bLayerOpA, bLayerOpB, bLayerOpAB,
-        removeArtifacts, removeArtifactsEpsilon
+        removeArtifacts, removeArtifactsEpsilon,
+        uniBiasAxis, uniBiasAfterRotation
     }
 
     public int getInt(properties_i p)
@@ -259,9 +266,6 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.shapeIndex:
                 ret = getInt(ShapeSettings.properties_i.shapeIndex);
-                break;
-            case properties_i.gCSEngine:
-                ret = getInt(ShapeSettings.properties_i.gCSEngine);
                 break;
             case properties_i.shape0Tip:
                 ret = getInt(ShapeSettings.properties_i.subShapeTipLocIndex);
@@ -401,6 +405,12 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.removeArtifactsEpsilon:
                 ret = removeArtifactsEpsilon;
                 break;
+            case properties_i.uniBiasAxis:
+                ret = uniBiasAxis;
+                break;
+            case properties_i.uniBiasAfterRotation:
+                ret = uniBiasAfterRotation;
+                break;
         }
 
         return ret;
@@ -420,9 +430,6 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.shapeIndex:
                 setInt(ShapeSettings.properties_i.shapeIndex, val);
-                break;
-            case properties_i.gCSEngine:
-                setInt(ShapeSettings.properties_i.gCSEngine, val);
                 break;
             case properties_i.shape0Tip:
                 setInt(ShapeSettings.properties_i.subShapeTipLocIndex, val);
@@ -562,6 +569,12 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.removeArtifactsEpsilon:
                 removeArtifactsEpsilon = val;
                 break;
+            case properties_i.uniBiasAxis:
+                uniBiasAxis = val;
+                break;
+            case properties_i.uniBiasAfterRotation:
+                uniBiasAfterRotation = val;
+                break;
         }
     }
 
@@ -579,9 +592,6 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.shapeIndex:
                 defaultInt(ShapeSettings.properties_i.shapeIndex);
-                break;
-            case properties_i.gCSEngine:
-                defaultInt(ShapeSettings.properties_i.gCSEngine);
                 break;
             case properties_i.shape0Tip:
                 defaultInt(ShapeSettings.properties_i.subShapeTipLocIndex);
@@ -721,6 +731,12 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.removeArtifactsEpsilon:
                 removeArtifactsEpsilon = default_removeArtifactsEpsilon;
                 break;
+            case properties_i.uniBiasAxis:
+                uniBiasAxis = default_uniBiasAxis;
+                break;
+            case properties_i.uniBiasAfterRotation:
+                uniBiasAfterRotation = default_uniBiasAfterRotation;
+                break;
         }
     }
 
@@ -739,9 +755,6 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.shapeIndex:
                 ret = getDefaultInt(ShapeSettings.properties_i.shapeIndex);
-                break;
-            case properties_i.gCSEngine:
-                ret = getDefaultInt(ShapeSettings.properties_i.gCSEngine);
                 break;
             case properties_i.shape0Tip:
                 ret = getDefaultInt(ShapeSettings.properties_i.subShapeTipLocIndex);
@@ -874,6 +887,12 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.removeArtifactsEpsilon:
                 ret = default_removeArtifactsEpsilon;
+                break;
+            case properties_i.uniBiasAxis:
+                ret = default_uniBiasAxis;
+                break;
+            case properties_i.uniBiasAfterRotation:
+                ret = default_uniBiasAfterRotation;
                 break;
         }
 
@@ -1154,6 +1173,7 @@ public class EntropyLayerSettings : ShapeSettings
     }
 
     private decimal wobble;
+    private decimal totalRotation;
     private decimal lensDistortionCoeff1;
     private decimal lensDistortionCoeff2;
     private decimal innerCV;
@@ -1163,11 +1183,13 @@ public class EntropyLayerSettings : ShapeSettings
     private decimal horOverlay;
     private decimal verOverlay;
 
+    private decimal uniBias;
+
     public new enum properties_decimal
     {
         horLength, verLength, horOffset, verOffset,
         gHorOffset, gVerOffset,
-        rot, wobble,
+        rot, wobble, totalRotation,
         sBias, hTBias, hTNVar, hTPVar, vTBias, vTNVar, vTPVar,
         pBias, pBiasDist,
         lDC1, lDC2,
@@ -1178,6 +1200,7 @@ public class EntropyLayerSettings : ShapeSettings
         xOL, yOL,
         proxSideRaysMultiplier,
         rayExtension, keyhole_factor,
+        uniBias
     }
 
     public decimal getDecimal(properties_decimal p, int _subShapeRef = -1)
@@ -1271,6 +1294,9 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_decimal.wobble:
                 ret = wobble;
                 break;
+            case properties_decimal.totalRotation:
+                ret = totalRotation;
+                break;
             case properties_decimal.lDC1:
                 ret = lensDistortionCoeff1;
                 break;
@@ -1294,6 +1320,9 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.yOL:
                 ret = verOverlay;
+                break;
+            case properties_decimal.uniBias:
+                ret = uniBias;
                 break;
         }
 
@@ -1367,6 +1396,7 @@ public class EntropyLayerSettings : ShapeSettings
                 ret = getDefaultDecimal(ShapeSettings.properties_decimal.eTension);
                 break;
             case properties_decimal.rot:
+            case properties_decimal.totalRotation:
                 ret = getDefaultDecimal(ShapeSettings.properties_decimal.rot);
                 break;
             case properties_decimal.pBias:
@@ -1410,6 +1440,9 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.yOL:
                 ret = default_verOverlay;
+                break;
+            case properties_decimal.uniBias:
+                ret = 0;
                 break;
         }
 
@@ -1488,6 +1521,9 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_decimal.rot:
                 setDecimal(ShapeSettings.properties_decimal.rot, val);
                 break;
+            case properties_decimal.totalRotation:
+                totalRotation = val;
+                break;
             case properties_decimal.pBias:
                 setDecimal(ShapeSettings.properties_decimal.pBias, val);
                 break;
@@ -1529,6 +1565,9 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.yOL:
                 verOverlay = val;
+                break;
+            case properties_decimal.uniBias:
+                uniBias = val;
                 break;
         }
     }
@@ -1605,6 +1644,9 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_decimal.rot:
                 defaultDecimal(ShapeSettings.properties_decimal.rot);
                 break;
+            case properties_decimal.totalRotation:
+                defaultDecimal(properties_decimal.totalRotation);
+                break;
             case properties_decimal.pBias:
                 defaultDecimal(ShapeSettings.properties_decimal.pBias);
                 break;
@@ -1646,6 +1688,9 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.yOL:
                 verOverlay = default_verOverlay;
+                break;
+            case properties_decimal.uniBias:
+                uniBias = 0;
                 break;
         }
     }
@@ -1715,6 +1760,7 @@ public class EntropyLayerSettings : ShapeSettings
         
         wobble = default_wobble;
         wobble_RNGMapping = default_rngmapping;
+        totalRotation = default_rotation;
         horTipBiasNVar_RNGMapping = default_rngmapping;
         horTipBiasPVar_RNGMapping = default_rngmapping;
         verTipBiasNVar_RNGMapping = default_rngmapping;
@@ -1743,6 +1789,10 @@ public class EntropyLayerSettings : ShapeSettings
         sideCDU_RNGMapping = default_rngmapping;
         tipsCDU = default_tipsCDU;
         tipsCDU_RNGMapping = default_rngmapping;
+
+        uniBias = default_uniBias;
+        uniBiasAxis = default_uniBiasAxis;
+        uniBiasAfterRotation = default_uniBiasAfterRotation;
 
         fileType = default_fileType;
         fileData = default_fileData;
@@ -1797,7 +1847,6 @@ public class EntropyLayerSettings : ShapeSettings
         comment = source.comment;
         bgLayers = source.bgLayers.ToArray();
         setInt(ShapeSettings.properties_i.enabled, source.getInt(ShapeSettings.properties_i.enabled));
-        setInt(ShapeSettings.properties_i.gCSEngine, source.getInt(ShapeSettings.properties_i.gCSEngine));
         setInt(ShapeSettings.properties_i.shapeIndex, source.getInt(ShapeSettings.properties_i.shapeIndex));
         showDrawn = source.showDrawn;
 
@@ -1825,7 +1874,11 @@ public class EntropyLayerSettings : ShapeSettings
             setDecimal(ShapeSettings.properties_decimal.rot, source.getDecimal(ShapeSettings.properties_decimal.rot));
             wobble = source.wobble;
             wobble_RNGMapping = source.wobble_RNGMapping;
+            totalRotation = source.totalRotation;
             setDecimal(ShapeSettings.properties_decimal.sBias, source.getDecimal(ShapeSettings.properties_decimal.sBias));
+            uniBias = source.uniBias;
+            uniBiasAxis = source.uniBiasAxis;
+            uniBiasAfterRotation = source.uniBiasAfterRotation;
 
             setDecimal(ShapeSettings.properties_decimal.hTBias, source.getDecimal(ShapeSettings.properties_decimal.hTBias));
             setDecimal(ShapeSettings.properties_decimal.hTNVar, source.getDecimal(ShapeSettings.properties_decimal.hTNVar));
@@ -1845,7 +1898,7 @@ public class EntropyLayerSettings : ShapeSettings
             setInt(ShapeSettings.properties_i.proxRays, source.getInt(ShapeSettings.properties_i.proxRays));
             setInt(ShapeSettings.properties_i.proxSideRaysFallOff, source.getInt(ShapeSettings.properties_i.proxSideRaysFallOff));
             setDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier, source.getDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier));
-
+            
             setDecimal(ShapeSettings.properties_decimal.iCR, source.getDecimal(ShapeSettings.properties_decimal.iCR));
             innerCV = source.innerCV;
             innerCV_RNGMapping = source.innerCV_RNGMapping;

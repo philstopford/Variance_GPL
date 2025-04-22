@@ -33,9 +33,11 @@ public partial class MainForm
                 if (sfd.ShowDialog(ParentWindow) == DialogResult.Ok)
                 {
                     filename = sfd.FileName;
+                    sfd.Dispose();
                 }
                 else
                 {
+                    sfd.Dispose();
                     saveEnabler();
                     return;
                 }
@@ -151,14 +153,14 @@ public partial class MainForm
                 new FileFilter("XML Files (*.xml)", ".xml")
             }
         };
-        if (ofd.ShowDialog(ParentWindow) != DialogResult.Ok)
+        if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
         {
-            return;
+            pNew(false);
+            doLoad(ofd.FileName);
+            commonVars.setHashes();
         }
 
-        pNew(false);
-        doLoad(ofd.FileName);
-        commonVars.setHashes();
+        ofd.Dispose();
     }
 
     private void revertHandler(object sender, EventArgs e)
@@ -305,13 +307,13 @@ public partial class MainForm
             Title = "Please choose location of DOE results to summarize"
         };
         // Need to request output file location and name.
-        if (ofd.ShowDialog(ParentWindow) != DialogResult.Ok)
+        if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
         {
-            return;
+            updateStatusLine("Generating summary file(s)");
+            updateStatusLine(UtilityFuncs.summarizeDOEResults(ofd.Directory, Directory.GetFiles(ofd.Directory, "*_summary.txt")));
         }
 
-        updateStatusLine("Generating summary file(s)");
-        updateStatusLine(UtilityFuncs.summarizeDOEResults(ofd.Directory, Directory.GetFiles(ofd.Directory, "*_summary.txt")));
+        ofd.Dispose();
     }
 
     private async void geoFileChooser_Handler_exp(object sender, EventArgs e)
@@ -439,6 +441,8 @@ public partial class MainForm
             });
         }
 
+        ofd.Dispose();
+
         await Application.Instance.InvokeAsync(() =>
         {
             stopIndeterminateProgress();
@@ -526,6 +530,7 @@ public partial class MainForm
                 commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.uTileList, 0);
             }
         }
+        ofd.Dispose();
     }
 
     private void QuiltFileChooser_Handler(object sender, EventArgs e)
@@ -582,6 +587,7 @@ public partial class MainForm
                 commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.uTileList, 0);
             }
         }
+        ofd.Dispose();
     }
 
     private void geoCoreLoadingUI(bool status)
