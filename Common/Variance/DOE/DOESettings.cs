@@ -7,20 +7,20 @@ namespace Variance;
 [Serializable]
 public class DOESettings
 {
-    public static string default_comment = "";
-    public static double default_colOffset = 0;
-    public static double default_rowOffset = 0;
-    public static int[] default_layersAffected = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    public static double default_colPitch = 0;
-    public static double default_rowPitch = 0;
-    public static int default_cols = 1;
-    public static int default_rows = 1;
-    public static int default_specificTile = 0;
-    public static int default_specificTile_Row = 0;
-    public static int default_specificTile_Col = 0;
-    public static int default_listOfTiles = 0;
-    public static List<int[]> default_tileList_ColRow = new() { new [] { 0, 0 } };
-    public static string default_trList = "";
+    public const string default_comment = "";
+    public const double default_colOffset = 0;
+    public const double default_rowOffset = 0;
+    public static readonly int[] default_layersAffected = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    public const double default_colPitch = 0;
+    public const double default_rowPitch = 0;
+    public const int default_cols = 1;
+    public const int default_rows = 1;
+    public const int default_specificTile = 0;
+    public const int default_specificTile_Row = 0;
+    public const int default_specificTile_Col = 0;
+    public const int default_listOfTiles = 0;
+    public static readonly List<int[]> default_tileList_ColRow = [new[] { 0, 0 }];
+    public const string default_trList = "";
 
     public enum properties_d { colOffset, rowOffset, colPitch, rowPitch }
 
@@ -35,23 +35,14 @@ public class DOESettings
 
     private double pGetDouble(properties_d p)
     {
-        double ret = 0;
-
-        switch (p)
+        double ret = p switch
         {
-            case properties_d.colOffset:
-                ret = colOffset;
-                break;
-            case properties_d.rowOffset:
-                ret = rowOffset;
-                break;
-            case properties_d.colPitch:
-                ret = colPitch;
-                break;
-            case properties_d.rowPitch:
-                ret = rowPitch;
-                break;
-        }
+            properties_d.colOffset => colOffset,
+            properties_d.rowOffset => rowOffset,
+            properties_d.colPitch => colPitch,
+            properties_d.rowPitch => rowPitch,
+            _ => 0
+        };
 
         return ret;
     }
@@ -96,29 +87,16 @@ public class DOESettings
 
     private int pGetInt(properties_i p)
     {
-        int ret = 0;
-
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.cols:
-                ret = cols;
-                break;
-            case properties_i.rows:
-                ret = rows;
-                break;
-            case properties_i.sTile:
-                ret = specificTile;
-                break;
-            case properties_i.sTileCol:
-                ret = specificTile_Col;
-                break;
-            case properties_i.sTileRow:
-                ret = specificTile_Row;
-                break;
-            case properties_i.uTileList:
-                ret = listOfTiles;
-                break;
-        }
+            properties_i.cols => cols,
+            properties_i.rows => rows,
+            properties_i.sTile => specificTile,
+            properties_i.sTileCol => specificTile_Col,
+            properties_i.sTileRow => specificTile_Row,
+            properties_i.uTileList => listOfTiles,
+            _ => 0
+        };
 
         return ret;
     }
@@ -204,7 +182,7 @@ public class DOESettings
 
     private void pResetTileList_ColRow()
     {
-        tileList_ColRow = new List<int[]>();
+        tileList_ColRow = [];
     }
 
     public List<int[]> getTileList_ColRow()
@@ -269,16 +247,12 @@ public class DOESettings
 
     private bool pGetBool(properties_b p)
     {
-        bool ret = false;
-        switch (p)
+        bool ret = p switch
         {
-            case properties_b.iDRM:
-                ret = iDRMRunConfigured;
-                break;
-            case properties_b.quilt:
-                ret = OPCRunConfigured;
-                break;
-        }
+            properties_b.iDRM => iDRMRunConfigured,
+            properties_b.quilt => OPCRunConfigured,
+            _ => false
+        };
         return ret;
     }
 
@@ -312,16 +286,12 @@ public class DOESettings
 
     private string pGetString(properties_s p)
     {
-        string ret = "";
-        switch (p)
+        string ret = p switch
         {
-            case properties_s.comment:
-                ret = comment;
-                break;
-            case properties_s.list:
-                ret = trList;
-                break;
-        }
+            properties_s.comment => comment,
+            properties_s.list => trList,
+            _ => ""
+        };
         return ret;
     }
 

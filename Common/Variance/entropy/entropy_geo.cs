@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,17 +21,14 @@ namespace Variance;
 public partial class Entropy
 {
     public delegate void updateSimUI(bool doPASearch, SimResultPackage resultPackage, string resultString);
-    public updateSimUI updateSimUIFunc { get; set; }
+    public updateSimUI? updateSimUIFunc { get; set; }
 
     public delegate void updateSimUIMT();
-    public updateSimUIMT updateSimUIMTFunc { get; set; }
+    public updateSimUIMT? updateSimUIMTFunc { get; set; }
 
     public delegate void updateProgressBar(double val);
-    public updateProgressBar updateProgressBarFunc { get; set; }
-
-    public delegate bool tooManyPolysWarning();
-    public tooManyPolysWarning tooManyPolysWarningFunc { get; set; }
-
+    public updateProgressBar? updateProgressBarFunc { get; set; }
+    
     private SimResultPackage resultPackage;
 
     public SimResultPackage getResultPackage()
@@ -79,7 +77,6 @@ public partial class Entropy
     private void setSampler(int numberOfCases, bool previewMode, bool doPASearch)
     {
         sampler = new Sampler_Geo(numberOfCases, previewMode, doPASearch, ref commonVars);
-        string tmp = commonVars.getFriendly() ? Utils.friendlyNumber(sampler.getDimensions() * CentralProperties.maxLayersForMC * numberOfCases) : (sampler.getDimensions() * CentralProperties.maxLayersForMC * numberOfCases).ToString();
         updateStatus?.Invoke("Reticulating splines."); //("Computing " + tmp + " samples.");
         sampler.updateProgressBarFunc = uiProgressBarWrapper;
     }
@@ -103,16 +100,13 @@ public partial class Entropy
         const int sampleRate = 100;
 
         // Set up our cleavedResults based on the max number of results we expect:
-        int numberOfResultsFields;
-        switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
-        {
-            case (int)geoAnalysis.Supported.calcModes.chord: // chord
-                numberOfResultsFields = 4;
-                break;
-            default: // area, angle, spacing
-                numberOfResultsFields = 1;
-                break;
-        }
+        int numberOfResultsFields =
+            commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) switch
+            {
+                (int)geoAnalysis.Supported.calcModes.chord => // chord
+                    4,
+                _ => 1
+            };
 
         resultPackage = doPASearch ? new SimResultPackage(ref varianceContext.previewLock, commonVars.getPASearch().numberofPassCases, numberOfResultsFields) : new SimResultPackage(ref varianceContext.previewLock, numberOfCases, numberOfResultsFields);
 
@@ -183,8 +177,8 @@ public partial class Entropy
                         currentProgress++;
                         stepProgress?.Invoke();
                     }
-                    resultPackage.Add(currentResult, generateExternal);
-                    if (doPASearch && resultPackage.getListOfResults().Count == commonVars.getPASearch().numberofPassCases)
+                    resultPackage.Add(i, currentResult, generateExternal);
+                    if (doPASearch && resultPackage.results_count == commonVars.getPASearch().numberofPassCases)
                     {
                         break;
                     }
@@ -200,7 +194,7 @@ public partial class Entropy
                     int index = i;
                     if (doPASearch)
                     {
-                        index = resultPackage.getListOfResults().Count - 1;
+                        index = resultPackage.results_count - 1;
                     }
                     // Update the preview configuration.
                     if (resultPackage.getResult(index).isValid())
@@ -290,16 +284,13 @@ public partial class Entropy
         sw.Start();
 
         // Set up our cleavedResults based on the max number of results we expect:
-        int numberOfResultsFields;
-        switch (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType))
-        {
-            case (int)geoAnalysis.Supported.calcModes.chord: // chord
-                numberOfResultsFields = 4;
-                break;
-            default: // area, angle, spacing
-                numberOfResultsFields = 1;
-                break;
-        }
+        int numberOfResultsFields =
+            commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) switch
+            {
+                (int)geoAnalysis.Supported.calcModes.chord => // chord
+                    4,
+                _ => 1
+            };
 
         if (doPASearch)
         {
@@ -497,23 +488,23 @@ public partial class Entropy
                                     }
                                 }
                                 // resultPackage has its own locking.
-                                resultPackage.Add(currentResult, 0); // disable retention of geometry given new write-during-run methodology.
+                                resultPackage.Add(currentProgress, currentResult, 0); // disable retention of geometry given new write-during-run methodology.
+                                Interlocked.Increment(ref currentProgress);
+                                if (doPASearch)
+                                {
+                                    if (resultPackage.results_count >= commonVars.getPASearch().numberofPassCases)
+                                    {
+                                        loopState.Stop();
+                                    }
+                                }
                             }
-                            catch (Exception)
+                            catch (Exception e1)
                             {
+                                int xx = 2;
                             }
 
                         }
-
-                        if (!doPASearch || doPASearch && addResultToPackage)
-                        {
-                            Interlocked.Increment(ref currentProgress);
-                            if (doPASearch && Equals(resultPackage.getListOfResults().Count, commonVars.getPASearch().numberofPassCases))
-                            {
-                                loopState.Stop();
-                            }
-                        }
-
+ 
                         forceRepaintFunc?.Invoke();
 
                         abortRunFuncMT?.Invoke(resultPackage, cancelSource, cancellationToken);
@@ -558,7 +549,7 @@ public partial class Entropy
         double tileXSize = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch);
         double tileYOffset = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset);
         double tileYSize = commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch);
-        PathD tileCutter = new();
+        PathD tileCutter = [];
         double tileLeftX = (tileXOffset + col * tileXSize);
         double tileRightX = (tileLeftX + tileXSize);
         double tileBottomY = (tileYOffset + row * tileYSize);
@@ -571,14 +562,14 @@ public partial class Entropy
 
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
-            List<string> polyHashCodes = new();
+            List<string> polyHashCodes = [];
             if (commonVars.getSimulationSettings().getDOESettings().getLayerAffected(layer) != 1)
             {
                 continue;
             }
 
             // Get our layout for clipping.
-            PathsD layout = new(); // Use Paths since we have polygon islands to wrangle.
+            PathsD layout = []; // Use Paths since we have polygon islands to wrangle.
             // fileData contains all of our polygons
             for (int poly = 0; poly < commonVars.getLayerSettings(layer).getFileData().Count; poly++)
             {
@@ -592,7 +583,7 @@ public partial class Entropy
                 // Hash not found - assuming unique polygon. This is done to avoid impact of copy/paste fails in layout where
                 // totally coincident duplicate polygons cause the extracted tile to be empty.
                 // This avoids full overlaps causing complications in the Union used below to resolve partial overlaps.
-                layout.Add(new (polyPath));
+                layout.Add(new PathD(polyPath));
                 polyHashCodes.Add(polyHash);
             }
 
@@ -608,15 +599,13 @@ public partial class Entropy
             c.Clear();
             c.AddClip(tileCutter);
             c.AddSubject(layout);
-            PathsD result = new();
+            PathsD result = [];
             c.Execute(ClipType.Intersection, FillRule.EvenOdd, result);
 
             // Need to map output and downscale to floating points again.
             // We might have more than one polygon in the result, so be careful.
-            double xCompensation = tileLeftX;
-            double yCompensation = tileBottomY;
 
-            PathsD extractedPolys = new (GeoWrangler.move(result, -xCompensation, -yCompensation));
+            PathsD extractedPolys = new (GeoWrangler.move(result, -tileLeftX, -tileBottomY));
 
             commonVars.getNonSimulationSettings().extractedTile[layer] = extractedPolys;
         }
@@ -675,7 +664,7 @@ public partial class Entropy
                     // We have minutes
                     statusLineString += cT.Minutes + " m";
                 }
-                if (!(cT.Minutes < 1 && cT.Hours < 1))
+                if (cT is not { Minutes: < 1, Hours: < 1 })
                 {
                     statusLineString += ", ";
                 }
@@ -712,7 +701,7 @@ public partial class Entropy
         csvFileName += ".csv";
 
         bool returnValue = false;
-        int doneCases = resultPackage.getListOfResults().Count;
+        int doneCases = resultPackage.results_count;
         int rows = doneCases + 4;
         string[] stringList = new string[rows];
 
@@ -862,8 +851,7 @@ public partial class Entropy
 
             File.WriteAllLines(csvFileName, stringList);
 
-            string tmp;
-            tmp = commonVars.getFriendly() ? Utils.friendlyNumber(counter) : counter.ToString();
+            var tmp = commonVars.getFriendly() ? Utils.friendlyNumber(counter) : counter.ToString();
             statusLine = tmp + " results saved to CSV file";
         }
 
@@ -971,7 +959,7 @@ public partial class Entropy
         gcell_root.modsec = (short)DateTime.Now.Second;
         gcell_root.cellName = "result" + resultEntry;
 
-        List<int> layers = new();
+        List<int> layers = [];
         // Input shapes.
         for (int previewShapeIndex = 0; previewShapeIndex < currentResult.getPreviewShapes().Count; previewShapeIndex++)
         {
@@ -1042,14 +1030,12 @@ public partial class Entropy
         // This was simplier before, but now user can avoid CSV creation and will instead select the summary output filename (txt)
         string summaryFile_ = internalFileName + "_summary.txt";
         string csvFileName = internalFileName + ".csv";
-        List<string> linesToWrite = new()
-        {
-            // Write the results first.
-            // Results first
+        List<string> linesToWrite =
+        [
             commonVars.titleText,
             "Results summary for job: " + csvFileName + " run on : " + DateTime.Today.ToLocalTime().ToLongDateString() +
             ". Runtime: " + resultPackage.runTime.ToString("0.##") + " seconds"
-        };
+        ];
 
         if (Debugger.IsAttached)
         {
@@ -1067,7 +1053,7 @@ public partial class Entropy
             {
                 tempString += " and standard deviation";
             }
-            tempString += " for " + resultPackage.getListOfResults().Count + " cases:";
+            tempString += " for " + resultPackage.results_count + " cases:";
             tempString += " x: " + resultPackage.getValue(SimResultPackage.Properties.mean, resultGroup).ToString("0.##");
             if (!resultPackage.nonGaussianInput)
             {
@@ -1388,7 +1374,7 @@ public partial class Entropy
         }
 
         // Number crunching goes here.
-        List<PreviewShape> simShapes = new();
+        List<PreviewShape> simShapes = [];
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
             // Show our variations - set preview to false
@@ -1417,7 +1403,7 @@ public partial class Entropy
 
         ChaosEngine currentJobEngine = new(commonVars, simShapes, previewMode);
 
-        PathsD listOfPoints = new();
+        PathsD listOfPoints = [];
         if (currentJobEngine.isValid())
         {
             value = currentJobEngine.getResult();
@@ -1439,7 +1425,7 @@ public partial class Entropy
 #endif
                     {
                         // The cast below is important - if this is missing or screwed up, we get clamped to integers and the viewport representation is fouled up.
-                        points[i] = new (currentJobEngine.getPaths()[listMember][i].x,
+                        points[i] = new PointD(currentJobEngine.getPaths()[listMember][i].x,
                             currentJobEngine.getPaths()[listMember][i].y);
                     }
 #if !ENTROPYSINGLETHREADED
@@ -1456,7 +1442,7 @@ public partial class Entropy
         else
         {
             points = Helper.initedPathD(1);
-            points[0] = new (0.0f, 0.0f);
+            points[0] = new PointD(0.0f, 0.0f);
             listOfPoints.Add(points);
         }
 

@@ -1,0 +1,525 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+#menu {
+position: fixed;
+left: 0;
+top: 5em;
+width: 3em;
+margin: -2.5em 0 0 0;
+z-index: 5;
+background: rgba(40, 40, 40, 0.9);
+color: #ccc;
+font-weight: normal;
+font-size: 12px;
+text-align: left;
+border: solid rgba(40, 40, 40, 0.5);
+border-left: none;
+padding: 0.5em 0.5em 0.5em 2.5em;
+box-shadow: 0 1px 3px black;
+/*border-radius: 3em 0.5em 0.5em 3em;*/
+}
+#menu li { margin: 0 }
+#menu a { color: inherit }
+
+/* Make menu absolute, not fixed, on IE 5 & 6 */
+#menu { position: absolute }
+*>#menu { position: fixed }
+
+</style>
+</head>
+
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<blockquote>
+	<a name="releases"></a>
+	<h1 class="western">Variance Release History</h1>
+  <ul id=menu>
+    <li><a href="#releases_260">2.6</a>
+    <li><a href="#releases_250">2.5</a>
+    <li><a href="#releases_240">2.4</a>
+    <li><a href="#releases_230">2.3</a>
+    <li><a href="#releases_220">2.2</a>
+    <li><a href="#releases_210">2.1</a>
+    <li><a href="#releases_200">2.0</a>
+  </ul>
+
+	<blockquote>
+	  <a name="releases_260"></a>
+	  <h2 class="western">New to 2.6.1 (May 8 2017)</h2>
+	  <blockquote>
+		<ul>
+		  <li>Number of threads can now be set using '--threads x'.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <h2 class="western">New to 2.6 (Mar 26 2017)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.6_edgeslide.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/_blank.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.6_multipoly_flipValign.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.6_multipoly_rotation.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Viewports support 'zoom extents'.</li>
+		  <li>DOE viewport offers entry to go to bottom-left corner of grid.</li>
+		  <li>Optimized viewport resets.</li>
+		  <li>Convergence reporting for results.</li>
+		  <li>Chord handler refined to address some edge case failures.</li>
+		  <li>Enable contouring of extracted DOE geometry.</li>
+		  <li>geoCore and geoLib enhancements.</li>
+		  <li>Performance work:</li>
+		  <ul>
+		    <li>Single-threaded 2x performance gain from sampled updates of the GUI (100 cases per update).</li>
+		    <li>Enormous performance gains in multi-threaded (4-10x speedup) due to garbage collection change (server mode).</li>
+		    <li>Smaller gains (1-5%) following some code optimizations.</li>
+		  </ul>
+		  <li>Flip and rotate enhancements for polygon sheets, to flip and rotate around centre point.</li>
+		  <li>Edge midpoint slide based on sigmoid function for previous/next edge length ratio.</li>
+		  <li>ClipperLib upgraded to current version, with patches to address intersection point issues.</li>
+		  <li>Headless updates, including interactive mode.</li>
+		  <li>License system enhancements.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	<a name="releases_250"></a>
+	  <h2 class="western">New to 2.5 (Dec 12 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.5_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.5_overlap.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.5_overlap_raytrace_shortestEdge.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.5_overlap_raytrace.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.5_implant.png" alt=""/>
+		  </td>
+		  <td>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Shape engine enhancements.</li>
+		  <li>Simplified implant calculation inputs.</li>
+		  <li>Switched from angular resolution to segment count for corner definition UI input.</li>
+		  <li>Context menus in viewports.</li>
+		  <ul>
+		  <li>Toggle antialiasing, point display and filled polygons.</li>
+		  <li>Freeze/thaw viewport mouse interaction.</li>
+		  <li>Apply the camera position in one viewport to all others</li>
+		  <li>Bookmark location in a viewport for later use</li>
+		  <li>Rapidly zoom in/out by large amounts (5, 10, 50, 100x)</li>
+		  <li>Retrieve the current viewport zoom level into the UI</li>
+		  </ul>
+		  <li>Ability to freeze/thaw individual viewports through a hotkey (f).</li>
+		  <li>Resolved issue that was clamping subshape inputs to integers</li>
+		  <li>Ability to independently correlate tip and side CDU variations</li>
+		  <li>'Debug' mode (implementation depending on the calculation engine)</li>
+		  <ul>
+			<li>Used by overlap engine to show rays being cast, to aid set-up.</li>
+		  </ul>
+		  <li>LER enhancements.</li>
+		  <ul>
+			<li>Much better algorithm to apply LER to the geometry.</li>
+			<li>Multiple noise sources for noise : Perlin, Simplex</li>
+			<li>Configurable frequency.</li>
+			<li>In-layer preview.</li>
+			<li>Internal changes to overlap handling to utilize averaged normal for raycast.</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_240"></a>
+	  <h2 class="western">New to 2.4 (Oct 23 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.4_implant.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.4_utilities.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Advanced implant shadowing calculation.</li>
+		  <ul>
+			<li>Uses shape engine to contour resist, and tangent extraction to derive shadowing.</li>
+			<li>Monte Carlo engine available for full variation evaluation, as well as fast preview using nominal resist contour.</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_230"></a>
+	  <h2 class="western">New to 2.3 (Sep 06 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.3_filled_geometry.png" alt=""/>
+		  </td>
+		  <td>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.3_gds_contour.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.3_gds_contour_merging.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>UI enhancements</li>
+		  <ul>
+			<li>Viewport can be navigated at any time now.</li>
+			<li>Feedback during long-running preview situations, to avoid impression tool has hung.</li>
+		  </ul>
+		  <li>Allow geoCore to feed the internal shape engine.</li>
+		  <ul>
+			<li>Orthogonal geometry only, processed polygon-wise.</li>
+			<li>Compatible with multiple, arbitrary polygon data.</li>
+			<li>Works with DOE layouts.</li>
+			<li>Overlapping contours are merged.</li>
+		  </ul>
+		  <li>Email password is now stored encrypted.</li>
+		  <li>Performance improvement for zooming with the gadget in layer previews.</li>
+		  <li>Option to fill polygons in viewports.</li>
+		  <li>Intensive bug hunt and fix cycle following significant code disruption in the 2.x cycle so far.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_220"></a>
+	  <h2 class="western">New to 2.2 (Aug 01 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.2_mac.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.2_gtk.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Background polygon opacity in layer viewports.</li>
+		  <li>General UI performance enhancements.</li>
+		  <li>Eto.Forms GUI.</li>
+		  <ul>
+			<li>Full port of GUI to Eto.Forms. Common code across Windows/Mac/Linux now.</li>
+			<ul>
+			  <li>No impact on performance</li>
+			  <li>Windows GUI no longer supports a headless mode (other GUI implementations never offered this). The headless binary remains available.</li>
+			  <li>Preferences from older versions will not be migrated. Preferences are now stored in XML under the user account. Email password is stored plaintext in the file at this time.</li>
+			</ul>
+		  </ul>
+		  <li>Bug fixes:</li>
+		  <ul>
+			<li>Fixed issue with geoCore layers from changes in 2.1.</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_210"></a>
+	  <h2 class="western">New to 2.1 (Jul 08 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.1_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.1_settings.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Enabling more layers (8 instead of 4). This is a major change that brings a lot of new code - it will take time to stabilize.</li>
+		  <li>'Show drawn' support for geoCore geometry.</li>
+		  <li>Optimizations for the preview generation system, building on infrastructure enhancements.</li>
+		  <li>Bug fixes:</li>
+		  <ul>
+			<li>Stability enhancement to the background layer system.</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_200"></a>
+	  <h2 class="western">New to 2.0 (Jun 30 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.0_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/2.0_layer_Sshape.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.0_geocore.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.0_doesettings.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/2.0_utils.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<p class="western" style=" line-height: 100%">2.0 brought major changes to many areas of the application.</p>
+		<ul>
+		  <li>Average overlay implementation (against an arbitrary number of reference layers).</li>
+		  <li>CSV generation now optional.</li>
+		  <li>Interactive improvement: now able to set overlay references</li>
+		  <li>Shape engine enhancements:</li>
+		  <ul>
+			<li>Performance optimizations in overlay calculation and application.</li>
+			<li>Now handles overlapping geometry within the same layer - previously, this was not a supported situation.</li>
+			<ul>
+			  <li>Behavior is configurable. Compatibility with all calculation modes is, however, not guaranteed. Chord identification is problematic with swiss-hole geometry.</li>
+			</ul>
+		  </ul>
+		  <li>Cryptographic RNG source now available. ~10% increase in runtime, but likely to be more evenly distributed than other sources.</li>
+		  <li>Replacement of System.Drawing components (Point, PointF, Rectangle, RectangleF, Matrix) in common libraries due to Mono framework problems</li>
+		  <li>R&amp;D on Eto.Forms UIs that might enable cross-platform GUI</li>
+		  <ul>
+			<li>OpenGL viewports not viable yet on Mac/Linux</li>
+		  </ul>
+		  <li>GeoCore for external geometry</li>
+		  <ul>
+		  <li>Generalized system for external geometry parsing/utilization</li>
+		  <li>Enabled improved GDS handling</li>
+		  <li>Oasis support</li>
+		  </ul>
+		  <li>Layout file-related tweaks.</li>
+		  <ul>
+			<li>Moved DOE registration controls to layer UI</li>
+			<li>'Apply to all' for DOE configuration</li>
+			<li>DOE controls UI reworked</li>
+		  </ul>
+		  <li>S-shape support.</li>
+		  <li>Improved robustness in interactive and GUI.</li>
+		  <ul>
+			<li>Improved UI lockout methodology for invalid value settings based on shape type.</li>
+			<li>Simpler subshape handling in the preview displays</li>
+		  </ul>
+		  <li>Bug fixes:</li>
+		  <ul>
+			<li>Enhancements to the background layer system.</li>
+			<li>DOE summary generation.</li>
+			<li>Preview panel redraw for project loading, etc.</li>
+			<li>Subshape offset calculation and application simplified.</li>
+			<li>Subshape group box now hidden (and internal geometry values reset) when no shape is chosen from the menu.</li>
+			<li>Lingering subshape (2/3) geometry when dropping down to configurations with fewer subshapes - fixed.</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+	font-family: "Calibri", serif;
+	font-size: 10pt;
+  color: #aaaaaa;
+	so-language: en-US
+}
+p.cjk {
+	font-family: "Calibri";
+	font-size: 10pt;
+	so-language: en-US
+}
+p.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h1 {
+	direction: ltr;
+	color: #365f91;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h1.western {
+	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.cjk {
+	font-family: "宋体";
+	font-size: 13pt;
+	so-language: en-US
+}
+h1.ctl {
+font-family:;
+	font-size: 13pt;
+	so-language: ar-SA
+}
+h2 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h2.western {
+	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.cjk {
+	font-family: "宋体";
+	font-size: 12pt;
+	so-language: en-US
+}
+h2.ctl {
+font-family:;
+	font-size: 12pt;
+	so-language: ar-SA
+}
+h3 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h3.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US
+}
+h3.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA
+}
+h4 {
+	direction: ltr;
+	color: #4f81bd;
+	line-height: 100%;
+	text-align: justify;
+	page-break-inside: avoid;
+	orphans: 2;
+	widows: 2
+}
+h4.western {
+	font-family: "Cambria", serif;
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.cjk {
+	font-family: "宋体";
+	font-size: 10pt;
+	so-language: en-US;
+	font-style: italic
+}
+h4.ctl {
+font-family:;
+	font-size: 10pt;
+	so-language: ar-SA;
+	font-style: italic
+}
+a:link {
+	color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {	font-family: "Cambria", serif;
+	font-size: 13pt;
+	so-language: en-US
+}
+p.western1 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+h2.western1 {	font-family: "Cambria", serif;
+	font-size: 12pt;
+	so-language: en-US
+}
+p.western2 {	font-family: "Calibri", serif;
+	font-size: 10pt;
+	so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+#menu {
+position: fixed;
+left: 0;
+top: 5em;
+width: 3em;
+margin: -2.5em 0 0 0;
+z-index: 5;
+background: rgba(40, 40, 40, 0.9);
+color: #ccc;
+font-weight: normal;
+font-size: 12px;
+text-align: left;
+border: solid rgba(40, 40, 40, 0.5);
+border-left: none;
+padding: 0.5em 0.5em 0.5em 2.5em;
+box-shadow: 0 1px 3px black;
+/*border-radius: 3em 0.5em 0.5em 3em;*/
+}
+#menu li { margin: 0 }
+#menu a { color: inherit }
+
+/* Make menu absolute, not fixed, on IE 5 & 6 */
+#menu { position: absolute }
+*>#menu { position: fixed }
+
+</style>
+</head>
+
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<blockquote>
+	<a name="releases"></a>
+	<h1 class="western">Variance Release History</h1>
+  <ul id=menu>
+    <li><a href="#releases_180">1.8</a></li>
+    <li><a href="#releases_170">1.7</a></li>
+    <li><a href="#releases_160">1.6</a></li>
+    <li><a href="#releases_150">1.5</a></li>
+    <li><a href="#releases_140">1.4</a></li>
+    <li><a href="#releases_130">1.3</a></li>
+    <li><a href="#releases_120">1.2</a></li>
+    <li><a href="#releases_110">1.1</a></li>
+    <li><a href="#releases_100">1.0</a></li>
+    <li><a href="#releases_dev">Pre</a></li>
+  </ul>
+	<blockquote>
+	  <a name="releases_180"></a>
+	  <h2 class="western">New to 1.8 (Feb 06 2016)</h2>
+	  <blockquote>
+		<ul>
+		  <li>Brand new chord engine : 40x faster than before (886 seconds to 22 seconds for 32.5k cases).</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_170"></a>
+	  <h2 class="western">New to 1.7 (Jan 08 2016)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.7_layer.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.7_settings.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.7_doesettings.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.7_utils.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Grid colors now configurable.</li>
+		  <li>Hyperthreading is now always used. No negative effects were observed, and removal of the option simplified cross-platform support.</li>
+		  <li>Overlap evaluation improved :
+		  <ul>
+			<li>The tool now provides an option to use shortest edge for raycast source; makes arbitrary configurations usable.</li>
+			<li>Overlaps in enclosure mode are properly handled.</li>
+		  </ul>
+		  <li>Validated 50k runs without hang-up using Mono 4.2.2.10 and Xamarin.Mac 2.4.1.5, but still sporadic fails in the Mac build. Postponing Mac work for now.</li>
+		  <li>Support for re-ordering layers in simulation, making it easier to fix misconfiguration.</li>
+		  <li>Windows GUI now has keyboard shortcuts.</li>
+		  <li>Layer preview panels now support background layers.</li>
+		  <ul>
+			<li>See the contours from enabled layer(s) in your current layer, to ease set-up.</li>      
+		  </ul>
+		  <li>Simplifications to the distance handler.</li>
+		  <li>Simplifications to the fragmenter.</li>
+		  <li>Simplifications to the layer settings handling (pasting, etc.) that eased re-ordering implementation.</li>
+		  <li>Minor tweaks to avoid iterating lists without benefit.</li>
+		  <li>Various bug fixes.</li>
+		  <li>GDI fallback removed - difficult to maintain and OpenGL viewports are superior.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_160"></a>
+	  <h2 class="western">New to 1.6 (Dec 03 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.6_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.6_settings.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.6_utils.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Summary file saved first, allowing user to review results whilst waiting for (or aborting) the SVG/CSV stages.</li>
+		  <li>Refined the settings panel to reduce clutter and expand the help pane, also improving the Mac experience.</li>
+		  <li>Ability to cancel lengthy GDS file loads.</li>
+		  <li>Headless interactive now supports GDS layer property modification.</li>
+		  <li>Activity indicators for GDS processing to show application is working.</li>
+		  <li>Viewport 2.0 : migrated from immediate mode OpenGL to VBO. Better performance and more robust when faced with larger datasets.</li>
+		  <li>Long-awaited legacy project load support - missing or invalid values will be set to defaults.</li>
+		  <li>Replacing problematic core code use of System.Drawing with replacement components (Point, PointF, Color) to improve portability.</li>
+		  <ul>
+		  <li>Windows retains GDI viewport implementation and use of System.Drawing in GUI code as needed.</li>
+		  <li>Non-Windows GUI required native replacements for others (e.g. Size, SizeF, RectangleF).</li>
+		  </ul>
+		  <li>Mac port continues to mature.</li>
+		  <ul>
+			<li>Performance very close to Windows due to framework fixes.</li>
+			<li>Xamarin.Unified migration completed.</li>
+			<li>Single-threaded performance matches Windows build.</li>
+		  </ul>
+		  <li>Performance improvements from improved locking and data management.</li>
+		  <ul>
+			<li>UI responsiveness improved with large GDS inputs</li>
+			<li>Single-threaded : 10-20% over 1.5</li>
+			<li>Multi-threaded  : 20-33% over 1.5</li>
+			<li>10-33% memory reduction for large GDS datasets over 1.5</li>
+		  </ul>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_150"></a>
+	  <h2 class="western">New to 1.5 (Oct 16 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.5_layer.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.5_settings.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.5_doesettings.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.5_utils.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<p class="western" style=" line-height: 100%">This update was far more extensive than originally planned and so took longer to complete.</p>
+		<ul>
+		  <li>Performance improvements (over 60x, based on benchmarking) compared to 1.4, increasing gains with large runs.</li>
+		  <li>Preference setting for layer preview geometry for GDS DOE (all layout or just the extracted tile)</li>
+		  <li>Preference setting for CD variation of GDS geometry</li>
+		  <ul>
+			<li>Loading of projects using variation with GDS geometry will request user input when user preference set to disable</li>
+		  </ul>
+		  <li>Rotational variation (wobble) for non-GDS geometry</li>
+		  <li>Ability to flip shapes :</li>
+		  <ul>
+			<li>Horizontally and/or vertically</li>
+			  <li>Optional re-positioning with centerpoint of original geometry</li>
+		  </ul>
+		  <li>Live preview of the GDS DOE configuration through a new viewport</li>
+		  <li>Experiments in GUIs for non-Windows (source package)</li>
+		  <ul>
+			<li>GTK# : stalled by GL control support problems in Mono/GTK# frameworks.</li>
+			<li>Qt : UI shell drawn-up, but QtSharp infrastructure not available to utilize (yet)</li>
+		  </ul>
+		  <li>Mac port.</li>
+			<ul>
+			  <li>Native user interface</li>
+			  <li>MonoMac used to exploit existing C# codebase</li>
+			  <li>OpenGL viewports (no GDI implementation)</li>
+			  <li>Still has performance issues</li>
+			</ul>
+		  <li>Continuing work on the interactive system:</li>
+		  <ul>
+		  <li>Able to set layer settings, job settings</li>
+		  <li>Documentation</li>
+		  </ul>
+		  <li>Optimized XML generation (code simplification; no end-user change)</li>
+		  <li>VS 2015 projects.</li>
+		  <li>Overhauled viewport engine:</li>
+		  <ul>
+			<li>Adjustable zoom increment for mouse wheel.</li>
+			<li>Customizable colors across-the-board.</li>
+			<li>New and improved OpenGL viewport system using OpenTK</li>
+			  <ul>
+				<li>OpenTK is better supported by the developers - SharpGL has stalled.</li>
+				<li>Robust multi-platform code.</li>
+				<li>More straightforward to use - it's now trivial to add new viewports (see the new GDS DOE preview)</li>
+			  </ul>
+		  </ul>
+		  <li>Bug fix to the parallel 'greedy' approach.</li>
+		  <li>E-mail notification support on job and/or batch completion.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_140"></a>
+	  <h2 class="western">New to 1.4 (Jul 23 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.4_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.4_settings.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.4_utils.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Boolean system reworked to consider full layer contents (1, 2)/(3, 4) rather than individual polygons.</li>
+		  <li>Calculation engine adjusted to respect full/per-poly requirements of different calculation systems.</li>
+		  <li>Tile extraction improved to cope with overlapping geometry.</li>
+		  <li>DOE summary generation.</li>
+		  <li>DOCX replaced by HTML pages. Help now accessible from menu.</li>
+		  <li>Interactive headless mode.</li>
+		  <li>Migrated OpenGL viewports from DIB to FBO - improved drawing and hardware acceleration.</li>
+		  <li>Shape bias and CDU for GDS data.</li>
+		  <li>Refactored code.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_130"></a>
+	  <h2 class="western">New to 1.3 (Jun 24 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.3_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.3_settings.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>Dropped VS2010 support, to target .NET 4.5 only.</li>
+		  <li>Corner optimization in shape engine to avoid packing points too closely in corners. Highly experimental and needs proving.</li>
+		  <li>Restored GDI viewport mode as an option (--gdiViewPorts).</li>
+		  <li>Added headless mode for terminal usage (--headless), along with a truly	headless and portable build of the tool for non-Windows
+			platforms.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_120"></a>
+	  <h2 class="western">New to 1.2 (Apr 08 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.2_layer.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.2_settings.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.2_doesettings.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>X and Y overlay correlation layers rather than a single combined correlation layer.</li>
+		  <li>X and Y	overlay reference layers rather than a single overlay reference	layer.</li>
+		  <li>Toggle to choose how LER is derived from LWR.</li>
+		  <li>Cross-shape	overhaul and fixes.</li>
+		  <li>Issues warning if the user has a calculation involving many polyons in the simulation settings panel.</li>
+		  <li>Reworked random number infrastructure to avoid program issues.</li>
+		  <li>OpenGL viewport performance enhancements.</li>
+		  <li>Stability improvements.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_110"></a>
+	  <h2 class="western">New to 1.1 (Mar 31 2015)</h2>
+	  <blockquote>
+		<ul>
+		  <li>iDRM CSV parsing for GDS DOE, to select only passing tiles for GDS DOE evaluation</li>
+		  <li>Major performance improvement for tile-based calculations with overhaul to tile extraction methodology.</li>
+		  <li>Arbitrary tip definitions on subshapes.</li>
+		  <li>Single overlap value reporting.</li>
+		  <li>Overlay reference system.</li>
+		  <li>Preview panels reimplemented using OpenGL instead of GDI.</li>
+		  <li>Preview panels support mouse drag/mouse wheel zoom/hotkeys</li>
+		  <li>Mean/stddev readout during simulation runs.</li>
+		  <li>Summary file output.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_100"></a>
+	  <h2 class="western">New to 1.0 (Feb 18 2015)</h2>
+	  <table>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.0_oneD.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.0_implant.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.0_layer.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.0_layer_Lshape.png" alt=""/>
+		  </td>
+		</tr>
+		<tr>
+		  <td>
+			<img class="c" src="images/versions/1.0_settings.png" alt=""/>
+		  </td>
+		  <td>
+			<img class="c" src="images/versions/1.0_doesettings.png" alt=""/>
+		  </td>
+		</tr>
+	  </table>
+	  <blockquote>
+		<ul>
+		  <li>First release following 4 months intensive development and QA.</li>
+		</ul>
+	  </blockquote>
+	</blockquote>
+	<blockquote>
+	  <a name="releases_dev"></a>
+	  <h2 class="western">Dev builds</h2>
+	  <blockquote>
+		<ul>
+		<li>0.9.0 : Feb 05 2015</li>
+		  <ul>
+			<li>Store GDS point data in XML files</li>
+			<li>Chord refinements.</li>
+		  </ul>
+		<li>0.5.0 : Feb 02 2015</li>
+		  <ul>
+			<li>Bug hunt.</li>
+		  </ul>    
+		<li>0.1.0 : Jan 27 2015</li>
+		  <ul>
+			<li>Distance handler supports overlaps (X and Y values reported).</li>
+			<li>Chord engine stabilization.</li>
+			<li>Chord selection options added.</li>
+			<li>XML save/load of project files.</li>
+			<li>Multithreaded batch calculations.</li>
+			<li>Intersection angle marker refinements.</li>
+			<li>Optimizations and fixes.</li>
+		  </ul>
+		<li>0.0.7 : Jan 15 2015</li>
+		  <ul>
+			<li>Chord engine work.</li>
+			<li>UI refinements and optimizations (repaint reduction).</li>
+		  </ul>
+		<li>0.0.6 : Jan 06 2015</li>
+		  <ul>
+			<li>Initial intersection angle engine.</li>
+			<li>Initial GDS DOE implementation.</li>
+			<li>UI lockout during runs.</li>
+			<li>Started work to support multithreading of batch calculations.</li>
+			<li>GDS implementation overhaul for internals and UI.</li>
+			<li>Ongoing fixes and optimizations.</li>
+			<li>ShapeLibrary implemented to push definition code into a more obvious location.</li>
+			<li>U-shape enabled.</li>
+		  </ul>
+		<li>0.0.5 : Dec 09 2014</li>
+		  <ul>
+			<li>Copy/paste of layer settings.</li>
+			<li>GDS parser.</li>
+			<li>Results class implemented.</li>
+			<li>SVG writer for inputs/outputs to calculations.</li>
+			<li>Job preflight engine.</li>
+			<li>Initial chord engine.</li>
+			<li>Initial distance engine for spacing/enclosure.</li>
+			<li>Correlation of overlay/CDU.</li>
+			<li>Many fixes and optimizations.</li>
+			<li>Shape engine work for LWR and corner definition.</li>
+			<li>Tooltips in UI</li>
+		  </ul>
+		<li>0.0.3 : Nov 03 2014</li>
+		  <ul>
+			<li>Batch calculation engine (single threaded).</li>
+			<li>CSV writer for results.</li>
+			<li>Layer tone inversion (single polygon).</li>
+		  </ul>
+		<li>0.0.2 : Oct 27 2014</li>
+		  <ul>
+			<li>Basic area calculation using clipperLib.</li>
+			<li>Shape engine tuning.</li>
+		  </ul>
+		<li>0.0.1 : Oct 23 2014.
+		  <ul>
+			<li>Basic prototype GUI with viewports enabled.</li>
+			<li>1D and implant calculations.</li>
+			<li>Initial shape engine.</li>
+			<li>RNG implementation including Gaussian distribution.</li>
+		  </ul>
+	  </blockquote>
+	</blockquote>
+</blockquote>
+</body>
+</html>

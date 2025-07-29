@@ -15,7 +15,8 @@ public class PASearch
         tipBias : need support for positive/negative limits and variation.
         proxBias : deep shape engine support, like others.
     */
-    public static readonly string[] paNames = { "xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble" };
+    public static readonly string[] paNames = ["xOL", "yOL", "SCDU", "TCDU", "LWR", "LWR2", "hTipNVar", "hTipPVar", "vTipNVar", "vTipPVar", "ICR", "OCR", "Wobble"
+    ];
 
     private enum paEnum { XOL, YOL, SCDU, TCDU, LWR, LWR2, HTIPNVAR, HTIPPVAR, VTIPNVAR, VTIPPVAR, ICR, OCR, WOB }
 
@@ -155,22 +156,22 @@ public class PASearch
         return Convert.ToDouble(upperLimit[layer, index]);
     }
 
-    public bool paAllowsNegativeValues(int index)
+    public static bool paAllowsNegativeValues(int index)
     {
         return pPAAllowsNegativeValues(index);
     }
 
-    private bool pPAAllowsNegativeValues(int index)
+    private static bool pPAAllowsNegativeValues(int index)
     {
         return paNames[index].Contains("Bias");
     }
 
-    public bool[] getEnabledState(EntropyLayerSettings layerSettings)
+    public static bool[] getEnabledState(EntropyLayerSettings layerSettings)
     {
         return pGetEnabledState(layerSettings);
     }
 
-    private bool[] pGetEnabledState(EntropyLayerSettings layerSettings)
+    private static bool[] pGetEnabledState(EntropyLayerSettings layerSettings)
     {
         int length = paNames.Length;
         bool[] enabled = new bool[length];
@@ -410,48 +411,26 @@ public class PASearch
         // We're interested in this PA, so we need to pull out the values and calculate the mean and standard deviation for this input to the simulation.
         if (searchablePAs[layer, pa])
         {
-            List<double> rawValues = new();
-            for (int resultField = 0; resultField < resultPackage.getListOfResults().Count; resultField++)
+            List<double> rawValues = [];
+            for (int resultField = 0; resultField < resultPackage.results_count; resultField++)
             {
-                double factor = 0;
-                switch (pa)
+                double factor = pa switch
                 {
-                    case (int)paEnum.XOL:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.olx, layer);
-                        break;
-                    case (int)paEnum.YOL:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.oly, layer);
-                        break;
-                    case (int)paEnum.SCDU:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.svar, layer);
-                        break;
-                    case (int)paEnum.TCDU:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.tvar, layer);
-                        break;
-                    case (int)paEnum.LWR:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.lwr, layer);
-                        break;
-                    case (int)paEnum.LWR2:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.lwr2, layer);
-                        break;
-                    case (int)paEnum.HTIPNVAR:
-                    case (int)paEnum.HTIPPVAR:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.htip, layer);
-                        break;
-                    case (int)paEnum.VTIPNVAR:
-                    case (int)paEnum.VTIPPVAR:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.vtip, layer);
-                        break;
-                    case (int)paEnum.ICR:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.icv, layer);
-                        break;
-                    case (int)paEnum.OCR:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.ocv, layer);
-                        break;
-                    case (int)paEnum.WOB:
-                        factor = resultPackage.getResult(resultField).getField(Results.fields_d.wob, layer);
-                        break;
-                }
+                    (int)paEnum.XOL => resultPackage.getResult(resultField).getField(Results.fields_d.olx, layer),
+                    (int)paEnum.YOL => resultPackage.getResult(resultField).getField(Results.fields_d.oly, layer),
+                    (int)paEnum.SCDU => resultPackage.getResult(resultField).getField(Results.fields_d.svar, layer),
+                    (int)paEnum.TCDU => resultPackage.getResult(resultField).getField(Results.fields_d.tvar, layer),
+                    (int)paEnum.LWR => resultPackage.getResult(resultField).getField(Results.fields_d.lwr, layer),
+                    (int)paEnum.LWR2 => resultPackage.getResult(resultField).getField(Results.fields_d.lwr2, layer),
+                    (int)paEnum.HTIPNVAR or (int)paEnum.HTIPPVAR => resultPackage.getResult(resultField)
+                        .getField(Results.fields_d.htip, layer),
+                    (int)paEnum.VTIPNVAR or (int)paEnum.VTIPPVAR => resultPackage.getResult(resultField)
+                        .getField(Results.fields_d.vtip, layer),
+                    (int)paEnum.ICR => resultPackage.getResult(resultField).getField(Results.fields_d.icv, layer),
+                    (int)paEnum.OCR => resultPackage.getResult(resultField).getField(Results.fields_d.ocv, layer),
+                    (int)paEnum.WOB => resultPackage.getResult(resultField).getField(Results.fields_d.wob, layer),
+                    _ => 0
+                };
                 // Since we're talking variations, we need absolute values - can't have a negative CDU value, for example.
                 // RNG expects 3-sigma PA, so we need to convert back to 3-sigma for reporting.
                 rawValues.Add(Math.Abs(factor) * Convert.ToDouble(upperLimit[layer, pa]));

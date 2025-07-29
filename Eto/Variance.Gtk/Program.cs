@@ -34,15 +34,11 @@ public static class MainClass
 
             if (graphicsIndex != -1)
             {
-                switch (args[graphicsIndex + 1].ToLower())
+                graphicsMode = args[graphicsIndex + 1].ToLower() switch
                 {
-                    case "opengl":
-                        graphicsMode = (int)GraphicsBackend.OpenGL;
-                        break;
-                    default:
-                        graphicsMode = (int)GraphicsBackend.Vulkan;
-                        break;
-                }
+                    "opengl" => (int)GraphicsBackend.OpenGL,
+                    _ => (int)GraphicsBackend.Vulkan
+                };
             }
 
             int i = 0;
@@ -52,7 +48,7 @@ public static class MainClass
                 // Extract XML file.
                 try
                 {
-                    string[] tokens = args[i].Split(new[] { '.' });
+                    string[] tokens = args[i].Split(['.']);
                     string extension = tokens[^1];
                     if (extension.ToUpper() == "VARIANCE" || extension.ToUpper() == "XML")
                     {

@@ -1,5 +1,42 @@
 Changelog for Variance
 
+6.2
+
+	- Moved to NET 9.0
+
+6.2b1
+
+	- Add legacy rounding compatibility option.
+
+6.2a3
+
+	- Experimental adoption of ppy.Veldrid packages, as a maintained Veldrid project.
+	- Fixed regression in PA search feature.
+	- Fixed multiple issues in reference layer handling.
+	- Fixed regression in multi-polygon flip scenarios.
+	- Fixed regression in side rays for proximity biasing.
+	- Fixed regressions in lens distortion code.
+	- Applied some fixes to avoid artifacts in keyhole handling for sequential geometry operations.
+	- Big change to the shape engine sequence.
+	 - Historically, we applied contouring on top of the keyholed structure, which caused rounding in the keyhole region.
+	 - Now, if appropriate, we collapse keyholes to get the outers and inners.
+	  - Outers are rounded as normal. Inners see rounding with inverted assignment.
+	  - Outers and inners are then passed to the keyholer for combination.
+
+	 - Benefit is that the keyholed region is not rounded at all now, avoiding undue influence on the shape.
+	 - This will change existing results for these scenarios, but the results will be correct now.
+
+6.2a2
+
+	- Extensive code refactoring.
+
+6.2a1
+
+	- 15-20% performance increase.
+	 - Adjusted how the result package works, avoiding potential contention.
+	 - Also more multithreading usage across various libraries in DesignLibs.
+	- Layout file improvements in GeoCore.
+
 6.1
 
 	- Avoided hang-on-quit issue with GTK when file dialogs have been shown.

@@ -54,7 +54,7 @@ public partial class Entropy
     public delegate void simRunningUI();
     public simRunningUI simRunningUIFunc { get; set; }
 
-    private readonly char[] csvSeparator = { ',' }; // to cleave the results apart.
+    private readonly char[] csvSeparator = [',']; // to cleave the results apart.
     public Stopwatch sw { get; private set; }
     public Stopwatch sw_Preview { get; private set; }
     public int currentProgress;
@@ -102,7 +102,7 @@ public partial class Entropy
 
         if (fileName != null)
         {
-            string[] tokens = fileName.Split(new [] { '.' });
+            string[] tokens = fileName.Split(['.']);
 
             for (int i = 0; i < tokens.Length - 2; i++)
             {

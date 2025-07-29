@@ -1,0 +1,550 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Variance - Reference</title>
+<style type="text/css">
+* {
+  background-color: black
+}
+p.western {
+    font-family: "Calibri", serif;
+    font-size: 10pt;
+  color: #aaaaaa;
+    so-language: en-US
+}
+p.cjk {
+    font-family: "Calibri";
+    font-size: 10pt;
+    so-language: en-US
+}
+p.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA
+}
+h1 {
+    direction: ltr;
+    color: #365f91;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h1.western {
+    font-family: "Cambria", serif;
+    font-size: 13pt;
+    so-language: en-US
+}
+h1.cjk {
+    font-family: "宋体";
+    font-size: 13pt;
+    so-language: en-US
+}
+h1.ctl {
+font-family:;
+    font-size: 13pt;
+    so-language: ar-SA
+}
+h2 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h2.western {
+    font-family: "Cambria", serif;
+    font-size: 12pt;
+    so-language: en-US
+}
+h2.cjk {
+    font-family: "宋体";
+    font-size: 12pt;
+    so-language: en-US
+}
+h2.ctl {
+font-family:;
+    font-size: 12pt;
+    so-language: ar-SA
+}
+h3 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h3.western {
+    font-family: "Cambria", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+h3.cjk {
+    font-family: "宋体";
+    font-size: 10pt;
+    so-language: en-US
+}
+h3.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA
+}
+h4 {
+    direction: ltr;
+    color: #4f81bd;
+    line-height: 100%;
+    text-align: justify;
+    page-break-inside: avoid;
+    orphans: 2;
+    widows: 2
+}
+h4.western {
+    font-family: "Cambria", serif;
+    font-size: 10pt;
+    so-language: en-US;
+    font-style: italic
+}
+h4.cjk {
+    font-family: "宋体";
+    font-size: 10pt;
+    so-language: en-US;
+    font-style: italic
+}
+h4.ctl {
+font-family:;
+    font-size: 10pt;
+    so-language: ar-SA;
+    font-style: italic
+}
+a:link {
+    color: #00aacc
+}
+ul {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+ol {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  color: #aaaaaa;
+  so-language: en-US
+}
+h1.western1 {   font-family: "Cambria", serif;
+    font-size: 13pt;
+    so-language: en-US
+}
+p.western1 {    font-family: "Calibri", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+h2.western1 {   font-family: "Cambria", serif;
+    font-size: 12pt;
+    so-language: en-US
+}
+p.western2 {    font-family: "Calibri", serif;
+    font-size: 10pt;
+    so-language: en-US
+}
+a {
+  font-family: "Calibri", serif;
+  font-size: 10pt;
+  so-language: en-US;
+  color: #33aacc
+}
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+#menu {
+position: fixed;
+left: 0;
+top: 5em;
+width: 3em;
+margin: -2.5em 0 0 0;
+z-index: 5;
+background: rgba(40, 40, 40, 0.9);
+color: #ccc;
+font-weight: normal;
+font-size: 12px;
+text-align: left;
+border: solid rgba(40, 40, 40, 0.5);
+border-left: none;
+padding: 0.5em 0.5em 0.5em 2.5em;
+box-shadow: 0 1px 3px black;
+/*border-radius: 3em 0.5em 0.5em 3em;*/
+}
+#menu li { margin: 0 }
+#menu a { color: inherit }
+
+/* Make menu absolute, not fixed, on IE 5 & 6 */
+#menu { position: absolute }
+*>#menu { position: fixed }
+
+</style>
+</head>
+
+<body lang="en-US" text="#aaaaaa" link="#00aacc" dir="ltr">
+
+<blockquote>
+    <a name="releases"></a>
+    <h1 class="western">Variance Release History</h1>
+  <ul id=menu>
+    <li><a href="#releases_360">3.6</a>
+    <li><a href="#releases_351">3.5.1</a>
+    <li><a href="#releases_350">3.5</a>
+    <li><a href="#releases_340">3.4</a>
+    <li><a href="#releases_330">3.3</a>
+    <li><a href="#releases_320">3.2</a>
+    <li><a href="#releases_310">3.1</a>
+    <li><a href="#releases_301">3.0.1</a>
+    <li><a href="#releases_300">3.0</a>
+  </ul>
+
+    <blockquote>
+      <a name="releases_360"></a>
+      <h2 class="western">New to 3.6 (Jun 14 2019)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.6_mac_1.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.6_gtk_mint.png" alt=""/>
+          </td>
+        </tr>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.6_layout_export_1.png" alt=""/>
+          </td>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.6_layout_export_3.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Keyholing added for enclosed holes in geometry.</li>
+          <li>Performance enhancements in the overlap/spacing system.</li>
+          <li>Boolean engine enhancements.</li>
+          <li>Layer contours can now be exported to GDSII or Oasis, if desired.</li>
+          <li>User interface rewrite.</li>
+          <ul>
+            <li>Resizable UI.</li>
+            <li>Move to modern UI toolkit (WPF) on Windows.</li>
+            <li>Performance work through reduction of user interface code.</li>
+            <li>Automatic layout code, improving appearance on macOS and GTK.</li>
+          </ul>
+          <li>macOS available as a stable implementation.</li>
+          <ul>
+            <li>Dark mode support.</li>
+            <li>Platform limits performance compared to Windows.</li>
+          </ul>
+          <li>Linux/GTK available as a stable implementation.</li>
+          <ul>
+            <li>Platform limits performance compared to Windows.</li>
+          </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_351"></a>
+      <h2 class="western">New to 3.5.1 (Feb 20 2019)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.5.1_gds_contour_path.png" alt=""/>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>New licensing system.</li>
+          <li>Quilt CSV support in the DOE system.</li>
+          <li>User interface refinements.</li>
+          <ul>
+            <li>Performance work through extra event filtering.</li>
+            <li>Camera position gadgets added.</li>
+          </ul>
+          <li>geoCore updates.</li>
+          <ul>
+            <li>Performance enhancements involving partial rework of internal data representation, enabling multithreading.</li>
+            <li>Path support.</li>
+            <li>Improvement in handling repetition.</li>
+            <li>Better handling of invalid cellrefs.</li>
+          </ul>
+          <li>Bug fixes.</li>
+          <ul>
+            <li>UI fix for layer transposition (layer booleans, correlations).</li>
+            <li>UI fix for status bar readout.</li>
+          </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_350"></a>
+      <h2 class="western">New to 3.5 (Oct 8 2018)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.5_ilb.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.5_ilb_tip_proxBias.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>User interface refinements.</li>
+          <li>In-layer boolean.</li>
+          <li>Optimized internals to avoid calls to shape system for viewport changes (drawn and background polygon display) - improves interactivity.</li>
+          <li>Adaptive multithreading in raycaster.</li>
+          <ul>
+            <li>Maximize CPU usage and performance for proximity biasing.</li>
+            <li>Performance boost for overlap calculations.</li>
+          </ul>
+        <li>Multithreaded noise application (LER).</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_340"></a>
+      <h2 class="western">New to 3.4 (Jun 15 2018)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.4_custom_RNG.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.4_custom_RNG_menu.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Custom RNG mapping support, allowing for per-input non-Gaussian distributions on variations.</li>
+          <li>Extended PA search system from 3.3.</li>
+          <li>Secondary LWR implementation, allowing for a mix of low and high frequency noise.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_330"></a>
+      <h2 class="western">New to 3.3 (Apr 30 2018)</h2>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/3.3_pa_search.png" alt=""/>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Process Assumptions search from target result value.</li>
+          <li>Boolean engine enhancements.</li>
+          <ul>
+            <li>Refactored to 'always do the right thing', addressing edge case issues.</li>
+          </ul>
+          <li>geoCore enhancements.</li>
+          <ul>
+            <li>Oasis layer name support.</li>
+            <li>Removed some constraints on the layout that could be read in.</li>
+          </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_320"></a>
+      <h2 class="western">New to 3.2 (Mar 30 2018)</h2>
+      <table>
+        <tr>
+          <td>
+            <img class="c" src="images/versions/3.2_proxBias.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.2_replay.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Contouring is now processed in the background, making the UI more responsive when working with larger datasets.</li>
+          <li>Layout referencing, to enable regression testing.</li>
+          <ul>
+            <li>System will load layout, adapting to changes (cell, layer/dataype) to pull in updated geometry.</li>
+            <li>Fall-back to in-XML geometry.</li>
+          </ul>
+          <li>Proximity biasing.</li>
+          <ul>
+            <li>Reproduce pitch dependent effects, such as spacer thickness increasing with pitch.</li>
+          </ul>
+          <li>Replay has arrived!</li>
+          <ul>
+            <li>Using a CSV with the project file, you can now inspect specific cases, even from DOE projects. The case is rebuilt from the combination so that you can inspect failure modes.</li>
+          </ul>
+        <li>Fixes:</li>
+        <ul>
+          <li>Improvements to chord system - addressed an edge case scenario where chord-type assignment ran into trouble.</li>
+          <li>Improvements to non-overlap spacing/enclosure value reporting.</li>
+          <li>Misc fixes.</li>
+        </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_310"></a>
+      <h2 class="western">New to 3.1 (Feb 18 2018)</h2>
+      <table>
+        <tr>
+          <td>
+            <img class="c" src="images/versions/3.1_lens_1.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.1_lens_2.png" alt=""/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img class="c" src="images/versions/3.1_WPF.png" alt=""/>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Improved handling of non-orthogonal polygons coming from geoCore (including mixed configurations).</li>
+          <ul>
+            <li>Non-orthogonal polygons receive side bias, LER, rotation. Tip definition and related settings are not supported, however.</li>
+          </ul>
+          <li>Performance improvements related to loading projects.</li>
+          <li>Overlap calculation improvements.</li>
+          <li>Lens distortion model, based on <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/zhan99.pdf">Zhang</a>.</li>
+          <li>Noise application improvement, avoiding periodicity-related 'nodes'.</li>
+          <li>Project files store location and zoom for each viewport.</li>
+          <li>Save viewport display to SVG file.</li>
+          <li>WPF implementation of UI, beta grade.</li>
+          <ul>
+            <li>UI works, but there are some quirks to be ironed out. Work ongoing.</li>
+          </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_301"></a>
+      <h2 class="western">New to 3.0.1 (Dec 23 2017)</h2>
+      <blockquote>
+        <ul>
+          <li>Overlap engine enhancements.</li>
+          <ul>
+            <li>Overlap deconstruction methodology improved.</li>
+          </ul>
+          <li>Spacing engine enhancements.</li>
+          <ul>
+            <li>Orders-of-magnitude improvement in performance (runtime, memory) for multi-polygon input layers.</li>
+            <ul>
+                <li>Now < 200 MB and 32500 cases in 8.5 minutes. Pre-3.0.1 : ~15 GB, many minutes for a single case.</li>
+            </ul>
+            <li>Additional code optimizations for a 10-25% speed improvement in typical, simpler cases.</li>
+          </ul>
+          <li>Added tooltip information to most controls in the interface, to improve usability.</li>
+          <li>Allow per-polygon rotation/wobble for geoCore inputs.</li>
+          <li>Allow negative values for DOE column and row offsets.</li>
+          <li>Bug fix to the wobble application.</li>
+          <li>Code optimizations/refinements without user impact.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+    <blockquote>
+      <a name="releases_300"></a>
+      <h2 class="western">New to 3.0 (Nov 8 2017)</h2>
+      <table>
+        <tr>
+          <td>
+            <img class="c" src="images/versions/3.0_simulation.png" alt=""/>
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img class="c" src="images/versions/3.0_gds_bias.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/3.0_gds_contour_merging.png" alt=""/>
+          </td>
+        </tr>
+      </table>
+      <blockquote>
+        <ul>
+          <li>Ability to revert to settings from project file.</li>
+          <li>User interface now highlights when your project settings differ from those that were loaded in.</li>
+          <li>Simplex noise implementation overhauled.</li>
+          <li>Per-poly option added to area calculation, allowing for minimum overlap area evaluation (e.g. contact hole cases).</li>
+          <li>Project files now store the implant simulation in addition to the multi-layer geometric simulation.</li>
+          <ul>
+            <li>One project file can now encapsulate enclosure and shadowing calculations, for example.</li>
+          </ul>
+          <li>Improved geoCore biasing methodology.</li>
+          <li>Advanced license now enables 16 layers.</li>
+          <ul>
+            <li>Identical performance to 2.x for 8 layer and 4 layer cases. Calculation time remains linear with number of active layers.</li>
+          </ul>
+          <li>geoCore overhaul</li>
+          <ul>
+            <li>Cell reference improvements.</li>
+            <li>Memory usage reduced by 33% due to internal optimizations.</li>
+            <li>Background loading keeps user interface responsive.</li>
+            <li>GeoCore enhancement boosts GDS loading speed by 4x.</li>
+          </ul>
+          <li>Comments can be set for layers, DOE and simulation settings for documentation purposes. They are retained in project files.</li>
+          <li>Large, single viewport system. Greatly improved speed and reduced resource usage.</li>
+          <ul>
+            <li>User can now choose VBO or immediate mode OpenGL in case of driver issues.</li>
+            <li>OpenGL viewport fallback to immediate mode if VBO isn't supported on host system.</li>
+          </ul>
+          <li>Brand new user interface (requires 1920x1080), to accommodate the additional layers and controls.</li>
+          <ul>
+            <li>Internal architecture moved to a generalized UI definition and handling system for each layer.</li>
+            <ul>
+                <li>Vastly simpler and much smaller codebase from this approach.</li>
+            </ul>
+            <li>Experimental 'modern' WPF user interface.</li>
+          </ul>
+          <li>Bug fixes and optimizations</li>
+          <ul>
+            <li>Code simplification and optimization through refactoring of various systems.</li>
+            <li>Fixed staircasing of geoCore contours in certain situations.</li>
+            <li>Fixed misc UI issues in geoCore case.</li>
+            <li>Fixed misc UI issues from transposing layers in the simulation panel. (Eto.Forms bug)</li>
+            <li>Fixed misc UI issues from clearing layer / starting a new project. (Eto.Forms bug)</li>
+          </ul>
+        </ul>
+      </blockquote>
+    </blockquote>
+
+</blockquote>
+
+</body>
+</html>

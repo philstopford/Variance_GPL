@@ -65,19 +65,12 @@ public static class UtilityFuncs
 
     private static double pGetGaussianRandomNumber3(EntropySettings settings)
     {
-        double value;
-        switch (settings.getValue(EntropySettings.properties_i.rngType))
+        double value = settings.getValue(EntropySettings.properties_i.rngType) switch
         {
-            case (int)commonRNG.rngIndex.crypto:
-                value = Crypto_RNG.random_gauss3()[0];
-                break;
-            case (int)commonRNG.rngIndex.mtwister:
-                value = MersenneTwister_RNG.random_gauss3()[0];
-                break;
-            default:
-                value = RNG.random_gauss3()[0];
-                break;
-        }
+            (int)commonRNG.rngIndex.crypto => Crypto_RNG.random_gauss3()[0],
+            (int)commonRNG.rngIndex.mtwister => MersenneTwister_RNG.random_gauss3()[0],
+            _ => RNG.random_gauss3()[0]
+        };
         return value;
     }
 
@@ -88,19 +81,12 @@ public static class UtilityFuncs
 
     private static double pGetGaussianRandomNumber(EntropySettings settings)
     {
-        double value;
-        switch (settings.getValue(EntropySettings.properties_i.rngType))
+        double value = settings.getValue(EntropySettings.properties_i.rngType) switch
         {
-            case (int)commonRNG.rngIndex.crypto:
-                value = Crypto_RNG.random_gauss()[0];
-                break;
-            case (int)commonRNG.rngIndex.mtwister:
-                value = MersenneTwister_RNG.random_gauss()[0];
-                break;
-            default:
-                value = RNG.random_gauss()[0];
-                break;
-        }
+            (int)commonRNG.rngIndex.crypto => Crypto_RNG.random_gauss()[0],
+            (int)commonRNG.rngIndex.mtwister => MersenneTwister_RNG.random_gauss()[0],
+            _ => RNG.random_gauss()[0]
+        };
         return value;
     }
 
@@ -111,19 +97,12 @@ public static class UtilityFuncs
 
     private static int pGetRandomInt(EntropySettings settings)
     {
-        int value;
-        switch (settings.getValue(EntropySettings.properties_i.rngType))
+        int value = settings.getValue(EntropySettings.properties_i.rngType) switch
         {
-            case (int)commonRNG.rngIndex.crypto:
-                value = Crypto_RNG.nextint();
-                break;
-            case (int)commonRNG.rngIndex.mtwister:
-                value = MersenneTwister_RNG.nextint();
-                break;
-            default:
-                value = RNG.nextint();
-                break;
-        }
+            (int)commonRNG.rngIndex.crypto => Crypto_RNG.nextint(),
+            (int)commonRNG.rngIndex.mtwister => MersenneTwister_RNG.nextint(),
+            _ => RNG.nextint()
+        };
         return value;
     }
 
@@ -134,19 +113,12 @@ public static class UtilityFuncs
 
     private static double pGetRandomDouble(EntropySettings settings)
     {
-        double value;
-        switch (settings.getValue(EntropySettings.properties_i.rngType))
+        double value = settings.getValue(EntropySettings.properties_i.rngType) switch
         {
-            case (int)commonRNG.rngIndex.crypto:
-                value = Crypto_RNG.nextdouble();
-                break;
-            case (int)commonRNG.rngIndex.mtwister:
-                value = MersenneTwister_RNG.nextdouble();
-                break;
-            default:
-                value = RNG.nextdouble();
-                break;
-        }
+            (int)commonRNG.rngIndex.crypto => Crypto_RNG.nextdouble(),
+            (int)commonRNG.rngIndex.mtwister => MersenneTwister_RNG.nextdouble(),
+            _ => RNG.nextdouble()
+        };
         return value;
     }
 
@@ -238,20 +210,20 @@ public static class UtilityFuncs
     private static bool pReadiDRMCSVFile(ref CommonVars commonVars, string fileName)
     {
         bool reading = false;
-        List<int[]> tilesToRun = new(); // will be col,row
+        List<int[]> tilesToRun = []; // will be col,row
         try
         {
             using (StreamReader sr = new(fileName))
             {
-                char[] csvSeparators = { ',' };
-                char[] equalSeparators = { '=' };
+                char[] csvSeparators = [','];
+                char[] equalSeparators = ['='];
 
                 reading = true;
                 // Read in non-CSV data first
                 // Pattern line
                 sr.ReadLine();
                 // Now we have the meat of the data we need.
-                string tempString = sr.ReadLine();
+                string tempString = sr.ReadLine()!;
                 // ReSharper disable once PossibleNullReferenceException
                 string[] parsedString = tempString.Split(csvSeparators);
                 if (parsedString.Length >= 6)
@@ -279,8 +251,8 @@ public static class UtilityFuncs
                 while (!sr.EndOfStream)
                 {
                     // Assuming Pass/Fail,Column,Row,Co-ord X,Co-ord Y,,,,,,,,,,,,,
-                    tempString = sr.ReadLine();
-                    parsedString = tempString!.Split(csvSeparators);
+                    tempString = sr.ReadLine()!;
+                    parsedString = tempString.Split(csvSeparators);
                     if (parsedString[0] == "" || parsedString[0] == "Occupy matrix")
                     {
                         break;
@@ -289,7 +261,7 @@ public static class UtilityFuncs
                     if (Convert.ToInt32(parsedString[0]) == 1)
                     {
                         // Pass case - need to add to list.
-                        tilesToRun.Add(new [] { Convert.ToInt32(parsedString[1]), Convert.ToInt32(parsedString[2]) });
+                        tilesToRun.Add([Convert.ToInt32(parsedString[1]), Convert.ToInt32(parsedString[2])]);
                     }
                 }
             }
@@ -325,19 +297,19 @@ public static class UtilityFuncs
             using (StreamReader sr = new(fileName))
             {
                 reading = true;
-                char[] csvSeparators = { ',' };
+                char[] csvSeparators = [','];
 
                 // Read in non-CSV data first
                 // Pattern line
-                string check = sr.ReadLine();
+                string check = sr.ReadLine()!;
                 // ReSharper disable once PossibleNullReferenceException
                 if (!check.StartsWith("Quilt"))
                 {
                     return false;
                 }
                 // Now we have the meat of the data we need.
-                string tempString = sr.ReadLine();
-                string[] parsedString = tempString!.Split(csvSeparators);
+                string tempString = sr.ReadLine()!;
+                string[] parsedString = tempString.Split(csvSeparators);
                 if (parsedString.Length >= 6)
                 {
                     // We have 6 values to extract from this line.
@@ -404,9 +376,8 @@ public static class UtilityFuncs
 
         bool headerRead = false;
         bool eqtnFound = false;
-        string line;
-        List<string> header = new();
-        while ((line = file.ReadLine()) != null)
+        List<string> header = [];
+        while (file.ReadLine() is { } line)
         {
             if (line.Contains("mean and standard deviation"))
             {
@@ -416,14 +387,14 @@ public static class UtilityFuncs
                 // We need to carve it up. Happily, we know our format and can rely on it!
                 string leaderString = "result ";
 
-                leaderString = leaderString + line.Substring(leaderString.Length, 1) + ": ";
+                leaderString = string.Concat(leaderString, line.AsSpan(leaderString.Length, 1), ": ");
 
                 int meanStart = line.LastIndexOf("x", StringComparison.CurrentCulture);
 
                 // We need to replace our ',' in the result string to avoid issues with the CSV format.
                 string resultLine = line.Substring(meanStart, line.Length - meanStart);
                 string[] resultLineTokens = resultLine.Split(',');
-                resultLine = resultLineTokens[0] + "(" + resultLineTokens[1].Substring(1, resultLineTokens[1].Length - 1) + ")";
+                resultLine = string.Concat(resultLineTokens[0], "(", resultLineTokens[1].AsSpan(1, resultLineTokens[1].Length - 1), ")");
 
                 // Populate our cell-level list of results for the DOEName, with the list of result strings that we find in the file.
                 doeResults.getResults()[index].AddResultToCell(column, row, leaderString + resultLine);
@@ -433,7 +404,7 @@ public static class UtilityFuncs
                 if (!eqtnFound)
                 {
                     const string searchString = "Equation";
-                    if (line.Length > searchString.Length && line.Substring(0, searchString.Length) == searchString)
+                    if (line.Length > searchString.Length && line[..searchString.Length] == searchString)
                     {
                         eqtnFound = true;
                     }
@@ -564,7 +535,7 @@ public static class UtilityFuncs
 
         string fileToRead = Path.Combine(path, summaryFilesFound[index]);
 
-        char[] tokens = { '_' };
+        char[] tokens = ['_'];
         string[] DOETokens = summaryFilesFound[index].Split(tokens);
         // Create our DOE results instance. This will contain all of DOEs and collect all of their results as well.
         DOEResults doeResults = new(DOETokens[0]);

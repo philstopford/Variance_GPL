@@ -5,7 +5,7 @@ namespace Variance;
 public static class CentralProperties
 {
     public const string productName = "Variance";
-    public const string version = "6.1";
+    public const string version = "6.2";
     public const int maxLayersForMC = 16; // maximum number of supported layers in MC system
 
     public enum shapeNames
@@ -18,10 +18,11 @@ public static class CentralProperties
         Ushape,
         Sshape,
         GEOCORE,
-        BOOLEAN,
+        BOOLEAN
     }
 
-    public static int[] shapeTable = new[] {
+    public static int[] shapeTable =
+    [
         (int)ShapeLibrary.shapeNames_all.none,
         (int)ShapeLibrary.shapeNames_all.rect,
         (int)ShapeLibrary.shapeNames_all.Lshape,
@@ -31,7 +32,7 @@ public static class CentralProperties
         (int)ShapeLibrary.shapeNames_all.Sshape,
         (int)ShapeLibrary.shapeNames_all.GEOCORE,
         (int)ShapeLibrary.shapeNames_all.BOOLEAN
-    };
+    ];
 
     public const int timer_interval = 1000;
 }

@@ -19,16 +19,16 @@ public class EntropyImplantSettings
     private double twistAngle;
     private double twistAngleVar;
 
-    private static double default_resistWidth = 0.0;
-    private static double default_resistWidthVar = 0.0;
-    private static double default_resistHeight_postDevelop = 0.0;
-    private static double default_resistHeight_postDevelopVar = 0.0;
-    private static double default_resistCRR = 0.0;
-    private static double default_resistCRRVar = 0.0;
-    private static double default_tilt = 0.0;
-    private static double default_tiltVar = 0.0;
-    private static double default_twist = 0.0;
-    private static double default_twistVar = 0.0;
+    private const double default_resistWidth = 0.0;
+    private const double default_resistWidthVar = 0.0;
+    private const double default_resistHeight_postDevelop = 0.0;
+    private const double default_resistHeight_postDevelopVar = 0.0;
+    private const double default_resistCRR = 0.0;
+    private const double default_resistCRRVar = 0.0;
+    private const double default_tilt = 0.0;
+    private const double default_tiltVar = 0.0;
+    private const double default_twist = 0.0;
+    private const double default_twistVar = 0.0;
 
     public EntropyImplantSettings()
     {
@@ -161,84 +161,44 @@ public class EntropyImplantSettings
 
     private double pGetDouble(properties_d p)
     {
-        double ret = 0;
-        switch (p)
+        double ret = p switch
         {
-            case properties_d.w:
-                ret = resistWidth;
-                break;
-            case properties_d.wV:
-                ret = resistWidthVar;
-                break;
-            case properties_d.h:
-                ret = resistHeight_postDevelop;
-                break;
-            case properties_d.hV:
-                ret = resistHeight_postDevelopVar;
-                break;
-            case properties_d.cRR:
-                ret = resistCRR;
-                break;
-            case properties_d.cV:
-                ret = resistCRRVar;
-                break;
-            case properties_d.tilt:
-                ret = tiltAngle;
-                break;
-            case properties_d.tiltV:
-                ret = tiltAngleVar;
-                break;
-            case properties_d.twist:
-                ret = twistAngle;
-                break;
-            case properties_d.twistV:
-                ret = twistAngleVar;
-                break;
-        }
+            properties_d.w => resistWidth,
+            properties_d.wV => resistWidthVar,
+            properties_d.h => resistHeight_postDevelop,
+            properties_d.hV => resistHeight_postDevelopVar,
+            properties_d.cRR => resistCRR,
+            properties_d.cV => resistCRRVar,
+            properties_d.tilt => tiltAngle,
+            properties_d.tiltV => tiltAngleVar,
+            properties_d.twist => twistAngle,
+            properties_d.twistV => twistAngleVar,
+            _ => 0
+        };
         return ret;
     }
 
-    public double getDefaultDouble(properties_d p)
+    public static double getDefaultDouble(properties_d p)
     {
         return pGetDefaultDouble(p);
     }
 
-    private double pGetDefaultDouble(properties_d p)
+    private static double pGetDefaultDouble(properties_d p)
     {
-        double ret = 0;
-        switch (p)
+        double ret = p switch
         {
-            case properties_d.w:
-                ret = default_resistWidth;
-                break;
-            case properties_d.wV:
-                ret = default_resistWidthVar;
-                break;
-            case properties_d.h:
-                ret = default_resistHeight_postDevelop;
-                break;
-            case properties_d.hV:
-                ret = default_resistHeight_postDevelopVar;
-                break;
-            case properties_d.cRR:
-                ret = default_resistCRR;
-                break;
-            case properties_d.cV:
-                ret = default_resistCRRVar;
-                break;
-            case properties_d.tilt:
-                ret = default_tilt;
-                break;
-            case properties_d.tiltV:
-                ret = default_tiltVar;
-                break;
-            case properties_d.twist:
-                ret = default_twist;
-                break;
-            case properties_d.twistV:
-                ret = default_twistVar;
-                break;
-        }
+            properties_d.w => default_resistWidth,
+            properties_d.wV => default_resistWidthVar,
+            properties_d.h => default_resistHeight_postDevelop,
+            properties_d.hV => default_resistHeight_postDevelopVar,
+            properties_d.cRR => default_resistCRR,
+            properties_d.cV => default_resistCRRVar,
+            properties_d.tilt => default_tilt,
+            properties_d.tiltV => default_tiltVar,
+            properties_d.twist => default_twist,
+            properties_d.twistV => default_twistVar,
+            _ => 0
+        };
         return ret;
     }
 }

@@ -122,7 +122,7 @@ public partial class MainForm
                     if (!entryOK) // failsafe.
                     {
                         commonVars.getSimulationSettings().getDOESettings().resetTileList_ColRow();
-                        commonVars.getSimulationSettings().getDOESettings().addTileList_Value(new [] { 0, 0 });
+                        commonVars.getSimulationSettings().getDOESettings().addTileList_Value([0, 0]);
                     }
 
                 }

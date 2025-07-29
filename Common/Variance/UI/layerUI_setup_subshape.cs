@@ -26,8 +26,8 @@ public partial class MainForm
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layerSubShapes_table = new();
-            groupBox_subShapes = new() {Content = TableLayout.AutoSized(groupBox_layerSubShapes_table)};
-            expander_subShapes = new ()
+            groupBox_subShapes = new GroupBox {Content = TableLayout.AutoSized(groupBox_layerSubShapes_table)};
+            expander_subShapes = new Expander
             {
                 Content = groupBox_subShapes,
                 Header = "SubShapes",

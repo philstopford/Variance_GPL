@@ -16,11 +16,11 @@ public class Headless
         public ConsoleSpinner()
         {
             counter = 0;
-            sequence = new[] { "/", "-", "\\", "|" };
-            sequence = new[] { ".", "o", "0", "o" };
-            sequence = new[] { "+", "x" };
-            sequence = new[] { "V", "<", "^", ">" };
-            sequence = new[] { ".   ", "..  ", "... ", "...." };
+            sequence = ["/", "-", "\\", "|"];
+            sequence = [".", "o", "0", "o"];
+            sequence = ["+", "x"];
+            sequence = ["V", "<", "^", ">"];
+            sequence = [".   ", "..  ", "... ", "...."];
         }
 
         public void Turn()
@@ -37,11 +37,11 @@ public class Headless
         }
     }
 
-    public VarianceContext varianceContext;
-    private ConsoleSpinner cs;
+    public VarianceContext? varianceContext;
+    private ConsoleSpinner? cs;
 
-    private CommonVars commonVars;
-    private Entropy entropyControl;
+    private CommonVars? commonVars;
+    private Entropy? entropyControl;
 
     public Headless(VarianceContext varianceContext)
     {
@@ -57,15 +57,15 @@ public class Headless
     {
         varianceContext = _varianceContext;
         commonVars = new CommonVars(varianceContext);
-        varianceContext.emailPwd = varianceContext.aes.EncryptToString(varianceContext.emailPwd);
+        varianceContext.emailPwd = varianceContext.aes!.EncryptToString(varianceContext.emailPwd!);
         entropyControl = new Entropy(ref varianceContext, commonVars);
         commonVars.getNonSimulationSettings().emailOnCompletion = varianceContext.completion;
         commonVars.getNonSimulationSettings().emailPerJob = varianceContext.perJob;
-        commonVars.getNonSimulationSettings().emailAddress = varianceContext.emailAddress;
-        commonVars.getNonSimulationSettings().emailPwd = varianceContext.emailPwd;
-        commonVars.getNonSimulationSettings().host = varianceContext.host;
+        commonVars.getNonSimulationSettings().emailAddress = varianceContext.emailAddress!;
+        commonVars.getNonSimulationSettings().emailPwd = varianceContext.emailPwd!;
+        commonVars.getNonSimulationSettings().host = varianceContext.host!;
         commonVars.getNonSimulationSettings().ssl = varianceContext.ssl;
-        commonVars.getNonSimulationSettings().port = varianceContext.port;
+        commonVars.getNonSimulationSettings().port = varianceContext.port!;
         commonVars.storage.setLayerSettings = setLayerSettings;
     }
 
@@ -76,7 +76,7 @@ public class Headless
 
     private void pUpdateReadout()
     {
-        if (entropyControl.sw_Preview.Elapsed.TotalMilliseconds - entropyControl.timeOfLastPreviewUpdate < commonVars.m_timer.Interval)
+        if (entropyControl!.sw_Preview.Elapsed.TotalMilliseconds - entropyControl.timeOfLastPreviewUpdate < commonVars!.m_timer.Interval)
         {
             return;
         }
@@ -87,7 +87,7 @@ public class Headless
                 entropyControl.swTime += entropyControl.sw.Elapsed.TotalSeconds;
             }
             entropyControl.sw.Stop();
-            if (varianceContext.implantMode)
+            if (varianceContext!.implantMode)
             {
                 entropyControl.timeOfFlight_implant(entropyControl.swTime);
             }
@@ -95,7 +95,7 @@ public class Headless
             {
                 entropyControl.timeOfFlight(entropyControl.swTime, false);
             }
-            if (Monitor.TryEnter(varianceContext.previewLock))
+            if (Monitor.TryEnter(varianceContext.previewLock!))
             {
                 try
                 {
@@ -121,7 +121,7 @@ public class Headless
                 }
                 finally
                 {
-                    Monitor.Exit(varianceContext.previewLock);
+                    Monitor.Exit(varianceContext.previewLock!);
                 }
             }
             entropyControl.sw.Reset();
@@ -138,14 +138,14 @@ public class Headless
     private void summary()
     {
         List<string> t;
-        if (varianceContext.implantMode)
+        if (varianceContext!.implantMode)
         {
-            Console.WriteLine("Converged on: " + entropyControl.getImplantResultPackage().getMeanAndStdDev());
+            Console.WriteLine("Converged on: " + entropyControl!.getImplantResultPackage().getMeanAndStdDev());
             t = entropyControl.getImplantResultPackage().getHistograms(50);
         }
         else
         {
-            Console.WriteLine("Converged on: " + entropyControl.getResultPackage().getMeanAndStdDev());
+            Console.WriteLine("Converged on: " + entropyControl!.getResultPackage().getMeanAndStdDev());
             t = entropyControl.getResultPackage().getHistograms(50);
         }
         foreach (string t1 in t)
@@ -156,43 +156,40 @@ public class Headless
 
     private void updateSimUIST(bool doPASearch, SimResultPackage resultPackage, string resultString)
     {
-        if (varianceContext.implantMode)
+        if (varianceContext!.implantMode)
         {
-            writeToConsole("Converging on: " + entropyControl.getImplantResultPackage().getMeanAndStdDev());
+            writeToConsole("Converging on: " + entropyControl!.getImplantResultPackage().getMeanAndStdDev());
         }
         else
         {
-            writeToConsole("Converging on: " + entropyControl.getResultPackage().getMeanAndStdDev());
+            writeToConsole("Converging on: " + entropyControl!.getResultPackage().getMeanAndStdDev());
         }
     }
 
-    private void directProgress(int current, int total)
+    private static void directProgress(int current, int total)
     {
         Console.WriteLine((current / (float)total * 100.0f).ToString("0.##") + "% of results saved");
     }
 
-    public void writeToConsole(string myString)
+    public static void writeToConsole(string myString)
     {
         Console.WriteLine(myString);
     }
 
     private void abortRun()
     {
-        if (commonVars.cancelling)
+        if (commonVars!.cancelling)
         {
             return;
         }
 
-        if (commonVars.runAbort && !commonVars.userCancelQuery)
+        if (commonVars is { runAbort: true, userCancelQuery: false })
         {
             commonVars.userCancelQuery = true;
             commonVars.cancelling = true;
             Console.WriteLine("Abort and save results so far? (y/n) ");
-            string userInput = Console.ReadLine();
-            if (userInput != null)
-            {
-                commonVars.runAbort = userInput.ToUpper().StartsWith("Y");
-            }
+            string userInput = Console.ReadLine()!;
+            commonVars.runAbort = userInput.StartsWith("Y", StringComparison.CurrentCultureIgnoreCase);
 
             commonVars.userCancelQuery = false;
         }
@@ -201,25 +198,18 @@ public class Headless
 
     private void abortRunMT(SimResultPackage resultPackage, CancellationTokenSource cancelSource, CancellationToken cancellationToken)
     {
-        if (commonVars.cancelling)
+        if (commonVars!.cancelling)
         {
             return;
         }
 
-        if (commonVars.runAbort && !commonVars.userCancelQuery)
+        if (commonVars is { runAbort: true, userCancelQuery: false })
         {
             commonVars.userCancelQuery = true;
             commonVars.cancelling = true;
             Console.WriteLine("Abort and save results so far? (y/n) ");
-            string userInput = Console.ReadLine();
-            if (userInput != null && userInput.ToUpper().StartsWith("Y"))
-            {
-                commonVars.runAbort = true;
-            }
-            else
-            {
-                commonVars.runAbort = false;
-            }
+            string userInput = Console.ReadLine()!;
+            commonVars.runAbort = false || userInput.StartsWith("Y", StringComparison.CurrentCultureIgnoreCase);
             commonVars.userCancelQuery = false;
 
             if (commonVars.runAbort)
@@ -234,14 +224,14 @@ public class Headless
 
     public void cancelHandler(object sender, ConsoleCancelEventArgs e)
     {
-        commonVars.runAbort = true;
+        commonVars!.runAbort = true;
     }
 
     private void hlRun(string csvFile)
     {
-        Console.CancelKeyPress += cancelHandler;
+        Console.CancelKeyPress += cancelHandler!;
 
-        entropyControl.updateStatus = writeLine;
+        entropyControl!.updateStatus = writeLine;
         entropyControl.directProgress = directProgress;
         entropyControl.clearAbortFlagFunc = clearAbortFlag;
         entropyControl.abortRunFunc = abortRun;
@@ -252,27 +242,21 @@ public class Headless
         entropyControl.simRunningFunc = simRunning;
         entropyControl.postSimUIFunc = summary;
 
-        string tmp;
-        if (commonVars.getFriendly())
-        {
-            tmp = utility.Utils.friendlyNumber(commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases));
-        }
-        else
-        {
-            tmp = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases).ToString();
-        }
+        var tmp = commonVars!.getFriendly() ? 
+            utility.Utils.friendlyNumber(commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases))
+            : commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases).ToString();
         Console.WriteLine("Starting run for " + tmp + " cases.");
         entropyControl.swTime = 0.0;
-        bool threaded = varianceContext.numberOfThreads != 1;
+        bool threaded = varianceContext!.numberOfThreads != 1;
 
         entropyControl.EntropyRun(commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases), csvFile, threaded, false);
     }
 
     private void hlImplantRun(string csvFile)
     {
-        Console.CancelKeyPress += cancelHandler;
+        Console.CancelKeyPress += cancelHandler!;
 
-        entropyControl.updateStatus = writeLine;
+        entropyControl!.updateStatus = writeLine;
         entropyControl.directProgress = directProgress;
         entropyControl.clearAbortFlagFunc = clearAbortFlag;
         entropyControl.abortRunFunc = abortRun;
@@ -280,40 +264,36 @@ public class Headless
         entropyControl.updateImplantSimUIFunc = updateSimUIST;
         entropyControl.updateImplantSimUIMTFunc = updateSimUIMT;
         entropyControl.implantSimRunningUIFunc = simRunning;
-        Console.WriteLine("Starting run for " + commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases) + " cases.");
+        Console.WriteLine("Starting run for " + commonVars!.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases) + " cases.");
         entropyControl.swTime = 0.0;
-        bool threaded = true;
-        if (varianceContext.numberOfThreads == 1)
-        {
-            threaded = false;
-        }
+        bool threaded = varianceContext!.numberOfThreads != 1;
 
         entropyControl.entropyRun_implant(commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.nCases), csvFile, threaded);
     }
 
     private void clearAbortFlag()
     {
-        commonVars.runAbort = false;
+        commonVars!.runAbort = false;
     }
 
     private void updateSimUIMT()
     {
-        commonVars.m_timer.Elapsed += updateReadout;
+        commonVars!.m_timer.Elapsed += updateReadout!;
     }
 
-    private void updateProgress(double val)
+    private static void updateProgress(double val)
     {
         Console.WriteLine((val * 100.0f).ToString("0.##") + "% complete");
     }
 
-    private void writeLine(string statusLine)
+    private static void writeLine(string statusLine)
     {
         Console.WriteLine(statusLine);
     }
 
     private void simRunning()
     {
-        commonVars.setSimRunning(true);
+        commonVars!.setSimRunning(true);
     }
 
     public void setLayerSettings(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false)
@@ -331,7 +311,7 @@ public class Headless
 
         if (!gdsOnly)
         {
-            if (commonVars.isCopyPrepped())
+            if (commonVars!.isCopyPrepped())
             {
                 if (entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.xOL_corr) == 1 || entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.yOL_corr) == 1 || entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr) == 1)
                 {
@@ -375,7 +355,7 @@ public class Headless
         try
         {
             // Call with '-1' can be triggered by load of project file where the copyFrom isn't set because we're direct driving the DOE flags.
-            if (commonVars.isCopyPrepped())
+            if (commonVars!.isCopyPrepped())
             {
                 commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, commonVars.getCopyDOEUse());
             }
@@ -385,12 +365,12 @@ public class Headless
         }
 
         if (entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.sCDU) != 0.0m && entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE &&
-            varianceContext.geoCoreCDVariation == false)
+            varianceContext!.geoCoreCDVariation == false)
         {
             ErrorReporter.showMessage_OK("Project uses Oasis/GDS CD variation.", "Overriding preference.");
         }
 
-        if (commonVars.isCopyPrepped())
+        if (commonVars!.isCopyPrepped())
         {
             // Align the external data.
             commonVars.pasteGeoCoreHandler(settingsIndex);
@@ -423,12 +403,12 @@ public class Headless
     private void pDoStuff()
     {
         Console.WriteLine("");
-        Console.WriteLine(commonVars.titleText + ": headless mode");
+        Console.WriteLine(commonVars!.titleText + ": headless mode");
         Console.WriteLine("brought to you by its creator: " + commonVars.author);
         Console.WriteLine();
 
         Console.WriteLine();
-        if (varianceContext.xmlFileArg == "")
+        if (varianceContext!.xmlFileArg == "")
         {
             Console.WriteLine("No input file specified.");
             Console.WriteLine("Quitting.");
@@ -443,7 +423,7 @@ public class Headless
                 return;
             }
 
-            string[] tokens = varianceContext.xmlFileArg.Split(new[] { '.' });
+            string[] tokens = varianceContext.xmlFileArg!.Split(['.']);
             // XML file?
             if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
@@ -459,7 +439,7 @@ public class Headless
                 // Loaded fine.
                 Console.WriteLine("OK");
                 commonVars.projectFileName = varianceContext.xmlFileArg;
-                string csvFile = varianceContext.xmlFileArg.Substring(0, varianceContext.xmlFileArg.Length - tokens[^1].Length) + "csv";
+                string csvFile = string.Concat(varianceContext.xmlFileArg.AsSpan(0, varianceContext.xmlFileArg.Length - tokens[^1].Length), "csv");
                 Console.WriteLine("Results will be written to: " + csvFile);
                 Console.WriteLine("Initializing settings for simulation");
                 try

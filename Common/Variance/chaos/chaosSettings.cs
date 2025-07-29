@@ -140,49 +140,23 @@ public class ChaosSettings
 
     private double pGetValue(int p, int index)
     {
-        double retVal = 0;
-        switch (p)
+        double retVal = p switch
         {
-            case (int)Properties.overlayX:
-                retVal = overlayX[index];
-                break;
-            case (int)Properties.overlayY:
-                retVal = overlayY[index];
-                break;
-            case (int)Properties.hTipBiasType:
-                retVal = hTipBiasType[index];
-                break;
-            case (int)Properties.vTipBiasType:
-                retVal = vTipBiasType[index];
-                break;
-            case (int)Properties.hTipBiasVar:
-                retVal = horTipBiasVar[index];
-                break;
-            case (int)Properties.vTipBiasVar:
-                retVal = verTipBiasVar[index];
-                break;
-            case (int)Properties.icVar:
-                retVal = iCVar[index];
-                break;
-            case (int)Properties.ocVar:
-                retVal = oCVar[index];
-                break;
-            case (int)Properties.LWRVar:
-                retVal = LWRVar[index];
-                break;
-            case (int)Properties.LWR2Var:
-                retVal = LWR2Var[index];
-                break;
-            case (int)Properties.CDUTVar:
-                retVal = CDUTVar[index];
-                break;
-            case (int)Properties.CDUSVar:
-                retVal = CDUSVar[index];
-                break;
-            case (int)Properties.wobbleVar:
-                retVal = wobbleVar[index];
-                break;
-        }
+            (int)Properties.overlayX => overlayX[index],
+            (int)Properties.overlayY => overlayY[index],
+            (int)Properties.hTipBiasType => hTipBiasType[index],
+            (int)Properties.vTipBiasType => vTipBiasType[index],
+            (int)Properties.hTipBiasVar => horTipBiasVar[index],
+            (int)Properties.vTipBiasVar => verTipBiasVar[index],
+            (int)Properties.icVar => iCVar[index],
+            (int)Properties.ocVar => oCVar[index],
+            (int)Properties.LWRVar => LWRVar[index],
+            (int)Properties.LWR2Var => LWR2Var[index],
+            (int)Properties.CDUTVar => CDUTVar[index],
+            (int)Properties.CDUSVar => CDUSVar[index],
+            (int)Properties.wobbleVar => wobbleVar[index],
+            _ => 0
+        };
 
         return retVal;
     }
@@ -194,49 +168,23 @@ public class ChaosSettings
 
     private double[] pGetValues(int p)
     {
-        double[] retVal = { };
-        switch (p)
+        double[] retVal = p switch
         {
-            case (int)Properties.overlayX:
-                retVal = overlayX;
-                break;
-            case (int)Properties.overlayY:
-                retVal = overlayY;
-                break;
-            case (int)Properties.hTipBiasType:
-                retVal = hTipBiasType;
-                break;
-            case (int)Properties.vTipBiasType:
-                retVal = vTipBiasType;
-                break;
-            case (int)Properties.hTipBiasVar:
-                retVal = horTipBiasVar;
-                break;
-            case (int)Properties.vTipBiasVar:
-                retVal = verTipBiasVar;
-                break;
-            case (int)Properties.icVar:
-                retVal = iCVar;
-                break;
-            case (int)Properties.ocVar:
-                retVal = oCVar;
-                break;
-            case (int)Properties.LWRVar:
-                retVal = LWRVar;
-                break;
-            case (int)Properties.LWR2Var:
-                retVal = LWR2Var;
-                break;
-            case (int)Properties.CDUTVar:
-                retVal = CDUTVar;
-                break;
-            case (int)Properties.CDUSVar:
-                retVal = CDUSVar;
-                break;
-            case (int)Properties.wobbleVar:
-                retVal = wobbleVar;
-                break;
-        }
+            (int)Properties.overlayX => overlayX,
+            (int)Properties.overlayY => overlayY,
+            (int)Properties.hTipBiasType => hTipBiasType,
+            (int)Properties.vTipBiasType => vTipBiasType,
+            (int)Properties.hTipBiasVar => horTipBiasVar,
+            (int)Properties.vTipBiasVar => verTipBiasVar,
+            (int)Properties.icVar => iCVar,
+            (int)Properties.ocVar => oCVar,
+            (int)Properties.LWRVar => LWRVar,
+            (int)Properties.LWR2Var => LWR2Var,
+            (int)Properties.CDUTVar => CDUTVar,
+            (int)Properties.CDUSVar => CDUSVar,
+            (int)Properties.wobbleVar => wobbleVar,
+            _ => []
+        };
 
         return retVal;
     }
@@ -317,16 +265,12 @@ public class ChaosSettings
 
     private int pGetInt(int i, int index)
     {
-        int retVal = 0;
-        switch (i)
+        int retVal = i switch
         {
-            case (int)Ints.lwrSeed:
-                retVal = LWRSeed[index];
-                break;
-            case (int)Ints.lwr2Seed:
-                retVal = LWR2Seed[index];
-                break;
-        }
+            (int)Ints.lwrSeed => LWRSeed[index],
+            (int)Ints.lwr2Seed => LWR2Seed[index],
+            _ => 0
+        };
         return retVal;
     }
 
@@ -337,16 +281,12 @@ public class ChaosSettings
 
     private int[] pGetInts(int i)
     {
-        int[] retVal = { };
-        switch (i)
+        int[] retVal = i switch
         {
-            case (int)Ints.lwrSeed:
-                retVal = LWRSeed;
-                break;
-            case (int)Ints.lwr2Seed:
-                retVal = LWR2Seed;
-                break;
-        }
+            (int)Ints.lwrSeed => LWRSeed,
+            (int)Ints.lwr2Seed => LWR2Seed,
+            _ => []
+        };
         return retVal;
     }
 
@@ -375,16 +315,12 @@ public class ChaosSettings
 
     private bool pGetBool(int b, int index)
     {
-        bool retVal = false;
-        switch (b)
+        bool retVal = b switch
         {
-            case (int)Bools.icPA:
-                retVal = iC_PAsearch[index];
-                break;
-            case (int)Bools.ocPA:
-                retVal = oC_PAsearch[index];
-                break;
-        }
+            (int)Bools.icPA => iC_PAsearch[index],
+            (int)Bools.ocPA => oC_PAsearch[index],
+            _ => false
+        };
         return retVal;
     }
 
@@ -395,16 +331,12 @@ public class ChaosSettings
 
     private bool[] pGetBools(int b)
     {
-        bool[] retVal = { };
-        switch (b)
+        bool[] retVal = b switch
         {
-            case (int)Bools.icPA:
-                retVal = iC_PAsearch;
-                break;
-            case (int)Bools.ocPA:
-                retVal = oC_PAsearch;
-                break;
-        }
+            (int)Bools.icPA => iC_PAsearch,
+            (int)Bools.ocPA => oC_PAsearch,
+            _ => []
+        };
         return retVal;
     }
 

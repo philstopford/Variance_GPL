@@ -39,7 +39,7 @@ public partial class MainForm
         }
 
         string filename = sfd.FileName;
-        string[] tokens = filename.Split(new[] { '.' });
+        string[] tokens = filename.Split(['.']);
         string ext = tokens[^1].ToUpper();
 
         int type = -1;

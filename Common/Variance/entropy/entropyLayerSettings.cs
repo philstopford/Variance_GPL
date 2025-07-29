@@ -8,67 +8,67 @@ namespace Variance;
 [Serializable]
 public class EntropyLayerSettings : ShapeSettings
 {
-    private static string default_comment = "";
-    private static int[] default_bgLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    private static int default_showDrawn = 0;
+    private const string default_comment = "";
+    private readonly int[] default_bgLayers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    private const int default_showDrawn = 0;
 
-    private static string default_rngmapping = CommonVars.boxMuller;
+    private static readonly string default_rngmapping = CommonVars.boxMuller;
 
-    private static decimal default_wobble = 0;
-    private static decimal default_innerCV = 0;
-    private static decimal default_outerCV = 0;
-    private static int default_correlatedLWR = 0;
-    private static int default_correlatedLWRLayerIndex = -1;
-    private static decimal default_sideCDU = 0;
-    private static decimal default_tipsCDU = 0;
-    private static decimal default_horOverlay = 0;
-    private static decimal default_verOverlay = 0;
+    private const decimal default_wobble = 0;
+    private const decimal default_innerCV = 0;
+    private const decimal default_outerCV = 0;
+    private const int default_correlatedLWR = 0;
+    private const int default_correlatedLWRLayerIndex = -1;
+    private const decimal default_sideCDU = 0;
+    private const decimal default_tipsCDU = 0;
+    private const decimal default_horOverlay = 0;
+    private const decimal default_verOverlay = 0;
 
-    private static int default_correlatedTipCDU = 0;
-    private static int default_correlatedTipCDULayerIndex = -1;
-    private static int default_correlatedCDU = 0;
-    private static int default_correlatedCDULayerIndex = -1;
-    private static int default_correlatedXOverlay = 0;
-    private static int default_correlatedXOverlayLayerIndex = -1;
-    private static int default_correlatedYOverlay = 0;
-    private static int default_correlatedYOverlayLayerIndex = -1;
-    private static int default_overlayXReferenceLayer = -1;
-    private static int default_overlayYReferenceLayer = -1;
-    private static int default_averageOverlayX = 0;
-    private static int default_averageOverlayY = 0;
-    private static int[] default_overlayXReferenceLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    private static int[] default_overlayYReferenceLayers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    private const int default_correlatedTipCDU = 0;
+    private const int default_correlatedTipCDULayerIndex = -1;
+    private const int default_correlatedCDU = 0;
+    private const int default_correlatedCDULayerIndex = -1;
+    private const int default_correlatedXOverlay = 0;
+    private const int default_correlatedXOverlayLayerIndex = -1;
+    private const int default_correlatedYOverlay = 0;
+    private const int default_correlatedYOverlayLayerIndex = -1;
+    private const int default_overlayXReferenceLayer = -1;
+    private const int default_overlayYReferenceLayer = -1;
+    private const int default_averageOverlayX = 0;
+    private const int default_averageOverlayY = 0;
+    private readonly int[] default_overlayXReferenceLayers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    private readonly int[] default_overlayYReferenceLayers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    private static int default_fileType = 0; // layout (now exposed by geoCore - could be redundant)
-    private static PathsD default_fileData = new() { new () { new (0, 0) } };
-    private static string default_fileToLoad = "";
-    private static string default_ldNameFromFile = "";
-    private static string default_structureNameFromFile = "";
-    private static int default_ldFromFile = 0;
-    private static int default_polyFill = (int)PolyFill.pftNonZero; // non-zero
-    private static int default_structureFromFile = 0;
-    private static int default_perPoly = 0;
-    private static int default_referenceLayout = 0;
+    private const int default_fileType = 0; // layout (now exposed by geoCore - could be redundant)
+    private readonly PathsD default_fileData = [new PathD { new PointD(0, 0) }];
+    private const string default_fileToLoad = "";
+    private const string default_ldNameFromFile = "";
+    private const string default_structureNameFromFile = "";
+    private const int default_ldFromFile = 0;
+    private const int default_polyFill = (int)PolyFill.pftNonZero; // non-zero
+    private const int default_structureFromFile = 0;
+    private const int default_perPoly = 0;
+    private const int default_referenceLayout = 0;
 
-    private static decimal default_lensDistortionCoeff1 = 0;
-    private static decimal default_lensDistortionCoeff2 = 0;
+    private const decimal default_lensDistortionCoeff1 = 0;
+    private const decimal default_lensDistortionCoeff2 = 0;
 
-    private static int default_booleanLayerA = -1;
-    private static int default_booleanLayerB = -1;
-    private static int default_booleanLayerOpA = 0;
-    private static int default_booleanLayerOpB = 0;
-    private static int default_booleanLayerOpAB = 0;
+    private const int default_booleanLayerA = -1;
+    private const int default_booleanLayerB = -1;
+    private const int default_booleanLayerOpA = 0;
+    private const int default_booleanLayerOpB = 0;
+    private const int default_booleanLayerOpAB = 0;
 
-    private static int default_omitLayer = 0;
+    private const int default_omitLayer = 0;
 
-    private static int default_LWRNoisePreview = 0;
+    private const int default_LWRNoisePreview = 0;
 
-    private static int default_removeArtifacts = 0;
-    private static int default_removeArtifactsEpsilon = 100;
+    private const int default_removeArtifacts = 0;
+    private const int default_removeArtifactsEpsilon = 100;
 
-    private static decimal default_uniBias = 0;
-    private static int default_uniBiasAxis = 0;
-    private static int default_uniBiasAfterRotation = 0;
+    private const decimal default_uniBias = 0;
+    private const int default_uniBiasAxis = 0;
+    private const int default_uniBiasAfterRotation = 0;
     
     [NonSerialized] private int[] bgLayers;
 
@@ -97,19 +97,13 @@ public class EntropyLayerSettings : ShapeSettings
 
     private int[] pGetIntArray(properties_intarray p)
     {
-        int[] ret = { };
-        switch (p)
+        int[] ret = p switch
         {
-            case properties_intarray.bglayers:
-                ret = bgLayers;
-                break;
-            case properties_intarray.xOLRefs:
-                ret = overlayXReferenceLayers;
-                break;
-            case properties_intarray.yOLRefs:
-                ret = overlayYReferenceLayers;
-                break;
-        }
+            properties_intarray.bglayers => bgLayers,
+            properties_intarray.xOLRefs => overlayXReferenceLayers,
+            properties_intarray.yOLRefs => overlayYReferenceLayers,
+            _ => []
+        };
 
         return ret;
     }
@@ -163,19 +157,13 @@ public class EntropyLayerSettings : ShapeSettings
 
     private int pGetIntArrayValue(properties_intarray p, int index)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_intarray.bglayers:
-                ret = bgLayers[index];
-                break;
-            case properties_intarray.xOLRefs:
-                ret = overlayXReferenceLayers[index];
-                break;
-            case properties_intarray.yOLRefs:
-                ret = overlayYReferenceLayers[index];
-                break;
-        }
+            properties_intarray.bglayers => bgLayers[index],
+            properties_intarray.xOLRefs => overlayXReferenceLayers[index],
+            properties_intarray.yOLRefs => overlayYReferenceLayers[index],
+            _ => 0
+        };
 
         return ret;
     }
@@ -248,7 +236,8 @@ public class EntropyLayerSettings : ShapeSettings
         flipH, flipV, alignX, alignY, structure, lD, fill, fileType, perPoly, refLayout,
         bLayerA, bLayerB, bLayerOpA, bLayerOpB, bLayerOpAB,
         removeArtifacts, removeArtifactsEpsilon,
-        uniBiasAxis, uniBiasAfterRotation
+        uniBiasAxis, uniBiasAfterRotation,
+        legacyRounding
     }
 
     public int getInt(properties_i p)
@@ -258,160 +247,61 @@ public class EntropyLayerSettings : ShapeSettings
 
     private int pGetInt(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.enabled:
-                ret = getInt(ShapeSettings.properties_i.enabled);
-                break;
-            case properties_i.shapeIndex:
-                ret = getInt(ShapeSettings.properties_i.shapeIndex);
-                break;
-            case properties_i.shape0Tip:
-                ret = getInt(ShapeSettings.properties_i.subShapeTipLocIndex);
-                break;
-            case properties_i.shape1Tip:
-                ret = getInt(ShapeSettings.properties_i.subShape2TipLocIndex);
-                break;
-            case properties_i.shape2Tip:
-                ret = getInt(ShapeSettings.properties_i.subShape3TipLocIndex);
-                break;
-            case properties_i.subShapeIndex:
-                ret = getInt(ShapeSettings.properties_i.subShapeRefIndex);
-                break;
-            case properties_i.posIndex:
-                ret = getInt(ShapeSettings.properties_i.posInSubShapeIndex);
-                break;
-            case properties_i.edgeSlide:
-                ret = getInt(ShapeSettings.properties_i.edgeSlide);
-                break;
-            case properties_i.proxRays:
-                ret = getInt(ShapeSettings.properties_i.proxRays);
-                break;
-            case properties_i.proxSideRaysFallOff:
-                ret = getInt(ShapeSettings.properties_i.proxSideRaysFallOff);
-                break;
-            case properties_i.lwrType:
-                ret = getInt(ShapeSettings.properties_i.lwrType);
-                break;
-            case properties_i.lwr2Type:
-                ret = getInt(ShapeSettings.properties_i.lwr2Type);
-                break;
-            case properties_i.flipH:
-                ret = getInt(ShapeSettings.properties_i.flipH);
-                break;
-            case properties_i.flipV:
-                ret = getInt(ShapeSettings.properties_i.flipV);
-                break;
-            case properties_i.alignX:
-                ret = getInt(ShapeSettings.properties_i.alignX);
-                break;
-            case properties_i.alignY:
-                ret = getInt(ShapeSettings.properties_i.alignY);
-                break;
-            case properties_i.omit:
-                ret = omitFromSim;
-                break;
-            case properties_i.showDrawn:
-                ret = showDrawn;
-                break;
-            case properties_i.lwr_corr:
-                ret = correlatedLWR;
-                break;
-            case properties_i.lwr_corr_ref:
-                ret = correlatedLWRLayerIndex;
-                break;
-            case properties_i.lwr2_corr:
-                ret = correlatedLWR2;
-                break;
-            case properties_i.lwr2_corr_ref:
-                ret = correlatedLWR2LayerIndex;
-                break;
-            case properties_i.lwrPreview:
-                ret = LWRNoisePreview;
-                break;
-            case properties_i.xOL_ref:
-                ret = overlayXReferenceLayer;
-                break;
-            case properties_i.yOL_ref:
-                ret = overlayYReferenceLayer;
-                break;
-            case properties_i.xOL_av:
-                ret = averageOverlayX;
-                break;
-            case properties_i.yOL_av:
-                ret = averageOverlayY;
-                break;
-            case properties_i.xOL_corr:
-                ret = correlatedXOverlay;
-                break;
-            case properties_i.xOL_corr_ref:
-                ret = correlatedXOverlayLayerIndex;
-                break;
-            case properties_i.yOL_corr:
-                ret = correlatedYOverlay;
-                break;
-            case properties_i.yOL_corr_ref:
-                ret = correlatedYOverlayLayerIndex;
-                break;
-            case properties_i.CDU_corr:
-                ret = correlatedCDU;
-                break;
-            case properties_i.CDU_corr_ref:
-                ret = correlatedCDULayerIndex;
-                break;
-            case properties_i.tCDU_corr:
-                ret = correlatedTipCDU;
-                break;
-            case properties_i.tCDU_corr_ref:
-                ret = correlatedTipCDULayerIndex;
-                break;
-            case properties_i.structure:
-                ret = structureFromFile;
-                break;
-            case properties_i.lD:
-                ret = ldFromFile;
-                break;
-            case properties_i.fill:
-                ret = polyFill;
-                break;
-            case properties_i.fileType:
-                ret = fileType;
-                break;
-            case properties_i.perPoly:
-                ret = perPoly;
-                break;
-            case properties_i.refLayout:
-                ret = referenceLayout;
-                break;
-            case properties_i.bLayerA:
-                ret = booleanLayerA;
-                break;
-            case properties_i.bLayerB:
-                ret = booleanLayerB;
-                break;
-            case properties_i.bLayerOpA:
-                ret = booleanLayerOpA;
-                break;
-            case properties_i.bLayerOpB:
-                ret = booleanLayerOpB;
-                break;
-            case properties_i.bLayerOpAB:
-                ret = booleanLayerOpAB;
-                break;
-            case properties_i.removeArtifacts:
-                ret = removeArtifacts;
-                break;
-            case properties_i.removeArtifactsEpsilon:
-                ret = removeArtifactsEpsilon;
-                break;
-            case properties_i.uniBiasAxis:
-                ret = uniBiasAxis;
-                break;
-            case properties_i.uniBiasAfterRotation:
-                ret = uniBiasAfterRotation;
-                break;
-        }
+            properties_i.enabled => getInt(ShapeSettings.properties_i.enabled),
+            properties_i.shapeIndex => getInt(ShapeSettings.properties_i.shapeIndex),
+            properties_i.shape0Tip => getInt(ShapeSettings.properties_i.subShapeTipLocIndex),
+            properties_i.shape1Tip => getInt(ShapeSettings.properties_i.subShape2TipLocIndex),
+            properties_i.shape2Tip => getInt(ShapeSettings.properties_i.subShape3TipLocIndex),
+            properties_i.subShapeIndex => getInt(ShapeSettings.properties_i.subShapeRefIndex),
+            properties_i.posIndex => getInt(ShapeSettings.properties_i.posInSubShapeIndex),
+            properties_i.edgeSlide => getInt(ShapeSettings.properties_i.edgeSlide),
+            properties_i.proxRays => getInt(ShapeSettings.properties_i.proxRays),
+            properties_i.proxSideRaysFallOff => getInt(ShapeSettings.properties_i.proxSideRaysFallOff),
+            properties_i.lwrType => getInt(ShapeSettings.properties_i.lwrType),
+            properties_i.lwr2Type => getInt(ShapeSettings.properties_i.lwr2Type),
+            properties_i.flipH => getInt(ShapeSettings.properties_i.flipH),
+            properties_i.flipV => getInt(ShapeSettings.properties_i.flipV),
+            properties_i.alignX => getInt(ShapeSettings.properties_i.alignX),
+            properties_i.alignY => getInt(ShapeSettings.properties_i.alignY),
+            properties_i.legacyRounding => getInt(ShapeSettings.properties_i.legacyRounding),
+            properties_i.omit => omitFromSim,
+            properties_i.showDrawn => showDrawn,
+            properties_i.lwr_corr => correlatedLWR,
+            properties_i.lwr_corr_ref => correlatedLWRLayerIndex,
+            properties_i.lwr2_corr => correlatedLWR2,
+            properties_i.lwr2_corr_ref => correlatedLWR2LayerIndex,
+            properties_i.lwrPreview => LWRNoisePreview,
+            properties_i.xOL_ref => overlayXReferenceLayer,
+            properties_i.yOL_ref => overlayYReferenceLayer,
+            properties_i.xOL_av => averageOverlayX,
+            properties_i.yOL_av => averageOverlayY,
+            properties_i.xOL_corr => correlatedXOverlay,
+            properties_i.xOL_corr_ref => correlatedXOverlayLayerIndex,
+            properties_i.yOL_corr => correlatedYOverlay,
+            properties_i.yOL_corr_ref => correlatedYOverlayLayerIndex,
+            properties_i.CDU_corr => correlatedCDU,
+            properties_i.CDU_corr_ref => correlatedCDULayerIndex,
+            properties_i.tCDU_corr => correlatedTipCDU,
+            properties_i.tCDU_corr_ref => correlatedTipCDULayerIndex,
+            properties_i.structure => structureFromFile,
+            properties_i.lD => ldFromFile,
+            properties_i.fill => polyFill,
+            properties_i.fileType => fileType,
+            properties_i.perPoly => perPoly,
+            properties_i.refLayout => referenceLayout,
+            properties_i.bLayerA => booleanLayerA,
+            properties_i.bLayerB => booleanLayerB,
+            properties_i.bLayerOpA => booleanLayerOpA,
+            properties_i.bLayerOpB => booleanLayerOpB,
+            properties_i.bLayerOpAB => booleanLayerOpAB,
+            properties_i.removeArtifacts => removeArtifacts,
+            properties_i.removeArtifactsEpsilon => removeArtifactsEpsilon,
+            properties_i.uniBiasAxis => uniBiasAxis,
+            properties_i.uniBiasAfterRotation => uniBiasAfterRotation,
+            _ => 0
+        };
 
         return ret;
     }
@@ -472,6 +362,9 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_i.alignY:
                 setInt(ShapeSettings.properties_i.alignY, val);
+                break;
+            case properties_i.legacyRounding:
+                setInt(ShapeSettings.properties_i.legacyRounding, val);
                 break;
             case properties_i.showDrawn:
                 showDrawn = val;
@@ -635,6 +528,9 @@ public class EntropyLayerSettings : ShapeSettings
             case properties_i.alignY:
                 defaultInt(ShapeSettings.properties_i.alignY);
                 break;
+            case properties_i.legacyRounding:
+                defaultInt(ShapeSettings.properties_i.legacyRounding);
+                break;
             case properties_i.CDU_corr:
                 correlatedCDU = default_correlatedCDU;
                 break;
@@ -747,154 +643,58 @@ public class EntropyLayerSettings : ShapeSettings
 
     private static int pGetDefaultInt(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.enabled:
-                ret = getDefaultInt(ShapeSettings.properties_i.enabled);
-                break;
-            case properties_i.shapeIndex:
-                ret = getDefaultInt(ShapeSettings.properties_i.shapeIndex);
-                break;
-            case properties_i.shape0Tip:
-                ret = getDefaultInt(ShapeSettings.properties_i.subShapeTipLocIndex);
-                break;
-            case properties_i.shape1Tip:
-                ret = getDefaultInt(ShapeSettings.properties_i.subShape2TipLocIndex);
-                break;
-            case properties_i.shape2Tip:
-                ret = getDefaultInt(ShapeSettings.properties_i.subShape3TipLocIndex);
-                break;
-            case properties_i.subShapeIndex:
-                ret = getDefaultInt(ShapeSettings.properties_i.subShapeRefIndex);
-                break;
-            case properties_i.posIndex:
-                ret = getDefaultInt(ShapeSettings.properties_i.posInSubShapeIndex);
-                break;
-            case properties_i.edgeSlide:
-                ret = getDefaultInt(ShapeSettings.properties_i.edgeSlide);
-                break;
-            case properties_i.proxRays:
-                ret = getDefaultInt(ShapeSettings.properties_i.proxRays);
-                break;
-            case properties_i.proxSideRaysFallOff:
-                ret = getDefaultInt(ShapeSettings.properties_i.proxSideRaysFallOff);
-                break;
-            case properties_i.lwrType:
-            case properties_i.lwr2Type:
-                ret = getDefaultInt(ShapeSettings.properties_i.lwrType);
-                break;
-            case properties_i.flipH:
-                ret = getDefaultInt(ShapeSettings.properties_i.flipH);
-                break;
-            case properties_i.flipV:
-                ret = getDefaultInt(ShapeSettings.properties_i.flipV);
-                break;
-            case properties_i.alignX:
-                ret = getDefaultInt(ShapeSettings.properties_i.alignX);
-                break;
-            case properties_i.alignY:
-                ret = getDefaultInt(ShapeSettings.properties_i.alignY);
-                break;
-            case properties_i.omit:
-                ret = default_omitLayer;
-                break;
-            case properties_i.showDrawn:
-                ret = default_showDrawn;
-                break;
-            case properties_i.lwrPreview:
-                ret = default_LWRNoisePreview;
-                break;
-            case properties_i.lwr_corr:
-            case properties_i.lwr2_corr:
-                ret = default_correlatedLWR;
-                break;
-            case properties_i.lwr_corr_ref:
-            case properties_i.lwr2_corr_ref:
-                ret = default_correlatedLWRLayerIndex;
-                break;
-            case properties_i.xOL_ref:
-                ret = default_overlayXReferenceLayer;
-                break;
-            case properties_i.yOL_ref:
-                ret = default_overlayYReferenceLayer;
-                break;
-            case properties_i.xOL_av:
-                ret = default_averageOverlayX;
-                break;
-            case properties_i.yOL_av:
-                ret = default_averageOverlayY;
-                break;
-            case properties_i.xOL_corr:
-                ret = default_correlatedXOverlay;
-                break;
-            case properties_i.xOL_corr_ref:
-                ret = default_correlatedXOverlayLayerIndex;
-                break;
-            case properties_i.yOL_corr:
-                ret = default_correlatedYOverlay;
-                break;
-            case properties_i.yOL_corr_ref:
-                ret = default_correlatedYOverlayLayerIndex;
-                break;
-            case properties_i.CDU_corr:
-                ret = default_correlatedCDU;
-                break;
-            case properties_i.CDU_corr_ref:
-                ret = default_correlatedCDULayerIndex;
-                break;
-            case properties_i.tCDU_corr:
-                ret = default_correlatedTipCDU;
-                break;
-            case properties_i.tCDU_corr_ref:
-                ret = default_correlatedTipCDULayerIndex;
-                break;
-            case properties_i.structure:
-                ret = default_structureFromFile;
-                break;
-            case properties_i.lD:
-                ret = default_ldFromFile;
-                break;
-            case properties_i.fill:
-                ret = default_polyFill;
-                break;
-            case properties_i.fileType:
-                ret = default_fileType;
-                break;
-            case properties_i.perPoly:
-                ret = default_perPoly;
-                break;
-            case properties_i.refLayout:
-                ret = default_referenceLayout;
-                break;
-            case properties_i.bLayerA:
-                ret = default_booleanLayerA;
-                break;
-            case properties_i.bLayerB:
-                ret = default_booleanLayerB;
-                break;
-            case properties_i.bLayerOpA:
-                ret = default_booleanLayerOpA;
-                break;
-            case properties_i.bLayerOpB:
-                ret = default_booleanLayerOpB;
-                break;
-            case properties_i.bLayerOpAB:
-                ret = default_booleanLayerOpAB;
-                break;
-            case properties_i.removeArtifacts:
-                ret = default_removeArtifacts;
-                break;
-            case properties_i.removeArtifactsEpsilon:
-                ret = default_removeArtifactsEpsilon;
-                break;
-            case properties_i.uniBiasAxis:
-                ret = default_uniBiasAxis;
-                break;
-            case properties_i.uniBiasAfterRotation:
-                ret = default_uniBiasAfterRotation;
-                break;
-        }
+            properties_i.enabled => getDefaultInt(ShapeSettings.properties_i.enabled),
+            properties_i.shapeIndex => getDefaultInt(ShapeSettings.properties_i.shapeIndex),
+            properties_i.shape0Tip => getDefaultInt(ShapeSettings.properties_i.subShapeTipLocIndex),
+            properties_i.shape1Tip => getDefaultInt(ShapeSettings.properties_i.subShape2TipLocIndex),
+            properties_i.shape2Tip => getDefaultInt(ShapeSettings.properties_i.subShape3TipLocIndex),
+            properties_i.subShapeIndex => getDefaultInt(ShapeSettings.properties_i.subShapeRefIndex),
+            properties_i.posIndex => getDefaultInt(ShapeSettings.properties_i.posInSubShapeIndex),
+            properties_i.edgeSlide => getDefaultInt(ShapeSettings.properties_i.edgeSlide),
+            properties_i.proxRays => getDefaultInt(ShapeSettings.properties_i.proxRays),
+            properties_i.proxSideRaysFallOff => getDefaultInt(ShapeSettings.properties_i.proxSideRaysFallOff),
+            properties_i.lwrType or properties_i.lwr2Type => getDefaultInt(ShapeSettings.properties_i.lwrType),
+            properties_i.flipH => getDefaultInt(ShapeSettings.properties_i.flipH),
+            properties_i.flipV => getDefaultInt(ShapeSettings.properties_i.flipV),
+            properties_i.alignX => getDefaultInt(ShapeSettings.properties_i.alignX),
+            properties_i.alignY => getDefaultInt(ShapeSettings.properties_i.alignY),
+            properties_i.legacyRounding => getDefaultInt(ShapeSettings.properties_i.legacyRounding),
+            properties_i.omit => default_omitLayer,
+            properties_i.showDrawn => default_showDrawn,
+            properties_i.lwrPreview => default_LWRNoisePreview,
+            properties_i.lwr_corr or properties_i.lwr2_corr => default_correlatedLWR,
+            properties_i.lwr_corr_ref or properties_i.lwr2_corr_ref => default_correlatedLWRLayerIndex,
+            properties_i.xOL_ref => default_overlayXReferenceLayer,
+            properties_i.yOL_ref => default_overlayYReferenceLayer,
+            properties_i.xOL_av => default_averageOverlayX,
+            properties_i.yOL_av => default_averageOverlayY,
+            properties_i.xOL_corr => default_correlatedXOverlay,
+            properties_i.xOL_corr_ref => default_correlatedXOverlayLayerIndex,
+            properties_i.yOL_corr => default_correlatedYOverlay,
+            properties_i.yOL_corr_ref => default_correlatedYOverlayLayerIndex,
+            properties_i.CDU_corr => default_correlatedCDU,
+            properties_i.CDU_corr_ref => default_correlatedCDULayerIndex,
+            properties_i.tCDU_corr => default_correlatedTipCDU,
+            properties_i.tCDU_corr_ref => default_correlatedTipCDULayerIndex,
+            properties_i.structure => default_structureFromFile,
+            properties_i.lD => default_ldFromFile,
+            properties_i.fill => default_polyFill,
+            properties_i.fileType => default_fileType,
+            properties_i.perPoly => default_perPoly,
+            properties_i.refLayout => default_referenceLayout,
+            properties_i.bLayerA => default_booleanLayerA,
+            properties_i.bLayerB => default_booleanLayerB,
+            properties_i.bLayerOpA => default_booleanLayerOpA,
+            properties_i.bLayerOpB => default_booleanLayerOpB,
+            properties_i.bLayerOpAB => default_booleanLayerOpAB,
+            properties_i.removeArtifacts => default_removeArtifacts,
+            properties_i.removeArtifactsEpsilon => default_removeArtifactsEpsilon,
+            properties_i.uniBiasAxis => default_uniBiasAxis,
+            properties_i.uniBiasAfterRotation => default_uniBiasAfterRotation,
+            _ => 0
+        };
 
         return ret;
     }
@@ -931,65 +731,28 @@ public class EntropyLayerSettings : ShapeSettings
 
     private string pGetString(properties_s p)
     {
-        string ret = "";
-
-        switch (p)
+        string ret = p switch
         {
-            case properties_s.comment:
-                ret = comment;
-                break;
-            case properties_s.name:
-                ret = getString(ShapeSettings.properties_s.s_name);
-                break;
-            case properties_s.hTipNVar_RNG:
-                ret = horTipBiasNVar_RNGMapping;
-                break;
-            case properties_s.hTipPVar_RNG:
-                ret = horTipBiasPVar_RNGMapping;
-                break;
-            case properties_s.vTipNVar_RNG:
-                ret = verTipBiasNVar_RNGMapping;
-                break;
-            case properties_s.vTipPVar_RNG:
-                ret = verTipBiasPVar_RNGMapping;
-                break;
-            case properties_s.iCV_RNG:
-                ret = innerCV_RNGMapping;
-                break;
-            case properties_s.oCV_RNG:
-                ret = outerCV_RNGMapping;
-                break;
-            case properties_s.lwr_RNG:
-                ret = LWR_RNGMapping;
-                break;
-            case properties_s.lwr2_RNG:
-                ret = LWR2_RNGMapping;
-                break;
-            case properties_s.sCDU_RNG:
-                ret = sideCDU_RNGMapping;
-                break;
-            case properties_s.tCDU_RNG:
-                ret = tipsCDU_RNGMapping;
-                break;
-            case properties_s.xOL_RNG:
-                ret = horOverlay_RNGMapping;
-                break;
-            case properties_s.yOL_RNG:
-                ret = verOverlay_RNGMapping;
-                break;
-            case properties_s.wobble_RNG:
-                ret = wobble_RNGMapping;
-                break;
-            case properties_s.file:
-                ret = fileToLoad;
-                break;
-            case properties_s.structure:
-                ret = structureNameFromFile;
-                break;
-            case properties_s.lD:
-                ret = ldNameFromFile;
-                break;
-        }
+            properties_s.comment => comment,
+            properties_s.name => getString(ShapeSettings.properties_s.s_name),
+            properties_s.hTipNVar_RNG => horTipBiasNVar_RNGMapping,
+            properties_s.hTipPVar_RNG => horTipBiasPVar_RNGMapping,
+            properties_s.vTipNVar_RNG => verTipBiasNVar_RNGMapping,
+            properties_s.vTipPVar_RNG => verTipBiasPVar_RNGMapping,
+            properties_s.iCV_RNG => innerCV_RNGMapping,
+            properties_s.oCV_RNG => outerCV_RNGMapping,
+            properties_s.lwr_RNG => LWR_RNGMapping,
+            properties_s.lwr2_RNG => LWR2_RNGMapping,
+            properties_s.sCDU_RNG => sideCDU_RNGMapping,
+            properties_s.tCDU_RNG => tipsCDU_RNGMapping,
+            properties_s.xOL_RNG => horOverlay_RNGMapping,
+            properties_s.yOL_RNG => verOverlay_RNGMapping,
+            properties_s.wobble_RNG => wobble_RNGMapping,
+            properties_s.file => fileToLoad,
+            properties_s.structure => structureNameFromFile,
+            properties_s.lD => ldNameFromFile,
+            _ => ""
+        };
 
         return ret;
     }
@@ -1133,41 +896,19 @@ public class EntropyLayerSettings : ShapeSettings
 
     private static string pGetDefaultString(properties_s p)
     {
-        string ret = "";
-
-        switch (p)
+        string ret = p switch
         {
-            case properties_s.comment:
-                ret = default_comment;
-                break;
-            case properties_s.name:
-                ret = getDefaultString(ShapeSettings.properties_s.s_name);
-                break;
-            case properties_s.hTipNVar_RNG:
-            case properties_s.hTipPVar_RNG:
-            case properties_s.vTipNVar_RNG:
-            case properties_s.vTipPVar_RNG:
-            case properties_s.iCV_RNG:
-            case properties_s.oCV_RNG:
-            case properties_s.lwr_RNG:
-            case properties_s.lwr2_RNG:
-            case properties_s.sCDU_RNG:
-            case properties_s.tCDU_RNG:
-            case properties_s.xOL_RNG:
-            case properties_s.yOL_RNG:
-            case properties_s.wobble_RNG:
-                ret = default_rngmapping;
-                break;
-            case properties_s.file:
-                ret = default_fileToLoad;
-                break;
-            case properties_s.structure:
-                ret = default_structureNameFromFile;
-                break;
-            case properties_s.lD:
-                ret = default_ldNameFromFile;
-                break;
-        }
+            properties_s.comment => default_comment,
+            properties_s.name => getDefaultString(ShapeSettings.properties_s.s_name),
+            properties_s.hTipNVar_RNG or properties_s.hTipPVar_RNG or properties_s.vTipNVar_RNG
+                or properties_s.vTipPVar_RNG or properties_s.iCV_RNG or properties_s.oCV_RNG or properties_s.lwr_RNG
+                or properties_s.lwr2_RNG or properties_s.sCDU_RNG or properties_s.tCDU_RNG or properties_s.xOL_RNG
+                or properties_s.yOL_RNG or properties_s.wobble_RNG => default_rngmapping,
+            properties_s.file => default_fileToLoad,
+            properties_s.structure => default_structureNameFromFile,
+            properties_s.lD => default_ldNameFromFile,
+            _ => ""
+        };
 
         return ret;
     }
@@ -1210,121 +951,48 @@ public class EntropyLayerSettings : ShapeSettings
 
     private decimal pGetDecimal(properties_decimal p, int _subShapeRef)
     {
-        decimal ret = 0m;
-        switch (p)
+        decimal ret = p switch
         {
-            case properties_decimal.horLength:
-                ret = getDecimal(ShapeSettings.properties_decimal.horLength, _subShapeRef);
-                break;
-            case properties_decimal.verLength:
-                ret = getDecimal(ShapeSettings.properties_decimal.verLength, _subShapeRef);
-                break;
-            case properties_decimal.horOffset:
-                ret = getDecimal(ShapeSettings.properties_decimal.horOffset, _subShapeRef);
-                break;
-            case properties_decimal.verOffset:
-                ret = getDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef);
-                break;
-            case properties_decimal.gHorOffset:
-                ret = getDecimal(ShapeSettings.properties_decimal.gHorOffset);
-                break;
-            case properties_decimal.gVerOffset:
-                ret = getDecimal(ShapeSettings.properties_decimal.gVerOffset);
-                break;
-            case properties_decimal.iCR:
-                ret = getDecimal(ShapeSettings.properties_decimal.iCR);
-                break;
-            case properties_decimal.oCR:
-                ret = getDecimal(ShapeSettings.properties_decimal.oCR);
-                break;
-            case properties_decimal.sBias:
-                ret = getDecimal(ShapeSettings.properties_decimal.sBias);
-                break;
-            case properties_decimal.hTBias:
-                ret = getDecimal(ShapeSettings.properties_decimal.hTBias);
-                break;
-            case properties_decimal.hTNVar:
-                ret = getDecimal(ShapeSettings.properties_decimal.hTNVar);
-                break;
-            case properties_decimal.hTPVar:
-                ret = getDecimal(ShapeSettings.properties_decimal.hTPVar);
-                break;
-            case properties_decimal.vTBias:
-                ret = getDecimal(ShapeSettings.properties_decimal.vTBias);
-                break;
-            case properties_decimal.vTNVar:
-                ret = getDecimal(ShapeSettings.properties_decimal.vTNVar);
-                break;
-            case properties_decimal.vTPVar:
-                ret = getDecimal(ShapeSettings.properties_decimal.vTPVar);
-                break;
-            case properties_decimal.lwr:
-                ret = getDecimal(ShapeSettings.properties_decimal.lwr);
-                break;
-            case properties_decimal.lwrFreq:
-                ret = getDecimal(ShapeSettings.properties_decimal.lwrFreq);
-                break;
-            case properties_decimal.lwr2:
-                ret = getDecimal(ShapeSettings.properties_decimal.lwr2);
-                break;
-            case properties_decimal.lwr2Freq:
-                ret = getDecimal(ShapeSettings.properties_decimal.lwr2Freq);
-                break;
-            case properties_decimal.eTension:
-                ret = getDecimal(ShapeSettings.properties_decimal.eTension);
-                break;
-            case properties_decimal.rot:
-                ret = getDecimal(ShapeSettings.properties_decimal.rot);
-                break;
-            case properties_decimal.pBias:
-                ret = getDecimal(ShapeSettings.properties_decimal.pBias);
-                break;
-            case properties_decimal.pBiasDist:
-                ret = getDecimal(ShapeSettings.properties_decimal.pBiasDist);
-                break;
-            case properties_decimal.proxSideRaysMultiplier:
-                ret = getDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier);
-                break;
-            case properties_decimal.rayExtension:
-                ret = getDecimal(ShapeSettings.properties_decimal.rayExtension);
-                break;
-            case properties_decimal.keyhole_factor:
-                ret = getDecimal(ShapeSettings.properties_decimal.keyhole_factor);
-                break;
-            case properties_decimal.wobble:
-                ret = wobble;
-                break;
-            case properties_decimal.totalRotation:
-                ret = totalRotation;
-                break;
-            case properties_decimal.lDC1:
-                ret = lensDistortionCoeff1;
-                break;
-            case properties_decimal.lDC2:
-                ret = lensDistortionCoeff2;
-                break;
-            case properties_decimal.iCV:
-                ret = innerCV;
-                break;
-            case properties_decimal.oCV:
-                ret = outerCV;
-                break;
-            case properties_decimal.sCDU:
-                ret = sideCDU;
-                break;
-            case properties_decimal.tCDU:
-                ret = tipsCDU;
-                break;
-            case properties_decimal.xOL:
-                ret = horOverlay;
-                break;
-            case properties_decimal.yOL:
-                ret = verOverlay;
-                break;
-            case properties_decimal.uniBias:
-                ret = uniBias;
-                break;
-        }
+            properties_decimal.horLength => getDecimal(ShapeSettings.properties_decimal.horLength, _subShapeRef),
+            properties_decimal.verLength => getDecimal(ShapeSettings.properties_decimal.verLength, _subShapeRef),
+            properties_decimal.horOffset => getDecimal(ShapeSettings.properties_decimal.horOffset, _subShapeRef),
+            properties_decimal.verOffset => getDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef),
+            properties_decimal.gHorOffset => getDecimal(ShapeSettings.properties_decimal.gHorOffset),
+            properties_decimal.gVerOffset => getDecimal(ShapeSettings.properties_decimal.gVerOffset),
+            properties_decimal.iCR => getDecimal(ShapeSettings.properties_decimal.iCR),
+            properties_decimal.oCR => getDecimal(ShapeSettings.properties_decimal.oCR),
+            properties_decimal.sBias => getDecimal(ShapeSettings.properties_decimal.sBias),
+            properties_decimal.hTBias => getDecimal(ShapeSettings.properties_decimal.hTBias),
+            properties_decimal.hTNVar => getDecimal(ShapeSettings.properties_decimal.hTNVar),
+            properties_decimal.hTPVar => getDecimal(ShapeSettings.properties_decimal.hTPVar),
+            properties_decimal.vTBias => getDecimal(ShapeSettings.properties_decimal.vTBias),
+            properties_decimal.vTNVar => getDecimal(ShapeSettings.properties_decimal.vTNVar),
+            properties_decimal.vTPVar => getDecimal(ShapeSettings.properties_decimal.vTPVar),
+            properties_decimal.lwr => getDecimal(ShapeSettings.properties_decimal.lwr),
+            properties_decimal.lwrFreq => getDecimal(ShapeSettings.properties_decimal.lwrFreq),
+            properties_decimal.lwr2 => getDecimal(ShapeSettings.properties_decimal.lwr2),
+            properties_decimal.lwr2Freq => getDecimal(ShapeSettings.properties_decimal.lwr2Freq),
+            properties_decimal.eTension => getDecimal(ShapeSettings.properties_decimal.eTension),
+            properties_decimal.rot => getDecimal(ShapeSettings.properties_decimal.rot),
+            properties_decimal.pBias => getDecimal(ShapeSettings.properties_decimal.pBias),
+            properties_decimal.pBiasDist => getDecimal(ShapeSettings.properties_decimal.pBiasDist),
+            properties_decimal.proxSideRaysMultiplier => getDecimal(ShapeSettings.properties_decimal
+                .proxSideRaysMultiplier),
+            properties_decimal.rayExtension => getDecimal(ShapeSettings.properties_decimal.rayExtension),
+            properties_decimal.keyhole_factor => getDecimal(ShapeSettings.properties_decimal.keyhole_factor),
+            properties_decimal.wobble => wobble,
+            properties_decimal.totalRotation => totalRotation,
+            properties_decimal.lDC1 => lensDistortionCoeff1,
+            properties_decimal.lDC2 => lensDistortionCoeff2,
+            properties_decimal.iCV => innerCV,
+            properties_decimal.oCV => outerCV,
+            properties_decimal.sCDU => sideCDU,
+            properties_decimal.tCDU => tipsCDU,
+            properties_decimal.xOL => horOverlay,
+            properties_decimal.yOL => verOverlay,
+            properties_decimal.uniBias => uniBias,
+            _ => 0m
+        };
 
         return ret;
     }
@@ -1336,115 +1004,48 @@ public class EntropyLayerSettings : ShapeSettings
 
     private static decimal pGetDefaultDecimal(properties_decimal p, int _subShapeRef)
     {
-        decimal ret = 0m;
-        switch (p)
+        decimal ret = p switch
         {
-            case properties_decimal.horLength:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.horLength, _subShapeRef);
-                break;
-            case properties_decimal.verLength:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.verLength, _subShapeRef);
-                break;
-            case properties_decimal.horOffset:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.horOffset, _subShapeRef);
-                break;
-            case properties_decimal.verOffset:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef);
-                break;
-            case properties_decimal.gHorOffset:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.gHorOffset);
-                break;
-            case properties_decimal.gVerOffset:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.gVerOffset);
-                break;
-            case properties_decimal.iCR:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.iCR);
-                break;
-            case properties_decimal.oCR:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.oCR);
-                break;
-            case properties_decimal.sBias:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.sBias);
-                break;
-            case properties_decimal.hTBias:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.hTBias);
-                break;
-            case properties_decimal.hTNVar:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.hTNVar);
-                break;
-            case properties_decimal.hTPVar:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.hTPVar);
-                break;
-            case properties_decimal.vTBias:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.vTBias);
-                break;
-            case properties_decimal.vTNVar:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.vTNVar);
-                break;
-            case properties_decimal.vTPVar:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.vTPVar);
-                break;
-            case properties_decimal.lwr:
-            case properties_decimal.lwr2:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.lwr);
-                break;
-            case properties_decimal.lwrFreq:
-            case properties_decimal.lwr2Freq:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.lwrFreq);
-                break;
-            case properties_decimal.eTension:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.eTension);
-                break;
-            case properties_decimal.rot:
-            case properties_decimal.totalRotation:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.rot);
-                break;
-            case properties_decimal.pBias:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.pBias);
-                break;
-            case properties_decimal.pBiasDist:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.pBiasDist);
-                break;
-            case properties_decimal.proxSideRaysMultiplier:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier);
-                break;
-            case properties_decimal.rayExtension:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.rayExtension);
-                break;
-            case properties_decimal.keyhole_factor:
-                ret = getDefaultDecimal(ShapeSettings.properties_decimal.keyhole_factor);
-                break;
-            case properties_decimal.wobble:
-                ret = default_wobble;
-                break;
-            case properties_decimal.lDC1:
-                ret = default_lensDistortionCoeff1;
-                break;
-            case properties_decimal.lDC2:
-                ret = default_lensDistortionCoeff2;
-                break;
-            case properties_decimal.iCV:
-                ret = default_innerCV;
-                break;
-            case properties_decimal.oCV:
-                ret = default_outerCV;
-                break;
-            case properties_decimal.sCDU:
-                ret = default_sideCDU;
-                break;
-            case properties_decimal.tCDU:
-                ret = default_tipsCDU;
-                break;
-            case properties_decimal.xOL:
-                ret = default_horOverlay;
-                break;
-            case properties_decimal.yOL:
-                ret = default_verOverlay;
-                break;
-            case properties_decimal.uniBias:
-                ret = 0;
-                break;
-        }
+            properties_decimal.horLength => getDefaultDecimal(ShapeSettings.properties_decimal.horLength, _subShapeRef),
+            properties_decimal.verLength => getDefaultDecimal(ShapeSettings.properties_decimal.verLength, _subShapeRef),
+            properties_decimal.horOffset => getDefaultDecimal(ShapeSettings.properties_decimal.horOffset, _subShapeRef),
+            properties_decimal.verOffset => getDefaultDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef),
+            properties_decimal.gHorOffset => getDefaultDecimal(ShapeSettings.properties_decimal.gHorOffset),
+            properties_decimal.gVerOffset => getDefaultDecimal(ShapeSettings.properties_decimal.gVerOffset),
+            properties_decimal.iCR => getDefaultDecimal(ShapeSettings.properties_decimal.iCR),
+            properties_decimal.oCR => getDefaultDecimal(ShapeSettings.properties_decimal.oCR),
+            properties_decimal.sBias => getDefaultDecimal(ShapeSettings.properties_decimal.sBias),
+            properties_decimal.hTBias => getDefaultDecimal(ShapeSettings.properties_decimal.hTBias),
+            properties_decimal.hTNVar => getDefaultDecimal(ShapeSettings.properties_decimal.hTNVar),
+            properties_decimal.hTPVar => getDefaultDecimal(ShapeSettings.properties_decimal.hTPVar),
+            properties_decimal.vTBias => getDefaultDecimal(ShapeSettings.properties_decimal.vTBias),
+            properties_decimal.vTNVar => getDefaultDecimal(ShapeSettings.properties_decimal.vTNVar),
+            properties_decimal.vTPVar => getDefaultDecimal(ShapeSettings.properties_decimal.vTPVar),
+            properties_decimal.lwr or properties_decimal.lwr2 =>
+                getDefaultDecimal(ShapeSettings.properties_decimal.lwr),
+            properties_decimal.lwrFreq or properties_decimal.lwr2Freq => getDefaultDecimal(ShapeSettings
+                .properties_decimal.lwrFreq),
+            properties_decimal.eTension => getDefaultDecimal(ShapeSettings.properties_decimal.eTension),
+            properties_decimal.rot or properties_decimal.totalRotation => getDefaultDecimal(ShapeSettings
+                .properties_decimal.rot),
+            properties_decimal.pBias => getDefaultDecimal(ShapeSettings.properties_decimal.pBias),
+            properties_decimal.pBiasDist => getDefaultDecimal(ShapeSettings.properties_decimal.pBiasDist),
+            properties_decimal.proxSideRaysMultiplier => getDefaultDecimal(ShapeSettings.properties_decimal
+                .proxSideRaysMultiplier),
+            properties_decimal.rayExtension => getDefaultDecimal(ShapeSettings.properties_decimal.rayExtension),
+            properties_decimal.keyhole_factor => getDefaultDecimal(ShapeSettings.properties_decimal.keyhole_factor),
+            properties_decimal.wobble => default_wobble,
+            properties_decimal.lDC1 => default_lensDistortionCoeff1,
+            properties_decimal.lDC2 => default_lensDistortionCoeff2,
+            properties_decimal.iCV => default_innerCV,
+            properties_decimal.oCV => default_outerCV,
+            properties_decimal.sCDU => default_sideCDU,
+            properties_decimal.tCDU => default_tipsCDU,
+            properties_decimal.xOL => default_horOverlay,
+            properties_decimal.yOL => default_verOverlay,
+            properties_decimal.uniBias => 0,
+            _ => 0m
+        };
 
         return ret;
     }
@@ -1735,7 +1336,7 @@ public class EntropyLayerSettings : ShapeSettings
 
     private void pSetFileData(PathsD newdata)
     {
-        fileData = new(newdata);
+        fileData = new PathsD(newdata);
     }
 
     public void defaultFileData()
@@ -1745,7 +1346,7 @@ public class EntropyLayerSettings : ShapeSettings
 
     private void pDefaultFileData()
     {
-        fileData = new(default_fileData);
+        fileData = new PathsD(default_fileData);
     }
 
     public EntropyLayerSettings()
@@ -1957,6 +1558,7 @@ public class EntropyLayerSettings : ShapeSettings
             setInt(ShapeSettings.properties_i.flipV, source.getInt(ShapeSettings.properties_i.flipV));
             setInt(ShapeSettings.properties_i.alignX, source.getInt(ShapeSettings.properties_i.alignX));
             setInt(ShapeSettings.properties_i.alignY, source.getInt(ShapeSettings.properties_i.alignY));
+            setInt(ShapeSettings.properties_i.legacyRounding, source.getInt(ShapeSettings.properties_i.legacyRounding));
 
             lensDistortionCoeff1 = source.lensDistortionCoeff1;
             lensDistortionCoeff2 = source.lensDistortionCoeff2;
@@ -1982,7 +1584,7 @@ public class EntropyLayerSettings : ShapeSettings
         ldFromFile = source.ldFromFile;
         ldNameFromFile = source.ldNameFromFile;
         polyFill = source.polyFill;
-        fileData = new (source.fileData);
+        fileData = new PathsD(source.fileData);
         referenceLayout = source.referenceLayout;
         fileType = source.fileType;
 

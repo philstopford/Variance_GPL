@@ -117,7 +117,7 @@ internal class ChaosEngine_implant
 
         try
         {
-            List<EntropyLayerSettings> implant_MLS = new();
+            List<EntropyLayerSettings> implant_MLS = [];
             EntropyLayerSettings mls = new();
             mls.setInt(EntropyLayerSettings.properties_i.edgeSlide, 0); // we don't want the edge slide in this situation.
             mls.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.rect);
@@ -139,7 +139,7 @@ internal class ChaosEngine_implant
             EntropyShape ms = new(entropySettings, implant_MLS, settingsIndex: 0, doPASearch: false, previewMode: true, implant_js, pivot_unused);
 
             // Set up our sourcePath for clipping, re-centering it at 0,0 as well.
-            PathD sourcePath = new();
+            PathD sourcePath = [];
             for (int pt = 0; pt < ms.getPoints().Count; pt++)
             {
                 double x = ms.getPoints()[pt].x - Convert.ToDouble(mls.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)) / 2.0f;
@@ -147,24 +147,24 @@ internal class ChaosEngine_implant
                 sourcePath.Add(new PointD(x, y));
             }
 
-            PathsD source = new() {sourcePath};
+            PathsD source = [sourcePath];
 
             // Build our mask polygon from the bounds and 0,0 reference. Curiously, Clipper's top/bottom bounds are flipped from what might be expected.
             RectD bounds = Clipper.GetBounds(source);
-            PathD maskPoly = new()
-            {
-                new (0, 0),
-                new (0, bounds.bottom),
-                new (bounds.right, bounds.bottom),
-                new (bounds.right, 0),
-                new (0, 0)
-            };
+            PathD maskPoly =
+            [
+                new PointD(0, 0),
+                new PointD(0, bounds.bottom),
+                new PointD(bounds.right, bounds.bottom),
+                new PointD(bounds.right, 0),
+                new PointD(0, 0)
+            ];
 
             // Get our region extracted using the mask.
             ClipperD c = new() {PreserveCollinear = false};
             c.AddSubject(sourcePath);
             c.AddClip(maskPoly);
-            PathsD solution = new();
+            PathsD solution = [];
             c.Execute(ClipType.Intersection, FillRule.EvenOdd, solution);
             solution = GeoWrangler.reOrderXY(solution);
 
@@ -194,13 +194,13 @@ internal class ChaosEngine_implant
                 int index = 0; // just to track our position in the points array.
                 for (int pt = reIndexStart; pt < solution[0].Count; pt++)
                 {
-                    points[index] = new (solution[0][pt].x, solution[0][pt].y);
+                    points[index] = new PointD(solution[0][pt].x, solution[0][pt].y);
                     index++;
                 }
                 // Ensure we close the shape by hitting the reIndexStart point again, since we will possibly have pushed it to the beginning of the shape.
                 for (int pt = 0; pt <= reIndexStart; pt++)
                 {
-                    points[index] = new (solution[0][pt].x, solution[0][pt].y);
+                    points[index] = new PointD(solution[0][pt].x, solution[0][pt].y);
                     index++;
                 }
             }
@@ -212,13 +212,13 @@ internal class ChaosEngine_implant
                     for (int pt = 0; pt < solution[0].Count; pt++)
 #endif
                     {
-                        points[pt] = new (solution[0][pt].x, solution[0][pt].y);
+                        points[pt] = new PointD(solution[0][pt].x, solution[0][pt].y);
                     }
 #if !CHAOSSINGLETHREADED
                 );
 #endif
             }
-            points[^1] = new (points[0].x, points[0].y); // close it, for the sake of it.
+            points[^1] = new PointD(points[0].x, points[0].y); // close it, for the sake of it.
 
             // Clockwise spin.
             points = GeoWrangler.clockwise(points);
@@ -342,10 +342,10 @@ internal class ChaosEngine_implant
 
             // Get our shadow line (polys) sorted out.
             shadow = Helper.initedPathD(4);
-            shadow[0] = new (0.0f, nomYIntercept);
-            shadow[1] = new (nomXIntercept, 0.0f);
-            shadow[2] = new (shadow[1].x, shadow[1].y);
-            shadow[3] = new (shadow[0].x, shadow[0].y);
+            shadow[0] = new PointD(0.0f, nomYIntercept);
+            shadow[1] = new PointD(nomXIntercept, 0.0f);
+            shadow[2] = new PointD(shadow[1].x, shadow[1].y);
+            shadow[3] = new PointD(shadow[0].x, shadow[0].y);
 
             // Calculate our shadow distance taking into account the resist width beyond the intercept point.
             double actualResistWidth = implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.w) + chaosSettings.getValue(ChaosSettings_implant.Properties.resistCDVar) * implantCalcSettings.getDouble(EntropyImplantSettings.properties_d.wV);
@@ -362,15 +362,15 @@ internal class ChaosEngine_implant
 
             if (chaosSettings.isPreview())
             {
-                minShadow[0] = new (0.0f, minYIntercept);
-                minShadow[1] = new (minXIntercept, 0.0f);
-                minShadow[2] = new (minShadow[1].x, minShadow[1].y);
-                minShadow[3] = new (minShadow[0].x, minShadow[0].y);
+                minShadow[0] = new PointD(0.0f, minYIntercept);
+                minShadow[1] = new PointD(minXIntercept, 0.0f);
+                minShadow[2] = new PointD(minShadow[1].x, minShadow[1].y);
+                minShadow[3] = new PointD(minShadow[0].x, minShadow[0].y);
 
-                maxShadow[0] = new (0.0f, maxYIntercept);
-                maxShadow[1] = new (maxXIntercept, 0.0f);
-                maxShadow[2] = new (maxShadow[1].x, maxShadow[1].y);
-                maxShadow[3] = new (maxShadow[0].x, maxShadow[0].y);
+                maxShadow[0] = new PointD(0.0f, maxYIntercept);
+                maxShadow[1] = new PointD(maxXIntercept, 0.0f);
+                maxShadow[2] = new PointD(maxShadow[1].x, maxShadow[1].y);
+                maxShadow[3] = new PointD(maxShadow[0].x, maxShadow[0].y);
 
                 min = (minShadow[1].x - actualResistWidth / 2.0f).ToString(CultureInfo.InvariantCulture);
                 // Seem to get periodic blanks for 0 cases so force the issue here.
@@ -392,15 +392,15 @@ internal class ChaosEngine_implant
                 min = "N/A";
                 max = "N/A";
 
-                minShadow[0] = new (0, 0);
-                minShadow[1] = new (0, 0);
-                minShadow[2] = new (0, 0);
-                minShadow[3] = new (0, 0);
+                minShadow[0] = new PointD(0, 0);
+                minShadow[1] = new PointD(0, 0);
+                minShadow[2] = new PointD(0, 0);
+                minShadow[3] = new PointD(0, 0);
 
-                maxShadow[0] = new (0, 0);
-                maxShadow[1] = new (0, 0);
-                maxShadow[2] = new (0, 0);
-                maxShadow[3] = new (0, 0);
+                maxShadow[0] = new PointD(0, 0);
+                maxShadow[1] = new PointD(0, 0);
+                maxShadow[2] = new PointD(0, 0);
+                maxShadow[3] = new PointD(0, 0);
             }
 
             // Now need to scale our polygon back down again for display.
@@ -412,10 +412,10 @@ internal class ChaosEngine_implant
                 for (int pt = 0; pt < points.Length; pt++)
 #endif
                 {
-                    double x = (double)points[pt].x;
-                    double y = (double)points[pt].y;
-                    geom[pt] = new (x, y);
-                    bgGeom[pt] = new (-x, y);
+                    double x = points[pt].x;
+                    double y = points[pt].y;
+                    geom[pt] = new PointD(x, y);
+                    bgGeom[pt] = new PointD(-x, y);
                 }
 #if !CHAOSSINGLETHREADED
             );

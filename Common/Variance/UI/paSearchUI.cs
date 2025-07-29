@@ -97,8 +97,6 @@ public partial class MainForm
 
         for (int passCaseVal = 0; passCaseVal < cb_passCaseValues.Length; passCaseVal++)
         {
-            var i = passCaseVal; // for event handler binding.
-
             groupBox_passCaseValues[passCaseVal] = new GroupBox {Text = "Filter result " + passCaseVal};
 
             passCaseValues_pnl[passCaseVal] = new Panel {Content = groupBox_passCaseValues[passCaseVal]};
@@ -109,29 +107,29 @@ public partial class MainForm
             tl.Rows.Add(new TableRow());
 
             cb_passCaseValues[passCaseVal] = new CheckBox {Text = ""};
-            cb_passCaseValues[i].CheckedChanged += paSearchUI_Handler;
+            cb_passCaseValues[passCaseVal].CheckedChanged += paSearchUI_Handler;
             tl.Rows[^1].Cells.Add(new TableCell { Control = cb_passCaseValues[passCaseVal] });
 
             rb_passValueRadioButtons[passCaseVal, 0] = new RadioButton
             {
                 Text = "Min", Checked = true, Enabled = false
             };
-            rb_passValueRadioButtons[i, 0].CheckedChanged += paSearchUI_Handler;
-            tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 0] });
+            rb_passValueRadioButtons[passCaseVal, 0].CheckedChanged += paSearchUI_Handler;
+            tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[passCaseVal, 0] });
 
             rb_passValueRadioButtons[passCaseVal, 1] = new RadioButton(rb_passValueRadioButtons[passCaseVal, 0])
             {
                 Text = "Max", Enabled = false
             };
-            rb_passValueRadioButtons[i, 1].CheckedChanged += paSearchUI_Handler;
-            tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[i, 1] });
+            rb_passValueRadioButtons[passCaseVal, 1].CheckedChanged += paSearchUI_Handler;
+            tl.Rows[^1].Cells.Add(new TableCell { Control = rb_passValueRadioButtons[passCaseVal, 1] });
 
             num_passCaseValues[passCaseVal] = new NumericStepper
             {
                 DecimalPlaces = 2, Increment = 0.01f, Enabled = false
             };
             setSize(num_passCaseValues[passCaseVal], 55);
-            num_passCaseValues[i].LostFocus += paSearchUI_Handler;
+            num_passCaseValues[passCaseVal].LostFocus += paSearchUI_Handler;
             tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(num_passCaseValues[passCaseVal]) });
 
             resultFilter_table.Rows[^1].Cells.Add(new TableCell { Control = passCaseValues_pnl[passCaseVal] });
@@ -196,7 +194,7 @@ public partial class MainForm
                     TextColor = UIHelper.myColorToColor(commonVars.getColors().simPreviewColors[layer]),
                     ToolTip = "Layer " + (layer + 1) + ": " + PASearch.paNames[pa]
                 };
-                if (!commonVars.getPASearch().paAllowsNegativeValues(pa))
+                if (!PASearch.paAllowsNegativeValues(pa))
                 {
                     num_searchPA_UpperLimit[layer, pa].MinValue = 0;
                 }
@@ -232,7 +230,7 @@ public partial class MainForm
 
     private void updatePASearchUI(int layer)
     {
-        bool[] paEnabledState = commonVars.getPASearch().getEnabledState(commonVars.getLayerSettings(layer));
+        bool[] paEnabledState = PASearch.getEnabledState(commonVars.getLayerSettings(layer));
         for (int i = 0; i < paEnabledState.Length; i++)
         {
             cb_searchPA[layer, i].Enabled = paEnabledState[i];
@@ -316,7 +314,7 @@ public partial class MainForm
             }
         }
 
-        updateProgressBar(resultPackage.getListOfResults().Count);
-        updateStatusLine("PA Search for " + resultPackage.getListOfResults().Count + " results in " + resultPackage.runTime.ToString("0.##") + " seconds.");
+        updateProgressBar(resultPackage.results_count);
+        updateStatusLine("PA Search for " + resultPackage.results_count + " results in " + resultPackage.runTime.ToString("0.##") + " seconds.");
     }
 }

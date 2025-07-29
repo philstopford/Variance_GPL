@@ -22,8 +22,9 @@ public partial class MainForm
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layerBoolean_table = new();
-            gB_layerBoolean = new() {Content = groupBox_layerBoolean_table};
-            expander_layerBoolean = new () {Content = gB_layerBoolean,
+            gB_layerBoolean = new GroupBox {Content = groupBox_layerBoolean_table};
+            expander_layerBoolean = new Expander
+            {Content = gB_layerBoolean,
                 Header = "Boolean",
                 Expanded = true
             };

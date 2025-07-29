@@ -59,14 +59,15 @@ public class SimResultPackage
         return previewResult_implant;
     }
 
-    private List<Results> listOfResults;
+    public int results_count;
+    private Results[] listOfResults;
 
-    public List<Results> getListOfResults()
+    public Results[] getListOfResults()
     {
         return pGetListOfResults();
     }
 
-    private List<Results> pGetListOfResults()
+    private Results[] pGetListOfResults()
     {
         return listOfResults;
     }
@@ -81,14 +82,15 @@ public class SimResultPackage
         return listOfResults[index];
     }
 
-    private List<Results_implant> listOfResults_implant;
+    public int implant_results_count;
+    private Results_implant[] listOfResults_implant;
 
-    public List<Results_implant> getListOfResults_implant()
+    public Results_implant[] getListOfResults_implant()
     {
         return pGetListOfResults_implant();
     }
 
-    private List<Results_implant> pGetListOfResults_implant()
+    private Results_implant[] pGetListOfResults_implant()
     {
         return listOfResults_implant;
     }
@@ -105,14 +107,14 @@ public class SimResultPackage
 
     private List<string[]> pGetImplantResultStrings()
     {
-        char[] s = { ',' };
+        char[] s = [','];
 
         return listOfResults_implant.Select(t => t.getResult().Split(s)).ToList();
     }
 
     private List<string[]> pGetResultStrings()
     {
-        char[] s = { ',' };
+        char[] s = [','];
 
         return listOfResults.Select(t => t.getResult().Split(s)).ToList();
     }
@@ -125,12 +127,12 @@ public class SimResultPackage
     private List<string> pGetHistograms(int buckets)
     {
         // Figure out which result package we should use.
-        if (listOfResults.Count > 0)
+        if (results_count > 0)
         {
             return pGetHistograms(pGetResultStrings(), buckets);
         }
 
-        return listOfResults_implant.Count > 0 ? pGetHistograms(pGetImplantResultStrings(), buckets) : new List<string> { "No results" };
+        return implant_results_count > 0 ? pGetHistograms(pGetImplantResultStrings(), buckets) : ["No results"];
     }
 
     private List<string> pGetHistograms(List<string[]> results, int buckets)
@@ -145,7 +147,7 @@ public class SimResultPackage
             for (int i = 0; i < numberOfResultsFields; i++)
 #endif
             {
-                res[i] = new List<double>();
+                res[i] = [];
             }
 #if !VARIANCESINGLETHREADED
         );
@@ -174,7 +176,7 @@ public class SimResultPackage
 
     private static List<string> pGetHistograms(List<double>[] values, int buckets)
     {
-        List<string> histograms = new();
+        List<string> histograms = [];
         // Generate histograms for each set, unless there are no results in that set.
         for (int i = 0; i < values.Length; i++)
         {
@@ -190,7 +192,7 @@ public class SimResultPackage
                     string temp = (h.StemLeaf(true, buckets));
                     if (string.IsNullOrWhiteSpace(temp))
                     {
-                        throw new();
+                        throw new Exception();
                     }
 
                     histograms.Add("Histogram for result " + i + ":\r\n");
@@ -226,23 +228,14 @@ public class SimResultPackage
 
     private double[] pGetValues(Properties p)
     {
-        double[] ret = { };
-
-        switch (p)
+        double[] ret = p switch
         {
-            case Properties.mean:
-                ret = meanValues;
-                break;
-            case Properties.lastMean:
-                ret = lastMeanValues;
-                break;
-            case Properties.stdDev:
-                ret = stdDevValues;
-                break;
-            case Properties.lastStdDev:
-                ret = lastStdDevValues;
-                break;
-        }
+            Properties.mean => meanValues,
+            Properties.lastMean => lastMeanValues,
+            Properties.stdDev => stdDevValues,
+            Properties.lastStdDev => lastStdDevValues,
+            _ => []
+        };
 
         return ret;
     }
@@ -254,29 +247,20 @@ public class SimResultPackage
 
     private double pGetValue(Properties p, int index)
     {
-        double ret = 0;
-
-        switch (p)
+        double ret = p switch
         {
-            case Properties.mean:
-                ret = meanValues[index];
-                break;
-            case Properties.lastMean:
-                ret = lastMeanValues[index];
-                break;
-            case Properties.stdDev:
-                ret = stdDevValues[index];
-                break;
-            case Properties.lastStdDev:
-                ret = lastStdDevValues[index];
-                break;
-        }
+            Properties.mean => meanValues[index],
+            Properties.lastMean => lastMeanValues[index],
+            Properties.stdDev => stdDevValues[index],
+            Properties.lastStdDev => lastStdDevValues[index],
+            _ => 0
+        };
 
         return ret;
     }
 
     private string resultString { get; set; }
-    private readonly char[] csvSeparator = { ',' }; // to cleave the results apart.
+    private readonly char[] csvSeparator = [',']; // to cleave the results apart.
     private Results lastResult;
     private Results_implant lastResult_implant;
     public double runTime { get; set; }
@@ -304,17 +288,17 @@ public class SimResultPackage
         previewResult = new Results();
         previewResult_implant = new Results_implant();
         state = state_;
-        listOfResults = new List<Results>(numberOfCases);
-        listOfResults_implant = new List<Results_implant>(numberOfCases);
+        listOfResults = new Results[numberOfCases];
+        listOfResults_implant = new Results_implant[numberOfCases];
         createCleavedResults(numberOfCases, numberOfResultsFields);
     }
 
-    public void Add(Results_implant newResult)
+    public void Add(int index, Results_implant newResult)
     {
-        pAdd(newResult);
+        pAdd(index, newResult);
     }
 
-    private void pAdd(Results_implant newResult)
+    private void pAdd(int index, Results_implant newResult)
     {
         if (Monitor.TryEnter(previewLock))
         {
@@ -329,27 +313,20 @@ public class SimResultPackage
         }
         newResult.clear();
 
-        Monitor.Enter(resultLock);
-        try
-        {
-            listOfResults_implant.Add(newResult);
-        }
-        finally
-        {
-            Monitor.Exit(resultLock);
-        }
+        listOfResults_implant[index] = newResult;
+        Interlocked.Increment(ref implant_results_count);
 
         lastResult_implant = newResult;
 
-        updateCleavedResults(new [] { newResult.getResult() });
+        updateCleavedResults([newResult.getResult()]);
     }
 
-    public void Add(Results newResult, int retainGeometry)
+    public void Add(int index, Results newResult, int retainGeometry)
     {
-        pAdd(newResult, retainGeometry);
+        pAdd(index, newResult, retainGeometry);
     }
 
-    private void pAdd(Results newResult, int retainGeometry)
+    private void pAdd(int index, Results newResult, int retainGeometry)
     {
         if (Monitor.TryEnter(previewLock))
         {
@@ -372,18 +349,11 @@ public class SimResultPackage
             newResult.clearPoints();
         }
 
-        Monitor.Enter(resultLock);
-        try
-        {
-            listOfResults.Add(newResult);
-        }
-        finally
-        {
-            Monitor.Exit(resultLock);
-        }
-
+        listOfResults[index] = newResult;
+        Interlocked.Increment(ref results_count);
+        
         lastResult = newResult;
-        if (lastResult.getResult() == "N/A" && listOfResults.Count == 1)
+        if (lastResult.getResult() == "N/A" && results_count == 1)
         {
             // We just have one result so far and it's a fail - purge and move on.
             resultString = "N/A";
@@ -512,7 +482,7 @@ public class SimResultPackage
         Monitor.Enter(meanStdLock);
         try
         {
-            string[] tempString = { "" };
+            string[] tempString = [""];
 
             if (lastResult != null)
             {

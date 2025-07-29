@@ -224,6 +224,7 @@ public partial class MainForm
         cB_FlipV.CheckedChanged += twoDLayerEventHandler_exp;
         cB_alignGeometryX.CheckedChanged += twoDLayerEventHandler_exp;
         cB_alignGeometryY.CheckedChanged += twoDLayerEventHandler_exp;
+        cB_legacyRounding.CheckedChanged += twoDLayerEventHandler_exp;
 
         comboBox_layerShape.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_subShapeRef.SelectedIndexChanged += twoDLayerEventHandler_exp;
@@ -399,6 +400,12 @@ public partial class MainForm
                 }
             }
 
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.legacyRounding, 0);
+            if ((bool)cB_legacyRounding.Checked!)
+            {
+                commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.legacyRounding, 1);
+            }
+            
             do2DLayerUI_edgeSlide(settingsIndex);
 
             int previousIndex = comboBox_subShapeRef.SelectedIndex;
@@ -488,8 +495,8 @@ public partial class MainForm
             {
                 // We do this to avoid any misfires later. Might not be needed, but seems safer.
                 PathD defaultPointArray = Helper.initedPathD(1);
-                defaultPointArray[0] = new (0, 0);
-                commonVars.getLayerSettings(settingsIndex).setFileData(new () { defaultPointArray });
+                defaultPointArray[0] = new PointD(0, 0);
+                commonVars.getLayerSettings(settingsIndex).setFileData([defaultPointArray]);
             }
             
             if ((bool)cB_geoCore_shapeEngine_perPoly.Checked!)
@@ -522,7 +529,7 @@ public partial class MainForm
 
             layer_clampSubShape(minHLength: 0, maxHLength: 1000000, minVLength: 0, maxVLength: 1000000, minHOffset: -1000000, maxHOffset: 1000000, minVOffset: -1000000, maxVOffset: 1000000);
 
-            bool[] warnArray = { false, false, false };
+            bool[] warnArray = [false, false, false];
 
             if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.none || commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.rect)
             {
@@ -1428,12 +1435,7 @@ public partial class MainForm
         }
         else
         {
-            int xcolRefIndex = Convert.ToInt32(rB_COLX[COLXIndex].Text);
-            if (xcolRefIndex > settingsIndex)
-            {
-                xcolRefIndex--; // compensate for missing radio button for current layer.
-            }
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_corr_ref, xcolRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_corr_ref, COLXIndex);
         }
 
         if (COLYIndex == 0)
@@ -1443,13 +1445,8 @@ public partial class MainForm
         }
         else
         {
-            int ycolRefIndex = Convert.ToInt32(rB_COLY[COLYIndex].Text);
-            if (ycolRefIndex > settingsIndex)
-            {
-                ycolRefIndex--; // compensate for missing radio button for current layer.
-            }
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_corr, 1);
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_corr_ref, ycolRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_corr_ref, COLYIndex);
         }
 
         if (OLRXIndex == 0)
@@ -1458,12 +1455,7 @@ public partial class MainForm
         }
         else
         {
-            int xolRefIndex = Convert.ToInt32(rB_OLRX[OLRXIndex].Text);
-            if (xolRefIndex > settingsIndex)
-            {
-                xolRefIndex--; // compensate for missing radio button for current layer.
-            }
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_ref, xolRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_ref, OLRXIndex);
         }
 
         if (OLRYIndex == 0)
@@ -1472,12 +1464,7 @@ public partial class MainForm
         }
         else
         {
-            int yolRefIndex = Convert.ToInt32(rB_OLRY_exp[OLRYIndex].Text);
-            if (yolRefIndex > settingsIndex)
-            {
-                yolRefIndex--; // compensate for missing radio button for current layer.
-            }
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_ref, yolRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.yOL_ref, OLRYIndex);
         }
 
         if (CLWRIndex == 0)
@@ -1488,8 +1475,7 @@ public partial class MainForm
         else
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr, 1);
-            int clwrRefIndex = Convert.ToInt32(rB_CLWR[CLWRIndex].Text);
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, clwrRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr_corr_ref, CLWRIndex);
 
         }
 
@@ -1501,8 +1487,7 @@ public partial class MainForm
         else
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr, 1);
-            int clwr2RefIndex = Convert.ToInt32(rB_CLWR2[CLWRIndex].Text);
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, clwr2RefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2_corr_ref, CLWR2Index);
 
         }
 
@@ -1514,8 +1499,7 @@ public partial class MainForm
         else
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.CDU_corr, 1);
-            int ccduRefIndex = Convert.ToInt32(rB_CCDU[CCDUIndex].Text);
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.CDU_corr_ref, ccduRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.CDU_corr_ref, CCDUIndex);
 
         }
 
@@ -1527,12 +1511,7 @@ public partial class MainForm
         else
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.tCDU_corr, 1);
-            int ctcduRefIndex = Convert.ToInt32(rB_CTCDU[CTCDUIndex].Text);
-            if (ctcduRefIndex > settingsIndex)
-            {
-                ctcduRefIndex--; // compensate for missing radio button for current layer.
-            }
-            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref, ctcduRefIndex - 1);
+            commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.tCDU_corr_ref, CTCDUIndex);
         }
 
         // Process the average overlay arrays.

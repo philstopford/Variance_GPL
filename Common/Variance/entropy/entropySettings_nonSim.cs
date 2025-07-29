@@ -16,22 +16,22 @@ public class EntropySettings_nonSim
     private int extCritCondition4 { get; set; }
     private decimal extCritValue4 { get; set; }
 
-    private static int default_externalType = (int)CommonVars.external_Type.svg;
-    private static int default_generateExternal = 0;
-    private static int default_generateCSV = 0;
+    private const int default_externalType = (int)CommonVars.external_Type.svg;
+    private const int default_generateExternal = 0;
+    private const int default_generateCSV = 0;
 
     private int greedyMode { get; set; }
     private string comment { get; set; }
     private string paSearchComment { get; set; }
 
-    private static string default_comment = "";
-    private static int default_greedyMode = 1;
+    private const string default_comment = "";
+    private const int default_greedyMode = 1;
 
     private int displayResults { get; set; }
     private int displayShape { get; set; }
 
-    private static int default_displayResults = 1;
-    private static int default_displayShape = 1;
+    private const int default_displayResults = 1;
+    private const int default_displayShape = 1;
 
     public enum properties_d { externalCritCond1, externalCritCond2, externalCritCond3, externalCritCond4 }
 
@@ -42,22 +42,14 @@ public class EntropySettings_nonSim
 
     private decimal pGetDecimal(properties_d p)
     {
-        decimal ret = 0;
-        switch (p)
+        decimal ret = p switch
         {
-            case properties_d.externalCritCond1:
-                ret = extCritValue1;
-                break;
-            case properties_d.externalCritCond2:
-                ret = extCritValue2;
-                break;
-            case properties_d.externalCritCond3:
-                ret = extCritValue3;
-                break;
-            case properties_d.externalCritCond4:
-                ret = extCritValue4;
-                break;
-        }
+            properties_d.externalCritCond1 => extCritValue1,
+            properties_d.externalCritCond2 => extCritValue2,
+            properties_d.externalCritCond3 => extCritValue3,
+            properties_d.externalCritCond4 => extCritValue4,
+            _ => 0
+        };
 
         return ret;
     }
@@ -110,23 +102,19 @@ public class EntropySettings_nonSim
         }
     }
 
-    public decimal getDefaultDecimal(properties_d p)
+    public static decimal getDefaultDecimal(properties_d p)
     {
         return pGetDefaultDecimal(p);
     }
 
-    private decimal pGetDefaultDecimal(properties_d p)
+    private static decimal pGetDefaultDecimal(properties_d p)
     {
-        decimal ret = 0;
-        switch (p)
+        decimal ret = p switch
         {
-            case properties_d.externalCritCond1:
-            case properties_d.externalCritCond2:
-            case properties_d.externalCritCond3:
-            case properties_d.externalCritCond4:
-                ret = 0;
-                break;
-        }
+            properties_d.externalCritCond1 or properties_d.externalCritCond2 or properties_d.externalCritCond3
+                or properties_d.externalCritCond4 => 0,
+            _ => 0
+        };
 
         return ret;
     }
@@ -140,43 +128,21 @@ public class EntropySettings_nonSim
 
     private int pGetInt(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.csv:
-                ret = generateCSV;
-                break;
-            case properties_i.external:
-                ret = generateExternal;
-                break;
-            case properties_i.externalType:
-                ret = externalType;
-                break;
-            case properties_i.externalCriteria:
-                ret = externalCriteria;
-                break;
-            case properties_i.externalCritCond1:
-                ret = extCritCondition1;
-                break;
-            case properties_i.externalCritCond2:
-                ret = extCritCondition2;
-                break;
-            case properties_i.externalCritCond3:
-                ret = extCritCondition3;
-                break;
-            case properties_i.externalCritCond4:
-                ret = extCritCondition4;
-                break;
-            case properties_i.greedy:
-                ret = greedyMode;
-                break;
-            case properties_i.results:
-                ret = displayResults;
-                break;
-            case properties_i.shape:
-                ret = displayShape;
-                break;
-        }
+            properties_i.csv => generateCSV,
+            properties_i.external => generateExternal,
+            properties_i.externalType => externalType,
+            properties_i.externalCriteria => externalCriteria,
+            properties_i.externalCritCond1 => extCritCondition1,
+            properties_i.externalCritCond2 => extCritCondition2,
+            properties_i.externalCritCond3 => extCritCondition3,
+            properties_i.externalCritCond4 => extCritCondition4,
+            properties_i.greedy => greedyMode,
+            properties_i.results => displayResults,
+            properties_i.shape => displayShape,
+            _ => 0
+        };
 
         return ret;
     }
@@ -271,42 +237,25 @@ public class EntropySettings_nonSim
         }
     }
 
-    public int getDefaultInt(properties_i p)
+    public static int getDefaultInt(properties_i p)
     {
         return pGetDefaultInt(p);
     }
 
-    private int pGetDefaultInt(properties_i p)
+    private static int pGetDefaultInt(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.csv:
-                ret = default_generateCSV;
-                break;
-            case properties_i.external:
-                ret = default_generateExternal;
-                break;
-            case properties_i.externalType:
-                ret = default_externalType;
-                break;
-            case properties_i.externalCriteria:
-            case properties_i.externalCritCond1:
-            case properties_i.externalCritCond2:
-            case properties_i.externalCritCond3:
-            case properties_i.externalCritCond4:
-                ret = 0;
-                break;
-            case properties_i.greedy:
-                ret = default_greedyMode;
-                break;
-            case properties_i.results:
-                ret = default_displayResults;
-                break;
-            case properties_i.shape:
-                ret = default_displayShape;
-                break;
-        }
+            properties_i.csv => default_generateCSV,
+            properties_i.external => default_generateExternal,
+            properties_i.externalType => default_externalType,
+            properties_i.externalCriteria or properties_i.externalCritCond1 or properties_i.externalCritCond2
+                or properties_i.externalCritCond3 or properties_i.externalCritCond4 => 0,
+            properties_i.greedy => default_greedyMode,
+            properties_i.results => default_displayResults,
+            properties_i.shape => default_displayShape,
+            _ => 0
+        };
 
         return ret;
     }
@@ -320,16 +269,12 @@ public class EntropySettings_nonSim
 
     private string pGetString(properties_s p)
     {
-        string ret = "";
-        switch (p)
+        string ret = p switch
         {
-            case properties_s.comment:
-                ret = comment;
-                break;
-            case properties_s.paComment:
-                ret = paSearchComment;
-                break;
-        }
+            properties_s.comment => comment,
+            properties_s.paComment => paSearchComment,
+            _ => ""
+        };
         return ret;
     }
 

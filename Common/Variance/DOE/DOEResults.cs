@@ -24,7 +24,7 @@ public class DOEResults
 
     private void pDOEResults(string DOEName)
     {
-        results = new List<DOEResult> {new(DOEName)};
+        results = [new DOEResult(DOEName)];
     }
 
     public void AddResult(string DOEName)
@@ -87,8 +87,8 @@ public class DOEResult
     {
         DOEName = DOEName_;
         headerSet = false;
-        cells = new List<DOECell>();
-        doeHeaderInformation = new List<string> {""};
+        cells = [];
+        doeHeaderInformation = [""];
     }
 
     public void setDOEHeaderInformation(List<string> headerInformation)
@@ -211,7 +211,7 @@ public class DOEMeanStdDev
 
     private void pDOEMeanStdDev()
     {
-        values = new List<string>();
+        values = [];
     }
 
     public void AddResult(string result)

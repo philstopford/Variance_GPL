@@ -53,7 +53,8 @@ public partial class MainForm
         {
             TableLayout lithography_table = new();
             gB_layer_lithography = new GroupBox {Content = lithography_table};
-            expander_lithography = new() {Header = "Lithography Parameters",
+            expander_lithography = new Expander
+            {Header = "Lithography Parameters",
                 Content = gB_layer_lithography,
                 Expanded = true
             };
@@ -94,7 +95,7 @@ public partial class MainForm
 
 
         GroupBox groupBox_rounding = new();
-        expander_rounding = new()
+        expander_rounding = new Expander
         {
             Header = "Rounding",
             Content = groupBox_rounding,
@@ -124,7 +125,7 @@ public partial class MainForm
         */
 
         groupBox_misc = new GroupBox();
-        expander_litmisc = new()
+        expander_litmisc = new Expander
         {
             Header = "Misc",
             Content = groupBox_misc,
@@ -290,7 +291,7 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_lwr = new()
+        expander_lwr = new Expander
         {
             Header = "Line Width Roughness (LWR)",
             Content = outer_gb,
@@ -314,7 +315,7 @@ public partial class MainForm
 
         Panel outer = new() {Content = tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_LWR = new()
+        expander_LWR = new Expander
         {
             Header = "Line Width Roughess (LWR)",
             Content = outer_gb,
@@ -417,7 +418,7 @@ public partial class MainForm
         Panel outer = new() {Content = tl};
 
         GroupBox outer_gb = new() {Content = outer};
-        expander_LWR2 = new()
+        expander_LWR2 = new Expander
         {
             Content = outer_gb,
             Header = "Line Width Roughess (LWR) 2",
@@ -513,7 +514,7 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_cdu = new()
+        expander_cdu = new Expander
         {
             Header = "Critical Dimension Uniformity (CDU)",
             Content = outer_gb,
@@ -534,7 +535,7 @@ public partial class MainForm
         Panel outer = new() {Content = outer_tl};
 
         GroupBox outer_gb = new() {Content = outer};
-        expander_SCDU = new()
+        expander_SCDU = new Expander
         {
             Header = "Side CD Uniformity",
             Content = outer_gb,
@@ -624,7 +625,7 @@ public partial class MainForm
         Panel outer = new() {Content = outer_tl};
 
         GroupBox outer_gb = new() {Content = outer};
-        expander_TCDU = new()
+        expander_TCDU = new Expander
         {
             Header = "Tips CD Uniformity",
             Content = outer_gb,
@@ -710,7 +711,7 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_overlay = new()
+        expander_overlay = new Expander
         {
             Header = "Overlay",
             Content = outer_gb,
@@ -728,7 +729,7 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_overlayX = new()
+        expander_overlayX = new Expander
         {
             Header = "Horizontal Overlay",
             Content = outer_gb,
@@ -889,7 +890,7 @@ public partial class MainForm
         TableLayout outer_tl = new();
         Panel outer = new() {Content = outer_tl};
         GroupBox outer_gb = new() {Content = outer};
-        expander_overlayY = new()
+        expander_overlayY = new Expander
         {
             Header = "Vertical Overlay",
             Content = outer_gb,

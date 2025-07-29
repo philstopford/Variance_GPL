@@ -39,15 +39,11 @@ internal static class Program
 
             if (graphicsIndex != -1)
             {
-                switch (args[graphicsIndex + 1].ToLower())
+                graphicsMode = args[graphicsIndex + 1].ToLower() switch
                 {
-                    case "d3d11":
-                        graphicsMode = (int)GraphicsBackend.Direct3D11;
-                        break;
-                    default:
-                        graphicsMode = (int)GraphicsBackend.Vulkan;
-                        break;
-                }
+                    "d3d11" => (int)GraphicsBackend.Direct3D11,
+                    _ => (int)GraphicsBackend.Vulkan
+                };
             }
 
             int i = 0;
@@ -57,7 +53,7 @@ internal static class Program
                 // Extract XML file.
                 try
                 {
-                    string[] tokens = args[i].Split(new[] { '.' });
+                    string[] tokens = args[i].Split(['.']);
                     string extension = tokens[^1];
                     if (extension.ToUpper() == "VARIANCE" || extension.ToUpper() == "XML")
                     {

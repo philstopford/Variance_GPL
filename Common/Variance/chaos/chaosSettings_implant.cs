@@ -6,7 +6,7 @@ internal class ChaosSettings_implant
 {
     public enum Properties { resistCDVar, resistHeightVar, resistTopCRRVar, tiltVar, twistVar }
 
-    private static int dimensions = 5; // number of variations.
+    private const int dimensions = 5; // number of variations.
 
     public static int getDimensions()
     {
@@ -25,25 +25,15 @@ internal class ChaosSettings_implant
 
     private double pGetValue(int p)
     {
-        double retVal = 0;
-        switch (p)
+        double retVal = p switch
         {
-            case (int)Properties.resistCDVar:
-                retVal = implant_resistCDVar;
-                break;
-            case (int)Properties.resistHeightVar:
-                retVal = implant_resistHeightVar;
-                break;
-            case (int)Properties.resistTopCRRVar:
-                retVal = implant_resistTopCRRVar;
-                break;
-            case (int)Properties.tiltVar:
-                retVal = implant_tiltVar;
-                break;
-            case (int)Properties.twistVar:
-                retVal = implant_twistVar;
-                break;
-        }
+            (int)Properties.resistCDVar => implant_resistCDVar,
+            (int)Properties.resistHeightVar => implant_resistHeightVar,
+            (int)Properties.resistTopCRRVar => implant_resistTopCRRVar,
+            (int)Properties.tiltVar => implant_tiltVar,
+            (int)Properties.twistVar => implant_twistVar,
+            _ => 0
+        };
 
         return retVal;
     }

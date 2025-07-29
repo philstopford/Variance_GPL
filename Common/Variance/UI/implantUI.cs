@@ -372,6 +372,6 @@ public partial class MainForm
         double x = otkVPSettings_implant.getCameraX();
         double y = otkVPSettings_implant.getCameraY();
         double zoom = otkVPSettings_implant.getZoomFactor();
-        return new[] { x, y, zoom };
+        return [x, y, zoom];
     }
 }

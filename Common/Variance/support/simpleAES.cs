@@ -16,13 +16,15 @@ public class SimpleAES
 
     public SimpleAES()
     {
-        Key = new byte[] {
+        Key =
+        [
             32, 161, 218,  27, 238, 106, 241, 131,  89,  76, 230, 247, 200, 133, 154, 136,
             189,  69, 240, 250, 171, 103,  69, 190, 141,  44,  11,  90, 118, 170, 210, 237
-        }; // 32
-        Vector = new byte[] {
+        ]; // 32
+        Vector =
+        [
             201, 149, 239, 100, 109, 190, 178, 165, 225, 145, 132,  65, 122, 128,  40, 254
-        }; // 16
+        ]; // 16
         init();
     }
 
@@ -137,7 +139,7 @@ public class SimpleAES
     //      return encoding.GetBytes(str);
     // However, this results in character values that cannot be passed in a URL.  So, instead, I just
     // lay out all of the byte values in a long string of numbers (three per - must pad numbers less than 100).
-    public byte[] StrToByteArray(string str)
+    public static byte[] StrToByteArray(string str)
     {
         if (str.Length == 0)
         {
@@ -160,24 +162,18 @@ public class SimpleAES
     // Same comment as above.  Normally the conversion would use an ASCII encoding in the other direction:
     //      System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
     //      return enc.GetString(byteArr);    
-    public string ByteArrToString(byte[] byteArr)
+    public static string ByteArrToString(byte[] byteArr)
     {
         string tempStr = "";
         for (int i = 0; i <= byteArr.GetUpperBound(0); i++)
         {
             byte val = byteArr[i];
-            switch (val)
+            tempStr += val switch
             {
-                case < 10:
-                    tempStr += "00" + val;
-                    break;
-                case < 100:
-                    tempStr += "0" + val;
-                    break;
-                default:
-                    tempStr += val.ToString();
-                    break;
-            }
+                < 10 => "00" + val,
+                < 100 => "0" + val,
+                _ => val.ToString()
+            };
         }
         return tempStr;
     }

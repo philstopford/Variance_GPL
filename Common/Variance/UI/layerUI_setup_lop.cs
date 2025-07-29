@@ -22,8 +22,9 @@ public partial class MainForm
         Application.Instance.Invoke(() =>
         {
             TableLayout groupBox_layer_LOP_table = new();
-            groupBox_LOP = new() {Content = groupBox_layer_LOP_table};
-            expander_LOP = new () {Header = "Layout Origin Parameters",
+            groupBox_LOP = new GroupBox {Content = groupBox_layer_LOP_table};
+            expander_LOP = new Expander
+            {Header = "Layout Origin Parameters",
                 Content = groupBox_LOP,
                 Expanded = true
             };

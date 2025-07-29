@@ -56,25 +56,15 @@ public class CommonVars
 
     private string pGetHash(Hashes p)
     {
-        string ret = "";
-        switch (p)
+        string ret = p switch
         {
-            case Hashes.gc:
-                ret = geoCoreHash;
-                break;
-            case Hashes.settings:
-                ret = listOfSettingsHash;
-                break;
-            case Hashes.entropy:
-                ret = entropyGeoHash;
-                break;
-            case Hashes.implant:
-                ret = implantHash;
-                break;
-            case Hashes.entropyImplant:
-                ret = entropyImplantHash;
-                break;
-        }
+            Hashes.gc => geoCoreHash,
+            Hashes.settings => listOfSettingsHash,
+            Hashes.entropy => entropyGeoHash,
+            Hashes.implant => implantHash,
+            Hashes.entropyImplant => entropyImplantHash,
+            _ => ""
+        };
 
         return ret;
     }
@@ -185,19 +175,13 @@ public class CommonVars
 
     private bool pGetOpenGLProp(properties_gl p)
     {
-        bool ret = false;
-        switch (p)
+        bool ret = p switch
         {
-            case properties_gl.aa:
-                ret = AA;
-                break;
-            case properties_gl.fill:
-                ret = filledPolygons;
-                break;
-            case properties_gl.points:
-                ret = drawPoints;
-                break;
-        }
+            properties_gl.aa => AA,
+            properties_gl.fill => filledPolygons,
+            properties_gl.points => drawPoints,
+            _ => false
+        };
 
         return ret;
     }
@@ -235,13 +219,11 @@ public class CommonVars
 
     private int pGetGLInt(gl_i i)
     {
-        int ret = 0;
-        switch (i)
+        int ret = i switch
         {
-            case gl_i.zoom:
-                ret = openGLZoomFactor;
-                break;
-        }
+            gl_i.zoom => openGLZoomFactor,
+            _ => 0
+        };
         return ret;
     }
 
@@ -252,12 +234,11 @@ public class CommonVars
 
     private void pSetGLInt(gl_i i, int val)
     {
-        switch (i)
+        openGLZoomFactor = i switch
         {
-            case gl_i.zoom:
-                openGLZoomFactor = val;
-                break;
-        }
+            gl_i.zoom => val,
+            _ => openGLZoomFactor
+        };
     }
 
     public enum opacity_gl { fg, bg }
@@ -272,16 +253,12 @@ public class CommonVars
 
     private double pGetOpacity(opacity_gl o)
     {
-        double ret = 0;
-        switch (o)
+        double ret = o switch
         {
-            case opacity_gl.fg:
-                ret = openGLFGOpacity;
-                break;
-            case opacity_gl.bg:
-                ret = openGLBGOpacity;
-                break;
-        }
+            opacity_gl.fg => openGLFGOpacity,
+            opacity_gl.bg => openGLBGOpacity,
+            _ => 0
+        };
 
         return ret;
     }
@@ -395,14 +372,15 @@ public class CommonVars
     public enum upperTabNames { twoD, Implant, oneD, Utilities }
     public enum twoDTabNames { layer, settings, DOE, paSearch }
 
-    public static readonly string[] csvHeader = { "CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar" };
+    public static readonly string[] csvHeader = ["CDUSVar", "CDUTVar", "LWRVar", "LWRSeed", "LWR2Var", "LWR2Seed", "horTipBiasVar", "verTipBiasVar", "iCVar", "oCVar", "overlayX", "overlayY", "wobbleVar"
+    ];
 
     public enum external_Type { svg, gds, oas }
 
-    private readonly List<string> externalTypes = new() { "SVG", "GDS", "Oasis" };
+    private readonly List<string> externalTypes = ["SVG", "GDS", "Oasis"];
     public enum external_Filter { none, lte, gte }
 
-    private readonly List<string> externalFilterList = new() { "", "<=", ">=" };
+    private readonly List<string> externalFilterList = ["", "<=", ">="];
 
     public List<string> getExternalTypes()
     {
@@ -852,19 +830,13 @@ public class CommonVars
 
     private bool pGetActiveUI(uiActive u)
     {
-        bool ret = false;
-        switch (u)
+        bool ret = u switch
         {
-            case uiActive.doe:
-                ret = DOESettingsUIActive;
-                break;
-            case uiActive.settings:
-                ret = settingsUIActive;
-                break;
-            case uiActive.implant:
-                ret = implantUIActive;
-                break;
-        }
+            uiActive.doe => DOESettingsUIActive,
+            uiActive.settings => settingsUIActive,
+            uiActive.implant => implantUIActive,
+            _ => false
+        };
         return ret;
     }
 
@@ -934,7 +906,7 @@ public class CommonVars
         paSearch = new PASearch();
         implantSettings_nonSim = new EntropySettings_nonSim();
         // This will contain our settings for the 2D simulation component
-        listOfSettings = new List<EntropyLayerSettings>();
+        listOfSettings = [];
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
             listOfSettings.Add(new EntropyLayerSettings());
@@ -966,27 +938,28 @@ public class CommonVars
         subshapes = new ObservableCollection<string>[CentralProperties.maxLayersForMC];
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {
-            subshapes[i] = new ObservableCollection<string> { "1" };
+            subshapes[i] = ["1"];
         }
 
-        subShapesList_exp = new ObservableCollection<string>();
+        subShapesList_exp = [];
         subShapesList_exp = subshapes[0];
 
-        rngCustomMapping = new ObservableCollection<string> {boxMuller};
+        rngCustomMapping = [boxMuller];
         // default. Not removable.
         foreach (string t in varianceContext.rngMappingEquations.Where(t => t != boxMuller))
         {
             rngCustomMapping.Add(t);
         }
         
-        calcMode_names = new ObservableCollection<string>
-        { "Compute Area Distribution",
+        calcMode_names =
+        [
+            "Compute Area Distribution",
             "Compute Spacing/Overlap Distribution",
             "Compute Chord Distribution",
             "Compute Angle Distribution"
-        };
+        ];
 
-        openGLModeList = new List<string> { "VBO", "Immediate" };
+        openGLModeList = ["VBO", "Immediate"];
 
         drawingLock = new object();
         implantDrawingLock = new object();
@@ -999,10 +972,10 @@ public class CommonVars
         copyLayerGHSettings = new GeoCoreHandler();
         copyLayerSettings = new EntropyLayerSettings();
 
-        layerNames = new ObservableCollection<string>();
+        layerNames = [];
 
         // External file data lists
-        geoCore_Handlers = new List<GeoCoreHandler>();
+        geoCore_Handlers = [];
         structureList = new ObservableCollection<string>[CentralProperties.maxLayersForMC];
         activeStructure_LayerDataTypeList = new ObservableCollection<string>[CentralProperties.maxLayersForMC];
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
@@ -1012,8 +985,8 @@ public class CommonVars
             activeStructure_LayerDataTypeList[layer] = geoCore_Handlers[layer].getGeo().activeStructure_LayerDataTypeList_;
             layerNames.Add((layer + 1).ToString());
         }
-        structureList_exp = new ObservableCollection<string>();
-        activeStructure_LayerDataTypeList_exp = new ObservableCollection<string>();
+        structureList_exp = [];
+        activeStructure_LayerDataTypeList_exp = [];
 
         pReset(varianceContext);
     }
@@ -2047,7 +2020,7 @@ public class CommonVars
         }
         catch (Exception)
         {
-            return new[] { "" };
+            return [""];
         }
     }
 

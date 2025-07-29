@@ -74,7 +74,7 @@ public partial class Entropy
             {
                 // Get the results from the implant calc engine.
                 ChaosSettings_implant cs = sampler_implant.getSample(i);
-                implantResultPackage.Add(entropyEval_implant(cs));
+                implantResultPackage.Add(i, entropyEval_implant(cs));
 
                 if (numberOfCases == 1 || currentProgress % sampleRate == 0)
                 {
@@ -165,15 +165,11 @@ public partial class Entropy
         // Attempt at parallelism.
         CancellationTokenSource cancelSource = new();
         CancellationToken cancellationToken = cancelSource.Token;
-        switch (varianceContext.numberOfThreads)
+        po.MaxDegreeOfParallelism = varianceContext.numberOfThreads switch
         {
-            case -1:
-                po.MaxDegreeOfParallelism = commonVars.HTCount;
-                break;
-            default:
-                po.MaxDegreeOfParallelism = varianceContext.numberOfThreads;
-                break;
-        }
+            -1 => commonVars.HTCount,
+            _ => varianceContext.numberOfThreads
+        };
 
         if (commonVars.getImplantSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 0)
         {
@@ -209,7 +205,7 @@ public partial class Entropy
                                                 break;
                                         }
                                     }
-                                    implantResultPackage.Add(currentResult);
+                                    implantResultPackage.Add(i, currentResult);
                                 }
                             }
                             catch (Exception)
@@ -292,18 +288,13 @@ public partial class Entropy
     {
         reset();
         clearAbortFlagFunc?.Invoke();
-        string emailString;
 
         bool simState = entropyRunCore(numberOfCases, row: 0, col: 0, csvFile, useThreads, tileHandling: false, implantMode: true, doPASearch: false);
-        switch (simState)
+        var emailString = simState switch
         {
-            case false:
-                emailString = "Implant run aborted";
-                break;
-            default:
-                emailString = "Implant run completed";
-                break;
-        }
+            false => "Implant run aborted",
+            _ => "Implant run completed"
+        };
         // Assume user error if perJob is set and not onCompletion.
         // We'll use simulationSettings here just because legacy put the settings there and it's the easiest option.
         if (commonVars.getNonSimulationSettings().emailOnCompletion && numberOfCases > 1)
@@ -379,7 +370,7 @@ public partial class Entropy
                     // We have minutes
                     statusLineString += cT.Minutes + " m";
                 }
-                if (!(cT.Minutes < 1 && cT.Hours < 1))
+                if (cT is not { Minutes: < 1, Hours: < 1 })
                 {
                     statusLineString += ", ";
                 }
@@ -412,7 +403,7 @@ public partial class Entropy
 
         bool returnValue = false;
 
-        int doneCases = implantResultPackage.getListOfResults_implant().Count;
+        int doneCases = implantResultPackage.implant_results_count;
 
         int rows = doneCases + 1;
         string[] stringList = new string[rows];
@@ -623,16 +614,16 @@ public partial class Entropy
         string summaryFile_ = csvFileName;
         if (!summaryFile_.EndsWith("_summary.txt", StringComparison.CurrentCulture))
         {
-            summaryFile_ = csvFileName.Substring(0, csvFileName.Length - 4);
+            summaryFile_ = csvFileName[..^4];
             summaryFile_ += "_summary.txt";
         }
 
-        List<string> linesToWrite = new()
-        {
+        List<string> linesToWrite =
+        [
             "Results summary for job: " + csvFileName + " run on : " +
             DateTime.Today.ToLocalTime().ToLongDateString() + ". Runtime: " +
             implantResultPackage.runTime.ToString("0.##") + " seconds"
-        };
+        ];
 
         // Results first
         // Write the results first.
@@ -644,7 +635,7 @@ public partial class Entropy
         linesToWrite.Add("");
         for (int resultGroup = 0; resultGroup < implantResultPackage.getValues(SimResultPackage.Properties.mean).Length; resultGroup++)
         {
-            linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.getListOfResults_implant().Count + " cases: x: " + implantResultPackage.getValue(SimResultPackage.Properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.Properties.stdDev, resultGroup).ToString("0.##"));
+            linesToWrite.Add("result " + resultGroup + " mean and standard deviation for " + implantResultPackage.implant_results_count + " cases: x: " + implantResultPackage.getValue(SimResultPackage.Properties.mean, resultGroup).ToString("0.##") + ", s: " + implantResultPackage.getValue(SimResultPackage.Properties.stdDev, resultGroup).ToString("0.##"));
         }
 
         linesToWrite.Add("");

@@ -119,7 +119,7 @@ public class Results
 
     private void pSetPoints(PathsD newPoints)
     {
-        points = new (newPoints);
+        points = new PathsD(newPoints);
     }
 
     public void clearPoints()
@@ -153,43 +153,21 @@ public class Results
 
     private double[] pGetFields(fields_d f)
     {
-        double[] ret = { };
-        switch (f)
+        double[] ret = f switch
         {
-            case fields_d.svar:
-                ret = CDUSVar;
-                break;
-            case fields_d.tvar:
-                ret = CDUTVar;
-                break;
-            case fields_d.lwr:
-                ret = LWRVar;
-                break;
-            case fields_d.lwr2:
-                ret = LWR2Var;
-                break;
-            case fields_d.htip:
-                ret = horTipBiasVar;
-                break;
-            case fields_d.vtip:
-                ret = verTipBiasVar;
-                break;
-            case fields_d.icv:
-                ret = iCVar;
-                break;
-            case fields_d.ocv:
-                ret = oCVar;
-                break;
-            case fields_d.olx:
-                ret = overlayX;
-                break;
-            case fields_d.oly:
-                ret = overlayY;
-                break;
-            case fields_d.wob:
-                ret = wobbleVar;
-                break;
-        }
+            fields_d.svar => CDUSVar,
+            fields_d.tvar => CDUTVar,
+            fields_d.lwr => LWRVar,
+            fields_d.lwr2 => LWR2Var,
+            fields_d.htip => horTipBiasVar,
+            fields_d.vtip => verTipBiasVar,
+            fields_d.icv => iCVar,
+            fields_d.ocv => oCVar,
+            fields_d.olx => overlayX,
+            fields_d.oly => overlayY,
+            fields_d.wob => wobbleVar,
+            _ => []
+        };
 
         return ret;
     }
@@ -273,16 +251,12 @@ public class Results
 
     private int[] pGetSeeds(fields_i f)
     {
-        int[] ret = { };
-        switch (f)
+        int[] ret = f switch
         {
-            case fields_i.lwrs:
-                ret = LWRSeed;
-                break;
-            case fields_i.lwr2s:
-                ret = LWR2Seed;
-                break;
-        }
+            fields_i.lwrs => LWRSeed,
+            fields_i.lwr2s => LWR2Seed,
+            _ => []
+        };
 
         return ret;
     }
@@ -346,10 +320,10 @@ public class Results
 
     private void init()
     {
-        LWRSeed = new int[] { };
-        LWR2Seed = new int[] { };
+        LWRSeed = [];
+        LWR2Seed = [];
 
-        previewShapes = new List<PathsD>();
+        previewShapes = [];
         valid = false;
     }
 
@@ -363,7 +337,7 @@ public class Results
         previewShapes.Clear();
         for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
         {
-            previewShapes.Add(new (simShapes[layer].getPoints()));
+            previewShapes.Add(new PathsD(simShapes[layer].getPoints()));
         }
     }
 }

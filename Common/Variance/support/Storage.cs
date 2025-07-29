@@ -13,19 +13,20 @@ public class Storage
     public delegate void PrepUI();
     public PrepUI prepUI { get; set; }
     public delegate void StorageSetSettingsCallback(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false);
-    public StorageSetSettingsCallback setLayerSettings { get; set; }
+    
+    public StorageSetSettingsCallback? setLayerSettings { get; set; }
     public delegate void StorageSuspendSettingsUICallback();
-    public StorageSuspendSettingsUICallback suspendSettingsUI { get; set; }
+    public StorageSuspendSettingsUICallback? suspendSettingsUI { get; set; }
     public delegate void StorageSuspendImplantUICallback();
     public StorageSuspendImplantUICallback suspendImplantUI { get; set; }
     public delegate void StorageSuspendGDSSettingsUICallback();
-    public StorageSuspendGDSSettingsUICallback suspendDOESettingsUI { get; set; }
+    public StorageSuspendGDSSettingsUICallback? suspendDOESettingsUI { get; set; }
     public delegate void StorageUpdateSettingsUICallback();
-    public StorageUpdateSettingsUICallback updateSettingsUIFromSettings { get; set; }
+    public StorageUpdateSettingsUICallback? updateSettingsUIFromSettings { get; set; }
     public delegate void StorageUpdateImplantUICallback();
     public StorageUpdateImplantUICallback updateImplantUIFromSettings { get; set; }
     public delegate void StorageUpdateDOESettingsUICallback();
-    public StorageUpdateDOESettingsUICallback updateDOESettingsUIFromSettings { get; set; }
+    public StorageUpdateDOESettingsUICallback? updateDOESettingsUIFromSettings { get; set; }
     public delegate bool StorageUpdateLoadLayoutCallback(int layer, string filename);
     public StorageUpdateLoadLayoutCallback loadLayout { get; set; }
     public delegate void ResumeUICallback();
@@ -60,7 +61,7 @@ public class Storage
 
     // compatibility shim for old projects pre-3.0
 
-    private void modifyLayerRefs_forLayerChange_1xto21(ref EntropyLayerSettings readSettings,
+    private static void modifyLayerRefs_forLayerChange_1xto21(ref EntropyLayerSettings readSettings,
         int compatibilityLayerOffset)
     {
         if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 2 ||
@@ -120,7 +121,7 @@ public class Storage
         readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3, 0);
     }
 
-    private void modifyLayerRefs_forLayerChange_220(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
+    private static void modifyLayerRefs_forLayerChange_220(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
     {
         if (readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 4 ||
             readSettings.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref) == 5 ||
@@ -203,7 +204,7 @@ public class Storage
         readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7, 0);
     }
 
-    private void modifyLayerRefs_forLayerChange(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
+    private static void modifyLayerRefs_forLayerChange(ref EntropyLayerSettings readSettings, int compatibilityLayerOffset)
     {
         switch (compatibilityLayerOffset)
         {
@@ -222,16 +223,16 @@ public class Storage
         }
     }
 
-    private PathsD fileDataFromString(string fileDataString)
+    private static PathsD fileDataFromString(string fileDataString)
     {
-        PathsD returnList = new();
+        PathsD returnList = [];
 
-        char[] polySep = { ';' };
-        char[] coordSep = { ',' };
+        char[] polySep = [';'];
+        char[] coordSep = [','];
 
         if (fileDataString.Length > 0)
         {
-            List<string> hashList = new();
+            List<string> hashList = [];
 
             string[] polyStringArray = fileDataString.Split(polySep);
             foreach (string t in polyStringArray)
@@ -241,7 +242,7 @@ public class Storage
                 int pt = 0;
                 while (pt < pointStringArray.Length)
                 {
-                    polyData[pt / 2] = new (Convert.ToDouble(pointStringArray[pt]), Convert.ToDouble(pointStringArray[pt + 1]));
+                    polyData[pt / 2] = new PointD(Convert.ToDouble(pointStringArray[pt]), Convert.ToDouble(pointStringArray[pt + 1]));
                     pt += 2;
                 }
 
@@ -258,17 +259,17 @@ public class Storage
         }
         else
         {
-            returnList.Add(new() { new (0, 0) });
-            returnList.Add(new() { new (0, 0) });
-            returnList.Add(new() { new (0, 0) });
+            returnList.Add([new PointD(0, 0)]);
+            returnList.Add([new PointD(0, 0)]);
+            returnList.Add([new PointD(0, 0)]);
         }
         return returnList;
     }
 
-    private string stringFromFileData(PathsD fileData)
+    private static string stringFromFileData(PathsD fileData)
     {
         string returnString = "";
-        if (fileData == null)
+        if (fileData.Count == 0)
         {
             return returnString;
         }
@@ -336,6 +337,7 @@ public class Storage
                 new XElement("flipV", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.flipV)),
                 new XElement("alignGeomX", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignX)),
                 new XElement("alignGeomY", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignY)),
+                new XElement("legacyRounding", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.legacyRounding)),
                 new XElement("shapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shapeIndex)),
                 new XElement("subShapeHorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)),
                 new XElement("subShapeHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0)),
@@ -488,14 +490,14 @@ public class Storage
                 // fileData is List<PointF[]> where each list entry is a polygon.
                 new XElement("fileData", stringFromFileData(listOfSettings[i].getFileData()))
             );
-            doc.Root.Add(xelement);
+            doc.Root!.Add(xelement);
         }
     }
 
     private void pStoreSimulationSettings_simulation(ref XDocument doc, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim)
     {
         double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC);
-        doc.Root.Add(new XElement("settings",
+        doc.Root!.Add(new XElement("settings",
             new XElement("comment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.comment)),
             new XElement("paSearchComment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.paComment)),
             new XElement("numberOfCases", simulationSettings.getValue(EntropySettings.properties_i.nCases)),
@@ -561,7 +563,7 @@ public class Storage
     private void pStoreSimulationSettings_DOE(ref XDocument doc, EntropySettings simulationSettings)
     {
         double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC + 1);
-        doc.Root.Add(new XElement("DOESettings",
+        doc.Root!.Add(new XElement("DOESettings",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
             new XElement("viewportY", camParameters != null ? camParameters[1] : 0),
@@ -605,7 +607,7 @@ public class Storage
     private void pStoreSimulationSettings_implant(ref XDocument doc, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
     {
         double[] camParameters = implantViewportSave?.Invoke();
-        doc.Root.Add(new XElement("implant",
+        doc.Root!.Add(new XElement("implant",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
             new XElement("viewportY", camParameters != null ? camParameters[1] : 0),
@@ -633,7 +635,7 @@ public class Storage
     {
         XDocument doc = new(new XElement("Variance"));
         // ReSharper disable once PossibleNullReferenceException
-        doc.Root.Add(new XElement("version", nonSimulationSettings_.version));
+        doc.Root!.Add(new XElement("version", nonSimulationSettings_.version));
         
         pStoreSimulationSettings_layer(ref doc, listOfSettings);
         pStoreSimulationSettings_simulation(ref doc, simulationSettings, simulationSettings_nonSim);
@@ -751,6 +753,16 @@ public class Storage
             catch (Exception)
             {
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.flipV);
+            }
+
+            try
+            {
+                readSettings.setInt(EntropyLayerSettings.properties_i.legacyRounding, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("legacyRounding").First().Value));
+            }
+            catch (Exception)
+            {
+                // Old project, need to force legacy rounding to avoid changing results.
+                readSettings.setInt(EntropyLayerSettings.properties_i.legacyRounding, 1);
             }
 
             try
@@ -1723,7 +1735,7 @@ public class Storage
             catch (Exception)
             {
             }
-            viewportLoad?.Invoke(layer, new[] { x, y, zoom });
+            viewportLoad?.Invoke(layer, [x, y, zoom]);
 
             try
             {
@@ -1949,7 +1961,7 @@ public class Storage
                     setLayerSettings?.Invoke(readSettings, layer + compatibilityLayerOffset, false, true);
                     double[] camDetails = viewportSave?.Invoke(layer);
                     viewportLoad?.Invoke(layer + compatibilityLayerOffset, camDetails);
-                    viewportLoad?.Invoke(layer, new double[] { 0, 0, 1 });
+                    viewportLoad?.Invoke(layer, [0, 0, 1]);
                     loadedLayers[layer + compatibilityLayerOffset] = true;
                     readSettings = new EntropyLayerSettings();
                 }
@@ -2032,7 +2044,7 @@ public class Storage
             catch (Exception)
             {
             }
-            viewportLoad?.Invoke(CentralProperties.maxLayersForMC, new[] { x, y, zoom });
+            viewportLoad?.Invoke(CentralProperties.maxLayersForMC, [x, y, zoom]);
 
             int svgCompat = 0;
             try
@@ -2528,7 +2540,7 @@ public class Storage
             catch (Exception)
             {
             }
-            viewportLoad?.Invoke(CentralProperties.maxLayersForMC + 1, new[] { x, y, zoom });
+            viewportLoad?.Invoke(CentralProperties.maxLayersForMC + 1, [x, y, zoom]);
 
             updateDOESettingsUIFromSettings?.Invoke();
         }
@@ -2718,7 +2730,7 @@ public class Storage
             catch (Exception)
             {
             }
-            implantViewportLoad?.Invoke(new[] { x, y, zoom });
+            implantViewportLoad?.Invoke([x, y, zoom]);
 
             updateImplantUIFromSettings?.Invoke();
         }
@@ -2753,7 +2765,7 @@ public class Storage
         }
         
         string version = simulationFromFile.Descendants("version").First().Value;
-        string[] tokenVersion = version.Split(new[] { '.' });
+        string[] tokenVersion = version.Split(['.']);
 
         if (version != currentVersion)
         {

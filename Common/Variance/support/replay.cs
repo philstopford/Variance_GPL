@@ -58,19 +58,13 @@ public class Replay
 
     private int pGetValue(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.col:
-                ret = col;
-                break;
-            case properties_i.row:
-                ret = row;
-                break;
-            case properties_i.max:
-                ret = max;
-                break;
-        }
+            properties_i.col => col,
+            properties_i.row => row,
+            properties_i.max => max,
+            _ => 0
+        };
         return ret;
     }
 
@@ -87,7 +81,7 @@ public class Replay
     private void pReplay(ref CommonVars commonVars)
     {
         commonVars_ = commonVars;
-        parsed = new List<string[]>();
+        parsed = [];
         pReset();
     }
 
@@ -96,10 +90,10 @@ public class Replay
         try
         {
             // Carve up the filename to see whether we have col and row specified.
-            string[] tokens = filename.Split(new[] { '_' });
+            string[] tokens = filename.Split(['_']);
             // Format is of the form _col0_row0.csv
-            string rowString = tokens[^1].Split(new[] { '.' })[0];
-            string colString = tokens[^2].Split(new[] { '_' })[0];
+            string rowString = tokens[^1].Split(['.'])[0];
+            string colString = tokens[^2].Split(['_'])[0];
 
             // Attempting to bullet-proof things against random user naming.
             if (rowString.Substring(0, 3) == "row" && rowString.Substring(0, 3) == "col")
@@ -147,7 +141,7 @@ public class Replay
                     // Validate that we got the expected strings and extract the checksum data.
                     try
                     {
-                        listOfSettingsHash = lines[i].Split(new[] { ',' })[1];
+                        listOfSettingsHash = lines[i].Split([','])[1];
                     }
                     catch (Exception)
                     {
@@ -161,7 +155,7 @@ public class Replay
                     // Validate that we got the expected strings and extract the checksum data.
                     try
                     {
-                        entropyGeoHash = lines[i].Split(new[] { ',' })[1];
+                        entropyGeoHash = lines[i].Split([','])[1];
                     }
                     catch (Exception)
                     {
@@ -175,7 +169,7 @@ public class Replay
                     // Validate that we got the expected strings and extract the checksum data.
                     try
                     {
-                        geoCoreHash = lines[i].Split(new[] { ',' })[1];
+                        geoCoreHash = lines[i].Split([','])[1];
                     }
                     catch (Exception)
                     {
@@ -205,7 +199,7 @@ public class Replay
             // Avoid the hash lines.
             for (int line = 0; line < lines.Length - terminatingRow; line++)
             {
-                parsed.Add(lines[line].Split(new[] { ',' }));
+                parsed.Add(lines[line].Split([',']));
             }
 
             chaosSettings = new ChaosSettings(true, commonVars_.getListOfSettings(), commonVars_.getSimulationSettings());
@@ -340,17 +334,14 @@ public class Replay
                 break;
 
             case (int)geoAnalysis.Supported.calcModes.enclosure_spacing_overlap:
-                switch (commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode))
+                searchString = commonVars_.getSimulationSettings().getValue(EntropySettings.properties_i.subMode) switch
                 {
-                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing:
-                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld:
-                        searchString = "Spacing";
-                        break;
-                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure:
-                    case (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld:
-                        searchString = "Enclosure";
-                        break;
-                }
+                    (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacing
+                        or (int)geoAnalysis.DistanceHandler.spacingCalcModes.spacingOld => "Spacing",
+                    (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosure
+                        or (int)geoAnalysis.DistanceHandler.spacingCalcModes.enclosureOld => "Enclosure",
+                    _ => searchString
+                };
 
                 colIndex = Array.IndexOf(parsed[0], searchString);
                 result = parsed[index][colIndex];
@@ -365,7 +356,7 @@ public class Replay
                 break;
 
             case (int)geoAnalysis.Supported.calcModes.chord: // chord output
-                string[] searchStrings = { "AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord" };
+                string[] searchStrings = ["AMinTopChord", "AMinBottomChord", "BMinLeftChord", "BMinRightChord"];
                 string[] resultValues = new string[searchStrings.Length];
                 for (int i = 0; i < searchStrings.Length; i++)
                 {

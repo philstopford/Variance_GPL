@@ -198,9 +198,53 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
+    <li><a href="#releases_620">6.2</a>
     <li><a href="#releases_610">6.1</a>
     <li><a href="#releases_600">6.0</a>
   </ul>
+
+    <blockquote>
+      <a name="releases_620"></a>
+      <h2 class="western">New to 6.2 (Jul 29 2025)</h2>
+      <blockquote>
+        <ul>
+          <li>Using new variant of Veldrid that is maintained, to provide viewports.</li>
+          <li>Variety of bug fixes.</li>
+          <ul>
+            <li>Fixed regression in PA search.</li>
+            <li>Fixed regressions in reference layer handling.</li>
+            <li>Fixed regression in multi-polygon flip processing.</li>
+            <li>Fixed regression in proximity biasing side ray weighting computation.</li>
+            <li>Fixed regressions in lens distortion code.</li>
+            <li>Applied some fixes to avoid artifacts in keyhole handling for sequential geometry operations.</li>
+          </ul>
+          <li>Performance work by addressing some potential bottlenecks.</li>
+          <li>GeoCore enhancements.</li>
+          <li>Big overhaul for shape engine treatment of keyholed geometry.</li>
+          <ul>
+            <li>Keyholed geometry is now subject to special treatment. Keyholes are collapsed, contouring is applied and then the keyholes are re-computed. This leads to greatly improved results: top-left is old result, top-right is the new result. Bottom-right shows the result for increased rounding.</li>
+            <li>Legacy rounding option is used to support older projects, without changing results.</li>
+          </ul>
+        </ul>
+      </blockquote>
+      <table>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/6.2_pre.png" alt=""/>
+          </td>
+          <td>
+            <img class="c" src="images/versions/6.2_post.png" alt=""/>
+          </td>
+        </tr>
+        <tr>
+          <td = width="50%">
+            <img class="c" src="images/versions/6.2_post_2.png" alt=""/>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </table>
+    </blockquote>
 
     <blockquote>
       <a name="releases_610"></a>

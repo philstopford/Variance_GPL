@@ -75,7 +75,7 @@ internal class ChaosEngine
 #if !CHAOSSINGLETHREADED
         );
 #endif
-        List<PathsD> returnPaths = new() {aPath, bPath};
+        List<PathsD> returnPaths = [aPath, bPath];
 
         return returnPaths;
     }
@@ -124,7 +124,7 @@ internal class ChaosEngine
         PathsD[] fourLayerResults = new PathsD[limit4];
         PathsD[] eightLayerResults = new PathsD[limit8];
 
-        PathD tPath = new();
+        PathD tPath = [];
 
 #if !CHAOSSINGLETHREADED
         Parallel.For(0, limit2, i =>
@@ -132,21 +132,17 @@ internal class ChaosEngine
             for (int i = 0; i < limit2; i++)
 #endif
             {
-                switch (inputLayerEnabled[i * 2])
+                twoLayerResults[i] = inputLayerEnabled[i * 2] switch
                 {
-                    case true when inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2 + 1, simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i), preserveCollinear: preserveCollinear);
-                        break;
-                    case true when !inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2, i * 2, 0, preserveCollinear: preserveCollinear);
-                        break;
-                    case false when inputLayerEnabled[i * 2 + 1]:
-                        twoLayerResults[i] = pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1, 0, preserveCollinear: preserveCollinear);
-                        break;
-                    default:
-                        twoLayerResults[i] = new ();
-                        break;
-                }
+                    true when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2 + 1,
+                        simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i),
+                        preserveCollinear: preserveCollinear),
+                    true when !inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2, 0,
+                        preserveCollinear: preserveCollinear),
+                    false when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1,
+                        0, preserveCollinear: preserveCollinear),
+                    _ => []
+                };
             }
 #if !CHAOSSINGLETHREADED
         );
@@ -221,7 +217,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.fourLayer, i) == 0)
                                 {
-                                    fourLayerResults[i] = new ();
+                                    fourLayerResults[i] = [];
                                 }
                                 else
                                 {
@@ -232,7 +228,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.fourLayer, i) == 0)
                                 {
-                                    fourLayerResults[i] = new ();
+                                    fourLayerResults[i] = [];
                                 }
                                 else
                                 {
@@ -241,11 +237,11 @@ internal class ChaosEngine
                             }
                             else
                             {
-                                fourLayerResults[i] = new ();
+                                fourLayerResults[i] = [];
                             }
                             break;
                         default:
-                            fourLayerResults[i] = new ();
+                            fourLayerResults[i] = [];
                             break;
                     }
                 }
@@ -336,7 +332,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new () {tPath};
+                                    eightLayerResults[i] = [tPath];
                                 }
                                 else
                                 {
@@ -347,7 +343,7 @@ internal class ChaosEngine
                             {
                                 if (simulationSettings.getOperatorValue(EntropySettings.properties_o.eightLayer, i) == 0)
                                 {
-                                    eightLayerResults[i] = new () {tPath};
+                                    eightLayerResults[i] = [tPath];
                                 }
                                 else
                                 {
@@ -356,11 +352,11 @@ internal class ChaosEngine
                             }
                             else
                             {
-                                eightLayerResults[i] = new () {tPath};
+                                eightLayerResults[i] = [tPath];
                             }
                             break;
                         default:
-                            eightLayerResults[i] = new () {tPath};
+                            eightLayerResults[i] = [tPath];
                             break;
                     }
                 }
@@ -382,7 +378,7 @@ internal class ChaosEngine
         outputValid = false;
         simShapes = simShapes_;
 
-        listOfOutputPoints = new ();
+        listOfOutputPoints = [];
 
         EntropySettings simulationSettings = commonVars.getSimulationSettings();
 
@@ -484,7 +480,7 @@ internal class ChaosEngine
                             int pt = t.Count - 1;
                             while (pt > 0)
                             {
-                                t.Add(new (t[pt]));
+                                t.Add(new PointD(t[pt]));
                                 pt--;
                             }
                         }
@@ -507,7 +503,7 @@ internal class ChaosEngine
                     double[] fraggedResult = new double[4];
                     fraggedResult[0] = fraggedResult[1] = fraggedResult[2] = fraggedResult[3] = 0.0;
 
-                    PathD tmpPath = new() {new (0, 0)};
+                    PathD tmpPath = [new PointD(0, 0)];
                     listOfOutputPoints.Add(tmpPath);
                     listOfOutputPoints.Add(tmpPath);
                     listOfOutputPoints.Add(tmpPath);
@@ -523,7 +519,7 @@ internal class ChaosEngine
                         ChordHandler cH = new(aPath, bPath, simulationSettings.getResolution(), simulationSettings.getValue(EntropySettings.properties_i.subMode));
 
                         // Fragment our result.
-                        char[] resultSeparators = { ',' }; // CSV separator for splitting results for comparison.
+                        char[] resultSeparators = [',']; // CSV separator for splitting results for comparison.
                         string[] tmpfraggedResult = result.Split(resultSeparators);
 #if !CHAOSSINGLETHREADED
                         Parallel.For(0, tmpfraggedResult.Length, i =>

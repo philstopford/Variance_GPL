@@ -93,7 +93,7 @@ public partial class MainForm
         // Check that we have a valid file somewhere in the dropped resources
         foreach (var t in e.Data.Uris)
         {
-            string[] tokens = t.LocalPath.Split(new[] { '.' });
+            string[] tokens = t.LocalPath.Split(['.']);
             if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
                 continue;
@@ -124,7 +124,7 @@ public partial class MainForm
             }
 
             // Actually a supported file?
-            string[] tokens = d.Uris[i].LocalPath.Split(new[] { '.' });
+            string[] tokens = d.Uris[i].LocalPath.Split(['.']);
             if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
                 continue;
@@ -457,7 +457,7 @@ public partial class MainForm
 
     private bool layoutLoad(int settingsIndex, string filename)
     {
-        string[] tokens = filename.Split(new[] { '.' });
+        string[] tokens = filename.Split(['.']);
         string ext = tokens[^1].ToUpper();
 
         switch (ext)

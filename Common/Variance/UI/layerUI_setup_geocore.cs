@@ -26,8 +26,9 @@ public partial class MainForm
         Application.Instance.Invoke(() =>
         {
             TableLayout geoCore_table = new();
-            gB_layer_geoCore = new () {Content = geoCore_table};
-            expander_layer_geoCore = new () {Content = gB_layer_geoCore,
+            gB_layer_geoCore = new GroupBox {Content = geoCore_table};
+            expander_layer_geoCore = new Expander
+            {Content = gB_layer_geoCore,
                 Header = "Layout Controls",
                 Expanded = true
             };

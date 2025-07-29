@@ -215,7 +215,7 @@ public partial class MainForm
         try
         {
             string tempString = prefs.Descendants("rngMappingEquations").First().Value;
-            string[] equations = tempString.Split(new[] { ';' });
+            string[] equations = tempString.Split([';']);
             foreach (string t in equations)
             {
                 if (t != "Box-Muller")
@@ -1010,8 +1010,8 @@ public partial class MainForm
 
         viewport_settings();
 
-        notList = new List<string> { "", "!" };
-        booleanList = new List<string> { "&", "|" };
+        notList = ["", "!"];
+        booleanList = ["&", "|"];
 
         mainTable = new TableLayout();
 
@@ -1019,7 +1019,7 @@ public partial class MainForm
 
         GraphicsDeviceOptions options = new(
             false,
-            PixelFormat.R32_Float,
+            PixelFormat.R32Float,
             false,
             ResourceBindingModel.Improved);
 
@@ -1031,7 +1031,7 @@ public partial class MainForm
         
         viewPort = new VeldridDriver(ref mcVPSettings[0], ref vSurface)
         {
-            Surface = vSurface,
+            Surface = vSurface
         };
 
         vSurface.VeldridInitialized += (_, _) =>
@@ -1713,7 +1713,7 @@ public partial class MainForm
                 //File submenu
                 new ButtonMenuItem { Text = "&File", Items = { newSim, openSim, revertSim, saveSim, saveAsSim } },
                 new ButtonMenuItem { Text = "&Edit", Items = { copyLayer, pasteLayer, clearLayer } },
-                new ButtonMenuItem { Text = "&View", Items = { expExpandersCommand, collExpandersCommand } },
+                new ButtonMenuItem { Text = "&View", Items = { expExpandersCommand, collExpandersCommand } }
             },
             QuitItem = quitCommand,
             HelpItems = {
@@ -1879,7 +1879,7 @@ public partial class MainForm
 
     private void setup_simPreviewBox()
     {
-        simPreviewBox_table = new();
+        simPreviewBox_table = new TableLayout();
         simPreviewBox_table.Rows.Add(new TableRow());
 
         simPreviewBox = new GroupBox {Text = "Simulation Elements", Content = simPreviewBox_table};

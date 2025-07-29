@@ -52,20 +52,20 @@ internal static class VHeadless
                     bool addressOK = pwdOK = serverOK = portOK = false;
                     // Set our flags to ensure we have a valid email configuration
 
-                    char[] splitArray = new char[] { ' ' };
+                    char[] splitArray = [' '];
                     System.IO.StreamReader emailSettings = new(emailFile);
                     while (!emailSettings.EndOfStream)
                     {
-                        string line = emailSettings.ReadLine();
+                        string line = emailSettings.ReadLine()!;
                         string[] tokens = line.Split(splitArray);
-                        if (line.ToUpper().StartsWith("ADDRESS"))
+                        if (line.StartsWith("ADDRESS", StringComparison.CurrentCultureIgnoreCase))
                         {
                             // email address should be here.
                             emailAddress = tokens[1]; // spaces are illegal in email addresses.
                             addressOK = true;
                         }
 
-                        if (line.ToUpper().StartsWith("PASSWORD"))
+                        if (line.StartsWith("PASSWORD", StringComparison.CurrentCultureIgnoreCase))
                         {
                             emailPwd = tokens[1];
                             for (int token = 2; token < tokens.Length; token++)
@@ -104,9 +104,9 @@ internal static class VHeadless
                 // Extract XML file.
                 try
                 {
-                    string[] tokens = args[i].Split(new[] { '.' });
+                    string[] tokens = args[i].Split(['.']);
                     string extension = tokens[^1];
-                    if (extension.ToUpper() == "VARIANCE" || extension.ToUpper() == "XML")
+                    if (extension.Equals("VARIANCE", StringComparison.CurrentCultureIgnoreCase) || extension.Equals("XML", StringComparison.CurrentCultureIgnoreCase))
                     {
                         xmlFile = args[i];
                         done = true;
@@ -147,7 +147,7 @@ internal static class VHeadless
             };
             Headless hl = new(varianceContext);
 
-            Console.CancelKeyPress += hl.cancelHandler;
+            Console.CancelKeyPress += hl.cancelHandler!;
             hl.doStuff();
         }
     }

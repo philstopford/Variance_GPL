@@ -431,32 +431,25 @@ public partial class MainForm
             int mainIndex = getMainSelectedIndex();
             int subTabIndex = getSubTabSelectedIndex();
 
-            switch (mainIndex)
+            commentBox.Text = mainIndex switch
             {
-                case (int)CommonVars.upperTabNames.Implant:
-                    commentBox.Text = commonVars.getImplantSettings_nonSim().getString(EntropySettings_nonSim.properties_s.comment);
-                    break;
-                case (int)CommonVars.upperTabNames.twoD:
+                (int)CommonVars.upperTabNames.Implant => commonVars.getImplantSettings_nonSim()
+                    .getString(EntropySettings_nonSim.properties_s.comment),
+                (int)CommonVars.upperTabNames.twoD => subTabIndex switch
                 {
-                    switch (subTabIndex)
-                    {
-                        case < (int)CommonVars.twoDTabNames.settings:
-                            commentBox.Text = commonVars.getLayerSettings(getSelectedLayerIndex()).getString(EntropyLayerSettings.properties_s.comment);
-                            break;
-                        case (int)CommonVars.twoDTabNames.settings:
-                            commentBox.Text = commonVars.getSimulationSettings_nonSim().getString(EntropySettings_nonSim.properties_s.comment);
-                            break;
-                        case (int)CommonVars.twoDTabNames.paSearch:
-                            commentBox.Text = commonVars.getSimulationSettings_nonSim().getString(EntropySettings_nonSim.properties_s.paComment);
-                            break;
-                        case (int)CommonVars.twoDTabNames.DOE:
-                            commentBox.Text = commonVars.getSimulationSettings().getDOESettings().getString(DOESettings.properties_s.comment);
-                            break;
-                    }
-
-                    break;
-                }
-            }
+                    < (int)CommonVars.twoDTabNames.settings => commonVars.getLayerSettings(getSelectedLayerIndex())
+                        .getString(EntropyLayerSettings.properties_s.comment),
+                    (int)CommonVars.twoDTabNames.settings => commonVars.getSimulationSettings_nonSim()
+                        .getString(EntropySettings_nonSim.properties_s.comment),
+                    (int)CommonVars.twoDTabNames.paSearch => commonVars.getSimulationSettings_nonSim()
+                        .getString(EntropySettings_nonSim.properties_s.paComment),
+                    (int)CommonVars.twoDTabNames.DOE => commonVars.getSimulationSettings()
+                        .getDOESettings()
+                        .getString(DOESettings.properties_s.comment),
+                    _ => commentBox.Text
+                },
+                _ => commentBox.Text
+            };
 
             globalUIFrozen = false;
         });

@@ -36,7 +36,7 @@ public partial class MainForm
         double x = mcVPSettings[index].getCameraX();
         double y = mcVPSettings[index].getCameraY();
         double zoom = mcVPSettings[index].getZoomFactor();
-        return new[] { x, y, zoom };
+        return [x, y, zoom];
     }
 
     private void saveViewportSVG_File()
@@ -72,7 +72,7 @@ public partial class MainForm
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt] = new (temp[pt].x, -temp[pt].y);
+                    temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
@@ -94,7 +94,7 @@ public partial class MainForm
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt] = new (temp[pt].x, -temp[pt].y);
+                    temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
@@ -117,7 +117,7 @@ public partial class MainForm
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt] = new (temp[pt].x, -temp[pt].y);
+                    temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
@@ -149,7 +149,7 @@ public partial class MainForm
         }
 
         string filename = sfd.FileName;
-        string[] tokens = filename.Split(new[] { '.' });
+        string[] tokens = filename.Split(['.']);
         string ext = tokens[^1].ToUpper();
 
         int type = (int)GeoCore.fileType.gds;
@@ -242,7 +242,7 @@ public partial class MainForm
         gcell_root.modsec = (short)DateTime.Now.Second;
         gcell_root.cellName = "viewport";
 
-        List<int> layers = new();
+        List<int> layers = [];
 
         for (int poly = 0; poly < vpSettings.polyList.Count; poly++)
         {
@@ -254,7 +254,7 @@ public partial class MainForm
                 for (int pt = 0; pt < count; pt++)
 #endif
                 {
-                    temp[pt] = new (temp[pt].x, -temp[pt].y);
+                    temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                 }
 #if !SVGSINGLETHREADED
             );
@@ -289,7 +289,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
+                        ePoly[pt] = new Point64((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -310,7 +310,7 @@ public partial class MainForm
                     for (int pt = 0; pt < count; pt++)
 #endif
                     {
-                        temp[pt] = new (temp[pt].x, -temp[pt].y);
+                        temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -338,7 +338,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
+                        ePoly[pt] = new Point64((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -359,7 +359,7 @@ public partial class MainForm
                     for (int pt = 0; pt < count; pt++)
 #endif
                     {
-                        temp[pt] = new (temp[pt].x, -temp[pt].y);
+                        temp[pt] = new PointD(temp[pt].x, -temp[pt].y);
                     }
 #if !SVGSINGLETHREADED
                 );
@@ -387,7 +387,7 @@ public partial class MainForm
 #endif
                     {
                         // Flip Y coordinate to align with the way the geometry is stored for the viewport.
-                        ePoly[pt] = new ((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
+                        ePoly[pt] = new Point64((int)(temp[pt].x * scale), (int)(-temp[pt].y * scale));
                     }
 #if !SVGSINGLETHREADED
                 );

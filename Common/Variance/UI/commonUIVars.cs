@@ -100,7 +100,7 @@ public partial class MainForm
     // Layer UI element arrays.
     // 2D Layer UI stuff.
     private DropDown comboBox_layerShape;
-    private CheckBox cB_Layer, cB_alignGeometryX, cB_alignGeometryY, cB_ShowDrawn, cB_FlipH, cB_FlipV, cB_edgeSlide;
+    private CheckBox cB_Layer, cB_alignGeometryX, cB_alignGeometryY, cB_ShowDrawn, cB_FlipH, cB_FlipV, cB_edgeSlide, cB_legacyRounding;
     private NumericStepper num_edgeSlideTension;
     private Label lbl_edgeSlideTension;
     private TextBox text_layerName;

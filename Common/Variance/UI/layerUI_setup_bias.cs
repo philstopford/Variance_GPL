@@ -38,7 +38,7 @@ public partial class MainForm
             {
                 Content = groupBox_layer_etchandbias_table
             };
-            expander_etchandbias = new()
+            expander_etchandbias = new Expander
             {
                 Header = "Bias and Etch Parameters",
                 Content = groupBox_etchandbias,
@@ -63,12 +63,12 @@ public partial class MainForm
     private void bias_row1(TableLayout etchandbias_table)
     {
         TableLayout uniBias_table = new();
-        groupBox_etchandbias_unidirectional = new()
+        groupBox_etchandbias_unidirectional = new GroupBox
         {
             Content = uniBias_table
         };
 
-        expander_etchandbias_unidirectional = new()
+        expander_etchandbias_unidirectional = new Expander
         {
             Header = "Unidirectional",
             Content = groupBox_etchandbias_unidirectional,
@@ -139,7 +139,7 @@ public partial class MainForm
         biasEtch_tr0_0_tl.Rows[^1].Cells.Add(new TableCell());
         biasEtch_tr0_0_tl.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(rB_unidirectional_y);
 
-        cb_unidirectionalbias_after_rotation = new()
+        cb_unidirectionalbias_after_rotation = new CheckBox
         {
             Text = "After Rotation",
             ToolTip = "When checked, the unidirectional bias is applied after all rotations are applied."
@@ -151,11 +151,11 @@ public partial class MainForm
     private void bias_row2(TableLayout etchandbias_table)
     {
         TableLayout regBias_table = new();
-        groupBox_etchandbias_reg = new ()
+        groupBox_etchandbias_reg = new GroupBox
         {
             Content = regBias_table
         };
-        expander_etchandbias_reg = new ()
+        expander_etchandbias_reg = new Expander
         {
             Header = "Regular",
             Content = groupBox_etchandbias_reg,
@@ -313,8 +313,8 @@ public partial class MainForm
     private void bias_row3(TableLayout etchandbias_table)
     {
         TableLayout proxBias_table = new();
-        groupBox_etchandbias_prox = new () {Content = proxBias_table};
-        expander_etchandbias_prox = new()
+        groupBox_etchandbias_prox = new GroupBox {Content = proxBias_table};
+        expander_etchandbias_prox = new Expander
         {
             Header = "Proximity",
             Content = groupBox_etchandbias_prox,

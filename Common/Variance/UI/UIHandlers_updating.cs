@@ -38,7 +38,7 @@ public partial class MainForm
 
     private void updateImplantSimUIST(bool doPASearch, SimResultPackage resultPackage, string resultString)
     {
-        string[] resultTokens = resultString.Split(new[] { ',' });
+        string[] resultTokens = resultString.Split([',']);
         updateImplantPreview();
         Application.Instance.Invoke(() =>
         {
@@ -218,7 +218,7 @@ public partial class MainForm
 
             if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.rngType) < 0)
             {
-                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.rngType, commonVars.getSimulationSettings().getDefaultValue(EntropySettings.properties_i.rngType));
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.rngType, EntropySettings.getDefaultValue(EntropySettings.properties_i.rngType));
             }
 
             comboBox_RNG.SelectedIndex = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.rngType);
@@ -1010,7 +1010,7 @@ public partial class MainForm
         });
         startIndeterminateProgress();
 
-        List<PreviewShape> previewShapes = new();
+        List<PreviewShape> previewShapes = [];
 
         try
         {
@@ -1107,7 +1107,7 @@ public partial class MainForm
     // All offsets need to be applied here - previewPanel takes what it is given and draws that.
     private List<PreviewShape> generate_shapes(int settingsIndex)
     {
-        List<PreviewShape> previewShapes = new();
+        List<PreviewShape> previewShapes = [];
 
         // User has a shape chosen so we can draw a preview
         if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) ==

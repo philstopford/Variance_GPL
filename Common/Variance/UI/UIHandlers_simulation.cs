@@ -166,7 +166,7 @@ public partial class MainForm
             try
             {
                 // ReSharper disable once PossibleNullReferenceException
-                string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(new[] { '.' });
+                string[] tokens = Path.GetFileName(commonVars.projectFileName).Split(['.']);
                 string fileName = "";
                 for (int i = 0; i < tokens.Length - 2; i++)
                 {

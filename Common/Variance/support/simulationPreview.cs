@@ -95,9 +95,9 @@ public class SimulationPreview
     private void pSimulationPreview(ref VarianceContext _varianceContext)
     {
         varianceContext = _varianceContext;
-        simShapes = new List<PreviewShape>();
-        previewShapes = new List<PathsD>();
-        points = new () {Helper.initedPathD(1)};
+        simShapes = [];
+        previewShapes = [];
+        points = [Helper.initedPathD(1)];
     }
 
     private void updatePreview(List<PreviewShape> simShapes_)
@@ -174,7 +174,7 @@ public class SimulationPreview
         }
         try
         {
-            points = new (points_);
+            points = new PathsD(points_);
         }
         catch (Exception)
         {

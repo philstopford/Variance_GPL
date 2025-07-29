@@ -281,13 +281,13 @@ public partial class MainForm
 
         tce2_tl.Rows.Add(new TableRow());
 
-        pnl_externalCriteria = new();
+        pnl_externalCriteria = new Panel();
         
         tce2_tl.Rows[^1].Cells.Add(new TableCell { Control = pnl_externalCriteria });
 
-        tl_externalCriteria = new();
+        tl_externalCriteria = new TableLayout();
         pnl_externalCriteria.Content = tl_externalCriteria;
-        tl_externalCriteria.Rows.Add(new());
+        tl_externalCriteria.Rows.Add(new TableRow());
 
         checkBox_externalCriteria = new CheckBox
         {

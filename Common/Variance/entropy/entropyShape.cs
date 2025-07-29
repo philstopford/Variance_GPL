@@ -22,9 +22,9 @@ public class EntropyShape
         return points;
     }
 
-    private PointD pivot = new PointD(double.NaN, double.NaN);
+    private PointD pivot = new (double.NaN, double.NaN);
     
-    private PathD preFlight(PathD mcPoints, EntropyLayerSettings entropyLayerSettings, double resolution)
+    private PathD preFlight(PathD mcPoints, EntropyLayerSettings entropyLayerSettings, double resolution, PointD pivot_)
     {
         // Fragment by resolution
         Fragmenter fragment = new Fragmenter(resolution);
@@ -35,11 +35,18 @@ public class EntropyShape
         bool alignX = entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.alignX) == 1;
         bool alignY = entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.alignY) == 1;
 
-        pivot = GeoWrangler.midPoint(newMCPoints);
+        if (pivot_ == null)
+        {
+            pivot = GeoWrangler.midPoint(newMCPoints);
+        }
+        else
+        {
+            pivot = pivot_;
+        }
 
         newMCPoints = GeoWrangler.flip(H, V, alignX, alignY, pivot, newMCPoints);
 
-        PathD tempList = new();
+        PathD tempList = [];
         // Now to start the re-indexing.
         for (int pt = 0; pt < newMCPoints.Count; pt++)
         {
@@ -56,7 +63,7 @@ public class EntropyShape
             // Avoid adding duplicate vertices
             if (addPoint)
             {
-                tempList.Add(new (newMCPoints[pt].x, newMCPoints[pt].y));
+                tempList.Add(new PointD(newMCPoints[pt].x, newMCPoints[pt].y));
             }
         }
 
@@ -68,12 +75,12 @@ public class EntropyShape
         makeEntropyShape(entropySettings, entropyLayerSettingsList, settingsIndex, doPASearch, previewMode, chaosSettings, pivot, shape);
     }
 
-    private PathD makeShape(bool returnEarly, bool cornerCheck, EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, int settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape)
+    private static PathD makeShape(bool returnEarly, bool cornerCheck, EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, int settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, ShapeLibrary shape)
     {
         // Define our biases. We will use these later.
         double sideBiasVar = chaosSettings.getValue(ChaosSettings.Properties.CDUSVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)) / 2;
 
-        PathD mcPoints = new(); // overall points container. We'll use this to populate and send back our Point array later. Int only...
+        PathD mcPoints = []; // overall points container. We'll use this to populate and send back our Point array later. Int only...
 
         double vTipBiasVar = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasVar, settingsIndex) * Convert.ToDouble(entropyLayerSettingsList[settingsIndex].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar));
         double vTipBiasType = chaosSettings.getValue(ChaosSettings.Properties.vTipBiasType, settingsIndex);
@@ -121,12 +128,12 @@ public class EntropyShape
     private void makeEntropyShape(EntropySettings entropySettings, List<EntropyLayerSettings> entropyLayerSettingsList, int settingsIndex, bool doPASearch, bool previewMode, ChaosSettings chaosSettings, PointD pivot_, ShapeLibrary shape = null)
     {
         bool geoCoreShapeDefined = shape != null;
-        bool cornerCheck = false;
-        bool returnEarly = false;
+        const bool cornerCheck = false;
+        const bool returnEarly = false;
 
         if ( !double.IsNaN(pivot_.x) && !double.IsNaN(pivot_.y) )
         {
-            pivot = new (pivot_.x, pivot_.y);
+            pivot = new PointD(pivot_.x, pivot_.y);
         }
         
         if (shape == null)
@@ -138,7 +145,7 @@ public class EntropyShape
         // Tip wrangling and shape closure will happen next
         bool failSafe = !shape.shapeValid || entropyLayerSettingsList[settingsIndex].getInt(EntropyLayerSettings.properties_i.enabled) == 0; // Set failsafe if shape is invalid.
 
-        PathD mcPoints = new(); // overall points container. We'll use this to populate and send back our Point array later. Ints only...
+        PathD mcPoints = []; // overall points container. We'll use this to populate and send back our Point array later. Ints only...
 
         // Handle non-orthogonal case.
         if (!failSafe)
@@ -156,7 +163,7 @@ public class EntropyShape
             }
             if (returnEarly || cornerCheck)
             {
-                points = new (mcPoints);
+                points = new PathD(mcPoints);
                 return;
             }
         }
@@ -168,7 +175,7 @@ public class EntropyShape
 
             if (entropyLayerSettingsList[settingsIndex].getInt(EntropyLayerSettings.properties_i.xOL_av) == 1) // overlay average
             {
-                List<double> overlayValues = new();
+                List<double> overlayValues = [];
                 for (int avgolref_x = 0; avgolref_x < entropyLayerSettingsList[settingsIndex].getIntArray(EntropyLayerSettings.properties_intarray.xOLRefs).Length; avgolref_x++)
                 {
                     if (entropyLayerSettingsList[settingsIndex].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, avgolref_x) == 1)
@@ -197,7 +204,7 @@ public class EntropyShape
 
             if (entropyLayerSettingsList[settingsIndex].getInt(EntropyLayerSettings.properties_i.yOL_av) == 1) // overlay average
             {
-                List<double> overlayValues = new();
+                List<double> overlayValues = [];
                 for (int avgolref_y = 0; avgolref_y < entropyLayerSettingsList[settingsIndex].getIntArray(EntropyLayerSettings.properties_intarray.yOLRefs).Length; avgolref_y++)
                 {
                     if (entropyLayerSettingsList[settingsIndex].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, avgolref_y) == 1)
@@ -226,7 +233,7 @@ public class EntropyShape
         }
 
         
-        double threshold = 1E-5; // threshold for proximity, to avoid normal extraction issues.
+        const double threshold = 1E-5; // threshold for proximity, to avoid normal extraction issues.
         if (mcPoints.Count > 1)
         {
             // Need to clean up any duplicate points at this point, to avoid causing /0 issues below.
@@ -251,7 +258,7 @@ public class EntropyShape
             pivot = GeoWrangler.midPoint(mcPoints);
         }
         
-        ShapeLibrary.RotateOutput ret = shape.rotateShape(mcPoints, entropyLayerSettingsList[settingsIndex], rotationVar, rotationDirection, pivot);
+        ShapeLibrary.RotateOutput ret = ShapeLibrary.rotateShape(mcPoints, entropyLayerSettingsList[settingsIndex], rotationVar, rotationDirection, pivot);
 
         mcPoints = ret.output;
         entropyLayerSettingsList[settingsIndex].setDecimal(EntropyLayerSettings.properties_decimal.totalRotation, (decimal)ret.totalRotation, 0);
@@ -259,11 +266,11 @@ public class EntropyShape
         // Error handling (failSafe) for no points or no subshape  - safety measure.
         if (!mcPoints.Any())
         {
-            mcPoints.Add(new (0.0f, 0.0f));
+            mcPoints.Add(new PointD(0.0f, 0.0f));
         }
 
         // Path direction, point order and re-fragmentation (as needed)
-        points = new (preFlight(mcPoints, entropyLayerSettingsList[settingsIndex], entropySettings.getResolution()));
+        points = new PathD(preFlight(mcPoints, entropyLayerSettingsList[settingsIndex], entropySettings.getResolution(), pivot));
         
         if (Math.Abs(points[0].x - points[^1].x) > Constants.tolerance || Math.Abs(points[0].y - points[^1].y) > Constants.tolerance)
         {

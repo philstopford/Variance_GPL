@@ -17,7 +17,7 @@
 
   <Target Name="CopyVeldridSpirvNative" AfterTargets="SetPaths" BeforeTargets="Cleanup" Condition="$(OutputType) != 'library'  AND $(Headless) != true">
     <Copy
-      SourceFiles="$([MSBuild]::EnsureTrailingSlash('$(NuGetPackageRoot)'))veldrid.spirv\$(VeldridSpirvVersion)\runtimes\$(RuntimeID)\native\$(VeldridSpirvNativeName)"
+      SourceFiles="$([MSBuild]::EnsureTrailingSlash('$(NuGetPackageRoot)'))ppy.veldrid.spirv\$(VeldridSpirvVersion)\runtimes\$(RuntimeID)\native\$(VeldridSpirvNativeName)"
       DestinationFolder="$(OutputPath)" />
   </Target>
 

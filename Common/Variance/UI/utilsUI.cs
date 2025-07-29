@@ -270,8 +270,9 @@ public partial class MainForm : Form
         tl.Rows.Add(new TableRow()); // padding
 
         TableLayout groupBox_misc_table = new();
-        groupBox_misc = new () {Content = groupBox_misc_table};
-        expander_misc = new () {Header = "Misc",
+        groupBox_misc = new GroupBox {Content = groupBox_misc_table};
+        expander_misc = new Expander
+        {Header = "Misc",
             Content = groupBox_misc,
             Expanded = true
         };

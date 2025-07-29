@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Eto.Forms;
+using shapeEngine;
 
 namespace Variance;
 
@@ -29,17 +30,17 @@ public partial class MainForm
         rB_CLWR = new RadioButton[CentralProperties.maxLayersForMC];
         rB_CLWR2 = new RadioButton[CentralProperties.maxLayersForMC];
 
-        xOLRBs_enabledState = new List<bool[]>();
-        yOLRBs_enabledState = new List<bool[]>();
+        xOLRBs_enabledState = [];
+        yOLRBs_enabledState = [];
 
-        xCOLRBs_enabledState = new List<bool[]>();
-        yCOLRBs_enabledState = new List<bool[]>();
+        xCOLRBs_enabledState = [];
+        yCOLRBs_enabledState = [];
 
-        SCDURBs_enabledState = new List<bool[]>();
-        TCDURBs_enabledState = new List<bool[]>();
+        SCDURBs_enabledState = [];
+        TCDURBs_enabledState = [];
 
-        CLWRRBs_enabledState = new List<bool[]>();
-        CLWR2RBs_enabledState = new List<bool[]>();
+        CLWRRBs_enabledState = [];
+        CLWR2RBs_enabledState = [];
 
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {
@@ -214,6 +215,15 @@ public partial class MainForm
             if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.flipV) == 1)
             {
                 cB_alignGeometryY.Enabled = true;
+            }
+
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.legacyRounding) == 1)
+            {
+                cB_legacyRounding.Checked = true;
+            }
+            else
+            {
+                cB_legacyRounding.Checked = false;
             }
 
             text_layerName.Text = commonVars.getLayerSettings(settingsIndex).getString(EntropyLayerSettings.properties_s.name);
@@ -554,8 +564,8 @@ public partial class MainForm
 
         layerGadgets_table.Rows.Add(new TableRow());
 
-        gadgets_gb = new() {Content = TableLayout.AutoSized(layerGadgets_table)};
-        gadgets_exp = new() {Header = "Layer", Content = gadgets_gb, Expanded = true };
+        gadgets_gb = new GroupBox {Content = TableLayout.AutoSized(layerGadgets_table)};
+        gadgets_exp = new Expander {Header = "Layer", Content = gadgets_gb, Expanded = true };
         tc.Control = gadgets_exp;
     }
 
@@ -605,8 +615,8 @@ public partial class MainForm
         layerGadgets2_row1(layerGadgets2_table);
 
         Panel p = new() {Content = layerGadgets2_table};
-        gadgets_gb = new() {Content = p};
-        expander_gadgets = new()
+        gadgets_gb = new GroupBox {Content = p};
+        expander_gadgets = new Expander
         {
             Header = "Misc",
             Content = gadgets_gb,
@@ -665,6 +675,9 @@ public partial class MainForm
         cB_ShowDrawn = new CheckBox {Text = "Show Drawn", ToolTip = "Show drawn shape for the contour"};
         gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_ShowDrawn });
 
+        cB_legacyRounding = new CheckBox {Text = "Legacy Rounding", ToolTip = "Use legacy rounding for contour"};
+        gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = cB_legacyRounding });
+
         gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
         cB_layer_LWRPreview = new CheckBox {Text = "Show LWR", ToolTip = "Preview of LWR"};
@@ -672,7 +685,7 @@ public partial class MainForm
         
         gadgets_tr1_0_tl.Rows.Add(new TableRow());
 
-        exportToLayout = new() {Text = "Export to Layout"};
+        exportToLayout = new Button {Text = "Export to Layout"};
         gadgets_tr1_0_tl.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(exportToLayout) });
         exportToLayout.Click += exportActiveLayerToLayout;
         exportToLayout.Enabled = false;

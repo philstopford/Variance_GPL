@@ -9,8 +9,7 @@ public static class UIHelper
 {
     public static Color myColorToColor(MyColor sourceColor)
     {
-        Color returnColor;
-        returnColor = Color.FromArgb(sourceColor.R, sourceColor.G, sourceColor.B);
+        var returnColor = Color.FromArgb(sourceColor.R, sourceColor.G, sourceColor.B);
         return returnColor;
     }
 

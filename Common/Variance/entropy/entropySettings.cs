@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using Error;
 
@@ -9,7 +10,7 @@ public class EntropySettings
 {
     public bool debugCalc { get; set; } // job engine specific debug flag from user.
 
-    private DOESettings DOESettings;
+    private DOESettings? DOESettings;
     public DOESettings getDOESettings()
     {
         return pGetDOESettings();
@@ -17,7 +18,7 @@ public class EntropySettings
 
     private DOESettings pGetDOESettings()
     {
-        return DOESettings;
+        return DOESettings!;
     }
 
     public enum properties_i { nCases, linkCDU, subMode, cSeg, optC, oType, rngType, ler }
@@ -42,34 +43,18 @@ public class EntropySettings
 
     private int pGetValue(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.cSeg:
-                ret = cornerSegments;
-                break;
-            case properties_i.linkCDU:
-                ret = linkTipandSideCDU;
-                break;
-            case properties_i.nCases:
-                ret = numberOfCases;
-                break;
-            case properties_i.optC:
-                ret = optimizeCorners;
-                break;
-            case properties_i.oType:
-                ret = outputType;
-                break;
-            case properties_i.rngType:
-                ret = rngType;
-                break;
-            case properties_i.subMode:
-                ret = subMode;
-                break;
-            case properties_i.ler:
-                ret = lerFromLWR_by_sqrt2;
-                break;
-        }
+            properties_i.cSeg => cornerSegments,
+            properties_i.linkCDU => linkTipandSideCDU,
+            properties_i.nCases => numberOfCases,
+            properties_i.optC => optimizeCorners,
+            properties_i.oType => outputType,
+            properties_i.rngType => rngType,
+            properties_i.subMode => subMode,
+            properties_i.ler => lerFromLWR_by_sqrt2,
+            _ => 0
+        };
 
         return ret;
     }
@@ -146,41 +131,25 @@ public class EntropySettings
         }
     }
 
-    public int getDefaultValue(properties_i p)
+    public static int getDefaultValue(properties_i p)
     {
         return pGetDefaultValue(p);
     }
 
-    private int pGetDefaultValue(properties_i p)
+    private static int pGetDefaultValue(properties_i p)
     {
-        int ret = 0;
-        switch (p)
+        int ret = p switch
         {
-            case properties_i.cSeg:
-                ret = default_cornerSegments;
-                break;
-            case properties_i.linkCDU:
-                ret = default_linkTipandSideCDU;
-                break;
-            case properties_i.nCases:
-                ret = default_numberOfCases;
-                break;
-            case properties_i.optC:
-                ret = default_optimizeCorners;
-                break;
-            case properties_i.oType:
-                ret = default_outputType;
-                break;
-            case properties_i.rngType:
-                ret = default_rngType;
-                break;
-            case properties_i.subMode:
-                ret = default_subMode;
-                break;
-            case properties_i.ler:
-                ret = default_lerFromLWR_by_sqrt2;
-                break;
-        }
+            properties_i.cSeg => default_cornerSegments,
+            properties_i.linkCDU => default_linkTipandSideCDU,
+            properties_i.nCases => default_numberOfCases,
+            properties_i.optC => default_optimizeCorners,
+            properties_i.oType => default_outputType,
+            properties_i.rngType => default_rngType,
+            properties_i.subMode => default_subMode,
+            properties_i.ler => default_lerFromLWR_by_sqrt2,
+            _ => 0
+        };
 
         return ret;
     }
@@ -220,10 +189,10 @@ public class EntropySettings
     // Index in respective drop-down
     public enum properties_o { layer, twoLayer, fourLayer, eightLayer }
 
-    private int[] layerOperator;
-    private int[] twoLayerOperator;
-    private int[] fourLayerOperator;
-    private int[] eightLayerOperator;
+    private int[]? layerOperator;
+    private int[]? twoLayerOperator;
+    private int[]? fourLayerOperator;
+    private int[]? eightLayerOperator;
 
     public int[] getOperator(properties_o p)
     {
@@ -232,22 +201,14 @@ public class EntropySettings
 
     private int[] pGetOperator(properties_o p)
     {
-        int[] ret = { };
-        switch (p)
+        int[] ret = p switch
         {
-            case properties_o.layer:
-                ret = layerOperator;
-                break;
-            case properties_o.twoLayer:
-                ret = twoLayerOperator;
-                break;
-            case properties_o.fourLayer:
-                ret = fourLayerOperator;
-                break;
-            case properties_o.eightLayer:
-                ret = eightLayerOperator;
-                break;
-        }
+            properties_o.layer => layerOperator!,
+            properties_o.twoLayer => twoLayerOperator!,
+            properties_o.fourLayer => fourLayerOperator!,
+            properties_o.eightLayer => eightLayerOperator!,
+            _ => []
+        };
 
         return ret;
     }
@@ -272,16 +233,16 @@ public class EntropySettings
         switch (p)
         {
             case properties_o.layer:
-                layerOperator[index] = val;
+                layerOperator![index] = val;
                 break;
             case properties_o.twoLayer:
-                twoLayerOperator[index] = val;
+                twoLayerOperator![index] = val;
                 break;
             case properties_o.fourLayer:
-                fourLayerOperator[index] = val;
+                fourLayerOperator![index] = val;
                 break;
             case properties_o.eightLayer:
-                eightLayerOperator[index] = val;
+                eightLayerOperator![index] = val;
                 break;
         }
     }
@@ -296,31 +257,31 @@ public class EntropySettings
         switch (p)
         {
             case properties_o.layer:
-                layerOperator[index] = default_layerOperator;
+                layerOperator![index] = default_layerOperator;
                 break;
             case properties_o.twoLayer:
-                twoLayerOperator[index] = default_layerBoolOperator;
+                twoLayerOperator![index] = default_layerBoolOperator;
                 break;
             case properties_o.fourLayer:
-                fourLayerOperator[index] = default_layerBoolOperator;
+                fourLayerOperator![index] = default_layerBoolOperator;
                 break;
             case properties_o.eightLayer:
-                eightLayerOperator[index] = default_layerBoolOperator;
+                eightLayerOperator![index] = default_layerBoolOperator;
                 break;
         }
     }
 
-    private static int default_outputType = (int)geoAnalysis.Supported.calcModes.area;
-    private static int default_numberOfCases = 25000;
-    private static double default_resolution = 1.0;
-    private static int default_cornerSegments = 90;
-    private static int default_layerOperator = 0;
-    private static int default_layerBoolOperator = 0;
-    private static int default_linkTipandSideCDU = 1;
-    private static int default_optimizeCorners = 1;
-    private static int default_lerFromLWR_by_sqrt2 = 1;
-    private static int default_rngType = 0;
-    private static int default_subMode = 0;
+    private const int default_outputType = (int)geoAnalysis.Supported.calcModes.area;
+    private const int default_numberOfCases = 25000;
+    private const double default_resolution = 1.0;
+    private const int default_cornerSegments = 90;
+    private const int default_layerOperator = 0;
+    private const int default_layerBoolOperator = 0;
+    private const int default_linkTipandSideCDU = 1;
+    private const int default_optimizeCorners = 1;
+    private const int default_lerFromLWR_by_sqrt2 = 1;
+    private const int default_rngType = 0;
+    private const int default_subMode = 0;
 
     public EntropySettings()
     {
@@ -376,7 +337,7 @@ public class EntropySettings
             offset = 0;
         }
         string returnString = "";
-        if (!DOESettings.getTileList_ColRow().Any())
+        if (DOESettings!.getTileList_ColRow().Count == 0)
         {
             return returnString;
         }
@@ -407,8 +368,8 @@ public class EntropySettings
 
         // We need to parse our tile list
         bool entryOK = false;
-        char[] tileSep = { ';' };
-        char[] coordSep = { ',' };
+        char[] tileSep = [';'];
+        char[] coordSep = [','];
 
         if (tmpString.Length <= 0)
         {
@@ -433,8 +394,8 @@ public class EntropySettings
                 {
                     colValue = Convert.ToInt32(tmpStringArray[0]);
                     rowValue = Convert.ToInt32(tmpStringArray[1]);
-                    DOESettings.resetTileList_ColRow();
-                    DOESettings.addTileList_Value(new [] { colValue + offset, rowValue + offset });
+                    DOESettings!.resetTileList_ColRow();
+                    DOESettings.addTileList_Value([colValue + offset, rowValue + offset]);
                     entryOK = true;
                 }
                 catch (Exception)
@@ -445,14 +406,14 @@ public class EntropySettings
             default:
                 // All other cases.
                 string[] tmpCoordPairArray = tmpString.Split(tileSep);
-                if (!tmpCoordPairArray.Any())
+                if (tmpCoordPairArray.Length == 0)
                 {
                     // User used incorrect syntax. Failsafe.
                     ErrorReporter.showMessage_OK("Couldn't find a coordinate pair", "Invalid input");
                     break;
                 }
                 // We have some initial entries that appear to be valid.
-                DOESettings.resetTileList_ColRow();
+                DOESettings!.resetTileList_ColRow();
                 foreach (string t in tmpCoordPairArray)
                 {
                     tmpStringArray = t.Split(coordSep);
@@ -465,14 +426,14 @@ public class EntropySettings
                     {
                         colValue = Convert.ToInt32(tmpStringArray[0]);
                         rowValue = Convert.ToInt32(tmpStringArray[1]);
-                        DOESettings.addTileList_Value(new [] { colValue + offset, rowValue + offset });
+                        DOESettings.addTileList_Value([colValue + offset, rowValue + offset]);
                     }
                     catch (Exception)
                     {
                         // Invalid input; ignore it.
                     }
                 }
-                entryOK = DOESettings.getTileList_ColRow().Any();
+                entryOK = DOESettings.getTileList_ColRow().Count != 0;
                 break;
         }
         return entryOK;
