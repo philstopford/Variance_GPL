@@ -24,11 +24,11 @@
   <ItemGroup>
     <PackageReference Include="Eto.Forms" Version="2.9.0-ci-20250329.14150108340" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.15" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
     <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
     <PackageReference Include="System.Management" Version="9.0.4" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.15" />
   </ItemGroup>
 
   <ItemGroup>
