@@ -255,115 +255,115 @@ public partial class MainForm
     private void switchSimulationLayers12Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(0, 1);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers23Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(1, 2);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers34Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(2, 3);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers56Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(4, 5);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers67Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(5, 6);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers78Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(6, 7);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers910Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(8, 9);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1011Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(9, 10);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1112Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(10, 11);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1314Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(12, 13);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1415Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(13, 14);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1516Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(14, 15);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers15Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(0, 4);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers26Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(1, 5);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers37Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(2, 6);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers48ver(object sender, EventArgs e)
     {
         switchSimulationLayersOver(3, 7);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers913Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(8, 12);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1115Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(10, 14);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationLayers1216Over(object sender, EventArgs e)
     {
         switchSimulationLayersOver(11, 15);
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationAllALayersOver(object sender, EventArgs e)
@@ -372,7 +372,7 @@ public partial class MainForm
         {
             switchSimulationLayersOver(i, i + 4);
         }
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 
     private void switchSimulationAllBLayersOver(object sender, EventArgs e)
@@ -381,6 +381,6 @@ public partial class MainForm
         {
             switchSimulationLayersOver(i, i + 4);
         }
-        entropySettingsChanged(sender, e);
+        entropySettingsChanged();
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using Eto.Drawing;
 using Eto.Forms;
 using System.Threading.Tasks;
+using utility;
 using VeldridEto;
 
 namespace Variance;
@@ -11,8 +12,18 @@ public partial class MainForm
 {
     private void suspendDOESettingsUI()
     {
-        DOEUIFrozen = true;
-        commonVars.setActiveUI(CommonVars.uiActive.doe, false);
+        suspendDOESettingsUI(null);
+    }
+
+    private void suspendDOESettingsUI(Action callback)
+    {
+        Application.Instance.Invoke(() =>
+        {
+            DOEUIFrozen = true;
+            commonVars.setActiveUI(CommonVars.uiActive.doe, false);
+            if (callback != null)
+                callback.Invoke();
+        });
     }
 
     private void resumeDOESettingsUI()
@@ -52,54 +63,74 @@ public partial class MainForm
         {
             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].clear();
 
+            // Cache frequently accessed objects to reduce method call overhead
+            var doeSettings = commonVars.getSimulationSettings().getDOESettings();
+            var colors = commonVars.getColors();
+            float bgOpacity = (float)commonVars.getOpacity(CommonVars.opacity_gl.bg);
+            var doeViewportSettings = mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE];
+
             for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
             {
-                if (commonVars.getSimulationSettings().getDOESettings().getLayerAffected(i) != 1)
+                if (doeSettings.getLayerAffected(i) != 1)
                 {
                     continue;
                 }
 
-                for (int poly = 0; poly < commonVars.getLayerSettings(i).getFileData().Count; poly++)
+                var layerSettings = commonVars.getLayerSettings(i);
+                var fileData = layerSettings.getFileData();
+                int polyCount = fileData.Count;
+                var polyColor = Color.FromArgb(colors.simPreviewColors[i].toArgb());
+
+                for (int poly = 0; poly < polyCount; poly++)
                 {
-                    mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addBGPolygon(
-                        poly: OVPSettings.convertToClosedPointF(commonVars.getLayerSettings(i).getFileData()[poly]),
-                        polyColor: Color.FromArgb(commonVars.getColors().simPreviewColors[i].toArgb()),
-                        alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.bg),
+                    doeViewportSettings.addBGPolygon(
+                        poly: OVPSettings.convertToClosedPointF(fileData[poly]),
+                        polyColor: polyColor,
+                        alpha: bgOpacity,
                         layerIndex: i
                     );
                 }
             }
 
-            if (!radio_useCSVQuilt.Checked || radio_useCSVQuilt.Checked && !commonVars.getSimulationSettings().getDOESettings().getBool(DOESettings.properties_b.quilt))
+            if (!radio_useCSVQuilt.Checked || radio_useCSVQuilt.Checked && !doeSettings.getBool(DOESettings.properties_b.quilt))
             {
                 btn_useCSVQuilt.Enabled = false;
                 groupBox_DOESettings.Enabled = true;
             }
 
-            if (!radio_useCSViDRM.Checked || radio_useCSViDRM.Checked && !commonVars.getSimulationSettings().getDOESettings().getBool(DOESettings.properties_b.iDRM))
+            if (!radio_useCSViDRM.Checked || radio_useCSViDRM.Checked && !doeSettings.getBool(DOESettings.properties_b.iDRM))
             {
                 btn_useCSViDRM.Enabled = false;
                 groupBox_DOESettings.Enabled = true;
             }
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.uTileList, 0);
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.sTile, 0);
+            
+            // Batch DOE settings updates to reduce method call overhead
+            doeSettings.setInt(DOESettings.properties_i.uTileList, 0);
+            doeSettings.setInt(DOESettings.properties_i.sTile, 0);
             num_DOESCCol.Enabled = false;
             num_DOESCRow.Enabled = false;
-            commonVars.getSimulationSettings().getDOESettings().setDouble(DOESettings.properties_d.rowPitch, num_DOERowPitch.Value);
-            commonVars.getSimulationSettings().getDOESettings().setDouble(DOESettings.properties_d.colPitch, num_DOEColPitch.Value);
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.rows, Convert.ToInt32(num_DOERows.Value));
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.cols, Convert.ToInt32(num_DOECols.Value));
-            commonVars.getSimulationSettings().getDOESettings().setDouble(DOESettings.properties_d.colOffset, num_colOffset.Value);
-            commonVars.getSimulationSettings().getDOESettings().setDouble(DOESettings.properties_d.rowOffset, num_rowOffset.Value);
-            num_DOESCCol.MaxValue = commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.cols);
-            num_DOESCRow.MaxValue = commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.rows);
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.sTileCol, Convert.ToInt16(num_DOESCCol.Value));
-            commonVars.getSimulationSettings().getDOESettings().setInt(DOESettings.properties_i.sTileRow, Convert.ToInt16(num_DOESCRow.Value));
+            doeSettings.setDouble(DOESettings.properties_d.rowPitch, num_DOERowPitch.Value);
+            doeSettings.setDouble(DOESettings.properties_d.colPitch, num_DOEColPitch.Value);
+            
+            // Cache converted values to avoid repeated conversions
+            int rowsValue = Convert.ToInt32(num_DOERows.Value);
+            int colsValue = Convert.ToInt32(num_DOECols.Value);
+            
+            doeSettings.setInt(DOESettings.properties_i.rows, rowsValue);
+            doeSettings.setInt(DOESettings.properties_i.cols, colsValue);
+            doeSettings.setDouble(DOESettings.properties_d.colOffset, num_colOffset.Value);
+            doeSettings.setDouble(DOESettings.properties_d.rowOffset, num_rowOffset.Value);
+            
+            // Use cached values instead of re-fetching
+            num_DOESCCol.MaxValue = colsValue;
+            num_DOESCRow.MaxValue = rowsValue;
+            doeSettings.setInt(DOESettings.properties_i.sTileCol, Convert.ToInt16(num_DOESCCol.Value));
+            doeSettings.setInt(DOESettings.properties_i.sTileRow, Convert.ToInt16(num_DOESCRow.Value));
 
             if (!radio_useCSViDRM.Checked && !radio_useCSVQuilt.Checked)
             {
-                commonVars.getSimulationSettings().getDOESettings().setBool(DOESettings.properties_b.iDRM, false);
-                commonVars.getSimulationSettings().getDOESettings().setBool(DOESettings.properties_b.quilt, false);
+                doeSettings.setBool(DOESettings.properties_b.iDRM, false);
+                doeSettings.setBool(DOESettings.properties_b.quilt, false);
                 if (radioButton_allTiles.Checked)
                 {
                     // Nothing to do.
@@ -148,46 +179,84 @@ public partial class MainForm
             }
 
             int tile = 0;
+            // Cache DOE settings to avoid repeated method calls
+            double colOffset = doeSettings.getDouble(DOESettings.properties_d.colOffset);
+            double rowOffset = doeSettings.getDouble(DOESettings.properties_d.rowOffset);
+            double colPitch = doeSettings.getDouble(DOESettings.properties_d.colPitch);
+            double rowPitch = doeSettings.getDouble(DOESettings.properties_d.rowPitch);
+            int rows = doeSettings.getInt(DOESettings.properties_i.rows);
+            int cols = doeSettings.getInt(DOESettings.properties_i.cols);
+            
             PointF[] tilePoly = new PointF[5];
-            tilePoly[0] = new PointF((float)commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colOffset), (float)commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowOffset));
-            tilePoly[1] = new PointF(tilePoly[0].X, (float)(tilePoly[0].Y + commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch)));
-            tilePoly[2] = new PointF((float)(tilePoly[1].X + commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch)), tilePoly[1].Y);
+            tilePoly[0] = new PointF((float)colOffset, (float)rowOffset);
+            tilePoly[1] = new PointF(tilePoly[0].X, (float)(tilePoly[0].Y + rowPitch));
+            tilePoly[2] = new PointF((float)(tilePoly[1].X + colPitch), tilePoly[1].Y);
             tilePoly[3] = new PointF(tilePoly[2].X, tilePoly[0].Y);
             tilePoly[4] = new PointF(tilePoly[0].X, tilePoly[0].Y);
 
             if (radioButton_allTiles.Checked || radio_useCSVQuilt.Checked)
             {
-                for (int row = 0; row < commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.rows); row++)
+                // Calculate total tiles for potential parallelization
+                int totalTiles = rows * cols;
+                var resultColors = varianceContext.vc.colors.resultColors;
+                float fgOpacity = (float)commonVars.getOpacity(CommonVars.opacity_gl.fg);
+                var castColPitch = (float)colPitch;
+                var castRowPitch = (float)rowPitch;
+                
+                // Optimize by parallelizing the tile generation when beneficial
+                if (totalTiles > 100) // Threshold for parallelization
                 {
-                    int col = 0;
-                    while (col < commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.cols))
+                    ParallelProcessing.OptimizedParallelFor(0, totalTiles, tileIndex =>
                     {
-                        int colorIndex = tile % varianceContext.vc.colors.resultColors.Length; // map our result into the available colors.
-                        PointF[] currentTile = tilePoly.ToArray();
-                        int length = currentTile.Length;
-                        int col1 = col;
-                        int row1 = row;
-#if !VARIANCESINGLETHREADED
-                        Parallel.For(0, length, pt =>
-#else
-                            for (int pt = 0; pt < length; pt++)
-#endif
+                        int row = tileIndex / cols;
+                        int col = tileIndex % cols;
+                        int colorIndex = tileIndex % resultColors.Length;
+                        
+                        PointF[] currentTile = new PointF[tilePoly.Length];
+                        Array.Copy(tilePoly, currentTile, tilePoly.Length);
+                        
+                        // Apply transformations using cached values
+                        for (int pt = 0; pt < currentTile.Length; pt++)
+                        {
+                            currentTile[pt].X += col * castColPitch;
+                            currentTile[pt].Y += row * castRowPitch;
+                        }
+                        
+                        lock (doeViewportSettings) // Thread-safe viewport access
+                        {
+                            doeViewportSettings.addPolygon(
+                                poly: currentTile,
+                                polyColor: Color.FromArgb(resultColors[colorIndex].toArgb()),
+                                alpha: fgOpacity,
+                                drawn: true,
+                                layerIndex: CentralProperties.maxLayersForMC + colorIndex);
+                        }
+                    });
+                }
+                else
+                {
+                    // Use original approach for small tile counts
+                    for (int row = 0; row < rows; row++)
+                    {
+                        for (int col = 0; col < cols; col++)
+                        {
+                            int colorIndex = tile % resultColors.Length;
+                            PointF[] currentTile = tilePoly.ToArray();
+                            int length = currentTile.Length;
+                            ParallelProcessing.OptimizedParallelFor(0, length, pt =>
                             {
-                                currentTile[pt].X += (float)(col1 * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
-                                currentTile[pt].Y += (float)(row1 * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
+                                currentTile[pt].X += col * castColPitch;
+                                currentTile[pt].Y += row * castRowPitch;
                             }
-#if !VARIANCESINGLETHREADED
-                        );
-#endif
-                        mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
-                            poly: currentTile,
-                            polyColor: Color.FromArgb(commonVars.getColors().resultColors[colorIndex].toArgb()),
-                            alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
-                            drawn: true,
-                            layerIndex: CentralProperties.maxLayersForMC + colorIndex);
-
-                        tile++;
-                        col++;
+                            );
+                            doeViewportSettings.addPolygon(
+                                poly: currentTile,
+                                polyColor: Color.FromArgb(resultColors[colorIndex].toArgb()),
+                                alpha: fgOpacity,
+                                drawn: true,
+                                layerIndex: CentralProperties.maxLayersForMC + colorIndex);
+                            tile++;
+                        }
                     }
                 }
             }
@@ -196,21 +265,20 @@ public partial class MainForm
             {
                 PointF[] currentTile = tilePoly.ToArray();
                 int length = currentTile.Length;
-#if !VARIANCESINGLETHREADED
-                Parallel.For(0, length, pt =>
-#else
-                    for (int pt = 0; pt < length; pt++)
-#endif
+                
+                // Cache tile calculations using already cached values
+                float tileColOffset = (float)((doeSettings.getInt(DOESettings.properties_i.sTileCol) - 1) * colPitch);
+                float tileRowOffset = (float)((doeSettings.getInt(DOESettings.properties_i.sTileRow) - 1) * rowPitch);
+                
+                ParallelProcessing.OptimizedParallelFor(0, length, pt =>
                     {
-                        currentTile[pt].X += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileCol) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
-                        currentTile[pt].Y += (float)((commonVars.getSimulationSettings().getDOESettings().getInt(DOESettings.properties_i.sTileRow) - 1) * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
+                        currentTile[pt].X += tileColOffset;
+                        currentTile[pt].Y += tileRowOffset;
                     }
-#if !VARIANCESINGLETHREADED
                 );
-#endif
-                mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
+                doeViewportSettings.addPolygon(
                     poly: currentTile,
-                    polyColor: Color.FromArgb(commonVars.getColors().resultColors[0].toArgb()),
+                    polyColor: Color.FromArgb(colors.resultColors[0].toArgb()),
                     alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
                     drawn: true,
                     layerIndex: CentralProperties.maxLayersForMC + 0);
@@ -218,32 +286,64 @@ public partial class MainForm
 
             if (radio_useSpecificTiles.Checked)
             {
-                while (tile < commonVars.getSimulationSettings().getDOESettings().getTileList_ColRow().Count)
+                var tileList = doeSettings.getTileList_ColRow();
+                int tileListCount = tileList.Count;
+                var resultColors = varianceContext.vc.colors.resultColors;
+                float fgOpacity = (float)commonVars.getOpacity(CommonVars.opacity_gl.fg);
+                var castColPitch = (float)colPitch;
+                var castRowPitch = (float)rowPitch;
+                
+                // Parallelize specific tiles processing when beneficial
+                if (tileListCount > 50)
                 {
-                    int colorIndex = tile % varianceContext.vc.colors.resultColors.Length; // map our result into the available colors.
-                    int col = commonVars.getSimulationSettings().getDOESettings().getTileList_Value(tile, 0);
-                    int row = commonVars.getSimulationSettings().getDOESettings().getTileList_Value(tile, 1);
-                    PointF[] currentTile = tilePoly.ToArray();
-                    int length = currentTile.Length;
-#if !VARIANCESINGLETHREADED
-                    Parallel.For(0, length, pt =>
-#else
-                        for (int pt = 0; pt < length; pt++)
-#endif
+                    ParallelProcessing.OptimizedParallelFor(0, tileListCount, tileIndex =>
+                    {
+                        int colorIndex = tileIndex % resultColors.Length;
+                        int col = doeSettings.getTileList_Value(tileIndex, 0);
+                        int row = doeSettings.getTileList_Value(tileIndex, 1);
+                        PointF[] currentTile = new PointF[tilePoly.Length];
+                        Array.Copy(tilePoly, currentTile, tilePoly.Length);
+                        
+                        for (int pt = 0; pt < currentTile.Length; pt++)
                         {
-                            currentTile[pt].X += (float)(col * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.colPitch));
-                            currentTile[pt].Y += (float)(row * commonVars.getSimulationSettings().getDOESettings().getDouble(DOESettings.properties_d.rowPitch));
+                            currentTile[pt].X += col * castColPitch;
+                            currentTile[pt].Y += row * castRowPitch;
                         }
-#if !VARIANCESINGLETHREADED
-                    );
-#endif
-                    mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.DOE].addPolygon(
-                        poly: currentTile,
-                        polyColor: Color.FromArgb(commonVars.getColors().resultColors[colorIndex].toArgb()),
-                        alpha: (float)commonVars.getOpacity(CommonVars.opacity_gl.fg),
-                        drawn: true,
-                        layerIndex: CentralProperties.maxLayersForMC + colorIndex);
-                    tile++;
+                        
+                        lock (doeViewportSettings)
+                        {
+                            doeViewportSettings.addPolygon(
+                                poly: currentTile,
+                                polyColor: Color.FromArgb(resultColors[colorIndex].toArgb()),
+                                alpha: fgOpacity,
+                                drawn: true,
+                                layerIndex: CentralProperties.maxLayersForMC + colorIndex);
+                        }
+                    });
+                }
+                else
+                {
+                    // Use optimized sequential approach for small lists
+                    for (tile = 0; tile < tileListCount; tile++)
+                    {
+                        int colorIndex = tile % resultColors.Length;
+                        int col = doeSettings.getTileList_Value(tile, 0);
+                        int row = doeSettings.getTileList_Value(tile, 1);
+                        PointF[] currentTile = tilePoly.ToArray();
+                        int length = currentTile.Length;
+                        ParallelProcessing.OptimizedParallelFor(0, length, pt =>
+                        {
+                            currentTile[pt].X += col * castColPitch;
+                            currentTile[pt].Y += row * castRowPitch;
+                        }
+                        );
+                        doeViewportSettings.addPolygon(
+                            poly: currentTile,
+                            polyColor: Color.FromArgb(resultColors[colorIndex].toArgb()),
+                            alpha: fgOpacity,
+                            drawn: true,
+                            layerIndex: CentralProperties.maxLayersForMC + colorIndex);
+                    }
                 }
             }
             entropyControl.EntropyRun(numberOfCases: 1, csvFile: null, useThreads: false, doPASearch: false); // force a tile extraction run to update tool.

@@ -51,6 +51,7 @@ public partial class MainForm
             subShapePos = ShapeSettings.getAvailableSubShapePositions(),
             tipLocs = ShapeSettings.getAvailableTipsLocations(),
             rngTypeList = commonRNG.rngTypes,
+            samplerList = QuasiRandomSampler.samplers.ToList(),
             externalTypeList = commonVars.getExternalTypes(),
             externalFilterList = commonVars.getExternalFilterList(),
             calcModes = commonVars.calcMode_names,
@@ -209,6 +210,21 @@ public partial class MainForm
         {
         }
 
+        try
+        {
+            varianceContext.vc.rng = Convert.ToInt32(prefs.Descendants("rng").First().Value);
+        }
+        catch (Exception)
+        {
+        }
+
+        try
+        {
+            varianceContext.vc.sampler = Convert.ToInt32(prefs.Descendants("sampler").First().Value);
+        }
+        catch (Exception)
+        {
+        }
 
         varianceContext.vc.rngMappingEquations.Clear();
         varianceContext.vc.rngMappingEquations.Add("Box-Muller");
@@ -621,6 +637,10 @@ public partial class MainForm
             prefsXML.Root.Add(new XElement("friendlyNumber", varianceContext.vc.friendlyNumber));
 
             prefsXML.Root.Add(new XElement("expandUI", varianceContext.vc.expandUI));
+
+            prefsXML.Root.Add(new XElement("rng", varianceContext.vc.rng));
+
+            prefsXML.Root.Add(new XElement("sampler", varianceContext.vc.sampler));
 
             string equationString = "";
             for (int i = 0; i < commonVars.rngCustomMapping.Count; i++)
@@ -1040,6 +1060,12 @@ public partial class MainForm
             VeldridReady = true;
         };
 
+        if (vSurface.GraphicsDevice != null && !VeldridReady)
+        {
+            viewPort.SetUpVeldrid();
+            VeldridReady = true;
+        }
+
         viewPort.updateHostFunc = viewportUpdateHost;
 
         const string viewportToolTipText = "(w/a/s/d) to navigate\r\n(r) to reset\r\n(n/m) to zoom\r\n(f) to freeze/thaw\r\n(x) to zoom extents";
@@ -1154,7 +1180,7 @@ public partial class MainForm
 
         globalUIFrozen = false;
         layerUIFrozen_exp = false;
-        entropySettingsChanged(null, EventArgs.Empty);
+        entropySettingsChanged();
         createVPContextMenu();
         viewPort.reset();
         viewPort.updateViewport();
@@ -1197,8 +1223,10 @@ public partial class MainForm
         comboBox_calcModes.SelectedIndex = 0;
 
         comboBox_RNG.SelectedIndex = 0;
+        comboBox_samplers.SelectedIndex = 0;
 
         comboBox_implantRNG.SelectedIndex = 0;
+        comboBox_implantSamplers.SelectedIndex = 0;
 
         try
         {
@@ -1238,6 +1266,11 @@ public partial class MainForm
     }
 
     private void posChanged(object sender, EventArgs e)
+    {
+        posChanged();
+    }
+
+    private void posChanged()
     {
         if (openGLErrorReported)
         {
@@ -1326,7 +1359,7 @@ public partial class MainForm
                 {
                     case (int)CommonVars.twoDTabNames.settings:
                     case (int)CommonVars.twoDTabNames.paSearch:
-                        entropySettingsChanged(null);
+                        entropySettingsChanged();
                         break;
                     case (int)CommonVars.twoDTabNames.DOE:
                         doeSettingsChanged();
@@ -1648,6 +1681,11 @@ public partial class MainForm
     }
 
     private void launchHelp(object sender, EventArgs e)
+    {
+        launchHelp();
+    }
+
+    private void launchHelp()
     {
         if (helpAvailable)
         {

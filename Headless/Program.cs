@@ -56,7 +56,12 @@ internal static class VHeadless
                     System.IO.StreamReader emailSettings = new(emailFile);
                     while (!emailSettings.EndOfStream)
                     {
-                        string line = emailSettings.ReadLine()!;
+                        string? lineRead = emailSettings.ReadLine();
+                        if (lineRead == null)
+                        {
+                            break; // End of stream reached
+                        }
+                        string line = lineRead;
                         string[] tokens = line.Split(splitArray);
                         if (line.StartsWith("ADDRESS", StringComparison.CurrentCultureIgnoreCase))
                         {
@@ -147,7 +152,7 @@ internal static class VHeadless
             };
             Headless hl = new(varianceContext);
 
-            Console.CancelKeyPress += hl.cancelHandler!;
+            Console.CancelKeyPress += hl.cancelHandler;
             hl.doStuff();
         }
     }

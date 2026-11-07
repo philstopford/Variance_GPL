@@ -247,17 +247,11 @@ public class Replay
         int colIndex;
         // Find out which layers we have active.
         bool[] activeLayers = new bool[CentralProperties.maxLayersForMC];
-#if !VARIANCESINGLETHREADED
         Parallel.For(0, CentralProperties.maxLayersForMC, i =>
-#else
-            for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
-#endif
             {
                 activeLayers[i] = commonVars_.getLayerSettings(i).getInt(EntropyLayerSettings.properties_i.enabled) == 1;
             }
-#if !VARIANCESINGLETHREADED
         );
-#endif
 
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {

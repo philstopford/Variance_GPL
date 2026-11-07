@@ -89,7 +89,7 @@ public partial class Entropy
                 setSampler(numberOfCases, previewMode, doPASearch:false);
                 break;
             default:
-                setSampler(1, previewMode, doPASearch:false);
+                setSampler(1, previewMode, doPASearch:true);
                 break;
         }
         sampler.sample(false, true);
@@ -170,26 +170,27 @@ public partial class Entropy
                     }
                 }
 
-                if (addResultToPackage)
+                if (addResultToPackage && currentResult.isValid())
                 {
+                    // Search attempts may be rejected. Store accepted cases
+                    // densely rather than using the attempt number as an index.
+                    resultPackage.Add(doPASearch ? resultPackage.results_count : i, currentResult, generateExternal);
                     if (doPASearch)
                     {
                         currentProgress++;
                         stepProgress?.Invoke();
                     }
-                    resultPackage.Add(i, currentResult, generateExternal);
                     if (doPASearch && resultPackage.results_count == commonVars.getPASearch().numberofPassCases)
                     {
                         break;
                     }
                 }
-                else
-                {
-                    continue;
-                }
+                // Rejected attempts must still reach timing and cancellation
+                // checks below; only the preview requires an accepted result.
 
                 // PASearch - update with every match, at least for now.
-                if (doPASearch || previewMode || currentProgress % sampleRate == 0)
+                if (addResultToPackage && currentResult.isValid() &&
+                    (doPASearch || previewMode || currentProgress % sampleRate == 0))
                 {
                     int index = i;
                     if (doPASearch)
@@ -212,23 +213,26 @@ public partial class Entropy
                         }
                         else
                         {
-                            resultString = "";
                             string[] tempString = resultPackage.getResult(index).getResult().Split(csvSeparator);
+                            // Use StringBuilder for efficient string concatenation
+                            var resultBuilder = new System.Text.StringBuilder(tempString.Length * 10); // Pre-allocate reasonable capacity
+                            
                             for (int j = 0; j < tempString.Length; j++)
                             {
                                 if (j > 0)
                                 {
-                                    resultString += ",";
+                                    resultBuilder.Append(',');
                                 }
                                 if (tempString[j] == "N/A")
                                 {
-                                    resultString += "N/A";
+                                    resultBuilder.Append("N/A");
                                 }
                                 else
                                 {
-                                    resultString += Convert.ToDouble(tempString[j]).ToString("0.##");
+                                    resultBuilder.Append(Convert.ToDouble(tempString[j]).ToString("0.##"));
                                 }
                             }
+                            resultString = resultBuilder.ToString();
                         }
                         updateSimUIFunc?.Invoke(doPASearch, resultPackage, resultString);
                     }
@@ -311,7 +315,10 @@ public partial class Entropy
         commonVars.m_timer.Start();
 
         // Set our parallel task options based on user settings.
-        ParallelOptions po = new();
+        ParallelOptions po = new()
+        {
+            TaskScheduler = TaskScheduler.Default
+        };
         // Attempt at parallelism.
         CancellationTokenSource cancelSource = new();
         CancellationToken cancellationToken = cancelSource.Token;
@@ -332,6 +339,9 @@ public partial class Entropy
             generateExternal = 0; // no SVG for the PA search mode.
         }
 
+        // Reserving an accepted-result slot and checking the search target
+        // must be one operation. Geometry evaluation remains parallel.
+        object paSearchResultLock = new();
         try
         {
             Parallel.For(0, numberOfCases, po, (i, loopState) =>
@@ -487,20 +497,31 @@ public partial class Entropy
                                         }
                                     }
                                 }
-                                // resultPackage has its own locking.
-                                resultPackage.Add(currentProgress, currentResult, 0); // disable retention of geometry given new write-during-run methodology.
-                                Interlocked.Increment(ref currentProgress);
                                 if (doPASearch)
                                 {
-                                    if (resultPackage.results_count >= commonVars.getPASearch().numberofPassCases)
+                                    lock (paSearchResultLock)
                                     {
-                                        loopState.Stop();
+                                        if (resultPackage.results_count < commonVars.getPASearch().numberofPassCases)
+                                        {
+                                            resultPackage.Add(resultPackage.results_count, currentResult, 0);
+                                            Interlocked.Increment(ref currentProgress);
+                                        }
+                                        if (resultPackage.results_count >= commonVars.getPASearch().numberofPassCases)
+                                        {
+                                            loopState.Stop();
+                                        }
                                     }
                                 }
+                                else
+                                {
+                                    // Ordinary runs retain their simulation case
+                                    // index, independent of worker completion order.
+                                    resultPackage.Add(i, currentResult, 0);
+                                    Interlocked.Increment(ref currentProgress);
+                                }
                             }
-                            catch (Exception e1)
+                            catch (Exception)
                             {
-                                int xx = 2;
                             }
 
                         }
@@ -538,7 +559,7 @@ public partial class Entropy
         }
         commonVars.m_timer.Stop();
         commonVars.m_timer.Dispose();
-        resultPackage.setRunTime(swTime);
+        resultPackage.setRunTime(swTime + sw.Elapsed.TotalSeconds);
         sw.Stop();
         sw.Reset();
     }
@@ -648,27 +669,29 @@ public partial class Entropy
             {
                 double completionTime = swTime_ / currentProgress * (numberOfCases - currentProgress);
                 TimeSpan cT = TimeSpan.FromSeconds(completionTime);
-                statusLineString += "; ";
+                
+                // Use StringBuilder for efficient time string building
+                var timeBuilder = new System.Text.StringBuilder(50);
+                timeBuilder.Append("; ");
 
                 if (cT.Hours >= 1)
                 {
-                    // We have hours.
-                    statusLineString += cT.Hours + " h";
+                    timeBuilder.Append(cT.Hours).Append(" h");
                 }
                 if (cT.Minutes >= 1)
                 {
                     if (cT.Hours >= 1)
                     {
-                        statusLineString += ", ";
+                        timeBuilder.Append(", ");
                     }
-                    // We have minutes
-                    statusLineString += cT.Minutes + " m";
+                    timeBuilder.Append(cT.Minutes).Append(" m");
                 }
                 if (cT is not { Minutes: < 1, Hours: < 1 })
                 {
-                    statusLineString += ", ";
+                    timeBuilder.Append(", ");
                 }
-                statusLineString += cT.Seconds + " s remaining";
+                timeBuilder.Append(cT.Seconds).Append(" s remaining");
+                statusLineString += timeBuilder.ToString();
             }
 
             string tmp;
@@ -1099,7 +1122,7 @@ public partial class Entropy
         }
     }
 
-    public void EntropyRun(int numberOfCases, string csvFile, bool useThreads, bool doPASearch, bool setJobSettings = false, ChaosSettings loadedJobSettings = null, int replayRow_ = 0, int replayCol_ = 0) // event handler will call this with 1 and null as the csvFile
+    public void EntropyRun(int numberOfCases, string? csvFile, bool useThreads, bool doPASearch, bool setJobSettings = false, ChaosSettings? loadedJobSettings = null, int replayRow_ = 0, int replayCol_ = 0) // event handler will call this with 1 and null as the csvFile
     {
         replayCol = replayCol_;
         replayRow = replayRow_;
@@ -1109,6 +1132,10 @@ public partial class Entropy
         // Replay mode
         if (useLoadedSettings)
         {
+            if (loadedJobSettings == null)
+            {
+                throw new ArgumentNullException(nameof(loadedJobSettings), "loadedJobSettings cannot be null when useLoadedSettings is true");
+            }
             loadedJobSettings_ = loadedJobSettings;
             numberOfCases = 1;
             csvFile = null;
@@ -1116,7 +1143,7 @@ public partial class Entropy
         pEntropyRun(numberOfCases, csvFile, useThreads, doPASearch);
     }
 
-    private void pEntropyRun(int numberOfCases, string csvFile, bool useThreads, bool doPASearch)
+    private void pEntropyRun(int numberOfCases, string? csvFile, bool useThreads, bool doPASearch)
     {
         reset();
         // Apply PA search values to settings.
@@ -1418,19 +1445,14 @@ public partial class Entropy
                 }
                 points = Helper.initedPathD(arraySize);
 
-#if !ENTROPYSINGLETHREADED
-                Parallel.For(0, length, i =>
-#else
-                    for (Int32 i = 0; i < length; i++)
-#endif
+                var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+                Parallel.For(0, length, options, i =>
                     {
                         // The cast below is important - if this is missing or screwed up, we get clamped to integers and the viewport representation is fouled up.
                         points[i] = new PointD(currentJobEngine.getPaths()[listMember][i].x,
                             currentJobEngine.getPaths()[listMember][i].y);
                     }
-#if !ENTROPYSINGLETHREADED
                 );
-#endif
                 // Close the shape only if we have an area calculation; for other cases we expect lines.
                 if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.oType) == (int)geoAnalysis.Supported.calcModes.area && points[^1] != points[0])
                 {

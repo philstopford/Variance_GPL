@@ -352,21 +352,26 @@ public partial class MainForm
 
     private void preferencesChange(object sender, EventArgs e)
     {
+        preferencesChange();
+    }
+
+    private void preferencesChange()
+    {
         if (utilsUIFrozen)
         {
             return;
         }
         utilsUIFrozen = true;
-        varianceContext.vc.geoCoreCDVariation = (bool)checkBox_geoCore_enableCDVariation.Checked!;
-        commonVars.setGCCDV((bool)checkBox_geoCore_enableCDVariation.Checked);
-        varianceContext.vc.layerPreviewDOETile = (bool)checkBox_geoCore_tileLayerPreview.Checked!;
-        commonVars.setLayerPreviewDOETile((bool)checkBox_geoCore_tileLayerPreview.Checked);
-        varianceContext.vc.AA = (bool)checkBox_OGLAA.Checked!;
-        commonVars.setOpenGLProp(CommonVars.properties_gl.aa, (bool)checkBox_OGLAA.Checked);
-        varianceContext.vc.FilledPolygons = (bool)checkBox_OGLFill.Checked!;
-        commonVars.setOpenGLProp(CommonVars.properties_gl.fill, (bool)checkBox_OGLFill.Checked);
-        varianceContext.vc.drawPoints = (bool)checkBox_OGLPoints.Checked!;
-        commonVars.setOpenGLProp(CommonVars.properties_gl.points, (bool)checkBox_OGLPoints.Checked);
+        varianceContext.vc.geoCoreCDVariation = checkBox_geoCore_enableCDVariation.Checked == true;
+        commonVars.setGCCDV(checkBox_geoCore_enableCDVariation.Checked == true);
+        varianceContext.vc.layerPreviewDOETile = checkBox_geoCore_tileLayerPreview.Checked == true;
+        commonVars.setLayerPreviewDOETile(checkBox_geoCore_tileLayerPreview.Checked == true);
+        varianceContext.vc.AA = checkBox_OGLAA.Checked == true;
+        commonVars.setOpenGLProp(CommonVars.properties_gl.aa, checkBox_OGLAA.Checked == true);
+        varianceContext.vc.FilledPolygons = checkBox_OGLFill.Checked == true;
+        commonVars.setOpenGLProp(CommonVars.properties_gl.fill, checkBox_OGLFill.Checked == true);
+        varianceContext.vc.drawPoints = checkBox_OGLPoints.Checked == true;
+        commonVars.setOpenGLProp(CommonVars.properties_gl.points, checkBox_OGLPoints.Checked == true);
         varianceContext.vc.openGLZoomFactor = Convert.ToInt32(num_zoomSpeed.Value);
         commonVars.setGLInt(CommonVars.gl_i.zoom, Convert.ToInt32(num_zoomSpeed.Value));
         varianceContext.vc.FGOpacity = num_fgOpacity.Value;
@@ -396,10 +401,15 @@ public partial class MainForm
 
     private void miscSettingsChanged(object sender, EventArgs e)
     {
-        varianceContext.vc.friendlyNumber = (bool)checkBox_friendlyNumbers.Checked!;
+        miscSettingsChanged();
+    }
+
+    private void miscSettingsChanged()
+    {
+        varianceContext.vc.friendlyNumber = checkBox_friendlyNumbers.Checked == true;
         commonVars.setFriendly(varianceContext.vc.friendlyNumber);
 
-        varianceContext.vc.expandUI = (bool) checkBox_expandUI.Checked!;
+        varianceContext.vc.expandUI = checkBox_expandUI.Checked == true;
         commonVars.setExpandedUI(varianceContext.vc.expandUI);
     }
 

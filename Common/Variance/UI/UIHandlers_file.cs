@@ -9,15 +9,27 @@ namespace Variance;
 
 public partial class MainForm
 {
+    /// <summary>
+    /// Event handler for the save menu/toolbar button. Saves the current project to the existing file path.
+    /// </summary>
+    /// <param name="sender">The object that triggered the save event</param>
+    /// <param name="e">Event arguments</param>
     private void saveHandler(object sender, EventArgs e)
     {
         saveProject(commonVars.projectFileName);
     }
 
+    /// <summary>
+    /// Saves the current project to the specified file path. If no filename is provided, 
+    /// prompts the user with a save dialog to select the save location.
+    /// Supports both .variance and .xml file formats.
+    /// </summary>
+    /// <param name="filename">File path to save to. If empty, a save dialog will be shown</param>
     private void saveProject(string filename)
     {
         Application.Instance.Invoke(() =>
         {
+            // Check if we need to prompt for a file location
             if (filename == "")
             {
                 // Need to request output file location and name.
@@ -37,11 +49,14 @@ public partial class MainForm
                 }
                 else
                 {
+                    // User cancelled, cleanup and exit
                     sfd.Dispose();
                     saveEnabler();
                     return;
                 }
             }
+            
+            // Attempt to save all simulation settings and configuration data
             if (commonVars.storage.storeSimulationSettings(filename,
                     commonVars.getSimulationSettings(),
                     commonVars.getSimulationSettings_nonSim(),
@@ -53,25 +68,42 @@ public partial class MainForm
                 )
                )
             {
+                // Save successful - update the current project filename
                 commonVars.projectFileName = filename;
             }
             else
             {
+                // Save failed - notify user
                 MessageBox.Show("Error during save.", "Save failed", MessageBoxButtons.OK);
             }
+            
+            // Update UI to reflect save state
             saveEnabler();
         });
     }
 
+    /// <summary>
+    /// Event handler for the "Save As" menu/toolbar button. Always prompts the user 
+    /// to select a new save location regardless of whether a project file is already open.
+    /// </summary>
+    /// <param name="sender">The object that triggered the save as event</param>
+    /// <param name="e">Event arguments</param>
     private void saveAsHandler(object sender, EventArgs e)
     {
+        // Force save dialog by passing empty filename
         saveProject("");
     }
 
+    /// <summary>
+    /// Updates the window title to reflect the current project state and filename.
+    /// If no project is loaded, shows just the application title.
+    /// If a project is loaded, appends the filename to the title.
+    /// </summary>
     private void saveEnabler()
     {
         Application.Instance.Invoke(() =>
         {
+            // Update window title based on whether a project file is loaded
             if (commonVars.projectFileName == "")
             {
                 Title = commonVars.titleText;
@@ -83,8 +115,16 @@ public partial class MainForm
         });
     }
 
+    /// <summary>
+    /// Static event handler for drag events over the application window.
+    /// Validates that the dragged items contain supported file types (.variance or .xml)
+    /// and sets the appropriate drag effects to indicate whether dropping is allowed.
+    /// </summary>
+    /// <param name="sender">The object that triggered the drag event</param>
+    /// <param name="e">Drag event arguments containing information about dragged items</param>
     private static void dragEvent(object sender, DragEventArgs e)
     {
+        // Early exit if no URIs are present in the drag data
         if (!e.Data.ContainsUris)
         {
             return;
@@ -94,19 +134,28 @@ public partial class MainForm
         foreach (var t in e.Data.Uris)
         {
             string[] tokens = t.LocalPath.Split(['.']);
+            // Only allow .variance and .xml files
             if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
                 continue;
             }
 
+            // Found a supported file type - allow copy operation
             e.Effects = DragEffects.Copy;
             break;
         }
     }
 
+    /// <summary>
+    /// Handles the actual drop operation when a file is dropped onto the application.
+    /// Only processes the first supported file found in the dropped items.
+    /// Supported file types are .variance and .xml files.
+    /// </summary>
+    /// <param name="sender">The object that received the drop</param>
+    /// <param name="e">Drop event arguments containing the dropped file information</param>
     private void dragAndDrop(object sender, DragEventArgs e)
     {
-        // Only allow a single selection; pick the first.
+        // Only allow a single selection; pick the first supported file
         DataObject d = e.Data;
         int length = d.Uris.Length;
         if (length < 1)
@@ -114,35 +163,45 @@ public partial class MainForm
             return;
         }
 
-        // Find our first file object.
+        // Find our first valid file object
         int index = -1;
         for (int i = 0; i < length; i++)
         {
+            // Skip non-file URIs
             if (!d.Uris[i].IsFile)
             {
                 continue;
             }
 
-            // Actually a supported file?
+            // Check if this is a supported file type
             string[] tokens = d.Uris[i].LocalPath.Split(['.']);
             if (tokens[^1].ToUpper() != "VARIANCE" && tokens[^1].ToUpper() != "XML")
             {
                 continue;
             }
 
+            // Found a supported file - use this one
             index = i;
             break;
         }
 
+        // If we found a valid file, load it
         if (index != -1)
         {
             doLoad(d.Uris[index].LocalPath);
         }
     }
 
+    /// <summary>
+    /// Event handler for the "Open" menu/toolbar button. 
+    /// Presents a file dialog to the user to select a project file to load.
+    /// Supports .variance and .xml file formats.
+    /// </summary>
+    /// <param name="sender">The object that triggered the open event</param>
+    /// <param name="e">Event arguments</param>
     private void openHandler(object sender, EventArgs e)
     {
-        // Need to request input file location and name.
+        // Present file dialog to user for file selection
         OpenFileDialog ofd = new()
         {
             Title = "Choose file to load",
@@ -155,6 +214,7 @@ public partial class MainForm
         };
         if (ofd.ShowDialog(ParentWindow) == DialogResult.Ok)
         {
+            // Initialize new project state and load the selected file
             pNew(false);
             doLoad(ofd.FileName);
             commonVars.setHashes();
@@ -163,33 +223,63 @@ public partial class MainForm
         ofd.Dispose();
     }
 
+    /// <summary>
+    /// Event handler for the "Revert" menu option.
+    /// Reloads the current project from disk, discarding any unsaved changes.
+    /// </summary>
+    /// <param name="sender">The object that triggered the revert event</param>
+    /// <param name="e">Event arguments</param>
     private void revertHandler(object sender, EventArgs e)
     {
         doLoad(commonVars.projectFileName);
     }
 
+    /// <summary>
+    /// Core method that handles loading a project file from the specified path.
+    /// Suspends UI updates during loading for performance, loads all simulation settings,
+    /// and updates the UI state based on the current tab selection.
+    /// Provides user feedback through status line updates during the loading process.
+    /// </summary>
+    /// <param name="xmlFile">Full path to the project file to load</param>
     private void doLoad(string xmlFile)
     {
         // We suspend/resume the layout here to reduce the overhead from updating the huge number of UI controls.
         // We have to toggle this a few times to display progress messages to the user.
         Application.Instance.Invoke(() =>
         {
+            // Store current tab state to restore after loading
             int mainTabIndex = getMainSelectedIndex();
             int subTabIndex = -1;
             if (mainTabIndex == (int)CommonVars.twoDTabNames.layer)
             {
                 subTabIndex = getSubTabSelectedIndex();
             }
+            
+            // Suspend UI updates and show loading message
             suspendUIHandlers();
             updateStatusLine("Loading project. Please wait");
-            string loadOK = commonVars.storage.loadSimulationSettings(CentralProperties.version, xmlFile, commonVars.getSimulationSettings(), commonVars.getSimulationSettings_nonSim(), commonVars.getListOfSettings(), commonVars.getImplantSimulationSettings(), commonVars.getImplantSettings_nonSim(), commonVars.getImplantSettings(), commonVars.getNonSimulationSettings());
+            
+            // Attempt to load all simulation settings from the project file
+            string loadOK = commonVars.storage.loadSimulationSettings(
+                CentralProperties.version, 
+                xmlFile, 
+                commonVars.getSimulationSettings(), 
+                commonVars.getSimulationSettings_nonSim(), 
+                commonVars.getListOfSettings(), 
+                commonVars.getImplantSimulationSettings(), 
+                commonVars.getImplantSettings_nonSim(), 
+                commonVars.getImplantSettings(), 
+                commonVars.getNonSimulationSettings());
+                
             if (loadOK == "")
             {
+                // Loading successful
                 updateStatusLine("Project loaded successfully");
                 commonVars.projectFileName = xmlFile;
             }
             else
             {
+                // Loading failed
                 updateStatusLine("Project loading failed.");
             }
             resumeUIHandlers();
@@ -205,8 +295,8 @@ public partial class MainForm
                 case (int)CommonVars.twoDTabNames.settings:
                     drawSimulationPanelHandler(false);
                     set_ui_from_settings(getSelectedLayerIndex());
-                    updateSettingsUIFromSettings();
-                    entropySettingsChanged(this, EventArgs.Empty);
+                    updateSettingsUIFromSettings(() => entropySettingsChanged());
+                    // entropySettingsChanged call moved to updateSettingsUIFromSettings to avoid race condition
                     break;
             }
 
@@ -217,7 +307,7 @@ public partial class MainForm
             if (mainTabIndex == (int)CommonVars.upperTabNames.Implant)
             {
                 updateImplantUIFromSettings();
-                doImplantShadowing(null, EventArgs.Empty);
+                doImplantShadowing();
             }
             resumeUIFromStorage();
         });

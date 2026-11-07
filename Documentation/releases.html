@@ -198,10 +198,50 @@ box-shadow: 0 1px 3px black;
     <a name="releases"></a>
     <h1 class="western">Variance Release History</h1>
   <ul id=menu>
+    <li><a href="#releases_650">6.5</a>
     <li><a href="#releases_620">6.2</a>
     <li><a href="#releases_610">6.1</a>
     <li><a href="#releases_600">6.0</a>
   </ul>
+
+    <blockquote>
+      <a name="releases_650"></a>
+      <h2 class="western">New to 6.5 (Nov 4 2026)</h2>
+      <blockquote>
+        <ul>
+          <li>Resolved some issues with layout parsing that resulted in scaling errors, and mishandled certain repetition scenarios in OASIS files.</li>
+          <li>Optimized keyholing to find minimal path across multiple holes.</li>
+          <li>Avoided proximity biasing considering keyholes.</li>
+          <li>Resolved some issues with PA Search where completion was not handled properly.</li>
+          <li>This release was developed alongside 7.0, to offer the classical UI in 6.5 as 7.0 brings a new approach.</li>
+          <li>Support for Apple Silicon. Intel Macs are not being targeted, but may work.</li>
+          <li>Moved to .NET 10.</li>
+          <li>More work on GeoCore layout parsing and validation.</li>
+          <ul>
+            <li>Continuing focus on correctness and testing.</li>
+          </ul>
+          <li>Brand new contouring system in the shape engine.</li>
+          <ul>
+            <li>Works with any kind of geometry - no longer constrained to orthogonal cases.</li>
+            <li>Custom engine fitting Bezier curves into the source geometry.</li>
+            <li>Supports short edge length definitions and blended transitions up to 'max' short edge length, where full bezier rounding is applied.</li>
+          </ul>
+          <li>Short edge definition support.</li>
+          <ul>
+            <li>Making use of new shape engine functionality to offer short edge configuration options, with transition to rounding at 'max' short edge length.</li>
+            <li>Allows reproduction of near-limit resolution effects, such as creating diagonal lines from short edge staircase.</li>
+            <li>Transition to non-short edge lengths (bezier curves) automatically.</li>
+          </ul>
+          <li>Sampling engine choices.</li>
+          <ul>
+            <li>Classical Monte Carlo (default for old projects).</li>
+            <li>Latin Hypercube.</li>
+            <li>Sobol.</li>
+          </ul>
+          <li>Wide ranging performance work across the entire code base. Gains of up to 40% depending on situation.</li>
+        </ul>
+      </blockquote>
+    </blockquote>
 
     <blockquote>
       <a name="releases_620"></a>

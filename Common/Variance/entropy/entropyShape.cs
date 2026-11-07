@@ -35,7 +35,7 @@ public class EntropyShape
         bool alignX = entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.alignX) == 1;
         bool alignY = entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.alignY) == 1;
 
-        if (pivot_ == null)
+        if ((double.IsNaN(pivot.x)) || double.IsNaN(pivot.y))
         {
             pivot = GeoWrangler.midPoint(newMCPoints);
         }
@@ -119,7 +119,11 @@ public class EntropyShape
         bool ocPA = chaosSettings.getBool(ChaosSettings.Bools.ocPA, settingsIndex);
 
         mcPoints = shape.processCorners(previewMode,cornerCheck, cornerSegments, optimizeCorners, resolution, icPA, ocPA,
-            iCV, iCVariation, oCV, oCVariation);
+            iCV, iCVariation, oCV, oCVariation, 
+            Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
+                .getDecimal(EntropyLayerSettings.properties_decimal.shortEdgeLength)),
+            Convert.ToDouble(entropyLayerSettingsList[settingsIndex]
+            .getDecimal(EntropyLayerSettings.properties_decimal.maxShortEdgeLength)));
 
         return mcPoints;
 

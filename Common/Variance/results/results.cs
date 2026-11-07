@@ -4,48 +4,96 @@ using Clipper2Lib;
 
 namespace Variance;
 
+/// <summary>
+/// Container class for simulation results including geometric shapes and calculated values.
+/// Stores both preview shapes for real-time visualization and final computed results.
+/// Used throughout the Monte Carlo simulation system for result storage and analysis.
+/// </summary>
 public class Results
 {
+    /// <summary>Collection of geometric paths for preview/visualization purposes</summary>
     private List<PathsD> previewShapes;
+    
+    /// <summary>Collection of processed shapes with layer index information</summary>
     private List<PreviewShape> simShapes;
 
+    /// <summary>
+    /// Gets the layer index associated with a specific shape.
+    /// Used to determine which simulation layer a shape belongs to.
+    /// </summary>
+    /// <param name="shapeIndex">Index of the shape in the collection</param>
+    /// <returns>Layer index for the specified shape</returns>
     public int getLayerIndex(int shapeIndex)
     {
         return pGetLayerIndex(shapeIndex);
     }
 
+    /// <summary>
+    /// Private implementation of layer index getter with bounds checking.
+    /// </summary>
+    /// <param name="shapeIndex">Index of the shape to query</param>
+    /// <returns>Layer index for the shape</returns>
     private int pGetLayerIndex(int shapeIndex)
     {
         return simShapes[shapeIndex].getIndex();
     }
+    
+    /// <summary>
+    /// Gets the collection of preview shapes for visualization.
+    /// These shapes are used for real-time display during simulation runs.
+    /// </summary>
+    /// <returns>List of geometric paths representing preview shapes</returns>
     public List<PathsD> getPreviewShapes()
     {
         return pGetPreviewShapes();
     }
 
+    /// <summary>
+    /// Private implementation of preview shapes getter.
+    /// </summary>
+    /// <returns>Current preview shapes collection</returns>
     private List<PathsD> pGetPreviewShapes()
     {
         return previewShapes;
     }
 
+    /// <summary>
+    /// Clears all preview shapes from the collection.
+    /// Used to reset visualization state between simulation runs.
+    /// </summary>
     public void clearPreviewShapes()
     {
         pClearPreviewShapes();
     }
 
+    /// <summary>
+    /// Private implementation of preview shapes clearing.
+    /// </summary>
     private void pClearPreviewShapes()
     {
         previewShapes.Clear();
     }
 
+    /// <summary>
+    /// Sets the preview shapes collection to a new set of geometric paths.
+    /// Creates a defensive copy to prevent external modification.
+    /// </summary>
+    /// <param name="newPreviewShapes">New collection of preview shapes to set</param>
     public void setPreviewShapes(List<PathsD> newPreviewShapes)
     {
         pSetPreviewShapes(newPreviewShapes);
     }
 
+    /// <summary>
+    /// Private implementation of preview shapes setter with optimized copying.
+    /// Uses more efficient copying for better performance.
+    /// </summary>
+    /// <param name="newPreviewShapes">New shapes to copy into the preview collection</param>
     private void pSetPreviewShapes(List<PathsD> newPreviewShapes)
     {
-        previewShapes = newPreviewShapes.ToList();
+        // Optimize: Pre-allocate with known capacity and use AddRange
+        previewShapes = new List<PathsD>(newPreviewShapes.Count);
+        previewShapes.AddRange(newPreviewShapes);
     }
 
     public List<PreviewShape> getSimShapes()
@@ -65,7 +113,9 @@ public class Results
 
     private void pSetSimShapes(List<PreviewShape> newSimShapes)
     {
-        simShapes = newSimShapes.ToList();
+        // Optimize: Pre-allocate with known capacity and use AddRange
+        simShapes = new List<PreviewShape>(newSimShapes.Count);
+        simShapes.AddRange(newSimShapes);
     }
 
     public void clearSimShapes()

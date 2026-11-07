@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
@@ -63,6 +63,9 @@
     <Compile Include="..\Variance\entropy\paSearchSettings.cs">
       <Link>entropy\paSearchSettings.cs</Link>
     </Compile>
+    <Compile Include="..\Variance\entropy\QuasiRandomSampler.cs">
+      <Link>entropy\QuasiRandomSampler.cs</Link>
+    </Compile>
     <Compile Include="..\Variance\entropy\sampler_geo.cs">
       <Link>entropy\sampler_geo.cs</Link>
     </Compile>
@@ -101,6 +104,9 @@
     </Compile>
     <Compile Include="..\Variance\support\Storage.cs">
       <Link>support\Storage.cs</Link>
+    </Compile>
+    <Compile Include="..\Variance\support\StorageXMLOptimizer.cs">
+      <Link>support\StorageXMLOptimizer.cs</Link>
     </Compile>
     <Compile Include="..\Variance\support\utilityFuncs.cs">
       <Link>support\utilityFuncs.cs</Link>
@@ -141,11 +147,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Management" Version="9.0.4" />
+    <PackageReference Include="System.Management" Version="10.0.14" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
     <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.14" />
     <PackageReference Include="System.Security.SecureString" Version="4.3.0" />
   </ItemGroup>
 

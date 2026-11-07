@@ -1,5 +1,49 @@
 Changelog for Variance
 
+6.5
+
+    - This release is being developed alongside 7.0, to offer the classical UI in 6.5 as 7.0 brings a new approach.
+	- Obtained M4 Apple hardware, so have an Apple Silicon build...
+	- Bug fix for the PA Search system, where completion was not handled properly.
+	- Refinement for keyholing (DesignLibs), to find minimum path connecting multiple holes.
+	- Refinement for interaction of keyholes with proximity biasing (DesignLibs).
+	- Bug fixes for layout processing (DesignLibs).
+	 - Misapplied scaling.
+	 - Mishandled a specific repetition type in OASIS files.
+	- Bug fix for short edge combined with GEOCORE/BOOLEAN cases (DesignLibs).
+	- Bug fix to remove subshape offsets when switching to layout shape type; avoids lingering inaccessible offset values that shift the layout geometry.
+	- Updated all packages.
+
+6.5a2
+
+	- GeoCore fixes and improved test coverage to avoid future regressions.
+	- Refactored internals into a MVVM design.
+	 - No user impact, just modernization of the tool.
+    - Experimental new shape engine code for contouring.
+     - Uses a completely new approach, based on Bezier curve approaches.
+     - Test bed showed great results for orthogonal and non-orthogonal inputs.
+      - Successfully characterizes and rounds all kinds of input.
+     - Allows for short edge effects (diagonals).
+      - Can perform transition blending from short edge diagonal into curves.
+      - Can perform transition blending from short edge to 'max' short edge length to fade-in regular contouring.
+     - Isn't as fast as the old engine due to more computation being involved, including sampling curves, but the capability is worth the cost.
+      - Enabled a fallback that uses the old engine, when appropriate, to balance the cost vs fidelity.
+    - Initial implementation for short edge support.
+     - Short edges are below litho resolution limit and are treated by their midpoint only.
+     - A series of touching short edges will resolve to a diagonal line.
+      - For example, a square where all edges are considered 'short' will form a diamond shape.
+     - A transition edge length (max short edge length) is also defined and defines the point at which full rounding applies, so that a gradual blending between short edge length and max length can be produced, where the max short edge length is the onset of full effect bezier rounding.
+    - Fixed a number of XML related performance and reliability issues across the code.
+
+6.5a1
+
+	- Implemented additional samplers (LHS, Sobol).
+	 - Default is configurable.
+	 - Stored with project.
+	 - Old projects will load with Monte Carlo, to maintain original results.
+	  - Loading back into older versions will cause Monte Carlo to be used.
+	- Major performance optimizations across the entire codebase.
+
 6.2
 
 	- Moved to NET 9.0

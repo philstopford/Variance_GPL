@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using color;
 using keys;
@@ -28,6 +29,8 @@ public class VarianceContext
     public bool AA { get; set; }
     public bool FilledPolygons { get; set; }
     public bool drawPoints { get; set; }
+    public int rng { get; set; }
+    public int sampler { get; set; }
 
     public bool expandUI { get; set; }
 
@@ -77,6 +80,8 @@ public class VarianceContext
         rngMappingEquations = [];
         friendlyNumber = false;
         expandUI = false;
+        rng = 0;
+        sampler = 0;
 
         licenceName = "internal";
         

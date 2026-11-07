@@ -18,13 +18,13 @@ public partial class MainForm
         lbl_implantTiltAngle,
         lbl_implantTwistAngle, lbl_implantShadowNom, lbl_implantShadowMin, lbl_implantShadowMax,
         lbl_implantCornerSegments, lbl_implantNumOfCases,
-        lbl_implantNom, lbl_implantVar, lbl_implantRNG;
+        lbl_implantNom, lbl_implantVar, lbl_implantRNG, lbl_implantSamplers;
 
     private GroupBox groupBox_implant;
 
     private CheckBox checkBox_CSV_implant, checkBox_external_implant;
 
-    private DropDown comboBox_implantRNG, comboBox_externalTypes_implant;
+    private DropDown comboBox_implantRNG, comboBox_externalTypes_implant, comboBox_implantSamplers;
 
     private void implantTabSetup()
     {
@@ -237,6 +237,29 @@ public partial class MainForm
 
         row8ptl.Rows[^1].Cells.Add(new TableCell { Control = null });
 
+        
+        groupBox_implant_table.Rows.Add(new TableRow());
+
+        lbl_implantSamplers = new Label {Text = "Sampler"};
+        groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = lbl_implantSamplers });
+
+        TableLayout row8bptl = new();
+        row8bptl.Rows.Add(new TableRow());
+
+        Panel row8bp = new() {Content = row8bptl};
+
+        groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = row8bp });
+
+        comboBox_implantSamplers = new DropDown {DataContext = DataContext};
+        comboBox_implantSamplers.SelectedIndexChanged += doImplantShadowing;
+        setSize(comboBox_implantSamplers, 175);
+        comboBox_implantSamplers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.samplerList);
+
+        row8bptl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_implantSamplers });
+
+        row8bptl.Rows[^1].Cells.Add(new TableCell { Control = null });
+        
+        
         groupBox_implant_table.Rows.Add(new TableRow());
         groupBox_implant_table.Rows[^1].Cells.Add(new TableCell { Control = null });
 

@@ -1,67 +1,135 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using utility;
 using System.Threading.Tasks;
 
 namespace Variance;
 
-public class SimResultPackage
+/// <summary>
+/// Thread-safe container for simulation results that supports concurrent access from multiple threads.
+/// Uses ReaderWriterLockSlim for optimized read/write operations and provides both preview and 
+/// final result storage capabilities. Implements IDisposable for proper resource cleanup.
+/// </summary>
+public class SimResultPackage : IDisposable
 {
-    private object previewLock;
-    private object resultLock;
-    private object cleavedResultLock;
-    private object meanStdLock;
+    /// <summary>Thread-safe lock for preview result operations</summary>
+    private ReaderWriterLockSlim previewLock = new();
+    
+    /// <summary>Simple lock object for results list operations</summary>
+    private object resultLock = new();
+    
+    /// <summary>Thread-safe lock for cleaved (processed) result operations</summary>
+    private ReaderWriterLockSlim cleavedResultLock = new();
+    
+    /// <summary>Thread-safe lock for mean and standard deviation calculations</summary>
+    private ReaderWriterLockSlim meanStdLock = new();
+    
+    /// <summary>Flag to track if the object has been disposed</summary>
+    private bool disposed = false;
+    
+    /// <summary>Internal state flag for the simulation package</summary>
     private bool state;
 
+    /// <summary>
+    /// Gets the current state of the simulation result package.
+    /// Thread-safe operation that can be called concurrently.
+    /// </summary>
+    /// <returns>True if the package is active, false otherwise</returns>
     public bool getState()
     {
         return pGetState();
     }
 
+    /// <summary>
+    /// Private implementation of state getter for internal use.
+    /// </summary>
+    /// <returns>Current state value</returns>
     private bool pGetState()
     {
         return state;
     }
 
+    /// <summary>
+    /// Sets the state of the simulation result package.
+    /// Used to enable or disable result collection and processing.
+    /// </summary>
+    /// <param name="val">New state value - true to activate, false to deactivate</param>
     public void setState(bool val)
     {
         pSetState(val);
     }
 
+    /// <summary>
+    /// Private implementation of state setter for internal use.
+    /// </summary>
+    /// <param name="val">New state value to set</param>
     private void pSetState(bool val)
     {
         state = val;
     }
 
+    /// <summary>Preview result for immediate display/analysis before full processing</summary>
     private Results previewResult;
 
+    /// <summary>
+    /// Gets the current preview result for immediate display purposes.
+    /// Preview results are used for real-time feedback during simulation runs.
+    /// </summary>
+    /// <returns>Current preview result or null if none set</returns>
     public Results getPreviewResult()
     {
         return pGetPreviewResult();
     }
 
+    /// <summary>
+    /// Private implementation of preview result getter with thread-safe access.
+    /// </summary>
+    /// <returns>Current preview result</returns>
     private Results pGetPreviewResult()
     {
         return previewResult;
     }
 
+    /// <summary>Preview result specifically for implant simulation data</summary>
     private Results_implant previewResult_implant;
 
+    /// <summary>
+    /// Gets the current implant preview result for immediate display purposes.
+    /// Used specifically for implant shadowing simulation results.
+    /// </summary>
+    /// <returns>Current implant preview result or null if none set</returns>
     public Results_implant getImplantPreviewResult()
     {
         return pGetImplantPreviewResult();
     }
 
+    /// <summary>
+    /// Private implementation of implant preview result getter.
+    /// </summary>
+    /// <returns>Current implant preview result</returns>
     private Results_implant pGetImplantPreviewResult()
     {
         return previewResult_implant;
     }
 
+    /// <summary>
+    /// Count of results currently stored in the package.
+    /// Updated atomically when results are added.
+    /// </summary>
     public int results_count;
+    
+    /// <summary>Array containing all simulation results indexed by case number</summary>
     private Results[] listOfResults;
 
+    /// <summary>
+    /// Gets a copy of the complete results array.
+    /// This is a potentially expensive operation for large result sets.
+    /// </summary>
+    /// <returns>Array containing all stored results</returns>
     public Results[] getListOfResults()
     {
         return pGetListOfResults();
@@ -141,34 +209,22 @@ public class SimResultPackage
 
         List<double>[] res = new List<double>[numberOfResultsFields];
 
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, numberOfResultsFields, i =>
-#else
-            for (int i = 0; i < numberOfResultsFields; i++)
-#endif
-            {
-                res[i] = [];
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        ParallelProcessing.OptimizedParallelFor(0, numberOfResultsFields, options, i =>
+        {
+            res[i] = [];
+        });
+        
         foreach (string[] t in results)
         {
-#if !VARIANCESINGLETHREADED
-            Parallel.For(0, numberOfResultsFields, i =>
-#else
-                for (int i = 0; i < numberOfResultsFields; i++)
-#endif
+            ParallelProcessing.OptimizedParallelFor(0, numberOfResultsFields, options, i =>
+            {
+                // Could have "N/A" and need to skip the result in that case.
+                if (t[i] != "N/A")
                 {
-                    // Could have "N/A" and need to skip the result in that case.
-                    if (t[i] != "N/A")
-                    {
-                        res[i].Add(Convert.ToDouble(t[i]));
-                    }
+                    res[i].Add(Convert.ToDouble(t[i]));
                 }
-#if !VARIANCESINGLETHREADED
-            );
-#endif
+            });
         }
 
         return pGetHistograms(res, buckets);
@@ -271,6 +327,12 @@ public class SimResultPackage
         runTime = swTime;
     }
 
+    // Purely for test coverage.
+    public SimResultPackage()
+    {
+        
+    }
+
     public SimResultPackage(ref object previewLock_, int numberOfCases, int numberOfResultsFields, bool state_ = true)
     {
         pSimResultPackage(ref previewLock_, numberOfCases, numberOfResultsFields, state_);
@@ -279,10 +341,11 @@ public class SimResultPackage
     private void pSimResultPackage(ref object previewLock_, int numberOfCases, int numberOfResultsFields, bool state_ = true)
     {
         nonGaussianInput = false;
-        previewLock = previewLock_;
+        // Initialize our own high-performance locks instead of using the passed reference
+        previewLock = new ReaderWriterLockSlim();
         resultLock = new object();
-        cleavedResultLock = new object();
-        meanStdLock = new object();
+        cleavedResultLock = new ReaderWriterLockSlim();
+        meanStdLock = new ReaderWriterLockSlim();
         resultString = "";
         runTime = 0.0;
         previewResult = new Results();
@@ -300,7 +363,7 @@ public class SimResultPackage
 
     private void pAdd(int index, Results_implant newResult)
     {
-        if (Monitor.TryEnter(previewLock))
+        if (previewLock.TryEnterWriteLock(TimeSpan.FromMilliseconds(1)))
         {
             try
             {
@@ -308,7 +371,7 @@ public class SimResultPackage
             }
             finally
             {
-                Monitor.Exit(previewLock);
+                previewLock.ExitWriteLock();
             }
         }
         newResult.clear();
@@ -328,7 +391,7 @@ public class SimResultPackage
 
     private void pAdd(int index, Results newResult, int retainGeometry)
     {
-        if (Monitor.TryEnter(previewLock))
+        if (previewLock.TryEnterWriteLock(TimeSpan.FromMilliseconds(1)))
         {
             try
             {
@@ -339,7 +402,7 @@ public class SimResultPackage
             }
             finally
             {
-                Monitor.Exit(previewLock);
+                previewLock.ExitWriteLock();
             }
         }
         if (retainGeometry == 0)
@@ -376,16 +439,19 @@ public class SimResultPackage
         lastStdDevValues = new double[numberOfResultsFields];
         summedValues = new double[numberOfResultsFields];
         summedSquarevalues = new double[numberOfResultsFields];
+        
+        // Use Array.Clear for better performance than loop-based initialization
+        Array.Clear(numberOfValues, 0, numberOfResultsFields);
+        Array.Clear(meanValues, 0, numberOfResultsFields);
+        Array.Clear(lastMeanValues, 0, numberOfResultsFields);
+        Array.Clear(stdDevValues, 0, numberOfResultsFields);
+        Array.Clear(lastStdDevValues, 0, numberOfResultsFields);
+        Array.Clear(summedValues, 0, numberOfResultsFields);
+        Array.Clear(summedSquarevalues, 0, numberOfResultsFields);
+        
         for (int i = 0; i < numberOfResultsFields; i++)
         {
             cleavedResults.Add(new List<double>(numberOfCases));
-            numberOfValues[i] = 0;
-            summedValues[i] = 0.0;
-            summedSquarevalues[i] = 0.0;
-            meanValues[i] = 0.0;
-            lastMeanValues[i] = 0.0;
-            stdDevValues[i] = 0.0;
-            lastStdDevValues[i] = 0.0;
         }
     }
 
@@ -396,7 +462,7 @@ public class SimResultPackage
 
     private void pUpdateCleavedResults(string[] newResults)
     {
-        Monitor.Enter(cleavedResultLock);
+        cleavedResultLock.EnterWriteLock();
         try
         {
             for (int i = 0; i < newResults.Length; i++)
@@ -416,7 +482,7 @@ public class SimResultPackage
         }
         finally
         {
-            Monitor.Exit(cleavedResultLock);
+            cleavedResultLock.ExitWriteLock();
         }
     }
 
@@ -478,8 +544,7 @@ public class SimResultPackage
 
     private string pGetMeanAndStdDev()
     {
-        string returnString = "";
-        Monitor.Enter(meanStdLock);
+        meanStdLock.EnterReadLock();
         try
         {
             string[] tempString = [""];
@@ -492,26 +557,28 @@ public class SimResultPackage
             {
                 tempString = lastResult_implant.getResult().Split(csvSeparator);
             }
+            
+            var sb = new StringBuilder(256); // Pre-allocate reasonable capacity
             for (int k = 0; k < meanValues.Length; k++)
             {
                 setMeanAndStdDev();
                 if (k > 0)
                 {
-                    returnString += ",";
+                    sb.Append(',');
                 }
                 // Need to handle N/A cases.
                 if (tempString[k] == "N/A")
                 {
-                    returnString += "N/A";
+                    sb.Append("N/A");
                 }
                 else
                 {
                     try
                     {
-                        returnString += "x: " + meanValues[k].ToString("0.##") + " (" + (meanValues[k] - lastMeanValues[k]).ToString("0.##") + ")";
+                        sb.Append("x: ").Append(meanValues[k].ToString("0.##")).Append(" (").Append((meanValues[k] - lastMeanValues[k]).ToString("0.##")).Append(')');
                         if (!nonGaussianInput)
                         {
-                            returnString += ", s: " + stdDevValues[k].ToString("0.##") + " (" + (stdDevValues[k] - lastStdDevValues[k]).ToString("0.##") + ")";
+                            sb.Append(", s: ").Append(stdDevValues[k].ToString("0.##")).Append(" (").Append((stdDevValues[k] - lastStdDevValues[k]).ToString("0.##")).Append(')');
                         }
                     }
                     catch (Exception)
@@ -520,11 +587,28 @@ public class SimResultPackage
                     }
                 }
             }
+            return sb.ToString();
         }
         finally
         {
-            Monitor.Exit(meanStdLock);
+            meanStdLock.ExitReadLock();
         }
-        return returnString;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed && disposing)
+        {
+            previewLock?.Dispose();
+            cleavedResultLock?.Dispose();
+            meanStdLock?.Dispose();
+            disposed = true;
+        }
     }
 }

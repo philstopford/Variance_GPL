@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,10 @@ namespace Variance;
 
 public static class UtilityFuncs
 {
+    // Cache compiled equation patterns for better performance
+    private static readonly Dictionary<string, string> _equationCache = new Dictionary<string, string>();
+    private static readonly object _equationCacheLock = new object();
+
     public static double getCustomMappedRandomNumber(string equation, EntropySettings settings)
     {
         return pGetCustomMappedRandomNumber(equation, settings);
@@ -44,11 +49,31 @@ public static class UtilityFuncs
             parser.Values.Add("x", xvalue);
             parser.Values.Add("y", yvalue);
             parser.Values.Add("z", zvalue);
-            // Substitute any Box-Muller queries with the full form.
-            equation = equation.Replace("_gxy", "(sqrt(-2 * ln(y)) * cos(2 * PI * x))");
-            equation = equation.Replace("_gyz", "(sqrt(-2 * ln(z)) * cos(2 * PI * y))");
-            equation = equation.Replace("_gxz", "(sqrt(-2 * ln(z)) * cos(2 * PI * x))");
-            value = parser.Parse(equation);
+            
+            // Cache expensive string replacements
+            string processedEquation;
+            lock (_equationCacheLock)
+            {
+                if (!_equationCache.TryGetValue(equation, out string? cachedEquation))
+                {
+                    // Substitute any Box-Muller queries with the full form.
+                    processedEquation = equation.Replace("_gxy", "(sqrt(-2 * ln(y)) * cos(2 * PI * x))");
+                    processedEquation = processedEquation.Replace("_gyz", "(sqrt(-2 * ln(z)) * cos(2 * PI * y))");
+                    processedEquation = processedEquation.Replace("_gxz", "(sqrt(-2 * ln(z)) * cos(2 * PI * x))");
+                    
+                    // Limit cache size to prevent memory issues
+                    if (_equationCache.Count < 1000)
+                    {
+                        _equationCache[equation] = processedEquation;
+                    }
+                }
+                else
+                {
+                    processedEquation = cachedEquation;
+                }
+            }
+            
+            value = parser.Parse(processedEquation);
         }
         catch (Exception e)
         {
@@ -223,8 +248,13 @@ public static class UtilityFuncs
                 // Pattern line
                 sr.ReadLine();
                 // Now we have the meat of the data we need.
-                string tempString = sr.ReadLine()!;
-                // ReSharper disable once PossibleNullReferenceException
+                string? tempStringRead = sr.ReadLine();
+                if (tempStringRead == null)
+                {
+                    ErrorReporter.showMessage_OK("Unexpected end of file.", "Aborting.");
+                    return false;
+                }
+                string tempString = tempStringRead;
                 string[] parsedString = tempString.Split(csvSeparators);
                 if (parsedString.Length >= 6)
                 {
@@ -251,7 +281,12 @@ public static class UtilityFuncs
                 while (!sr.EndOfStream)
                 {
                     // Assuming Pass/Fail,Column,Row,Co-ord X,Co-ord Y,,,,,,,,,,,,,
-                    tempString = sr.ReadLine()!;
+                    tempStringRead = sr.ReadLine();
+                    if (tempStringRead == null)
+                    {
+                        break; // End of stream reached
+                    }
+                    tempString = tempStringRead;
                     parsedString = tempString.Split(csvSeparators);
                     if (parsedString[0] == "" || parsedString[0] == "Occupy matrix")
                     {
@@ -301,14 +336,23 @@ public static class UtilityFuncs
 
                 // Read in non-CSV data first
                 // Pattern line
-                string check = sr.ReadLine()!;
-                // ReSharper disable once PossibleNullReferenceException
+                string? checkRead = sr.ReadLine();
+                if (checkRead == null)
+                {
+                    return false;
+                }
+                string check = checkRead;
                 if (!check.StartsWith("Quilt"))
                 {
                     return false;
                 }
                 // Now we have the meat of the data we need.
-                string tempString = sr.ReadLine()!;
+                string? tempStringRead = sr.ReadLine();
+                if (tempStringRead == null)
+                {
+                    return false;
+                }
+                string tempString = tempStringRead;;
                 string[] parsedString = tempString.Split(csvSeparators);
                 if (parsedString.Length >= 6)
                 {

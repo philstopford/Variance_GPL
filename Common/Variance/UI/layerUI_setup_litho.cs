@@ -9,10 +9,12 @@ public partial class MainForm
 
     // 2D Layer Litho
     private NumericStepper num_lithoICRR, num_lithoOCRR, num_lithoCDUSide, num_lithoHorOverlay, num_lithoVerOverlay,
-        num_lithoICV, num_lithoOCV, num_lithoCDUTips, num_lithoLWR, num_lithoLWRFreq, num_lithoLWR2, num_lithoLWR2Freq, num_lithoWobble, num_coeff1, num_coeff2;
+        num_lithoICV, num_lithoOCV, num_lithoCDUTips, num_lithoLWR, num_lithoLWRFreq, num_lithoLWR2, num_lithoLWR2Freq, num_lithoWobble, num_coeff1, num_coeff2,
+        num_lithoSE, num_lithoMaxSE;
 
     private Label lbl_lithoICRR, lbl_lithoOCRR, lbl_lithoCDUSide, lbl_lithoHorOverlay, lbl_lithoVerOverlay,
-        lbl_lithoICV, lbl_lithoOCV, lbl_lithoCDUTips, lbl_lithoLWR, lbl_lithoLWRFreq, lbl_lithoLWR2, lbl_lithoLWR2Freq, lbl_lithoWobble, lbl_coeff1, lbl_coeff2;
+        lbl_lithoICV, lbl_lithoOCV, lbl_lithoCDUTips, lbl_lithoLWR, lbl_lithoLWRFreq, lbl_lithoLWR2, lbl_lithoLWR2Freq, lbl_lithoWobble, lbl_coeff1, lbl_coeff2,
+        lbl_lithoSE, lbl_lithoMaxSE;
 
     private GroupBox gB_overlayYReference, gB_overlayXReference,
         gB_overlayYReference_Av, gB_overlayXReference_Av,
@@ -221,7 +223,44 @@ public partial class MainForm
         rounding_table.Rows[^1].Cells.Add(new TableCell());
         rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoOCV);
 
+        rounding_table.Rows.Add(new TableRow());
 
+        lbl_lithoSE = new Label
+        {
+            Text = "Short Length", ToolTip = "Edge length in nm below which edges are considered short (below litho resolution). Requires modern rounding."
+        };
+        rounding_table.Rows[^1].Cells.Add(new TableCell());
+        rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoSE;
+
+        num_lithoSE = new NumericStepper
+        {
+            Increment = 0.1,
+            DecimalPlaces = 2,
+            MinValue = 0,
+            ToolTip = "Edge length in nm below which edges are considered short (below litho resolution). Requires modern rounding."
+        };
+        setSize(num_lithoSE, 55);
+        rounding_table.Rows[^1].Cells.Add(new TableCell());
+        rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoSE);
+
+        lbl_lithoMaxSE = new Label
+        {
+            Text = "Transition Length", ToolTip = "Edge length in nm at and above which corner rounding takes full effect. Requires modern rounding."
+        };
+        rounding_table.Rows[^1].Cells.Add(new TableCell());
+        rounding_table.Rows[^1].Cells[^1].Control = lbl_lithoMaxSE;
+
+        num_lithoMaxSE = new NumericStepper
+        {
+            Increment = 0.1,
+            DecimalPlaces = 2,
+            MinValue = 0,
+            ToolTip = "Edge length in nm at and above which corner rounding takes full effect. Requires modern rounding."
+        };
+        setSize(num_lithoMaxSE, 55);
+        rounding_table.Rows[^1].Cells.Add(new TableCell());
+        rounding_table.Rows[^1].Cells[^1].Control = TableLayout.AutoSized(num_lithoMaxSE);
+        
         TableLayout distortion_tl = new();
         distortion_tl.Rows.Add(new TableRow());
         litMisc_table.Rows[^1].Cells.Add(new TableCell { Control = TableLayout.AutoSized(distortion_tl) });

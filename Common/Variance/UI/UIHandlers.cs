@@ -11,7 +11,7 @@ public partial class MainForm
         if (aboutBox is not {Visible: true})
         {
             string creditText = "Version " + commonVars.version + ", " +
-                                "© " + commonVars.author + " 2014-2025" + "\r\n\r\n";
+                                "© " + commonVars.author + " 2014-2026" + "\r\n\r\n";
             creditText += varianceContext.vc.licenceName;
             creditText += "\r\n\r\n";
             creditText += "Libraries used:\r\n";
@@ -70,6 +70,11 @@ public partial class MainForm
     }
 
     private void mcPreviewSettingsChanged(object sender, EventArgs e)
+    {
+        mcPreviewSettingsChanged();
+    }
+
+    private void mcPreviewSettingsChanged()
     {
         int tabIndex = getSubTabSelectedIndex();
         if (tabIndex is (int)CommonVars.twoDTabNames.settings or (int)CommonVars.twoDTabNames.paSearch)
@@ -212,8 +217,8 @@ public partial class MainForm
         btn_Cancel.Visible = showSomeUIStuff;
         
         doeSettingsChanged();
-        entropySettingsChanged(null);
-        mcPreviewSettingsChanged(null, EventArgs.Empty);
+        entropySettingsChanged();
+        mcPreviewSettingsChanged();
         int vpindex = getSubTabSelectedIndex();
         if (vpindex == (int)CommonVars.twoDTabNames.DOE)
         {
@@ -373,8 +378,18 @@ public partial class MainForm
 
     private void suspendImplantUI()
     {
-        implantUIFrozen = true;
-        commonVars.setActiveUI(CommonVars.uiActive.implant, true);
+        suspendImplantUI(null);
+    }
+
+    private void suspendImplantUI(Action callback)
+    {
+        Application.Instance.Invoke(() =>
+        {
+            implantUIFrozen = true;
+            commonVars.setActiveUI(CommonVars.uiActive.implant, true);
+            if (callback != null)
+                callback.Invoke();
+        });
     }
 
     private void resumeImplantUI()

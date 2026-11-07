@@ -13,7 +13,7 @@ public partial class MainForm
     private DropDown[] comboBox_geoEqtn_Op_2Layer;
     private DropDown[] comboBox_geoEqtn_Op_4Layer;
     private DropDown[] comboBox_geoEqtn_Op_8Layer;
-    private DropDown comboBox_calcModes, comboBox_RNG, comboBox_externalTypes;
+    private DropDown comboBox_calcModes, comboBox_RNG, comboBox_externalTypes, comboBox_samplers;
 
     private CheckBox checkBox_externalCriteria;
     private DropDown comboBox_externalCriteria1, comboBox_externalCriteria2, comboBox_externalCriteria3, comboBox_externalCriteria4;
@@ -21,8 +21,15 @@ public partial class MainForm
 
     private Label[] label_geoEqtn_Op; // container to simplify access to the menus programmatically.
 
-    private Label label_AB, lbl_multiThreadResultNote, lbl_ssNumOfCases, lbl_ssPrecision,
-        lbl_cornerSegments, lbl_rng, lbl_ssTotalPoints, lbl_testArea;
+    private Label label_AB,
+        lbl_multiThreadResultNote,
+        lbl_ssNumOfCases,
+        lbl_ssPrecision,
+        lbl_cornerSegments,
+        lbl_rng,
+        lbl_ssTotalPoints,
+        lbl_testArea,
+        lbl_samplers;
 
     private GroupBox groupBox_setOutput, groupBox_GeoEqtn, groupBox_GeoEqtnA, groupBox_GeoEqtnB, groupBox_simSettings;
 
@@ -377,7 +384,33 @@ public partial class MainForm
         text_ssTotalPoints = new TextBox {ReadOnly = true};
         tc2_tl.Rows[^1].Cells.Add(new TableCell { Control = text_ssTotalPoints });
 
+        groupBox_simSettings_table.Rows.Add(new TableRow());
+        TableCell tc3 = new();
+        groupBox_simSettings_table.Rows[^1].Cells.Add(tc3);
 
+        TableLayout tc3_tl = new();
+        Panel tc3_p = new() {Content = tc3_tl};
+        tc3.Control = tc3_p;
+
+        tc3_tl.Rows.Add(new TableRow());
+
+        lbl_samplers = new Label
+        {
+            Text = "Sampler",
+            ToolTip = "Choice of samplers."
+        };
+        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_samplers });
+
+        comboBox_samplers = new DropDown
+        {
+            DataContext = DataContext,
+            ToolTip = "Choice of samplers."
+        };
+        comboBox_samplers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.samplerList);
+        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_samplers });
+
+        tc3_tl.Rows[^1].Cells.Add(new TableCell { Control = null });
+        
         groupBox_simSettings_table.Rows.Add(new TableRow()); // padding
     }
 

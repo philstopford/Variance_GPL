@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <RuntimeIdentifiers>osx-arm64</RuntimeIdentifiers>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Platform.Mac64" Version="2.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="mc_image.icns" />
+    <BundleResource Include="mc_image.icns" />
+    <!-- Help resolves ApplicationResources/Documentation/index.html inside the app bundle. -->
+    <DocumentationFile Include="..\..\Documentation\**\*" Exclude="..\..\Documentation\**\.DS_Store" />
+  </ItemGroup>
+
+  <!-- Copy explicitly because Eto's BundleResource copy flattens linked directories. -->
+  <Target Name="CopyBundledDocumentation" BeforeTargets="MacFinishBundle">
+    <Copy SourceFiles="@(DocumentationFile)"
+          DestinationFiles="@(DocumentationFile->'$(OutputResourcesPath)Documentation\%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DesignLibs_GPL\Eto\Eto.Veldrid.Mac64\Eto.Veldrid.Mac64.csproj" />
+    <ProjectReference Include="..\..\Common\Variance\Variance.csproj" />
+  </ItemGroup>
+  
+</Project>

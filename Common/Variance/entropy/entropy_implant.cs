@@ -161,7 +161,10 @@ public partial class Entropy
         commonVars.m_timer.Start();
 
         // Set our parallel task options based on user settings.
-        ParallelOptions po = new();
+        ParallelOptions po = new()
+        {
+            TaskScheduler = TaskScheduler.Default
+        };
         // Attempt at parallelism.
         CancellationTokenSource cancelSource = new();
         CancellationToken cancellationToken = cancelSource.Token;

@@ -10,13 +10,6 @@ public class VarianceApplication : Application
     private VarianceContextGUI varianceContext;
     public VarianceApplication(Platform platform, VarianceContextGUI vContext) : base(platform)
     {
-        /*
-        if (DateTime.Now > new DateTime(2021, 02, 28))
-        {
-            ErrorReporter.showMessage_OK("Contact phil.stopford@gmail.com", "Build expired!");
-            Quit();
-        }
-        */
         varianceContext = vContext;
     }
 

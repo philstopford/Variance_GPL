@@ -37,7 +37,10 @@ public partial class MainForm : Form
         lbl_ss1Color_name, lbl_ss2Color_name, lbl_ss3Color_name,
         lbl_implantMinColor_name, lbl_implantMeanColor_name, lbl_implantMaxColor_name, lbl_implantResistColor_name,
         lbl_enabledColor_name, lbl_majorGridColor_name, lbl_minorGridColor_name, lbl_axisColor_name, lbl_vpbgColor_name, 
-        lbl_emailAddress, lbl_emailPwd, lbl_server, lbl_port, lbl_zoomSpeed, lbl_fgOpacity, lbl_bgOpacity;
+        lbl_emailAddress, lbl_emailPwd, lbl_server, lbl_port, lbl_zoomSpeed, lbl_fgOpacity, lbl_bgOpacity,
+        lbl_prefsRNG, lbl_prefsSampler;
+
+    private DropDown comboBox_prefsRNG, comboBox_prefsSamplers;
 
     private ListBox listBox_rngCustomMapping;
 
@@ -282,6 +285,16 @@ public partial class MainForm : Form
         TableCell row0 = new();
         groupBox_misc_table.Rows[^1].Cells.Add(row0);
         miscRow0(row0);
+
+        groupBox_misc_table.Rows.Add(new TableRow());
+        TableCell row1 = new();
+        groupBox_misc_table.Rows[^1].Cells.Add(row1);
+        miscRow1(row1);
+        
+        groupBox_misc_table.Rows.Add(new TableRow());
+        TableCell row2 = new();
+        groupBox_misc_table.Rows[^1].Cells.Add(row2);
+        miscRow2(row2);
     }
 
     private void miscRow0(TableCell tc)
@@ -306,6 +319,56 @@ public partial class MainForm : Form
         tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
 
         tl.Rows.Add(new TableRow()); // padding.
+    }
+
+    private void miscRow1(TableCell tc)
+    {
+        TableLayout tl = new();
+        tl.Rows.Add(new TableRow());
+        Panel p = new() {Content = tl};
+        tc.Control = p;
+
+        tl.Rows.Add(new TableRow());
+
+        lbl_prefsRNG = new Label() {Text = "RNG"};
+        comboBox_prefsRNG = new DropDown
+        {
+            DataContext = DataContext,
+            ToolTip = "Choice of RNG."
+        };
+        comboBox_prefsRNG.BindDataContext(c => c.DataStore, (UIStringLists m) => m.rngTypeList);
+        tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_prefsRNG });
+        tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_prefsRNG });
+
+        tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
+
+        tl.Rows.Add(new TableRow());
+
+    }
+
+    private void miscRow2(TableCell tc)
+    {
+        TableLayout tl = new();
+        tl.Rows.Add(new TableRow());
+        Panel p = new() {Content = tl};
+        tc.Control = p;
+
+        tl.Rows.Add(new TableRow());
+
+        lbl_prefsSampler = new Label() {Text = "Sampler"};
+        comboBox_prefsSamplers = new DropDown
+        {
+            DataContext = DataContext,
+            ToolTip = "Choice of samplers."
+        };
+        comboBox_prefsSamplers.BindDataContext(c => c.DataStore, (UIStringLists m) => m.samplerList);
+        tl.Rows[^1].Cells.Add(new TableCell { Control = lbl_prefsSampler });
+        tl.Rows[^1].Cells.Add(new TableCell { Control = comboBox_prefsSamplers });
+
+        tl.Rows[^1].Cells.Add(new TableCell { Control = null }); // padding
+
+        tl.Rows.Add(new TableRow());
+
     }
 
     private void openGL_settings_utilsUISetup(TableCell tc)

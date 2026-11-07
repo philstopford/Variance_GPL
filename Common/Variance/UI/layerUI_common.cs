@@ -284,6 +284,8 @@ public partial class MainForm
         comboBox_proxBiasFallOff.SelectedIndexChanged += twoDLayerEventHandler_exp;
         num_proxBiasFallOffMultiplier.LostFocus += twoDLayerEventHandler_exp;
 
+        num_lithoSE.LostFocus += twoDLayerEventHandler_exp;
+        num_lithoMaxSE.LostFocus += twoDLayerEventHandler_exp;
         num_lithoICRR.LostFocus += twoDLayerEventHandler_exp;
         num_lithoICV.LostFocus += twoDLayerEventHandler_exp;
         num_lithoOCRR.LostFocus += twoDLayerEventHandler_exp;
@@ -367,13 +369,13 @@ public partial class MainForm
             cB_FlipV.Enabled = true;
 
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 0);
-            if ((bool)cB_FlipH.Checked!)
+            if (cB_FlipH.Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipH, 1);
             }
 
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 0);
-            if ((bool)cB_FlipV.Checked!)
+            if (cB_FlipV.Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.flipV, 1);
             }
@@ -401,7 +403,7 @@ public partial class MainForm
             }
 
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.legacyRounding, 0);
-            if ((bool)cB_legacyRounding.Checked!)
+            if (cB_legacyRounding.Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.legacyRounding, 1);
             }
@@ -476,6 +478,8 @@ public partial class MainForm
             num_vTipNVar.Enabled = true;
             num_vTipPVar.Enabled = true;
 
+            num_lithoSE.Enabled = true;
+            num_lithoMaxSE.Enabled = true;
             num_lithoICRR.Enabled = true;
             num_lithoICV.Enabled = true;
             num_lithoCDUSide.Enabled = true;
@@ -499,7 +503,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setFileData([defaultPointArray]);
             }
             
-            if ((bool)cB_geoCore_shapeEngine_perPoly.Checked!)
+            if (cB_geoCore_shapeEngine_perPoly.Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.perPoly, 1);
             }
@@ -508,7 +512,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.perPoly, 0);
             }
 
-            if ((bool)cB_geoCore_layoutReference.Checked!)
+            if (cB_geoCore_layoutReference.Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.refLayout, 1);
             }
@@ -588,6 +592,18 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(num_subshape3_vl.Value), 2);
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, Convert.ToDecimal(num_subshape3_vo.Value), 2);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.shape2Tip, comboBox_tipLocations3.SelectedIndex);
+
+            // Zero offsets for GEOCORE and BOOLEAN because they are not used.
+            if (commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.GEOCORE ||
+                commonVars.getLayerSettings(settingsIndex).getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.BOOLEAN)
+            {
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0, 0);
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0, 1);
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0, 2);
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0, 0);
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0, 1);
+                commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0, 2);
+            }
 
             warnArray[0] = commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0) == 0 || commonVars.getLayerSettings(settingsIndex).getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0) == 0;
 
@@ -674,6 +690,8 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.removeArtifacts, (bool)cb_removeArtifacts.Checked ? 1 : 0);
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon, Convert.ToInt32(num_removeArtifactsEps.Value));
 
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.shortEdgeLength, Convert.ToDecimal(num_lithoSE.Value));
+            commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.maxShortEdgeLength, Convert.ToDecimal(num_lithoMaxSE.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.iCR, Convert.ToDecimal(num_lithoICRR.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.oCR, Convert.ToDecimal(num_lithoOCRR.Value));
             commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.iCV, Convert.ToDecimal(num_lithoICV.Value));
@@ -851,7 +869,7 @@ public partial class MainForm
         cB_edgeSlide.Enabled = true;
         num_edgeSlideTension.Enabled = true;
 
-        if ((bool)cB_edgeSlide.Checked!)
+        if (cB_edgeSlide.Checked == true)
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.edgeSlide, 1);
             num_edgeSlideTension.Enabled = true;
@@ -1046,7 +1064,7 @@ public partial class MainForm
         comboBox_lDList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
         comboBox_structureList_geoCore.SelectedIndexChanged += twoDLayerEventHandler_exp;
 
-        commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, (bool)cB_DOE_geoCore.Checked! ? 1 : 0);
+        commonVars.getSimulationSettings().getDOESettings().setLayerAffected(settingsIndex, cB_DOE_geoCore.Checked == true ? 1 : 0);
     }
 
     private void do2DLayerUI_X(int settingsIndex)
@@ -1344,7 +1362,7 @@ public partial class MainForm
         commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.lwr2, Convert.ToDecimal(num_lithoLWR2.Value));
         commonVars.getLayerSettings(settingsIndex).setDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq, Convert.ToDecimal(num_lithoLWR2Freq.Value));
         commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwr2Type, comboBox_LWR2NoiseType.SelectedIndex);
-        if ((bool)cB_layer_LWRPreview.Checked!)
+        if (cB_layer_LWRPreview.Checked == true)
         {
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.lwrPreview, 1);
         }
@@ -1409,7 +1427,7 @@ public partial class MainForm
                 continue;
             }
 
-            if ((bool)cB_OLRX_Av[i].Checked!)
+            if (cB_OLRX_Av[i].Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i, 1);
             }
@@ -1418,7 +1436,7 @@ public partial class MainForm
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, i, 0);
             }
 
-            if ((bool)cB_layer_OLRY_Av[i].Checked!)
+            if (cB_layer_OLRY_Av[i].Checked == true)
             {
                 commonVars.getLayerSettings(settingsIndex).setIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, i, 1);
             }
@@ -1532,7 +1550,7 @@ public partial class MainForm
             commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.xOL_av, 0);
         }
 
-        if ((bool)cB_overlayYReference_Av.Checked!)
+        if (cB_overlayYReference_Av.Checked == true)
         {
             if (updateUI)
             {
@@ -1693,7 +1711,7 @@ public partial class MainForm
 
     private void showDrawn(int settingsIndex)
     {
-        bool showDrawn = (bool)cB_ShowDrawn.Checked!;
+        bool showDrawn = cB_ShowDrawn.Checked == true;
         commonVars.getLayerSettings(settingsIndex).setInt(EntropyLayerSettings.properties_i.showDrawn, showDrawn ? 1 : 0);
         doShowDrawn(settingsIndex);
     }

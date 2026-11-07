@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using geoWrangler;
+using utility;
 
 namespace Variance;
 
@@ -96,20 +97,14 @@ public class PASearch
         {
             return;
         }
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, paNames.Length, j =>
-#else
-            for (int j = 0; j < paNames.Length; j++)
-#endif
-            {
-                searchablePAs[layer, j] = false;
-                upperLimit[layer, j] = 0;
-                meanValues[layer, j] = "";
-                stdDevValues[layer, j] = "";
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        ParallelProcessing.OptimizedParallelFor(0, paNames.Length, options, j =>
+        {
+            searchablePAs[layer, j] = false;
+            upperLimit[layer, j] = 0;
+            meanValues[layer, j] = "";
+            stdDevValues[layer, j] = "";
+        });
     }
 
     public bool isPASearchable(int layer, int index)
@@ -175,17 +170,11 @@ public class PASearch
     {
         int length = paNames.Length;
         bool[] enabled = new bool[length];
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, length, i =>
-#else
-            for (int i = 0; i < length; i++)
-#endif
-            {
-                enabled[i] = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;;
-            }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        ParallelProcessing.OptimizedParallelFor(0, length, options, i =>
+        {
+            enabled[i] = layerSettings.getInt(EntropyLayerSettings.properties_i.enabled) == 1;;
+        });
         return enabled;
     }
 
@@ -197,68 +186,87 @@ public class PASearch
 
     private void pBackupOriginalValues(CommonVars commonVars)
     {
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, CentralProperties.maxLayersForMC, i =>
-#else
-            for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        ParallelProcessing.OptimizedParallelFor(0, CentralProperties.maxLayersForMC, options, i =>
+        {
+            if (searchablePAs[i, (int)paEnum.XOL])
             {
-                if (searchablePAs[i, (int)paEnum.XOL])
-                {
-                    originalValues[i, (int)paEnum.XOL] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.xOL);
-                }
-                if (searchablePAs[i, (int)paEnum.YOL])
-                {
-                    originalValues[i, (int)paEnum.YOL] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.yOL);
-                }
-                if (searchablePAs[i, (int)paEnum.SCDU])
-                {
-                    originalValues[i, (int)paEnum.SCDU] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.sCDU);
-                }
-                if (searchablePAs[i, (int)paEnum.TCDU])
-                {
-                    originalValues[i, (int)paEnum.TCDU] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.tCDU);
-                }
-                if (searchablePAs[i, (int)paEnum.LWR])
-                {
-                    originalValues[i, (int)paEnum.LWR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.lwr);
-                }
-                if (searchablePAs[i, (int)paEnum.LWR2])
-                {
-                    originalValues[i, (int)paEnum.LWR2] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.lwr2);
-                }
-                if (searchablePAs[i, (int)paEnum.HTIPNVAR])
-                {
-                    originalValues[i, (int)paEnum.HTIPNVAR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.hTNVar);
-                }
-                if (searchablePAs[i, (int)paEnum.HTIPPVAR])
-                {
-                    originalValues[i, (int)paEnum.HTIPPVAR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.hTPVar);
-                }
-                if (searchablePAs[i, (int)paEnum.VTIPNVAR])
-                {
-                    originalValues[i, (int)paEnum.VTIPNVAR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.vTNVar);
-                }
-                if (searchablePAs[i, (int)paEnum.VTIPPVAR])
-                {
-                    originalValues[i, (int)paEnum.VTIPPVAR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.vTPVar);
-                }
-                if (searchablePAs[i, (int)paEnum.ICR])
-                {
-                    originalValues[i, (int)paEnum.ICR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.iCR);
-                }
-                if (searchablePAs[i, (int)paEnum.OCR])
-                {
-                    originalValues[i, (int)paEnum.OCR] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.oCR);
-                }
-                if (searchablePAs[i, (int)paEnum.WOB])
-                {
-                    originalValues[i, (int)paEnum.WOB] = commonVars.getLayerSettings(i).getDecimal(EntropyLayerSettings.properties_decimal.wobble);
-                }
+                originalValues[i, (int)paEnum.XOL] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.xOL);
             }
-#if !VARIANCESINGLETHREADED
-        );
-#endif
+
+            if (searchablePAs[i, (int)paEnum.YOL])
+            {
+                originalValues[i, (int)paEnum.YOL] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.yOL);
+            }
+
+            if (searchablePAs[i, (int)paEnum.SCDU])
+            {
+                originalValues[i, (int)paEnum.SCDU] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.sCDU);
+            }
+
+            if (searchablePAs[i, (int)paEnum.TCDU])
+            {
+                originalValues[i, (int)paEnum.TCDU] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.tCDU);
+            }
+
+            if (searchablePAs[i, (int)paEnum.LWR])
+            {
+                originalValues[i, (int)paEnum.LWR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.lwr);
+            }
+
+            if (searchablePAs[i, (int)paEnum.LWR2])
+            {
+                originalValues[i, (int)paEnum.LWR2] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.lwr2);
+            }
+
+            if (searchablePAs[i, (int)paEnum.HTIPNVAR])
+            {
+                originalValues[i, (int)paEnum.HTIPNVAR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.hTNVar);
+            }
+
+            if (searchablePAs[i, (int)paEnum.HTIPPVAR])
+            {
+                originalValues[i, (int)paEnum.HTIPPVAR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.hTPVar);
+            }
+
+            if (searchablePAs[i, (int)paEnum.VTIPNVAR])
+            {
+                originalValues[i, (int)paEnum.VTIPNVAR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.vTNVar);
+            }
+
+            if (searchablePAs[i, (int)paEnum.VTIPPVAR])
+            {
+                originalValues[i, (int)paEnum.VTIPPVAR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.vTPVar);
+            }
+
+            if (searchablePAs[i, (int)paEnum.ICR])
+            {
+                originalValues[i, (int)paEnum.ICR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.iCR);
+            }
+
+            if (searchablePAs[i, (int)paEnum.OCR])
+            {
+                originalValues[i, (int)paEnum.OCR] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.oCR);
+            }
+
+            if (searchablePAs[i, (int)paEnum.WOB])
+            {
+                originalValues[i, (int)paEnum.WOB] = commonVars.getLayerSettings(i)
+                    .getDecimal(EntropyLayerSettings.properties_decimal.wobble);
+            }
+        });
     }
 
     private void pSetValues(ref CommonVars commonVars)
@@ -473,6 +481,8 @@ public class PASearch
 
     private static double stdDev(List<double> rawValues)
     {
+        // A single accepted case has no observed variation.
+        if (rawValues.Count < 2) return 0;
         // Welford's approach
         double m = 0.0;
         double s = 0.0;

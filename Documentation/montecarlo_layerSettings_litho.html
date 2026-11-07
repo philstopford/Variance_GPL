@@ -179,7 +179,36 @@ img {
   <blockquote>
     <a name="overviewMC_layers_Litho"></a>
     <h3 class="western">Lithography Parameters</h3>
-     <p class="western" style=" line-height: 100%">The corner rounding definitions should be fairly obvious. LWR is per-shape and is currently mapped to LER based on the simulation setting option (LWR/2 or LWR/sqrt(2)). There are several noise methods available (Perlin, Simplex, OpenSimplex) with configurable freqency. To see the nominal LER, the 'Show' checkbox can be set.</p>
+     <p class="western" style=" line-height: 100%">The corner rounding definitions should be fairly obvious. However, there is a subtlety here between the "Legacy" mode and the standard corner rounding.</p>
+     <ul>
+     	<li>Legacy : strictly limited to orthogonal geometry. Any deviation from this causes no corner rounding of any type to be applied. The legacy corner rounding fits rounding into the distance from the corner to the midpoint each side.</li>
+     	<ul>
+     		<li>If you engage Legacy Corner Rounding, the short edge system will not operate, due to the requirement for orthogonal geometry.</li>
+     	</ul>
+     	<li>Standard : a generally applicable quadratic bezier approach is used, permitting treatment of arbitrary geometry.</li>
+     </ul>
+     <p class="western" style=" line-height: 100%">The legacy mode is automatically engaged for any project file coming from Variance versions prior to 6.5. Newer projects default into the standard approach, but the legacy approach may be desired even in newer projects due to the different fitting between the elliptical and bezier methodologies.</p>
+     <p class="western" style=" line-height: 100%">A comparision of the two approaches (black is current; pink is legacy), applied to the same underlying input shape is below.</p>
+     <img src="images/corner_rounding_vs_legacy.png" alt=""/>
+
+     <a name="litho_shortedge"></a>
+     <p class="western" style=" line-height: 100%">The short edge system allows for reproducing how short edge runs print during lithography. Runs of edges that fall below a resolution threshold resolve to a diagonal feature, with gradual onset to classical rounding at higher edge lengths. In the native implementation, any contiguous edges below the short edge length specified resolve to a diagonal. Edges approaching the transition length will take on progressively more of the regular concave/convex rounding.</p>
+     <p class="western" style=" line-height: 100%">If you engage Legacy Corner Rounding, the short edge system will not operate, due to the requirement for orthogonal geometry.</p>
+     <blockquote>
+     	<p class="western" style=" line-height: 100%">Starting with the classical treatment for the input example, the clear concave and convex rounding is apparent in the staircase.</p>
+     	<img src="images/staircase_no_short-edge.png" alt=""/>
+     	<p class="western" style=" line-height: 100%">Increasing the short edge length, the diagonal run behavior and transition into adjacent long edges is apparent.</p>
+     	<img src="images/staircase_50_short-edge.png" alt=""/>
+     	<img src="images/staircase_100_short-edge.png" alt=""/>
+     	<p class="western" style=" line-height: 100%">The settings below cause a graduated treatment of edges between 25 nm and 75 nm. Consecutive edges at or below 25 nm resolve to diagonals. As individual edge lengths in the run approach the transition length, more of the standard corner rounding treatment is observed.</p>
+     	<img src="images/staircase_25_short-edge_75_transition.png" alt=""/>
+     	<p class="western" style=" line-height: 100%">Increasing the transition edge length to 85 nm, the diagonal run and transition behaviors modify accordingly.</p>
+     	<img src="images/staircase_25_short-edge_85_transition.png" alt=""/>
+
+     </blockquote>
+
+     <a name="litho_LWR"></a>
+     <p class="western" style=" line-height: 100%">LWR is per-shape and is currently mapped to LER based on the simulation setting option (LWR/2 or LWR/sqrt(2)). There are several noise methods available (Perlin, Simplex, OpenSimplex) with configurable freqency. To see the nominal LER, the 'Show' checkbox can be set.</p>
      <img src="images/ler_preview_perlin.png" alt=""/>
      <p class="western" style=" line-height: 100%">&nbsp;</p>
      <img src="images/ler_preview_opensimplex.png" alt=""/>
@@ -196,9 +225,9 @@ img {
       <p class="western" style=" line-height: 100%">Lens distortion can be applied using the k1 and k2 lens coefficients, using the model described by <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/11/zhan99.pdf">Zhang</a>. The lens radius, r, is the distance from the world origin. k1 applies over r^2. k2 applies over r^4, defining a long range distortion effect compared to k1.</p>
       <img src="images/lens_k1_1.3_k2_0.png" alt=""/>
       <p class="western" style=" line-height: 100%">&nbsp;</p>
-      <img src="images/lens_k1_0_k2_3.png" alt=""/>
+      <img src="images/lens_k1_0_k2_2_3.png" alt=""/>
       <p class="western" style=" line-height: 100%">&nbsp;</p>
-      <img src="images/lens_k1_1.3_k2_3.png" alt=""/>
+      <img src="images/lens_k1_1.3_k2_2_3.png" alt=""/>
       <p class="western" style=" line-height: 100%">Please also refer to the order-of-operations section to understand how lens distortion, proximity biasing and LER are applied in combination.</p>
       <h4 class="western">GDS/Oasis Note</h4>
       <blockquote>

@@ -294,27 +294,23 @@ public partial class MainForm
     private void paSearchUI_showResults(SimResultPackage resultPackage)
     {
         commonVars.getPASearch().calculateMeanAndStdDev(resultPackage);
-        for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
+        Application.Instance.Invoke(() =>
         {
-            for (int pa = 0; pa < PASearch.paNames.Length; pa++)
+            for (int layer = 0; layer < CentralProperties.maxLayersForMC; layer++)
             {
-                int layer1 = layer;
-                int pa1 = pa;
-                Application.Instance.Invoke(() =>
+                for (int pa = 0; pa < PASearch.paNames.Length; pa++)
                 {
-                    if (commonVars.getPASearch().isPASearchable(layer1, pa1))
-                    {
-                        text_searchPA_Result[layer1, pa1].Text = "x:" + commonVars.getPASearch().getMeanValue(layer1, pa1) + ", s:" + commonVars.getPASearch().getSDValue(layer1, pa1);
-                    }
-                    else
-                    {
-                        text_searchPA_Result[layer1, pa1].Text = "";
-                    }
-                });
+                    text_searchPA_Result[layer, pa].Text = commonVars.getPASearch().isPASearchable(layer, pa)
+                        ? "x:" + commonVars.getPASearch().getMeanValue(layer, pa) + ", s:" + commonVars.getPASearch().getSDValue(layer, pa)
+                        : "";
+                }
             }
-        }
-
-        updateProgressBar(resultPackage.results_count);
-        updateStatusLine("PA Search for " + resultPackage.results_count + " results in " + resultPackage.runTime.ToString("0.##") + " seconds.");
+            // Publish the final state explicitly; the last timer tick may have
+            // preceded the final batch of accepted results.
+            text_paSearch.Text = resultPackage.getMeanAndStdDev();
+            updateProgressBar(resultPackage.results_count);
+            updateStatusLine("PA Search: " + resultPackage.results_count + "/" + commonVars.getPASearch().numberofPassCases +
+                " passing cases in " + resultPackage.runTime.ToString("0.##") + " seconds.");
+        });
     }
 }

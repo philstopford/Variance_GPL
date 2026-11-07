@@ -444,8 +444,18 @@ public partial class MainForm
 
     private void suspendSettingsUI()
     {
-        settingsUIFrozen = true;
-        commonVars.setActiveUI(CommonVars.uiActive.settings, false);
+        suspendSettingsUI(null);
+    }
+
+    private void suspendSettingsUI(Action callback)
+    {
+        Application.Instance.Invoke(() =>
+        {
+            settingsUIFrozen = true;
+            commonVars.setActiveUI(CommonVars.uiActive.settings, false);
+            if (callback != null)
+                callback.Invoke();
+        });
     }
 
     private void resumeSettingsUI()
@@ -507,6 +517,7 @@ public partial class MainForm
             checkBox_CSV.CheckedChanged += entropySettingsChanged;
             checkBox_LERMode.CheckedChanged += entropySettingsChanged;
             comboBox_RNG.SelectedIndexChanged += entropySettingsChanged;
+            comboBox_samplers.SelectedIndexChanged += entropySettingsChanged;
 
             text_server.LostFocus += emailSettingsChanged;
             text_emailAddress.LostFocus += emailSettingsChanged;
@@ -577,6 +588,11 @@ public partial class MainForm
                 }
             }
         });
+    }
+
+    private void entropySettingsChanged()
+    {
+        entropySettingsChanged((object)null);
     }
 
     private void entropySettingsChanged(object sender, EventArgs e)
@@ -692,6 +708,11 @@ public partial class MainForm
                 updateNeeded = false;
             }
 
+            var ddControl2 = sender as DropDown;
+            if (ddControl2 == comboBox_samplers)
+            {
+                updateNeeded = false;
+            }
             // Retrieve our settings.
             checkBox_perPoly.Enabled = comboBox_calcModes.SelectedIndex == (int)geoAnalysis.Supported.calcModes.area;
 
@@ -958,6 +979,8 @@ public partial class MainForm
 
             commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.rngType, comboBox_RNG.SelectedIndex);
 
+            commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.samplingMethod, comboBox_samplers.SelectedIndex);
+
             // Ensure we set controls according to run state
             if (commonVars.isSimRunning())
             {
@@ -1127,7 +1150,7 @@ public partial class MainForm
         postSimUI();
         commonVars.setReplayMode(0);
         replaySuspend();
-        entropySettingsChanged(null);
+        entropySettingsChanged();
     }
 
     private void replayCaseChanged(object sender, EventArgs e)
@@ -1154,7 +1177,7 @@ public partial class MainForm
             simReplay.getState(Convert.ToInt32(num_replay.Value));
 
             // Update preview with replay state.
-            entropySettingsChanged(null);
+            entropySettingsChanged();
         }
 
         replayChanged();

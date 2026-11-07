@@ -32,17 +32,11 @@ public static class UIHelper
     {
         int length = sourceArray.Count;
         PointF[] returnArray = new PointF[length];
-#if !VARIANCESINGLETHREADED
         Parallel.For(0, length, i =>
-#else
-            for (int i = 0; i < length; i++)
-#endif
             {
                 returnArray[i] = myPointFToPointF(sourceArray[i]);
             }
-#if !VARIANCESINGLETHREADED
         );
-#endif
         return returnArray;
     }
 
@@ -50,17 +44,11 @@ public static class UIHelper
     {
         int length = sourceArray.Length;
         PathD returnArray = Helper.initedPathD(length);
-#if !VARIANCESINGLETHREADED
         Parallel.For(0, length, i =>
-#else
-            for (int i = 0; i < length; i++)
-#endif
             {
                 returnArray[i] = pointFTomyPointF(sourceArray[i]);
             }
-#if !VARIANCESINGLETHREADED
         );
-#endif
         return returnArray;
     }
 }

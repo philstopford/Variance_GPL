@@ -2,7 +2,7 @@
 	
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
     <LangVersion>12</LangVersion>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Platform.Gtk" Version="2.9.0-ci-20250329.14150108340" />
+    <PackageReference Include="Eto.Platform.Gtk" Version="2.13.0" />
   </ItemGroup>
 
   <ItemGroup>

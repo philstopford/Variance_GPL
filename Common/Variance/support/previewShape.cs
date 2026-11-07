@@ -8,6 +8,7 @@ using geoWrangler;
 // tiled layout handling, Layout biasing/CDU.
 using System.Threading.Tasks;
 using shapeEngine;
+using utility;
 
 namespace Variance;
 
@@ -161,11 +162,15 @@ public class PreviewShape
 
     private bool exitEarly;
 
+    // Cache expensive mathematical calculations
+    private static readonly double _sqrtTwo = Math.Sqrt(2);
+    
     private void applyNoise(bool previewMode, CommonVars commonVars, ChaosSettings jobSettings, int settingsIndex)
     {
         EntropyLayerSettings entropyLayerSettings = commonVars.getLayerSettings(settingsIndex);
 
-        double lwrConversionFactor = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.ler) == 1 ? Math.Sqrt(2) : 0.5f;
+        // Use cached Math.Sqrt(2) value for better performance
+        double lwrConversionFactor = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.ler) == 1 ? _sqrtTwo : 0.5f;
 
         // LWR, skip if not requested to avoid runtime pain
         if ((!previewMode || entropyLayerSettings.getInt(EntropyLayerSettings.properties_i.lwrPreview) == 1) && entropyLayerSettings.getDecimal(EntropyLayerSettings.properties_decimal.lwr) != 0)
@@ -540,17 +545,11 @@ public class PreviewShape
 
             // Apply our deltas
             int tLength = tempArray.Count;
-#if !VARIANCESINGLETHREADED
             Parallel.For(0, tLength, i => 
-#else
-                for (Int32 i = 0; i < tLength; i++)
-#endif
                 {
                     tempArray[i] = new PointD(tempArray[i].x + xOffset, tempArray[i].y + yOffset);
                 }
-#if !VARIANCESINGLETHREADED
             );
-#endif
             previewPoints.Add(tempArray);
             drawnPoly.Add(true);
         }
@@ -579,20 +578,14 @@ public class PreviewShape
         {
             int ptCount = previewPoints[poly].Count;
             int poly1 = poly;
-#if !VARIANCESINGLETHREADED
             Parallel.For(0, ptCount, point =>
-#else
-                for (Int32 point = 0; point < ptCount; point++)
-#endif
                 {
                     double px = previewPoints[poly1][point].x + xOffset;
                     double py = previewPoints[poly1][point].y - yOffset;
 
                     previewPoints[poly1][point] = new PointD(px, py);
                 }
-#if !VARIANCESINGLETHREADED
             );
-#endif
             if (Math.Abs(previewPoints[poly][0].x - previewPoints[poly][previewPoints[poly].Count - 1].x) > Constants.tolerance ||
                 Math.Abs(previewPoints[poly][0].y - previewPoints[poly][previewPoints[poly].Count - 1].y) > Constants.tolerance)
             {
@@ -762,17 +755,11 @@ public class PreviewShape
                         PathD poly1 = tempPoly;
                         int poly2 = poly;
 
-#if !VARIANCESINGLETHREADED
                         Parallel.For(0, arraySize, pt => 
-#else
-                            for (int pt = 0; pt < arraySize; pt++)
-#endif
                             {
                                 poly1[pt] = new PointD(tempPolyList[poly2][pt].x + xOffset, tempPolyList[poly2][pt].y + yOffset);
                             }
-#if !VARIANCESINGLETHREADED
                         );
-#endif
                     }
                     else
                     {
@@ -782,17 +769,11 @@ public class PreviewShape
 
                         PathD poly1 = tempPoly;
                         int poly2 = poly;
-#if !VARIANCESINGLETHREADED
-                        Parallel.For(0, polySize, pt => 
-#else
-                            for (Int32 pt = 0; pt < polySize; pt++)
-#endif
+                        ParallelProcessing.OptimizedParallelFor(0, polySize, pt => 
                             {
                                 poly1[pt] = new PointD(entropyLayerSettings.getFileData()[poly2][pt].x + xOffset, entropyLayerSettings.getFileData()[poly2][pt].y + yOffset);
                             }
-#if !VARIANCESINGLETHREADED
                         );
-#endif
                     }
 
                     bool drawn = false;
@@ -837,18 +818,12 @@ public class PreviewShape
                     }
 
                     int ptCount = previewPoints[poly].Count;
-#if !VARIANCESINGLETHREADED
                     var poly1 = poly;
                     Parallel.For(0, ptCount, pt =>
-#else
-                            for (int pt = 0; pt < ptCount; pt++)
-#endif
                         {
                             previewPoints[poly1][pt] = new PointD(previewPoints[poly1][pt].x + xOverlayVal, previewPoints[poly1][pt].y + yOverlayVal);
                         }
-#if !VARIANCESINGLETHREADED
                     );
-#endif
                 }
             }
 
@@ -962,19 +937,13 @@ public class PreviewShape
                     {
                         int arraySize = entropyLayerSettings.getFileData()[poly].Count;
                         PathD tmp = Helper.initedPathD(arraySize);
-#if !VARIANCESINGLETHREADED
                         var poly1 = poly;
                         Parallel.For(0, arraySize, pt => 
-#else
-                    for (Int32 pt = 0; pt < arraySize; pt++)
-#endif
                             {
                                 tmp[pt] = new PointD(entropyLayerSettings.getFileData()[poly1][pt].x + xOffset,
                                     entropyLayerSettings.getFileData()[poly1][pt].y + yOffset);
                             }
-#if !VARIANCESINGLETHREADED
                         );
-#endif
                         previewPoints.Add(tmp);
                         drawnPoly.Add(true);
                     }
@@ -1021,11 +990,7 @@ public class PreviewShape
 
         // This is set later, if needed, to force an early return from the overlap processing path.
         int bpCount = booleanPaths.Count;
-#if !VARIANCESINGLETHREADED
-        Parallel.For(0, bpCount, i => 
-#else
-            for (int i = 0; i < bpCount; i++)
-#endif
+        ParallelProcessing.OptimizedParallelFor(0, bpCount, i => 
             {
                 try
                 {
@@ -1036,9 +1001,7 @@ public class PreviewShape
 
                 }
             }
-#if !VARIANCESINGLETHREADED
         );
-#endif
 
         // Process the geometry according to mode, etc.
         // We do this by treating our geometry as a geocore source and calling init with this to set up our instance properties.

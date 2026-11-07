@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -11,39 +12,51 @@ namespace Variance;
 public class Storage
 {
     public delegate void PrepUI();
-    public PrepUI prepUI { get; set; }
+    public PrepUI? prepUI { get; set; }
     public delegate void StorageSetSettingsCallback(EntropyLayerSettings readSettings, int layer, bool gdsOnly, bool updateGeoCoreGeometryFromFile = false);
     
     public StorageSetSettingsCallback? setLayerSettings { get; set; }
     public delegate void StorageSuspendSettingsUICallback();
     public StorageSuspendSettingsUICallback? suspendSettingsUI { get; set; }
+    public delegate void StorageSuspendSettingsUICallbackWithCallback(Action? callback);
+    public StorageSuspendSettingsUICallbackWithCallback? suspendSettingsUIWithCallback { get; set; }
     public delegate void StorageSuspendImplantUICallback();
-    public StorageSuspendImplantUICallback suspendImplantUI { get; set; }
+    public StorageSuspendImplantUICallback? suspendImplantUI { get; set; }
+    public delegate void StorageSuspendImplantUICallbackWithCallback(Action? callback);
+    public StorageSuspendImplantUICallbackWithCallback? suspendImplantUIWithCallback { get; set; }
     public delegate void StorageSuspendGDSSettingsUICallback();
     public StorageSuspendGDSSettingsUICallback? suspendDOESettingsUI { get; set; }
+    public delegate void StorageSuspendDOESettingsUICallbackWithCallback(Action? callback);
+    public StorageSuspendDOESettingsUICallbackWithCallback? suspendDOESettingsUIWithCallback { get; set; }
     public delegate void StorageUpdateSettingsUICallback();
     public StorageUpdateSettingsUICallback? updateSettingsUIFromSettings { get; set; }
+    public delegate void StorageUpdateSettingsUICallbackWithCallback(Action? callback);
+    public StorageUpdateSettingsUICallbackWithCallback? updateSettingsUIFromSettingsWithCallback { get; set; }
     public delegate void StorageUpdateImplantUICallback();
-    public StorageUpdateImplantUICallback updateImplantUIFromSettings { get; set; }
+    public delegate void StorageUpdateImplantUICallbackWithCallback(Action? callback);
+    public StorageUpdateImplantUICallback? updateImplantUIFromSettings { get; set; }
+    public StorageUpdateImplantUICallbackWithCallback? updateImplantUIFromSettingsWithCallback { get; set; }
     public delegate void StorageUpdateDOESettingsUICallback();
+    public delegate void StorageUpdateDOESettingsUICallbackWithCallback(Action? callback);
     public StorageUpdateDOESettingsUICallback? updateDOESettingsUIFromSettings { get; set; }
+    public StorageUpdateDOESettingsUICallbackWithCallback? updateDOESettingsUIFromSettingsWithCallback { get; set; }
     public delegate bool StorageUpdateLoadLayoutCallback(int layer, string filename);
-    public StorageUpdateLoadLayoutCallback loadLayout { get; set; }
+    public StorageUpdateLoadLayoutCallback? loadLayout { get; set; }
     public delegate void ResumeUICallback();
-    public ResumeUICallback resumeUI { get; set; }
+    public ResumeUICallback? resumeUI { get; set; }
 
     // Callbacks for viewport values.
     public delegate void viewportLoadCallback(int index, double[] camInfo);
-    public viewportLoadCallback viewportLoad { get; set; }
+    public viewportLoadCallback? viewportLoad { get; set; }
     public delegate double[] viewportSaveCallback(int index); // 2 fields : X and Y, zoom
-    public viewportSaveCallback viewportSave { get; set; }
+    public viewportSaveCallback? viewportSave { get; set; }
 
     public delegate void implantViewportLoadCallback(double[] camInfo);
-    public implantViewportLoadCallback implantViewportLoad { get; set; }
+    public implantViewportLoadCallback? implantViewportLoad { get; set; }
     public delegate double[] implantViewportSaveCallback(); // 3 fields : X and Y, zoom
-    public implantViewportSaveCallback implantViewportSave { get; set; }
+    public implantViewportSaveCallback? implantViewportSave { get; set; }
 
-    private bool[] loadedLayers;
+    private bool[] loadedLayers = new bool[CentralProperties.maxLayersForMC];
 
     public Storage()
     {
@@ -54,9 +67,17 @@ public class Storage
     {
         setLayerSettings = null;
         suspendSettingsUI = null;
+        suspendSettingsUIWithCallback = null;
+        suspendImplantUI = null;
+        suspendImplantUIWithCallback = null;
         suspendDOESettingsUI = null;
+        suspendDOESettingsUIWithCallback = null;
         updateSettingsUIFromSettings = null;
+        updateSettingsUIFromSettingsWithCallback = null;
         updateDOESettingsUIFromSettings = null;
+        updateDOESettingsUIFromSettingsWithCallback = null;
+        updateImplantUIFromSettings = null;
+        updateImplantUIFromSettingsWithCallback = null;
     }
 
     // compatibility shim for old projects pre-3.0
@@ -268,37 +289,42 @@ public class Storage
 
     private static string stringFromFileData(PathsD fileData)
     {
-        string returnString = "";
         if (fileData.Count == 0)
         {
-            return returnString;
+            return "";
         }
 
-        int poly = 0;
-        int pt = 0;
-        returnString += fileData[poly][pt].x + "," + fileData[poly][pt].y;
-        pt++;
-        while (pt < fileData[poly].Count)
+        // Pre-calculate approximate capacity to reduce StringBuilder reallocations
+        int estimatedCapacity = fileData.Count * fileData[0].Count * 20; // Rough estimate: 20 chars per point
+        var returnBuilder = new System.Text.StringBuilder(estimatedCapacity);
+
+        // Process first polygon
+        var firstPoly = fileData[0];
+        if (firstPoly.Count > 0)
         {
-            returnString += "," + fileData[poly][pt].x + "," + fileData[poly][pt].y;
-            pt++;
-        }
-        poly++;
-        while (poly < fileData.Count)
-        {
-            returnString += ";";
-            pt = 0;
-            returnString += fileData[poly][0].x + "," + fileData[poly][0].y;
-            pt++;
-            while (pt < fileData[poly].Count)
+            returnBuilder.Append(firstPoly[0].x).Append(',').Append(firstPoly[0].y);
+            for (int pt = 1; pt < firstPoly.Count; pt++)
             {
-                returnString += "," + fileData[poly][pt].x + "," + fileData[poly][pt].y;
-                pt++;
+                returnBuilder.Append(',').Append(firstPoly[pt].x).Append(',').Append(firstPoly[pt].y);
             }
-            poly++;
         }
 
-        return returnString;
+        // Process remaining polygons
+        for (int poly = 1; poly < fileData.Count; poly++)
+        {
+            returnBuilder.Append(';');
+            var currentPoly = fileData[poly];
+            if (currentPoly.Count > 0)
+            {
+                returnBuilder.Append(currentPoly[0].x).Append(',').Append(currentPoly[0].y);
+                for (int pt = 1; pt < currentPoly.Count; pt++)
+                {
+                    returnBuilder.Append(',').Append(currentPoly[pt].x).Append(',').Append(currentPoly[pt].y);
+                }
+            }
+        }
+
+        return returnBuilder.ToString();
     }
 
     public bool storeSimulationSettings(string filename, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim, List<EntropyLayerSettings> listOfSettings, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
@@ -310,185 +336,191 @@ public class Storage
     {
         for (int i = 0; i < CentralProperties.maxLayersForMC; i++)
         {
-            double[] camParameters = viewportSave?.Invoke(i);
+            double[]? camParameters = viewportSave?.Invoke(i);
+            
+            // Cache current layer to reduce repeated property access overhead
+            var currentLayer = listOfSettings[i];
+            
             XElement xelement = new("layer" + (i + 1),
-                new XElement("name", listOfSettings[i].getString(EntropyLayerSettings.properties_s.name)),
-                new XElement("comment", listOfSettings[i].getString(EntropyLayerSettings.properties_s.comment)),
-                new XElement("enabled", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.enabled)),
-                new XElement("omitLayer", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.omit)),
-                new XElement("layer1BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 0)),
-                new XElement("layer2BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 1)),
-                new XElement("layer3BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 2)),
-                new XElement("layer4BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 3)),
-                new XElement("layer5BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 4)),
-                new XElement("layer6BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 5)),
-                new XElement("layer7BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 6)),
-                new XElement("layer8BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 7)),
-                new XElement("layer9BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 8)),
-                new XElement("layer10BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 9)),
-                new XElement("layer11BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 10)),
-                new XElement("layer12BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 11)),
-                new XElement("layer13BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 12)),
-                new XElement("layer14BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 13)),
-                new XElement("layer15BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 14)),
-                new XElement("layer16BG", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 15)),
-                new XElement("showDrawn", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.showDrawn)),
-                new XElement("flipH", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.flipH)),
-                new XElement("flipV", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.flipV)),
-                new XElement("alignGeomX", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignX)),
-                new XElement("alignGeomY", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.alignY)),
-                new XElement("legacyRounding", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.legacyRounding)),
-                new XElement("shapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shapeIndex)),
-                new XElement("subShapeHorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)),
-                new XElement("subShapeHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0)),
-                new XElement("subShapeVerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0)),
-                new XElement("subShapeVerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0)),
-                new XElement("subShapeTipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape0Tip)),
-                new XElement("subShape2HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1)),
-                new XElement("subShape2HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1)),
-                new XElement("subShape2VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1)),
-                new XElement("subShape2VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 1)),
-                new XElement("subShape2TipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape1Tip)),
-                new XElement("subShape3HorLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2)),
-                new XElement("subShape3HorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 2)),
-                new XElement("subShape3VerLength", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2)),
-                new XElement("subShape3VerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 2)),
-                new XElement("subShape3TipLocIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.shape2Tip)),
-                new XElement("subShapeRefIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.subShapeIndex)),
-                new XElement("posInSubShapeIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.posIndex)),
-                new XElement("globalHorOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset)),
-                new XElement("globalVerOffset", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset)),
-                new XElement("rotation", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.rot)),
-                new XElement("wobble", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.wobble)),
-                new XElement("wobbleRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.wobble_RNG)),
-                new XElement("sideBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.sBias)),
-                new XElement("horTipBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.hTBias)),
-                new XElement("horTipBiasPVar", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.hTPVar)),
-                new XElement("horTipBiasPVarRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipPVar_RNG)),
-                new XElement("horTipBiasNVar", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.hTNVar)),
-                new XElement("horTipBiasNVarRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.hTipNVar_RNG)),
-                new XElement("verTipBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.vTBias)),
-                new XElement("verTipBiasPVar", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.vTPVar)),
-                new XElement("verTipBiasPVarRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipPVar_RNG)),
-                new XElement("verTipBiasNVar", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.vTNVar)),
-                new XElement("verTipBiasNVarRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.vTipNVar_RNG)),
-                new XElement("proximityBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.pBias)),
-                new XElement("proximityIsoDistance", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist)),
-                new XElement("proximitySideRays", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxRays)),
-                new XElement("proximitySideRayFallOff", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff)),
-                new XElement("proximitySideRayFallOffMultiplier", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)),
+                new XElement("name", currentLayer.getString(EntropyLayerSettings.properties_s.name)),
+                new XElement("comment", currentLayer.getString(EntropyLayerSettings.properties_s.comment)),
+                new XElement("enabled", currentLayer.getInt(EntropyLayerSettings.properties_i.enabled)),
+                new XElement("omitLayer", currentLayer.getInt(EntropyLayerSettings.properties_i.omit)),
+                new XElement("layer1BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 0)),
+                new XElement("layer2BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 1)),
+                new XElement("layer3BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 2)),
+                new XElement("layer4BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 3)),
+                new XElement("layer5BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 4)),
+                new XElement("layer6BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 5)),
+                new XElement("layer7BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 6)),
+                new XElement("layer8BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 7)),
+                new XElement("layer9BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 8)),
+                new XElement("layer10BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 9)),
+                new XElement("layer11BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 10)),
+                new XElement("layer12BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 11)),
+                new XElement("layer13BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 12)),
+                new XElement("layer14BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 13)),
+                new XElement("layer15BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 14)),
+                new XElement("layer16BG", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 15)),
+                new XElement("showDrawn", currentLayer.getInt(EntropyLayerSettings.properties_i.showDrawn)),
+                new XElement("flipH", currentLayer.getInt(EntropyLayerSettings.properties_i.flipH)),
+                new XElement("flipV", currentLayer.getInt(EntropyLayerSettings.properties_i.flipV)),
+                new XElement("alignGeomX", currentLayer.getInt(EntropyLayerSettings.properties_i.alignX)),
+                new XElement("alignGeomY", currentLayer.getInt(EntropyLayerSettings.properties_i.alignY)),
+                new XElement("legacyRounding", currentLayer.getInt(EntropyLayerSettings.properties_i.legacyRounding)),
+                new XElement("shapeIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.shapeIndex)),
+                new XElement("subShapeHorLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 0)),
+                new XElement("subShapeHorOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0)),
+                new XElement("subShapeVerLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verLength, 0)),
+                new XElement("subShapeVerOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0)),
+                new XElement("subShapeTipLocIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.shape0Tip)),
+                new XElement("subShape2HorLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1)),
+                new XElement("subShape2HorOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1)),
+                new XElement("subShape2VerLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1)),
+                new XElement("subShape2VerOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 1)),
+                new XElement("subShape2TipLocIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.shape1Tip)),
+                new XElement("subShape3HorLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 2)),
+                new XElement("subShape3HorOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 2)),
+                new XElement("subShape3VerLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verLength, 2)),
+                new XElement("subShape3VerOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.verOffset, 2)),
+                new XElement("subShape3TipLocIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.shape2Tip)),
+                new XElement("subShapeRefIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.subShapeIndex)),
+                new XElement("posInSubShapeIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.posIndex)),
+                new XElement("globalHorOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.gHorOffset)),
+                new XElement("globalVerOffset", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.gVerOffset)),
+                new XElement("rotation", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.rot)),
+                new XElement("wobble", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.wobble)),
+                new XElement("wobbleRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.wobble_RNG)),
+                new XElement("sideBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.sBias)),
+                new XElement("horTipBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.hTBias)),
+                new XElement("horTipBiasPVar", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.hTPVar)),
+                new XElement("horTipBiasPVarRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.hTipPVar_RNG)),
+                new XElement("horTipBiasNVar", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.hTNVar)),
+                new XElement("horTipBiasNVarRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.hTipNVar_RNG)),
+                new XElement("verTipBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.vTBias)),
+                new XElement("verTipBiasPVar", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.vTPVar)),
+                new XElement("verTipBiasPVarRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.vTipPVar_RNG)),
+                new XElement("verTipBiasNVar", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.vTNVar)),
+                new XElement("verTipBiasNVarRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.vTipNVar_RNG)),
+                new XElement("proximityBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.pBias)),
+                new XElement("proximityIsoDistance", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.pBiasDist)),
+                new XElement("proximitySideRays", currentLayer.getInt(EntropyLayerSettings.properties_i.proxRays)),
+                new XElement("proximitySideRayFallOff", currentLayer.getInt(EntropyLayerSettings.properties_i.proxSideRaysFallOff)),
+                new XElement("proximitySideRayFallOffMultiplier", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.proxSideRaysMultiplier)),
 
-                new XElement("uniBiasAxis", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
-                new XElement("uniBiasAfterRotation", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation)),
-                new XElement("uniBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
+                new XElement("uniBiasAxis", currentLayer.getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
+                new XElement("uniBiasAfterRotation", currentLayer.getInt(EntropyLayerSettings.properties_i.uniBiasAfterRotation)),
+                new XElement("uniBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
                 
-                new XElement("removeArtifacts", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifacts)),
-                new XElement("removeArtifactsEpsilon", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon)),
+                new XElement("removeArtifacts", currentLayer.getInt(EntropyLayerSettings.properties_i.removeArtifacts)),
+                new XElement("removeArtifactsEpsilon", currentLayer.getInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon)),
 
-                new XElement("innerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCR)),
-                new XElement("outerCRR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.oCR)),
-                new XElement("innerCV", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.iCV)),
-                new XElement("innerCVRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.iCV_RNG)),
-                new XElement("outerCV", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.oCV)),
-                new XElement("outerCVRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.oCV_RNG)),
-                new XElement("edgeSlide", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.edgeSlide)),
-                new XElement("edgeSlideTension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.eTension)),
-                new XElement("LWR", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwr)),
-                new XElement("LWRRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lwr_RNG)),
-                new XElement("LWRNoiseFreq", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq)),
-                new XElement("LWRNoiseType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwrType)),
-                new XElement("correlatedLWR", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr)),
-                new XElement("correlatedLWRLayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr_corr_ref)),
-                new XElement("LWR2", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwr2)),
-                new XElement("LWR2RNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lwr2_RNG)),
-                new XElement("LWR2NoiseFreq", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq)),
-                new XElement("LWR2NoiseType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2Type)),
-                new XElement("correlatedLWR2", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr)),
-                new XElement("correlatedLWR2LayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)),
-                new XElement("uniBiasAxis", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
-                new XElement("uniBias", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
-                new XElement("LWRNoisePreview", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lwrPreview)),
-                new XElement("sideCDU", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.sCDU)),
-                new XElement("sideCDURNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.sCDU_RNG)),
-                new XElement("tipsCDU", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.tCDU)),
-                new XElement("tipsCDURNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.tCDU_RNG)),
-                new XElement("horOverlay", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.xOL)),
-                new XElement("horOverlayRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.xOL_RNG)),
-                new XElement("verOverlay", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.yOL)),
-                new XElement("verOverlayRNGMapping", listOfSettings[i].getString(EntropyLayerSettings.properties_s.yOL_RNG)),
-                new XElement("correlatedXOverlay", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_corr)),
-                new XElement("correlatedXOverlayLayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_corr_ref)),
-                new XElement("correlatedYOverlay", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.yOL_corr)),
-                new XElement("correlatedYOverlayLayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.yOL_corr_ref)),
-                new XElement("correlatedTipCDU", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.tCDU_corr)),
-                new XElement("correlatedTipCDULayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref)),
-                new XElement("correlatedCDU", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.CDU_corr)),
-                new XElement("correlatedCDULayerIndex", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.CDU_corr_ref)),
-                new XElement("overlayXReferenceLayer", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_ref)),
-                new XElement("overlayYReferenceLayer", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.yOL_ref)),
+                new XElement("shortEdgeLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.shortEdgeLength)),
+                new XElement("maxShortEdgeLength", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.maxShortEdgeLength)),
+                new XElement("innerCRR", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.iCR)),
+                new XElement("outerCRR", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.oCR)),
+                new XElement("innerCV", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.iCV)),
+                new XElement("innerCVRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.iCV_RNG)),
+                new XElement("outerCV", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.oCV)),
+                new XElement("outerCVRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.oCV_RNG)),
+                new XElement("edgeSlide", currentLayer.getInt(EntropyLayerSettings.properties_i.edgeSlide)),
+                new XElement("edgeSlideTension", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.eTension)),
+                new XElement("LWR", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lwr)),
+                new XElement("LWRRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.lwr_RNG)),
+                new XElement("LWRNoiseFreq", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lwrFreq)),
+                new XElement("LWRNoiseType", currentLayer.getInt(EntropyLayerSettings.properties_i.lwrType)),
+                new XElement("correlatedLWR", currentLayer.getInt(EntropyLayerSettings.properties_i.lwr_corr)),
+                new XElement("correlatedLWRLayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.lwr_corr_ref)),
+                new XElement("LWR2", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lwr2)),
+                new XElement("LWR2RNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.lwr2_RNG)),
+                new XElement("LWR2NoiseFreq", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lwr2Freq)),
+                new XElement("LWR2NoiseType", currentLayer.getInt(EntropyLayerSettings.properties_i.lwr2Type)),
+                new XElement("correlatedLWR2", currentLayer.getInt(EntropyLayerSettings.properties_i.lwr2_corr)),
+                new XElement("correlatedLWR2LayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.lwr2_corr_ref)),
+                new XElement("uniBiasAxis", currentLayer.getInt(EntropyLayerSettings.properties_i.uniBiasAxis)),
+                new XElement("uniBias", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.uniBias)),
+                new XElement("LWRNoisePreview", currentLayer.getInt(EntropyLayerSettings.properties_i.lwrPreview)),
+                new XElement("sideCDU", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.sCDU)),
+                new XElement("sideCDURNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.sCDU_RNG)),
+                new XElement("tipsCDU", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.tCDU)),
+                new XElement("tipsCDURNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.tCDU_RNG)),
+                new XElement("horOverlay", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.xOL)),
+                new XElement("horOverlayRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.xOL_RNG)),
+                new XElement("verOverlay", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.yOL)),
+                new XElement("verOverlayRNGMapping", currentLayer.getString(EntropyLayerSettings.properties_s.yOL_RNG)),
+                new XElement("correlatedXOverlay", currentLayer.getInt(EntropyLayerSettings.properties_i.xOL_corr)),
+                new XElement("correlatedXOverlayLayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.xOL_corr_ref)),
+                new XElement("correlatedYOverlay", currentLayer.getInt(EntropyLayerSettings.properties_i.yOL_corr)),
+                new XElement("correlatedYOverlayLayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.yOL_corr_ref)),
+                new XElement("correlatedTipCDU", currentLayer.getInt(EntropyLayerSettings.properties_i.tCDU_corr)),
+                new XElement("correlatedTipCDULayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.tCDU_corr_ref)),
+                new XElement("correlatedCDU", currentLayer.getInt(EntropyLayerSettings.properties_i.CDU_corr)),
+                new XElement("correlatedCDULayerIndex", currentLayer.getInt(EntropyLayerSettings.properties_i.CDU_corr_ref)),
+                new XElement("overlayXReferenceLayer", currentLayer.getInt(EntropyLayerSettings.properties_i.xOL_ref)),
+                new XElement("overlayYReferenceLayer", currentLayer.getInt(EntropyLayerSettings.properties_i.yOL_ref)),
 
-                new XElement("averageOverlayX", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.xOL_av)),
-                new XElement("overlayXReferenceLayer_1", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 0)),
-                new XElement("overlayXReferenceLayer_2", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 1)),
-                new XElement("overlayXReferenceLayer_3", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2)),
-                new XElement("overlayXReferenceLayer_4", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3)),
-                new XElement("overlayXReferenceLayer_5", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4)),
-                new XElement("overlayXReferenceLayer_6", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5)),
-                new XElement("overlayXReferenceLayer_7", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6)),
-                new XElement("overlayXReferenceLayer_8", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7)),
-                new XElement("overlayXReferenceLayer_9", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 8)),
-                new XElement("overlayXReferenceLayer_10", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 9)),
-                new XElement("overlayXReferenceLayer_11", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 10)),
-                new XElement("overlayXReferenceLayer_12", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 11)),
-                new XElement("overlayXReferenceLayer_13", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 12)),
-                new XElement("overlayXReferenceLayer_14", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 13)),
-                new XElement("overlayXReferenceLayer_15", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 14)),
-                new XElement("overlayXReferenceLayer_16", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 15)),
+                new XElement("averageOverlayX", currentLayer.getInt(EntropyLayerSettings.properties_i.xOL_av)),
+                new XElement("overlayXReferenceLayer_1", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 0)),
+                new XElement("overlayXReferenceLayer_2", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 1)),
+                new XElement("overlayXReferenceLayer_3", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 2)),
+                new XElement("overlayXReferenceLayer_4", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 3)),
+                new XElement("overlayXReferenceLayer_5", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 4)),
+                new XElement("overlayXReferenceLayer_6", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 5)),
+                new XElement("overlayXReferenceLayer_7", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 6)),
+                new XElement("overlayXReferenceLayer_8", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 7)),
+                new XElement("overlayXReferenceLayer_9", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 8)),
+                new XElement("overlayXReferenceLayer_10", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 9)),
+                new XElement("overlayXReferenceLayer_11", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 10)),
+                new XElement("overlayXReferenceLayer_12", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 11)),
+                new XElement("overlayXReferenceLayer_13", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 12)),
+                new XElement("overlayXReferenceLayer_14", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 13)),
+                new XElement("overlayXReferenceLayer_15", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 14)),
+                new XElement("overlayXReferenceLayer_16", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.xOLRefs, 15)),
 
-                new XElement("averageOverlayY", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.yOL_av)),
-                new XElement("overlayYReferenceLayer_1", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 0)),
-                new XElement("overlayYReferenceLayer_2", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 1)),
-                new XElement("overlayYReferenceLayer_3", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2)),
-                new XElement("overlayYReferenceLayer_4", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3)),
-                new XElement("overlayYReferenceLayer_5", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4)),
-                new XElement("overlayYReferenceLayer_6", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5)),
-                new XElement("overlayYReferenceLayer_7", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6)),
-                new XElement("overlayYReferenceLayer_8", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7)),
-                new XElement("overlayYReferenceLayer_9", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 8)),
-                new XElement("overlayYReferenceLayer_10", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 9)),
-                new XElement("overlayYReferenceLayer_11", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 10)),
-                new XElement("overlayYReferenceLayer_12", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 11)),
-                new XElement("overlayYReferenceLayer_13", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 12)),
-                new XElement("overlayYReferenceLayer_14", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 13)),
-                new XElement("overlayYReferenceLayer_15", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 14)),
-                new XElement("overlayYReferenceLayer_16", listOfSettings[i].getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 15)),
+                new XElement("averageOverlayY", currentLayer.getInt(EntropyLayerSettings.properties_i.yOL_av)),
+                new XElement("overlayYReferenceLayer_1", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 0)),
+                new XElement("overlayYReferenceLayer_2", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 1)),
+                new XElement("overlayYReferenceLayer_3", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 2)),
+                new XElement("overlayYReferenceLayer_4", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 3)),
+                new XElement("overlayYReferenceLayer_5", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 4)),
+                new XElement("overlayYReferenceLayer_6", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 5)),
+                new XElement("overlayYReferenceLayer_7", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 6)),
+                new XElement("overlayYReferenceLayer_8", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 7)),
+                new XElement("overlayYReferenceLayer_9", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 8)),
+                new XElement("overlayYReferenceLayer_10", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 9)),
+                new XElement("overlayYReferenceLayer_11", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 10)),
+                new XElement("overlayYReferenceLayer_12", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 11)),
+                new XElement("overlayYReferenceLayer_13", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 12)),
+                new XElement("overlayYReferenceLayer_14", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 13)),
+                new XElement("overlayYReferenceLayer_15", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 14)),
+                new XElement("overlayYReferenceLayer_16", currentLayer.getIntArrayValue(EntropyLayerSettings.properties_intarray.yOLRefs, 15)),
 
-                new XElement("lensDistortionCoeff1", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lDC1)),
-                new XElement("lensDistortionCoeff2", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.lDC2)),
+                new XElement("lensDistortionCoeff1", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lDC1)),
+                new XElement("lensDistortionCoeff2", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.lDC2)),
 
-                new XElement("booleanLayerA", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerA)),
-                new XElement("booleanLayerB", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerB)),
-                new XElement("booleanLayerOpA", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpA)),
-                new XElement("booleanLayerOpB", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpB)),
-                new XElement("booleanLayerOpAB", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.bLayerOpAB)),
-                new XElement("rayExtension", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)),
+                new XElement("booleanLayerA", currentLayer.getInt(EntropyLayerSettings.properties_i.bLayerA)),
+                new XElement("booleanLayerB", currentLayer.getInt(EntropyLayerSettings.properties_i.bLayerB)),
+                new XElement("booleanLayerOpA", currentLayer.getInt(EntropyLayerSettings.properties_i.bLayerOpA)),
+                new XElement("booleanLayerOpB", currentLayer.getInt(EntropyLayerSettings.properties_i.bLayerOpB)),
+                new XElement("booleanLayerOpAB", currentLayer.getInt(EntropyLayerSettings.properties_i.bLayerOpAB)),
+                new XElement("rayExtension", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.rayExtension)),
 
                 new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
                 new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
                 new XElement("viewportY", camParameters != null ? camParameters[1] : 0),
-                new XElement("fileToLoad", listOfSettings[i].getString(EntropyLayerSettings.properties_s.file)),
-                new XElement("structureFromFile", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.structure)),
-                new XElement("structureNameFromFile", listOfSettings[i].getString(EntropyLayerSettings.properties_s.structure)),
-                new XElement("ldFromFile", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.lD)),
-                new XElement("ldNameFromFile", listOfSettings[i].getString(EntropyLayerSettings.properties_s.lD)),
-                new XElement("fileType", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.fileType)),
-                new XElement("polyFill", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.fill)),
-                new XElement("geoCoreShapeEnginePerPoly", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.perPoly)),
-                new XElement("geoCoreReferenceLayout", listOfSettings[i].getInt(EntropyLayerSettings.properties_i.refLayout)),
-                new XElement("geoCoreKeyholeSizing", listOfSettings[i].getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor)),
+                new XElement("fileToLoad", currentLayer.getString(EntropyLayerSettings.properties_s.file)),
+                new XElement("structureFromFile", currentLayer.getInt(EntropyLayerSettings.properties_i.structure)),
+                new XElement("structureNameFromFile", currentLayer.getString(EntropyLayerSettings.properties_s.structure)),
+                new XElement("ldFromFile", currentLayer.getInt(EntropyLayerSettings.properties_i.lD)),
+                new XElement("ldNameFromFile", currentLayer.getString(EntropyLayerSettings.properties_s.lD)),
+                new XElement("fileType", currentLayer.getInt(EntropyLayerSettings.properties_i.fileType)),
+                new XElement("polyFill", currentLayer.getInt(EntropyLayerSettings.properties_i.fill)),
+                new XElement("geoCoreShapeEnginePerPoly", currentLayer.getInt(EntropyLayerSettings.properties_i.perPoly)),
+                new XElement("geoCoreReferenceLayout", currentLayer.getInt(EntropyLayerSettings.properties_i.refLayout)),
+                new XElement("geoCoreKeyholeSizing", currentLayer.getDecimal(EntropyLayerSettings.properties_decimal.keyhole_factor)),
                 
                 // fileData is List<PointF[]> where each list entry is a polygon.
-                new XElement("fileData", stringFromFileData(listOfSettings[i].getFileData()))
+                new XElement("fileData", stringFromFileData(currentLayer.getFileData()))
             );
             doc.Root!.Add(xelement);
         }
@@ -496,7 +528,7 @@ public class Storage
 
     private void pStoreSimulationSettings_simulation(ref XDocument doc, EntropySettings simulationSettings, EntropySettings_nonSim simulationSettings_nonSim)
     {
-        double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC);
+        double[]? camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC);
         doc.Root!.Add(new XElement("settings",
             new XElement("comment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.comment)),
             new XElement("paSearchComment", simulationSettings_nonSim.getString(EntropySettings_nonSim.properties_s.paComment)),
@@ -526,6 +558,7 @@ public class Storage
             new XElement("optimizeCorners", simulationSettings.getValue(EntropySettings.properties_i.optC)),
             new XElement("greedyMode", simulationSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.greedy)),
             new XElement("rng", simulationSettings.getValue(EntropySettings.properties_i.rngType)),
+            new XElement("samplingMethod", simulationSettings.getValue(EntropySettings.properties_i.samplingMethod)),
             new XElement("outputType", simulationSettings.getValue(EntropySettings.properties_i.oType)),
             new XElement("layer1Operator", simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, 0)),
             new XElement("layer2Operator", simulationSettings.getOperatorValue(EntropySettings.properties_o.layer, 1)),
@@ -562,7 +595,7 @@ public class Storage
 
     private void pStoreSimulationSettings_DOE(ref XDocument doc, EntropySettings simulationSettings)
     {
-        double[] camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC + 1);
+        double[]? camParameters = viewportSave?.Invoke(CentralProperties.maxLayersForMC + 1);
         doc.Root!.Add(new XElement("DOESettings",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
@@ -606,7 +639,7 @@ public class Storage
 
     private void pStoreSimulationSettings_implant(ref XDocument doc, EntropySettings implantSimSettings, EntropySettings_nonSim implantSettings_nonSim, EntropyImplantSettings implantSettings_, NonSimulationSettings nonSimulationSettings_)
     {
-        double[] camParameters = implantViewportSave?.Invoke();
+        double[]? camParameters = implantViewportSave?.Invoke();
         doc.Root!.Add(new XElement("implant",
             new XElement("displayZoomFactor", camParameters != null ? camParameters[2] : 1),
             new XElement("viewportX", camParameters != null ? camParameters[0] : 0),
@@ -625,6 +658,7 @@ public class Storage
             new XElement("numberOfCases", implantSimSettings.getValue(EntropySettings.properties_i.nCases)),
             new XElement("cornerSegments", implantSimSettings.getValue(EntropySettings.properties_i.cSeg)),
             new XElement("rngType", implantSimSettings.getValue(EntropySettings.properties_i.rngType)),
+            new XElement("samplingMethod", implantSimSettings.getValue(EntropySettings.properties_i.samplingMethod)),
             new XElement("generateCSV", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.csv)),
             new XElement("generateExternal", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.external)),
             new XElement("externalType", implantSettings_nonSim.getInt(EntropySettings_nonSim.properties_i.externalType))
@@ -671,178 +705,133 @@ public class Storage
             }
 
             string layerref = "layer" + (layer + 1);
-            try
+            
+            // OPTIMIZATION: Get the layer element once and cache it to avoid repeated Descendants() calls
+            XElement? layerElement = StorageXMLOptimizer.GetCachedElement(simulationFromFile, layerref);
+            if (layerElement == null)
             {
-                readSettings.setInt(EntropyLayerSettings.properties_i.enabled, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("enabled").First().Value));
-            }
-            catch (Exception)
-            {
+                // Layer not found in XML, use defaults
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.enabled);
-            }
-
-            try
-            {
-                readSettings.setString(EntropyLayerSettings.properties_s.comment, simulationFromFile.Descendants(layerref).Descendants("comment").First().Value);
-            }
-            catch (Exception)
-            {
                 readSettings.defaultString(EntropyLayerSettings.properties_s.comment);
+                readSettings.defaultIntArray(EntropyLayerSettings.properties_intarray.bglayers);
+                continue;
             }
 
+            // OPTIMIZATION: Use safe parsing methods instead of Convert + exception handling
+            var enabledElement = layerElement.Element("enabled");
+            readSettings.setInt(EntropyLayerSettings.properties_i.enabled, 
+                StorageXMLOptimizer.GetIntValueSafe(enabledElement, readSettings.getInt(EntropyLayerSettings.properties_i.enabled)));
+
+            var commentElement = layerElement.Element("comment");
+            readSettings.setString(EntropyLayerSettings.properties_s.comment, 
+                StorageXMLOptimizer.GetStringValueSafe(commentElement, readSettings.getString(EntropyLayerSettings.properties_s.comment)));
+
+            // OPTIMIZATION: Batch process all background layer elements at once
             readSettings.defaultIntArray(EntropyLayerSettings.properties_intarray.bglayers);
-
-            try
+            var bgValues = StorageXMLOptimizer.GetBackgroundLayersBatch(layerElement, CentralProperties.maxLayersForMC);
+            for (int i = 0; i < bgValues.Length && i < CentralProperties.maxLayersForMC; i++)
             {
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 0, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer1BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 1, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer2BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 2, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer3BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 3, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer4BG").First().Value));
-            }
-            catch (Exception)
-            {
-                // default
-            }
-            try
-            {
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 4, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer5BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 5, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer6BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 6, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer7BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 7, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer8BG").First().Value));
-            }
-            catch (Exception)
-            {
-
-            }
-            try
-            {
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 8, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer9BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 9, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer10BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 10, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer11BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 11, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer12BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 12, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer13BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 13, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer14BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 14, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer15BG").First().Value));
-                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, 15, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("layer16BG").First().Value));
-            }
-            catch (Exception)
-            {
+                readSettings.setIntArrayValue(EntropyLayerSettings.properties_intarray.bglayers, i, bgValues[i]);
             }
 
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.showDrawn, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("showDrawn").First().Value));
-            }
-            catch (Exception)
-            {
-                readSettings.defaultInt(EntropyLayerSettings.properties_i.showDrawn);
-            }
+            // OPTIMIZATION: Use layerElement directly instead of repeated simulationFromFile.Descendants(layerref) calls
+            var showDrawnElement = layerElement.Element("showDrawn");
+            readSettings.setInt(EntropyLayerSettings.properties_i.showDrawn, 
+                StorageXMLOptimizer.GetIntValueSafe(showDrawnElement, readSettings.getInt(EntropyLayerSettings.properties_i.showDrawn)));
 
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.flipH, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("flipH").First().Value));
-            }
-            catch (Exception)
-            {
-                readSettings.defaultInt(EntropyLayerSettings.properties_i.flipH);
-            }
+            var flipHElement = layerElement.Element("flipH");
+            readSettings.setInt(EntropyLayerSettings.properties_i.flipH, 
+                StorageXMLOptimizer.GetIntValueSafe(flipHElement, readSettings.getInt(EntropyLayerSettings.properties_i.flipH)));
 
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.flipV, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("flipV").First().Value));
-            }
-            catch (Exception)
-            {
-                readSettings.defaultInt(EntropyLayerSettings.properties_i.flipV);
-            }
+            var flipVElement = layerElement.Element("flipV");
+            readSettings.setInt(EntropyLayerSettings.properties_i.flipV, 
+                StorageXMLOptimizer.GetIntValueSafe(flipVElement, readSettings.getInt(EntropyLayerSettings.properties_i.flipV)));
 
-            try
+            // Handle legacy rounding with special logic
+            var legacyRoundingElement = layerElement.Element("legacyRounding");
+            if (legacyRoundingElement != null)
             {
-                readSettings.setInt(EntropyLayerSettings.properties_i.legacyRounding, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("legacyRounding").First().Value));
+                readSettings.setInt(EntropyLayerSettings.properties_i.legacyRounding, 
+                    StorageXMLOptimizer.GetIntValueSafe(legacyRoundingElement, 1));
             }
-            catch (Exception)
+            else
             {
                 // Old project, need to force legacy rounding to avoid changing results.
                 readSettings.setInt(EntropyLayerSettings.properties_i.legacyRounding, 1);
             }
 
-            try
+            // Handle geometry alignment - check for old format first, then new format
+            var alignGeomElement = layerElement.Element("alignGeom");
+            if (alignGeomElement != null)
             {
-                readSettings.setInt(EntropyLayerSettings.properties_i.alignX, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("alignGeom").First().Value));
-                readSettings.setInt(EntropyLayerSettings.properties_i.alignY, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("alignGeom").First().Value));
+                int alignValue = StorageXMLOptimizer.GetIntValueSafe(alignGeomElement, 0);
+                readSettings.setInt(EntropyLayerSettings.properties_i.alignX, alignValue);
+                readSettings.setInt(EntropyLayerSettings.properties_i.alignY, alignValue);
             }
-            catch (Exception)
+            else
             {
-                try
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.alignX, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("alignGeomX").First().Value));
-                }
-                catch (Exception)
-                {
-                    readSettings.defaultInt(EntropyLayerSettings.properties_i.alignX);
-                }
+                var alignGeomXElement = layerElement.Element("alignGeomX");
+                readSettings.setInt(EntropyLayerSettings.properties_i.alignX, 
+                    StorageXMLOptimizer.GetIntValueSafe(alignGeomXElement, readSettings.getInt(EntropyLayerSettings.properties_i.alignX)));
 
-                try
-                {
-                    readSettings.setInt(EntropyLayerSettings.properties_i.alignY, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("alignGeomY").First().Value));
-                }
-                catch (Exception)
-                {
-                    readSettings.defaultInt(EntropyLayerSettings.properties_i.alignY);
-                }
+                var alignGeomYElement = layerElement.Element("alignGeomY");
+                readSettings.setInt(EntropyLayerSettings.properties_i.alignY, 
+                    StorageXMLOptimizer.GetIntValueSafe(alignGeomYElement, readSettings.getInt(EntropyLayerSettings.properties_i.alignY)));
             }
 
+            var nameElement = layerElement.Element("name");
+            readSettings.setString(EntropyLayerSettings.properties_s.name, 
+                StorageXMLOptimizer.GetStringValueSafe(nameElement, readSettings.getString(EntropyLayerSettings.properties_s.name)));
 
-            try
+            // Handle shape index with version compatibility logic
+            var shapeIndexElement = layerElement.Element("shapeIndex");
+            if (shapeIndexElement != null)
             {
-                readSettings.setString(EntropyLayerSettings.properties_s.name, simulationFromFile.Descendants(layerref).Descendants("name").First().Value);
-            }
-            catch (Exception)
-            {
-                readSettings.defaultString(EntropyLayerSettings.properties_s.name);
-            }
-
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("shapeIndex").First().Value));
-
+                int shapeIndex = StorageXMLOptimizer.GetIntValueSafe(shapeIndexElement, readSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex));
+                
                 // Version 1.9 broke the shape menu continuity as 'S' was inserted before the GDS.
-
-                if (Convert.ToInt32(tokenVersion[0]) == 1 && Convert.ToInt32(tokenVersion[1]) < 9)
+                if (int.TryParse(tokenVersion[0], out int majorVersion) && majorVersion == 1 &&
+                    tokenVersion.Length > 1 && int.TryParse(tokenVersion[1], out int minorVersion) && minorVersion < 9)
                 {
-                    if (readSettings.getInt(EntropyLayerSettings.properties_i.shapeIndex) == (int)CentralProperties.shapeNames.Sshape)
+                    if (shapeIndex == (int)CentralProperties.shapeNames.Sshape)
                     {
-                        readSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, (int)CentralProperties.shapeNames.GEOCORE); //increment to map to the GDS setting in the 1.9 version.
+                        shapeIndex = (int)CentralProperties.shapeNames.GEOCORE; //increment to map to the GDS setting in the 1.9 version.
                     }
                 }
+                readSettings.setInt(EntropyLayerSettings.properties_i.shapeIndex, shapeIndex);
             }
-            catch (Exception)
+            else
             {
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.shapeIndex);
             }
 
-            try
+            // OPTIMIZATION: Use TryParse for decimal conversions as well
+            var subShapeHorLengthElement = layerElement.Element("subShapeHorLength");
+            if (subShapeHorLengthElement != null && decimal.TryParse(subShapeHorLengthElement.Value, out decimal horLength))
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorLength").First().Value), 0);
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, horLength, 0);
             }
-            catch (Exception)
+            else
             {
                 readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horLength, 0);
             }
 
-            try
+            var subShapeHorOffsetElement = layerElement.Element("subShapeHorOffset");
+            if (subShapeHorOffsetElement != null && decimal.TryParse(subShapeHorOffsetElement.Value, out decimal horOffset))
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeHorOffset").First().Value), 0);
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, horOffset, 0);
             }
-            catch (Exception)
+            else
             {
                 readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horOffset, 0);
             }
 
-            try
+            var subShapeVerLengthElement = layerElement.Element("subShapeVerLength");
+            if (subShapeVerLengthElement != null && decimal.TryParse(subShapeVerLengthElement.Value, out decimal verLength))
             {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShapeVerLength").First().Value), 0);
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, verLength, 0);
             }
-            catch (Exception)
+            else
             {
                 readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verLength, 0);
             }
@@ -856,41 +845,21 @@ public class Storage
                 readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verOffset, 0);
             }
 
-            try
-            {
-                readSettings.setInt(EntropyLayerSettings.properties_i.shape0Tip, Convert.ToInt32(simulationFromFile.Descendants(layerref).Descendants("subShapeTipLocIndex").First().Value));
-            }
-            catch (Exception)
-            {
-                readSettings.defaultInt(EntropyLayerSettings.properties_i.shape0Tip);
-            }
+            var shape0TipElement = layerElement.Element("subShapeTipLocIndex");
+            readSettings.setInt(EntropyLayerSettings.properties_i.shape0Tip, 
+                StorageXMLOptimizer.GetIntValueSafe(shape0TipElement, readSettings.getInt(EntropyLayerSettings.properties_i.shape0Tip)));
 
-            try
-            {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorLength").First().Value), 1);
-            }
-            catch (Exception)
-            {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horLength, 1);
-            }
+            var subShape2HorLengthElement = layerElement.Element("subShape2HorLength");
+            readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horLength, 
+                StorageXMLOptimizer.GetDecimalValueSafe(subShape2HorLengthElement, readSettings.getDecimal(EntropyLayerSettings.properties_decimal.horLength, 1)), 1);
 
-            try
-            {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2HorOffset").First().Value), 1);
-            }
-            catch (Exception)
-            {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1);
-            }
+            var subShape2HorOffsetElement = layerElement.Element("subShape2HorOffset");
+            readSettings.setDecimal(EntropyLayerSettings.properties_decimal.horOffset, 
+                StorageXMLOptimizer.GetDecimalValueSafe(subShape2HorOffsetElement, readSettings.getDecimal(EntropyLayerSettings.properties_decimal.horOffset, 1)), 1);
 
-            try
-            {
-                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("subShape2VerLength").First().Value), 1);
-            }
-            catch (Exception)
-            {
-                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.verLength, 1);
-            }
+            var subShape2VerLengthElement = layerElement.Element("subShape2VerLength");
+            readSettings.setDecimal(EntropyLayerSettings.properties_decimal.verLength, 
+                StorageXMLOptimizer.GetDecimalValueSafe(subShape2VerLengthElement, readSettings.getDecimal(EntropyLayerSettings.properties_decimal.verLength, 1)), 1);
 
             try
             {
@@ -1207,6 +1176,24 @@ public class Storage
                 readSettings.defaultInt(EntropyLayerSettings.properties_i.removeArtifactsEpsilon);
             }
             
+            try
+            {
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.shortEdgeLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("shortEdgeLength").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.shortEdgeLength);
+            }
+
+            try
+            {
+                readSettings.setDecimal(EntropyLayerSettings.properties_decimal.maxShortEdgeLength, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("maxShortEdgeLength").First().Value));
+            }
+            catch (Exception)
+            {
+                readSettings.defaultDecimal(EntropyLayerSettings.properties_decimal.maxShortEdgeLength);
+            }
+
             try
             {
                 readSettings.setDecimal(EntropyLayerSettings.properties_decimal.iCR, Convert.ToDecimal(simulationFromFile.Descendants(layerref).Descendants("innerCRR").First().Value));
@@ -1833,7 +1820,7 @@ public class Storage
                 // Need to read in our layout file.
                 try
                 {
-                    loadLayoutOK = loadLayout(layer, readSettings.getString(EntropyLayerSettings.properties_s.file));
+                    loadLayoutOK = loadLayout?.Invoke(layer, readSettings.getString(EntropyLayerSettings.properties_s.file)) ?? false;
                 }
                 catch (Exception)
                 {
@@ -1959,8 +1946,11 @@ public class Storage
                 {
                     // Full layer remap
                     setLayerSettings?.Invoke(readSettings, layer + compatibilityLayerOffset, false, true);
-                    double[] camDetails = viewportSave?.Invoke(layer);
-                    viewportLoad?.Invoke(layer + compatibilityLayerOffset, camDetails);
+                    double[]? camDetails = viewportSave?.Invoke(layer);
+                    if (camDetails != null)
+                    {
+                        viewportLoad?.Invoke(layer + compatibilityLayerOffset, camDetails);
+                    }
                     viewportLoad?.Invoke(layer, [0, 0, 1]);
                     loadedLayers[layer + compatibilityLayerOffset] = true;
                     readSettings = new EntropyLayerSettings();
@@ -1976,7 +1966,16 @@ public class Storage
         bool error = false;
         try
         {
-            suspendSettingsUI?.Invoke();
+            // Suspend UI first, UI update will be called at the end after all parsing is complete
+            if (suspendSettingsUIWithCallback != null)
+            {
+                suspendSettingsUIWithCallback(null); // Just suspend, no callback yet
+            }
+            else
+            {
+                // Fallback to old pattern for backward compatibility
+                suspendSettingsUI?.Invoke();
+            }
 
             try
             {
@@ -1994,6 +1993,24 @@ public class Storage
             catch (Exception)
             {
                 simulationSettings_nonSim.defaultString(EntropySettings_nonSim.properties_s.paComment);
+            }
+
+            try
+            {
+                simulationSettings.setValue(EntropySettings.properties_i.rngType, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("rng").First().Value));
+            }
+            catch (Exception)
+            {
+                simulationSettings.setValue(EntropySettings.properties_i.rngType, 0);
+            }
+
+            try
+            {
+                simulationSettings.setValue(EntropySettings.properties_i.samplingMethod, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("samplingMethod").First().Value));
+            }
+            catch (Exception)
+            {
+                simulationSettings.setValue(EntropySettings.properties_i.samplingMethod, 0);
             }
 
             try
@@ -2158,6 +2175,15 @@ public class Storage
             catch (Exception)
             {
                 simulationSettings.defaultValue(EntropySettings.properties_i.rngType);
+            }
+
+            try
+            {
+                simulationSettings.setValue(EntropySettings.properties_i.samplingMethod, Convert.ToInt32(simulationFromFile.Descendants("settings").Descendants("samplingMethod").First().Value));
+            }
+            catch (Exception)
+            {
+                simulationSettings.defaultValue(EntropySettings.properties_i.samplingMethod); // Force Monte Carlo for legacy behavior.
             }
 
             try
@@ -2343,7 +2369,9 @@ public class Storage
                 simulationSettings_nonSim.defaultDecimal(EntropySettings_nonSim.properties_d.externalCritCond4);
             }
 
-            updateSettingsUIFromSettings?.Invoke();
+            
+            // UI update will be handled by resumeUIFromStorage after all XML parsing is complete
+            // This prevents race conditions where UI gets updated before all parsing is finished
         }
         catch (Exception)
         {
@@ -2366,7 +2394,16 @@ public class Storage
                 doeLabel = "gdsDOESettings";
             }
 
-            suspendDOESettingsUI?.Invoke();
+            // Suspend UI first, UI update will be called at the end after all parsing is complete
+            if (suspendDOESettingsUIWithCallback != null)
+            {
+                suspendDOESettingsUIWithCallback(null); // Just suspend, no callback yet
+            }
+            else
+            {
+                // Fallback to old pattern for backward compatibility
+                suspendDOESettingsUI?.Invoke();
+            }
             try
             {
                 simulationSettings.getDOESettings().setString(DOESettings.properties_s.comment, simulationFromFile.Descendants(doeLabel).Descendants("comment").First().Value);
@@ -2528,6 +2565,7 @@ public class Storage
                 simulationSettings.getDOESettings().setBool(DOESettings.properties_b.iDRM, false);
             }
 
+            // Update UI after all settings have been parsed from XML
             double x = 0;
             double y = 0;
             double zoom = 1;
@@ -2542,7 +2580,8 @@ public class Storage
             }
             viewportLoad?.Invoke(CentralProperties.maxLayersForMC + 1, [x, y, zoom]);
 
-            updateDOESettingsUIFromSettings?.Invoke();
+            // UI update will be handled by resumeUIFromStorage after all XML parsing is complete
+            // This prevents race conditions where UI gets updated before all parsing is finished
         }
         catch (Exception ex)
         {
@@ -2561,7 +2600,16 @@ public class Storage
         {
             const string implantLabel = "implant";
 
-            suspendImplantUI?.Invoke();
+            // Suspend UI first, UI update will be called at the end after all parsing is complete
+            if (suspendImplantUIWithCallback != null)
+            {
+                suspendImplantUIWithCallback(null); // Just suspend, no callback yet
+            }
+            else
+            {
+                // Fallback to old pattern for backward compatibility
+                suspendImplantUI?.Invoke();
+            }
             try
             {
                 implantSettings_.setComment(simulationFromFile.Descendants(implantLabel).Descendants("comment").First().Value);
@@ -2674,6 +2722,22 @@ public class Storage
             {
                 implantSettings_nonSim.defaultInt(EntropySettings_nonSim.properties_i.csv);
             }
+            try
+            {
+                implantSimSettings.setValue(EntropySettings.properties_i.rngType, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("rng").First().Value));
+            }
+            catch (Exception)
+            {
+                implantSimSettings.setValue(EntropySettings.properties_i.rngType, 0);
+            }
+            try
+            {
+                implantSimSettings.setValue(EntropySettings.properties_i.samplingMethod, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("samplingMethod").First().Value));
+            }
+            catch (Exception)
+            {
+                implantSimSettings.setValue(EntropySettings.properties_i.samplingMethod, 0);
+            }
 
             int svgCompat = 0;
             try
@@ -2718,6 +2782,16 @@ public class Storage
                 implantSimSettings.defaultValue(EntropySettings.properties_i.rngType);
             }
 
+            try
+            {
+                implantSimSettings.setValue(EntropySettings.properties_i.samplingMethod, Convert.ToInt32(simulationFromFile.Descendants(implantLabel).Descendants("samplingMethod").First().Value));
+            }
+            catch (Exception)
+            {
+                implantSimSettings.defaultValue(0); // Force Monte Carlo for legacy behavior
+            }
+
+            // Update UI after all settings have been parsed from XML
             double x = 0;
             double y = 0;
             double zoom = 1;
@@ -2732,7 +2806,8 @@ public class Storage
             }
             implantViewportLoad?.Invoke([x, y, zoom]);
 
-            updateImplantUIFromSettings?.Invoke();
+            // UI update will be handled by resumeUIFromStorage after all XML parsing is complete
+            // This prevents race conditions where UI gets updated before all parsing is finished
         }
         catch (Exception ex)
         {
@@ -2764,8 +2839,13 @@ public class Storage
             return "This is not a " + CentralProperties.productName + " project file.";
         }
         
-        string version = simulationFromFile.Descendants("version").First().Value;
-        string[] tokenVersion = version.Split(['.']);
+        // OPTIMIZATION: Clear the XML element cache for this loading operation
+        StorageXMLOptimizer.ClearCache();
+        
+        // OPTIMIZATION: Use cached element access and optimized version parsing
+        var versionElement = StorageXMLOptimizer.GetCachedElement(simulationFromFile, "version");
+        string version = versionElement?.Value ?? "";
+        string[] tokenVersion = StorageXMLOptimizer.ParseVersionOptimized(version);
 
         if (version != currentVersion)
         {
@@ -2788,6 +2868,25 @@ public class Storage
         }
 
         resumeUI?.Invoke();
+
+        // Ensure UI is updated with newly loaded settings regardless of which tab is currently active
+        // This prevents race conditions where UI doesn't reflect loaded values
+        if (updateSettingsUIFromSettings != null)
+        {
+            updateSettingsUIFromSettings();
+        }
+        
+        // Apply same fix for DOE settings UI to prevent race conditions
+        if (updateDOESettingsUIFromSettings != null)
+        {
+            updateDOESettingsUIFromSettings();
+        }
+        
+        // Apply same fix for Implant settings UI to prevent race conditions  
+        if (updateImplantUIFromSettings != null)
+        {
+            updateImplantUIFromSettings();
+        }
 
         if (error)
         {

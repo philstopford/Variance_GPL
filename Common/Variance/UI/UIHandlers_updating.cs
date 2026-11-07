@@ -83,6 +83,11 @@ public partial class MainForm
 
     private void updateSettingsUIFromSettings()
     {
+        updateSettingsUIFromSettings(null);
+    }
+
+    private void updateSettingsUIFromSettings(Action callback)
+    {
         Application.Instance.Invoke(() =>
         {
             if (commonVars.getActiveUI(CommonVars.uiActive.settings))
@@ -223,6 +228,14 @@ public partial class MainForm
 
             comboBox_RNG.SelectedIndex = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.rngType);
 
+            if (commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.samplingMethod) < 0)
+            {
+                commonVars.getSimulationSettings().setValue(EntropySettings.properties_i.samplingMethod, EntropySettings.getDefaultValue(EntropySettings.properties_i.samplingMethod));
+            }
+
+            comboBox_RNG.SelectedIndex = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.rngType);
+            comboBox_samplers.SelectedIndex = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.samplingMethod);
+
             num_cornerSegments.Value = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.cSeg);
             num_ssNumOfCases.Value = commonVars.getSimulationSettings().getValue(EntropySettings.properties_i.nCases);
             num_ssPrecision.Value = commonVars.getSimulationSettings().getResolution();
@@ -232,10 +245,19 @@ public partial class MainForm
             checkBox_greedyMultiCPU.Checked = commonVars.getSimulationSettings_nonSim().getInt(EntropySettings_nonSim.properties_i.greedy) == 1;
 
             resumeSettingsUI();
+            
+            // Call the callback after UI is updated
+            if (callback != null)
+                callback.Invoke();
         });
     }
 
     private void updateDOESettingsUIFromSettings()
+    {
+        updateDOESettingsUIFromSettings(null);
+    }
+
+    private void updateDOESettingsUIFromSettings(Action callback)
     {
         Application.Instance.Invoke(() =>
         {
@@ -303,12 +325,20 @@ public partial class MainForm
                 radio_useCSVQuilt.Checked = true;
             }
 
-            doeSettingsChanged();
             resumeDOESettingsUI();
+            
+            // Call the callback after UI is updated
+            if (callback != null)
+                callback.Invoke();
         });
     }
 
     private void updateImplantUIFromSettings()
+    {
+        updateImplantUIFromSettings(null);
+    }
+
+    private void updateImplantUIFromSettings(Action callback)
     {
         Application.Instance.Invoke(() =>
         {
@@ -445,8 +475,19 @@ public partial class MainForm
             {
             }
 
-            doImplantShadowing();
+            try
+            {
+                comboBox_implantSamplers.SelectedIndex = commonVars.getImplantSimulationSettings().getValue(EntropySettings.properties_i.samplingMethod);
+            }
+            catch (Exception)
+            {
+            }
+            
             resumeImplantUI();
+            
+            // Call the callback after UI is updated
+            if (callback != null)
+                callback.Invoke();
         });
     }
 
@@ -480,6 +521,14 @@ public partial class MainForm
             checkBox_OGLPoints.Checked = varianceContext.vc.drawPoints;
             checkBox_geoCore_tileLayerPreview.Checked = varianceContext.vc.layerPreviewDOETile;
             checkBox_geoCore_enableCDVariation.Checked = varianceContext.vc.geoCoreCDVariation;
+ 
+            comboBox_prefsSamplers.SelectedIndex = varianceContext.vc.sampler;
+            comboBox_samplers.SelectedIndex = varianceContext.vc.sampler;
+            comboBox_implantSamplers.SelectedIndex = varianceContext.vc.sampler;
+
+            comboBox_prefsRNG.SelectedIndex = varianceContext.vc.rng;
+            comboBox_RNG.SelectedIndex = varianceContext.vc.rng;
+            comboBox_implantRNG.SelectedIndex = varianceContext.vc.rng;
             utilsUIFrozen = false;
         });
     }
@@ -765,17 +814,11 @@ public partial class MainForm
                             PointF[] tmpPoints = new PointF[length];
                             int poly1 = poly;
                             int layer1 = layer;
-#if !VARIANCESINGLETHREADED
                             Parallel.For(0, length, point =>
-#else
-                            for (Int32 point = 0; point < length; point++)
-#endif
                             {
                                 tmpPoints[point] = new PointF((float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].x, (float)commonVars.getSimPreview().getLayerPreviewShapePoly(layer1, poly1)[point].y);
                             }
-#if !VARIANCESINGLETHREADED
                             );
-#endif
                             mcVPSettings[CentralProperties.maxLayersForMC - 1 + (int)CommonVars.twoDTabNames.settings].addPolygon(
                                 poly: tmpPoints,
                                 polyColor: Color.FromArgb(varianceContext.vc.colors.simPreviewColors[layer].toArgb()),

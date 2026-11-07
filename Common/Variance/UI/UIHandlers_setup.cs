@@ -82,21 +82,28 @@ public partial class MainForm
 
             commonVars.storage.setLayerSettings = setLayerSettings;
             commonVars.storage.resumeUI = resumeUIFromStorage;
-            commonVars.storage.suspendSettingsUI = suspendSettingsUI;
-            commonVars.storage.suspendDOESettingsUI = suspendDOESettingsUI;
-            commonVars.storage.updateSettingsUIFromSettings = updateSettingsUIFromSettings;
-            commonVars.storage.updateDOESettingsUIFromSettings = updateDOESettingsUIFromSettings;
+            commonVars.storage.suspendSettingsUI = () => suspendSettingsUI();
+            commonVars.storage.suspendSettingsUIWithCallback = (callback) => suspendSettingsUI(callback);
+            commonVars.storage.suspendDOESettingsUI = () => suspendDOESettingsUI();
+            commonVars.storage.suspendDOESettingsUIWithCallback = (callback) => suspendDOESettingsUI(callback);
+            commonVars.storage.updateSettingsUIFromSettings = () => updateSettingsUIFromSettings();
+            commonVars.storage.updateSettingsUIFromSettingsWithCallback = (callback) => updateSettingsUIFromSettings(callback);
+            commonVars.storage.updateDOESettingsUIFromSettings = () => updateDOESettingsUIFromSettings();
+            commonVars.storage.updateDOESettingsUIFromSettingsWithCallback = (callback) => updateDOESettingsUIFromSettings(callback);
             commonVars.storage.loadLayout = layoutLoad;
             commonVars.storage.viewportLoad = setViewportCamera;
             commonVars.storage.viewportSave = getViewportCamera;
-            commonVars.storage.suspendImplantUI = suspendImplantUI;
-            commonVars.storage.updateImplantUIFromSettings = updateImplantUIFromSettings;
+            commonVars.storage.suspendImplantUI = () => suspendImplantUI();
+            commonVars.storage.suspendImplantUIWithCallback = (callback) => suspendImplantUI(callback);
+            commonVars.storage.updateImplantUIFromSettings = () => updateImplantUIFromSettings();
+            commonVars.storage.updateImplantUIFromSettingsWithCallback = (callback) => updateImplantUIFromSettings(callback);
             commonVars.storage.implantViewportLoad = setImplantViewportCamera;
             commonVars.storage.implantViewportSave = getImplantViewportCamera;
 
             // Push the UI to align to our settings at startup.
             updateSettingsUIFromSettings();
             updateDOESettingsUIFromSettings();
+            updateImplantUIFromSettings();
 
             for (int i = 0; i < cB_bg.Length; i++)
             {
@@ -194,6 +201,8 @@ public partial class MainForm
             num_fgOpacity.LostFocus += preferencesChange;
             num_bgOpacity.LostFocus += preferencesChange;
             num_zoomSpeed.LostFocus += preferencesChange;
+            comboBox_prefsSamplers.SelectedIndexChanged += preferencesChange;
+            comboBox_prefsRNG.SelectedIndexChanged += preferencesChange;
 
             btn_resetColors.Click += resetColors;
         });

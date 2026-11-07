@@ -934,6 +934,7 @@ public class EntropyLayerSettings : ShapeSettings
         sBias, hTBias, hTNVar, hTPVar, vTBias, vTNVar, vTPVar,
         pBias, pBiasDist,
         lDC1, lDC2,
+        shortEdgeLength, maxShortEdgeLength,
         iCR, oCR, iCV, oCV,
         lwr, lwrFreq, lwr2, lwr2Freq,
         eTension,
@@ -959,6 +960,8 @@ public class EntropyLayerSettings : ShapeSettings
             properties_decimal.verOffset => getDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef),
             properties_decimal.gHorOffset => getDecimal(ShapeSettings.properties_decimal.gHorOffset),
             properties_decimal.gVerOffset => getDecimal(ShapeSettings.properties_decimal.gVerOffset),
+            properties_decimal.shortEdgeLength => getDecimal(ShapeSettings.properties_decimal.shortEdgeLength),
+            properties_decimal.maxShortEdgeLength => getDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength),
             properties_decimal.iCR => getDecimal(ShapeSettings.properties_decimal.iCR),
             properties_decimal.oCR => getDecimal(ShapeSettings.properties_decimal.oCR),
             properties_decimal.sBias => getDecimal(ShapeSettings.properties_decimal.sBias),
@@ -1012,6 +1015,8 @@ public class EntropyLayerSettings : ShapeSettings
             properties_decimal.verOffset => getDefaultDecimal(ShapeSettings.properties_decimal.verOffset, _subShapeRef),
             properties_decimal.gHorOffset => getDefaultDecimal(ShapeSettings.properties_decimal.gHorOffset),
             properties_decimal.gVerOffset => getDefaultDecimal(ShapeSettings.properties_decimal.gVerOffset),
+            properties_decimal.shortEdgeLength => getDefaultDecimal(ShapeSettings.properties_decimal.shortEdgeLength),
+            properties_decimal.maxShortEdgeLength => getDefaultDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength),
             properties_decimal.iCR => getDefaultDecimal(ShapeSettings.properties_decimal.iCR),
             properties_decimal.oCR => getDefaultDecimal(ShapeSettings.properties_decimal.oCR),
             properties_decimal.sBias => getDefaultDecimal(ShapeSettings.properties_decimal.sBias),
@@ -1076,6 +1081,12 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.gVerOffset:
                 setDecimal(ShapeSettings.properties_decimal.gVerOffset, val);
+                break;
+            case properties_decimal.shortEdgeLength:
+                setDecimal(ShapeSettings.properties_decimal.shortEdgeLength, val);
+                break;
+            case properties_decimal.maxShortEdgeLength:
+                setDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength, val);
                 break;
             case properties_decimal.iCR:
                 setDecimal(ShapeSettings.properties_decimal.iCR, val);
@@ -1199,6 +1210,12 @@ public class EntropyLayerSettings : ShapeSettings
                 break;
             case properties_decimal.gVerOffset:
                 defaultDecimal(ShapeSettings.properties_decimal.gVerOffset);
+                break;
+            case properties_decimal.shortEdgeLength:
+                defaultDecimal(ShapeSettings.properties_decimal.shortEdgeLength);
+                break;
+            case properties_decimal.maxShortEdgeLength:
+                defaultDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength);
                 break;
             case properties_decimal.iCR:
                 defaultDecimal(ShapeSettings.properties_decimal.iCR);
@@ -1499,7 +1516,10 @@ public class EntropyLayerSettings : ShapeSettings
             setInt(ShapeSettings.properties_i.proxRays, source.getInt(ShapeSettings.properties_i.proxRays));
             setInt(ShapeSettings.properties_i.proxSideRaysFallOff, source.getInt(ShapeSettings.properties_i.proxSideRaysFallOff));
             setDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier, source.getDecimal(ShapeSettings.properties_decimal.proxSideRaysMultiplier));
-            
+
+            setDecimal(ShapeSettings.properties_decimal.shortEdgeLength, source.getDecimal(ShapeSettings.properties_decimal.shortEdgeLength));
+            setDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength, source.getDecimal(ShapeSettings.properties_decimal.maxShortEdgeLength));
+
             setDecimal(ShapeSettings.properties_decimal.iCR, source.getDecimal(ShapeSettings.properties_decimal.iCR));
             innerCV = source.innerCV;
             innerCV_RNGMapping = source.innerCV_RNGMapping;

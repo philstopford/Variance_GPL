@@ -16,6 +16,11 @@ namespace Variance;
 
 public class CommonVars
 {
+    // For test coverage only.
+    public CommonVars()
+    {
+        
+    }
     private bool changed;
 
     public void setChanged(bool val)
@@ -966,7 +971,7 @@ public class CommonVars
         userCancelQuery = false;
         colors = varianceContext.colors;
         version = CentralProperties.version;
-        author = "Phil Stopford (phil.stopford@gmail.com)";
+        author = "Phil Stopford (github.com/philstopford)";
         titleText = CentralProperties.productName + " " + version + " (" + varianceContext.licenceName + ")";
 
         copyLayerGHSettings = new GeoCoreHandler();

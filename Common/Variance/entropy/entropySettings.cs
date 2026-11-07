@@ -18,10 +18,10 @@ public class EntropySettings
 
     private DOESettings pGetDOESettings()
     {
-        return DOESettings!;
+        return DOESettings ?? throw new InvalidOperationException("DOESettings has not been initialized");
     }
 
-    public enum properties_i { nCases, linkCDU, subMode, cSeg, optC, oType, rngType, ler }
+    public enum properties_i { nCases, linkCDU, subMode, cSeg, optC, oType, rngType, ler, samplingMethod }
 
     private int numberOfCases;
     private int linkTipandSideCDU;
@@ -35,6 +35,9 @@ public class EntropySettings
 
     // RNG type for run.
     private int rngType;
+
+    // Sampling method for run (0 = Monte Carlo, 1 = Latin Hypercube Sampling)
+    private int samplingMethod;
 
     public int getValue(properties_i p)
     {
@@ -53,6 +56,7 @@ public class EntropySettings
             properties_i.rngType => rngType,
             properties_i.subMode => subMode,
             properties_i.ler => lerFromLWR_by_sqrt2,
+            properties_i.samplingMethod => samplingMethod,
             _ => 0
         };
 
@@ -92,6 +96,9 @@ public class EntropySettings
             case properties_i.ler:
                 lerFromLWR_by_sqrt2 = val;
                 break;
+            case properties_i.samplingMethod:
+                samplingMethod = val;
+                break;
         }
     }
 
@@ -128,6 +135,9 @@ public class EntropySettings
             case properties_i.subMode:
                 subMode = default_subMode;
                 break;
+            case properties_i.samplingMethod:
+                samplingMethod = default_samplingMethod;
+                break;
         }
     }
 
@@ -148,6 +158,7 @@ public class EntropySettings
             properties_i.rngType => default_rngType,
             properties_i.subMode => default_subMode,
             properties_i.ler => default_lerFromLWR_by_sqrt2,
+            properties_i.samplingMethod => default_samplingMethod,
             _ => 0
         };
 
@@ -282,6 +293,7 @@ public class EntropySettings
     private const int default_lerFromLWR_by_sqrt2 = 1;
     private const int default_rngType = 0;
     private const int default_subMode = 0;
+    private const int default_samplingMethod = (int)QuasiRandomSampler.SamplingMethod.LatinHypercube; // Default to Monte Carlo
 
     public EntropySettings()
     {
@@ -322,6 +334,7 @@ public class EntropySettings
         lerFromLWR_by_sqrt2 = default_lerFromLWR_by_sqrt2;
         rngType = default_rngType; // default
         subMode = default_subMode;
+        samplingMethod = default_samplingMethod;
     }
 
     public string tileListToString(bool zeroIndex = false)
@@ -337,17 +350,18 @@ public class EntropySettings
             offset = 0;
         }
         string returnString = "";
-        if (DOESettings!.getTileList_ColRow().Count == 0)
+        var doeSettings = getDOESettings();
+        if (doeSettings.getTileList_ColRow().Count == 0)
         {
             return returnString;
         }
 
         int entry = 0;
-        returnString += DOESettings.getTileList_Value(entry, 0) + offset + "," + (DOESettings.getTileList_Value(entry, 1) + offset);
+        returnString += doeSettings.getTileList_Value(entry, 0) + offset + "," + (doeSettings.getTileList_Value(entry, 1) + offset);
         entry++;
-        while (entry < DOESettings.getTileList_ColRow().Count)
+        while (entry < doeSettings.getTileList_ColRow().Count)
         {
-            returnString += ";" + (DOESettings.getTileList_Value(entry, 0) + offset) + "," + (DOESettings.getTileList_Value(entry, 1) + offset);
+            returnString += ";" + (doeSettings.getTileList_Value(entry, 0) + offset) + "," + (doeSettings.getTileList_Value(entry, 1) + offset);
             entry++;
         }
         return returnString;
@@ -380,6 +394,7 @@ public class EntropySettings
         string[] tmpStringArray = tmpString.Split(coordSep);
         int colValue;
         int rowValue;
+        DOESettings doeSettings;
         switch (tmpStringArray.Length)
         {
             case 0:
@@ -394,8 +409,9 @@ public class EntropySettings
                 {
                     colValue = Convert.ToInt32(tmpStringArray[0]);
                     rowValue = Convert.ToInt32(tmpStringArray[1]);
-                    DOESettings!.resetTileList_ColRow();
-                    DOESettings.addTileList_Value([colValue + offset, rowValue + offset]);
+                    doeSettings = getDOESettings();
+                    doeSettings.resetTileList_ColRow();
+                    doeSettings.addTileList_Value([colValue + offset, rowValue + offset]);
                     entryOK = true;
                 }
                 catch (Exception)
@@ -413,7 +429,8 @@ public class EntropySettings
                     break;
                 }
                 // We have some initial entries that appear to be valid.
-                DOESettings!.resetTileList_ColRow();
+                doeSettings = getDOESettings();
+                doeSettings.resetTileList_ColRow();
                 foreach (string t in tmpCoordPairArray)
                 {
                     tmpStringArray = t.Split(coordSep);
@@ -426,14 +443,14 @@ public class EntropySettings
                     {
                         colValue = Convert.ToInt32(tmpStringArray[0]);
                         rowValue = Convert.ToInt32(tmpStringArray[1]);
-                        DOESettings.addTileList_Value([colValue + offset, rowValue + offset]);
+                        doeSettings.addTileList_Value([colValue + offset, rowValue + offset]);
                     }
                     catch (Exception)
                     {
                         // Invalid input; ignore it.
                     }
                 }
-                entryOK = DOESettings.getTileList_ColRow().Count != 0;
+                entryOK = doeSettings.getTileList_ColRow().Count != 0;
                 break;
         }
         return entryOK;

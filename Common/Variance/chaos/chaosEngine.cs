@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Clipper2Lib;
 using geoAnalysis;
 using geoWrangler;
+using utility;
 
 namespace Variance;
 
@@ -51,30 +52,19 @@ internal class ChaosEngine
     {
         // Put 0-index point at minX (see method for more notes)
         int aCount = aPath.Count;
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, aCount, path =>
-#else
-            for (Int32 path = 0; path < aCount; path++)
-#endif
-            {
-                aPath[path] = reOrderPath("A", path);
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        ParallelProcessing.OptimizedParallelFor(0, aCount, options, path =>
+        {
+            aPath[path] = reOrderPath("A", path);
+        });
+        
         // Put 0-index point at minY (see method for more notes)
         int bCount = bPath.Count;
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, bCount, path =>
-#else
-            for (Int32 path = 0; path < bCount; path++)
-#endif
-            {
-                bPath[path] = reOrderPath("B", path);
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+        ParallelProcessing.OptimizedParallelFor(0, bCount, options, path =>
+        {
+            bPath[path] = reOrderPath("B", path);
+        });
+        
         List<PathsD> returnPaths = [aPath, bPath];
 
         return returnPaths;
@@ -126,27 +116,23 @@ internal class ChaosEngine
 
         PathD tPath = [];
 
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, limit2, i =>
-#else
-            for (int i = 0; i < limit2; i++)
-#endif
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
+        
+        ParallelProcessing.OptimizedParallelFor(0, limit2, options, i =>
+        {
+            twoLayerResults[i] = inputLayerEnabled[i * 2] switch
             {
-                twoLayerResults[i] = inputLayerEnabled[i * 2] switch
-                {
-                    true when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2 + 1,
-                        simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i),
-                        preserveCollinear: preserveCollinear),
-                    true when !inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2, 0,
-                        preserveCollinear: preserveCollinear),
-                    false when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1,
-                        0, preserveCollinear: preserveCollinear),
-                    _ => []
-                };
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+                true when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2 + 1,
+                    simulationSettings.getOperatorValue(EntropySettings.properties_o.twoLayer, i),
+                    preserveCollinear: preserveCollinear),
+                true when !inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2, i * 2, 0,
+                    preserveCollinear: preserveCollinear),
+                false when inputLayerEnabled[i * 2 + 1] => pLayerBoolean(simulationSettings, i * 2 + 1, i * 2 + 1,
+                    0, preserveCollinear: preserveCollinear),
+                _ => []
+            };
+        });
+        
         /* Direct the 4 layer boolean approach
          -2 : no active layers.
          -1 : only the left layer is enabled.
@@ -155,44 +141,33 @@ internal class ChaosEngine
          */
         int[] doLayer4Boolean = new int[limit4];
 
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, limit4, i =>
-#else
-            for (int i = 0; i < limit4; i++)
-#endif
+        ParallelProcessing.OptimizedParallelFor(0, limit4, options, i =>
+        {
+            if (
+                (inputLayerEnabled[i * 4] || inputLayerEnabled[i * 4 + 1]) &&
+                (inputLayerEnabled[i * 4 + 2] || inputLayerEnabled[i * 4 + 3])
+            )
             {
-                if (
-                    (inputLayerEnabled[i * 4] || inputLayerEnabled[i * 4 + 1]) &&
-                    (inputLayerEnabled[i * 4 + 2] || inputLayerEnabled[i * 4 + 3])
-                )
+                doLayer4Boolean[i] = 0;
+            }
+            else
+            {
+                if (inputLayerEnabled[i * 4] || inputLayerEnabled[i * 4 + 1])
                 {
-                    doLayer4Boolean[i] = 0;
+                    doLayer4Boolean[i] = -1;
+                }
+                else if (inputLayerEnabled[i * 4 + 2] || inputLayerEnabled[i * 4 + 3])
+                {
+                    doLayer4Boolean[i] = 1;
                 }
                 else
                 {
-                    if (inputLayerEnabled[i * 4] || inputLayerEnabled[i * 4 + 1])
-                    {
-                        doLayer4Boolean[i] = -1;
-                    }
-                    else if (inputLayerEnabled[i * 4 + 2] || inputLayerEnabled[i * 4 + 3])
-                    {
-                        doLayer4Boolean[i] = 1;
-                    }
-                    else
-                    {
-                        doLayer4Boolean[i] = -2;
-                    }
+                    doLayer4Boolean[i] = -2;
                 }
             }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, limit4, i =>
-#else
-            for (int i = 0; i < limit4; i++)
-#endif
-            {
+        });
+        ParallelProcessing.OptimizedParallelFor(0, limit4, options, i =>
+        {
                 if (doLayer4Boolean[i] == 0 && twoLayerResults[i * 2].Count > 0 && twoLayerResults[i * 2 + 1].Count > 0)
                 {
                     fourLayerResults[i] = GeoWrangler.LayerBoolean(
@@ -245,10 +220,7 @@ internal class ChaosEngine
                             break;
                     }
                 }
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+        });
         /* Direct the 8 layer boolean approach
          -2 : no active layers.
          -1 : only the left layer is enabled.
@@ -257,12 +229,8 @@ internal class ChaosEngine
          */
         int[] doLayer8Boolean = new int[limit8];
             
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, limit8, i =>
-#else
-            for (int i = 0; i < limit8; i++)
-#endif
-            {
+        ParallelProcessing.OptimizedParallelFor(0, limit8, options, i =>
+        {
                 // Are both sides active?
                 // 0th loop : 0   1        5
                 // next     : 8   9
@@ -270,7 +238,7 @@ internal class ChaosEngine
                 if (
                     (
                         inputLayerEnabled[i * 8] || inputLayerEnabled[i * 8 + 1] || inputLayerEnabled[i * 8 + 2] || inputLayerEnabled[i * 8 + 3]
-                    ) &
+                    ) &&
                     (
                         inputLayerEnabled[i * 8 + 4] || inputLayerEnabled[i * 8 + 5] || inputLayerEnabled[i * 8 + 6] || inputLayerEnabled[i * 8 + 7]
                     )
@@ -297,17 +265,10 @@ internal class ChaosEngine
                         doLayer8Boolean[i] = -2;
                     }
                 }
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+        });
 
-#if !CHAOSSINGLETHREADED
-        Parallel.For(0, limit8, i =>
-#else
-            for (int i = 0; i < limit8; i++)
-#endif
-            {
+        ParallelProcessing.OptimizedParallelFor(0, limit8, options, i =>
+        {
                 if (doLayer8Boolean[i] == 0 && fourLayerResults[i * 2].Count > 0 && fourLayerResults[i * 2 + 1].Count > 0)
                 {
                     eightLayerResults[i] = GeoWrangler.LayerBoolean(
@@ -360,10 +321,7 @@ internal class ChaosEngine
                             break;
                     }
                 }
-            }
-#if !CHAOSSINGLETHREADED
-        );
-#endif
+        });
         return eightLayerResults;
     }
 
@@ -375,6 +333,7 @@ internal class ChaosEngine
 
     private void pChaosEngine(CommonVars commonVars, List<PreviewShape> simShapes_, bool previewMode)
     {
+        var options = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
         outputValid = false;
         simShapes = simShapes_;
 
@@ -521,17 +480,11 @@ internal class ChaosEngine
                         // Fragment our result.
                         char[] resultSeparators = [',']; // CSV separator for splitting results for comparison.
                         string[] tmpfraggedResult = result.Split(resultSeparators);
-#if !CHAOSSINGLETHREADED
-                        Parallel.For(0, tmpfraggedResult.Length, i =>
-#else
-                            for (Int32 i = 0; i < tmpfraggedResult.Length; i++)
-#endif
-                            {
-                                fraggedResult[i] = Convert.ToDouble(tmpfraggedResult[i]);
-                            }
-#if !CHAOSSINGLETHREADED
-                        );
-#endif
+                        ParallelProcessing.OptimizedParallelFor(0, tmpfraggedResult.Length, options, i =>
+                        {
+                            fraggedResult[i] = Convert.ToDouble(tmpfraggedResult[i]);
+                        });
+                        
                         fraggedResult[0] = cH.aChordLengths[0];
                         listOfOutputPoints[0] = cH.a_chordPaths[0];
                         fraggedResult[1] = cH.aChordLengths[1];
