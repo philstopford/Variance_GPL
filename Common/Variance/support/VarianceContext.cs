@@ -83,7 +83,7 @@ public class VarianceContext
         rng = 0;
         sampler = 0;
 
-        licenceName = "internal";
+        licenceName = "GPLv3";
         
         aes = new SimpleAES(Arrays.nameKey, Arrays.nameVector);
     }
